@@ -43,3 +43,6 @@ lerna-debug.log*
 
 # Generated files
 /src/generated
+
+# API spec
+/time-bank-api-spec/swagger.yaml
