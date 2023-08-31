@@ -83,6 +83,7 @@
     "consistent-return": "off",
     "no-param-reassign": ["error", { "props": false }],
     "@typescript-eslint/naming-convention": [ "error", { "selector": "variable", "format": [ "camelCase", "UPPER_CASE", "PascalCase" ] } ],
+    "@typescript-eslint/explicit-function-return-type": "off",
     "require-jsdoc": ["error", {
       "require": {
           "FunctionDeclaration": true,

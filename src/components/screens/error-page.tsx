@@ -1,4 +1,3 @@
-import { type ReactElement } from "react";
 import { useRouteError } from "react-router-dom";
 
 /**
@@ -6,7 +5,7 @@ import { useRouteError } from "react-router-dom";
  * 
  * @returns ReactElement
  */
-export default function ErrorPage (): ReactElement {
+function ErrorPage () {
   const error: unknown = useRouteError();
   console.error(error);
 
@@ -23,3 +22,5 @@ export default function ErrorPage (): ReactElement {
     </div>
   );
 }
+
+export default ErrorPage;
