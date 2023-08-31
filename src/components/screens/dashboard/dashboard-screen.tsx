@@ -1,11 +1,9 @@
-import { type ReactElement } from "react";
-
 /**
  * Dashboard screen component
  * 
  * @returns ReactElement
  */
-function DashboardScreen (): ReactElement {
+function DashboardScreen () {
   return (
     <div>not yet implemented</div>
   );
