@@ -1,4 +1,5 @@
 import { type ReactElement } from "react";
+
 /**
  * Dashboard screen component
  * 
