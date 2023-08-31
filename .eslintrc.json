@@ -46,7 +46,6 @@
       "ImportDeclaration": "never",
       "ExportDeclaration": "never"
     } ],
-    "react/jsx-tag-spacing": [ "error", { "beforeSelfClosing": "never" } ],
     "import/no-extraneous-dependencies": "off",
     "import/no-duplicates": "off",
     "no-duplicate-imports": "error",
