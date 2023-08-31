@@ -2,7 +2,6 @@ import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import App from "./App.tsx";
 
-<<<<<<< HEAD
 const container = document.getElementById("root") as HTMLElement;
 
 if (container !== null) {
@@ -13,4 +12,3 @@ if (container !== null) {
     </StrictMode>
   );
 }
-=======
