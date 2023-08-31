@@ -1,7 +1,6 @@
 /**
  * Dashboard screen component
  * 
- * @returns ReactElement
  */
 function DashboardScreen () {
   return (
