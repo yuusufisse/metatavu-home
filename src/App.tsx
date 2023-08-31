@@ -6,7 +6,7 @@ import ErrorPage from "./components/screens/error-page";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <DashboardScreen/>,
+    element: <DashboardScreen />,
     errorElement: <ErrorPage/>
   }
 ]);
