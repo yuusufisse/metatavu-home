@@ -3,11 +3,11 @@ import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
 import ErrorPage from "./components/screens/error-page";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import { useState } from "react";
-import { type KeycloakProfile, type KeycloakTokenParsed } from "keycloak-js";
+import type { KeycloakProfile, KeycloakTokenParsed } from "keycloak-js";
 
 export interface Auth {
-  token: KeycloakTokenParsed | undefined
-  tokenRaw: string | undefined
+  token: KeycloakTokenParsed 
+  tokenRaw: string
   logout: () => void
 }
 
@@ -17,12 +17,12 @@ export interface Auth {
  */
 function App () {
   const [auth, setAuth] = useState<Auth>();
-  const [userProfile, setUserProfile] = useState<KeycloakProfile | undefined>(undefined);
+  const [userProfile, setUserProfile] = useState<KeycloakProfile>();
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <DashboardScreen auth={auth!}/>,
+      element: <DashboardScreen auth={auth} />,
       errorElement: <ErrorPage />
     }
   ]);
@@ -34,7 +34,7 @@ function App () {
         setAuth={setAuth}
         userProfile={userProfile}
         setUserProfile={setUserProfile}>
-        <RouterProvider router={router}/>
+        <RouterProvider router={router} />
       </AuthenticationProvider>
     </div>
   );

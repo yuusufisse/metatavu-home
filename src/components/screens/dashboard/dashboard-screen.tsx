@@ -13,7 +13,7 @@ function DashboardScreen (props: Props) {
   return (
     <div>
       <div>This is where we would put our dashboard! IF WE HAD ONE!</div>
-      <button onClick={() => { auth.logout(); } }>Log out</button>
+      <button type="button" onClick={() => auth.logout() }>Log out</button>
     </div>
   );
 }

@@ -5,9 +5,9 @@ import { type Auth } from "../../App";
 
 interface Props {
   auth: Auth | undefined
-  setAuth: Dispatch<SetStateAction<Auth | undefined>>
-  userProfile: Keycloak.KeycloakProfile | undefined
-  setUserProfile: Dispatch<SetStateAction<Keycloak.KeycloakProfile | undefined>>
+  setAuth: Dispatch<SetStateAction<Auth>>
+  userProfile: Keycloak.KeycloakProfile
+  setUserProfile: Dispatch<SetStateAction<Keycloak.KeycloakProfile>>
   children: JSX.Element
 }
 
@@ -17,11 +17,10 @@ const keycloak = new Keycloak(config.auth);
 */
 const AuthenticationProvider = ({ auth, setAuth, setUserProfile, children }: Props) => {
   const updateAuthData = useCallback(() => {
-    console.log(auth);
     setAuth({
-      token: keycloak.tokenParsed!,
-      tokenRaw: keycloak.token!,
-      logout: () => keycloak.logout({ redirectUri: window.location.origin })
+      token: keycloak?.tokenParsed,
+      tokenRaw: keycloak?.token,
+      logout: () => keycloak?.logout({ redirectUri: window.location.origin })
     });
     setUserProfile(keycloak.profile);
   }, [auth]);
