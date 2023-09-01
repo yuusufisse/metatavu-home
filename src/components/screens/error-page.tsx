@@ -7,7 +7,6 @@ import { useRouteError } from "react-router-dom";
  */
 function ErrorPage () {
   const error: unknown = useRouteError();
-  console.error(error);
 
   return (
     <div id="error-page">
@@ -15,8 +14,7 @@ function ErrorPage () {
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
         <i>
-          {error.statusText}
-          {error.message}
+          {(error as Error)?.message || (error as { statusText?: string })?.statusText}
         </i>
       </p>
     </div>
