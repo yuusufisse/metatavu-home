@@ -1,10 +1,20 @@
+import { type Auth } from "../../../App";
+
+interface Props {
+  auth: Auth
+}
+
 /**
  * Dashboard screen component
  * 
  */
-function DashboardScreen () {
+function DashboardScreen (props: Props) {
+  const { auth } = props;
   return (
-    <div>not yet implemented</div>
+    <div>
+      <div>This is where we would put our dashboard! IF WE HAD ONE!</div>
+      <button type="button" onClick={() => auth.logout() }>Log out</button>
+    </div>
   );
 }
 
