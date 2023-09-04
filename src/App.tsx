@@ -1,9 +1,10 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
-import ErrorPage from "./components/screens/error-page";
+import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import { useState } from "react";
 import type { KeycloakProfile, KeycloakTokenParsed } from "keycloak-js";
+import ErrorHandler from "./components/contexts/error-handler";
 
 export interface Auth {
   token: KeycloakTokenParsed 
@@ -23,19 +24,21 @@ function App () {
     {
       path: "/",
       element: <DashboardScreen auth={auth} />,
-      errorElement: <ErrorPage />
+      errorElement: <ErrorScreen />
     }
   ]);
 
   return (
     <div className="App">
-      <AuthenticationProvider
-        auth={auth}
-        setAuth={setAuth}
-        userProfile={userProfile}
-        setUserProfile={setUserProfile}>
-        <RouterProvider router={router} />
-      </AuthenticationProvider>
+      <ErrorHandler>
+        <AuthenticationProvider
+          auth={auth}
+          setAuth={setAuth}
+          userProfile={userProfile}
+          setUserProfile={setUserProfile}>
+          <RouterProvider router={router} />
+        </AuthenticationProvider>
+      </ErrorHandler>
     </div>
   );
 }
