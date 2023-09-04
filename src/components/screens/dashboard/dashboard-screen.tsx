@@ -1,15 +1,12 @@
-import { type Auth } from "../../../App";
-
-interface Props {
-  auth: Auth
-}
+import { useAtom } from "jotai";
+import { authAtom } from "../../atoms/Auth";
 
 /**
  * Dashboard screen component
  * 
  */
-function DashboardScreen (props: Props) {
-  const { auth } = props;
+function DashboardScreen () {
+  const [auth] = useAtom(authAtom);
   return (
     <div>
       <div>This is where we would put our dashboard! IF WE HAD ONE!</div>
