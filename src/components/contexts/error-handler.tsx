@@ -25,7 +25,7 @@ const ErrorHandler = ({ children }: Props) => {
    * @param message error message
    * @param err any error
    */
-  const handleError = async (message: string, err?: any) => {
+  const handleError = async (message: string, err?: object) => {
     setError(message);
 
     if (err instanceof Response) {
