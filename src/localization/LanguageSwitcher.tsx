@@ -1,4 +1,5 @@
 import { type ReactNode, createContext, useContext, useState } from "react";
+import strings from "./strings";
 
 /**
  * LocaleContextType interface
@@ -63,6 +64,7 @@ function LanguageSwitcher () {
    */
   const handleLanguageChange = (newLocale: string) => {
     changeLocale(newLocale);
+    strings.setLanguage(newLocale);
   };
 
   return (

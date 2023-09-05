@@ -22,8 +22,8 @@ function App () {
   return (
     <div className="App">
       <LocaleProvider>
-        <RouterProvider router={router} />
         <LanguageSwitcher />
+        <RouterProvider router={router} />
       </LocaleProvider>
     </div>
   );
