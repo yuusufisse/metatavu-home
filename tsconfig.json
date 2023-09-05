@@ -5,6 +5,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "useUnknownInCatchVariables": true,
+    "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
@@ -14,12 +15,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "localization/**/*.ts"],
   "exclude": ["node_modules"],

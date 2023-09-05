@@ -1,29 +1,33 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
-import ErrorPage from "./components/screens/error-page";
 import LanguageSwitcher, { LocaleProvider } from "./localization/LanguageSwitcher";
-
-/**
- * Implementing browser router
- */
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <DashboardScreen />,
-    errorElement: <ErrorPage />
-  }
-]);
+import ErrorScreen from "./components/screens/error-screen";
+import AuthenticationProvider from "./components/providers/authentication-provider";
+import ErrorHandler from "./components/contexts/error-handler";
 
 /**
  * Application component
  *
  */
 function App () {
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <DashboardScreen />,
+      errorElement: <ErrorScreen />
+    }
+  ]);
+
   return (
     <div className="App">
       <LocaleProvider>
+      <ErrorHandler>
+        <AuthenticationProvider>
         <LanguageSwitcher />
-        <RouterProvider router={router} />
+        <RouterProvider router={router}  />
+        </AuthenticationProvider>
+      </ErrorHandler>
       </LocaleProvider>
     </div>
   );
