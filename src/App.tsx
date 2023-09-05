@@ -24,10 +24,10 @@ function App () {
       <LocaleProvider>
         <ErrorHandler>
           <AuthenticationProvider>
-        <LanguageSwitcher />
-        <RouterProvider router={router}  />
-        </AuthenticationProvider>
-      </ErrorHandler>
+            <LanguageSwitcher />
+            <RouterProvider router={router}  />
+          </AuthenticationProvider>
+        </ErrorHandler>
       </LocaleProvider>
     </div>
   );
