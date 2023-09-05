@@ -3,6 +3,8 @@ import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
+import { ThemeProvider } from "@emotion/react";
+import { theme } from "./theme";
 
 /**
  * Application component
@@ -20,11 +22,13 @@ function App () {
 
   return (
     <div className="App">
-      <ErrorHandler>
-        <AuthenticationProvider>
-          <RouterProvider router={router} />
-        </AuthenticationProvider>
-      </ErrorHandler>
+      <ThemeProvider theme={theme}>
+        <ErrorHandler>
+          <AuthenticationProvider>
+            <RouterProvider router={router} />
+          </AuthenticationProvider>
+        </ErrorHandler>
+      </ThemeProvider>
     </div>
   );
 }
