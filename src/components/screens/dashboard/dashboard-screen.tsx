@@ -12,7 +12,11 @@ const DashboardScreen = () => {
     strings.setLanguage(locale);
   }, [locale]);
 
-  return <div>{strings.notYetImplemented}</div>;
+  return (
+    <>
+      <div>{strings.notYetImplemented}</div>
+      <button type="button" onClick={ auth?.logout }>Log out</button>
+    </>
+  );
 }
-
 export default DashboardScreen;
