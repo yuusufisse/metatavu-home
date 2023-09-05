@@ -1,8 +1,8 @@
+import { useAtomValue } from "jotai";
+import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { PersonTotalTime } from "../../../generated/client";
-import { useAtomValue } from "jotai";
-import { authAtom, userProfileAtom } from "../../../atoms/auth";
 
 /**
  * Dashboard screen component
