@@ -56,6 +56,15 @@ function DashboardScreen () {
       })}</div>
       </div>
     }</>
+
+const DashboardScreen = () => {
+  const [auth] = useAtom(authAtom);
+
+  return (
+    <div>
+      <div>This is where we would put our dashboard! IF WE HAD ONE!</div>
+      <button type="button" onClick={ auth?.logout }>Log out</button>
+    </div>
   );
 }
 
