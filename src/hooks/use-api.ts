@@ -1,4 +1,4 @@
 import { useAtomValue } from "jotai";
-import { apiClientAtom } from "../components/atoms/Api";
+import { apiClientAtom } from "../atoms/api";
 
 export const useApi = () => useAtomValue(apiClientAtom);

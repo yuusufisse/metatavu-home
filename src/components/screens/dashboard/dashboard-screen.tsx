@@ -1,15 +1,15 @@
-import { useAtomValue } from "jotai";
-import { authAtom, userProfileAtom } from "../../atoms/Auth";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { PersonTotalTime } from "../../../generated/client";
+import { useAtomValue } from "jotai";
+import { authAtom, userProfileAtom } from "../../../atoms/auth";
 
 /**
  * Dashboard screen component
  * 
  */
 function DashboardScreen () {
-  const auth = useAtomValue(authAtom);
+  const auth = useAtomValue(authAtom)
   const userProfile = useAtomValue(userProfileAtom);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>();
@@ -23,13 +23,14 @@ function DashboardScreen () {
   const getPersons = async () => {
     setIsLoading(true);
     //NOTE: Trainees do not have time bank entries, therefore a use keycloak ID from another employee for testing.
-    const loggedInPerson = await (await personsApi.listPersons({ active: true })).filter(person => person.keycloakId === userProfile.id)
+    const loggedInPerson = await (await personsApi.listPersons({ active: true })).filter(person => person.keycloakId === userProfile?.id)
 
     if (loggedInPerson.length > 0) {
       try {
+        if (auth?.tokenRaw){
           const fetchedPerson : PersonTotalTime[] = await personsApi.listPersonTotalTime({personId: loggedInPerson[0].id});
           setPersonTotalTime(fetchedPerson);
-
+        }
       } catch (error) {
         console.error(error);
       }
