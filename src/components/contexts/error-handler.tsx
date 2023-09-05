@@ -1,7 +1,7 @@
 import { DialogContent, Divider, Typography } from "@mui/material";
 import { useAtom } from "jotai";
 import { ReactNode, useMemo } from "react";
-import { errorAtom } from "../../atoms/errorAtom";
+import { errorAtom } from "../../atoms/error";
 import GenericDialog from "../generics/generic-dialog";
 
 /**

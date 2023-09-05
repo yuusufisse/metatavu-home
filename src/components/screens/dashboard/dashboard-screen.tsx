@@ -1,18 +1,19 @@
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { PersonTotalTime } from "../../../generated/client";
+import { errorAtom } from "../../../atoms/error";
 
 /**
  * Dashboard screen component
  * 
  */
 function DashboardScreen () {
-  const auth = useAtomValue(authAtom)
+  const auth = useAtomValue(authAtom);
   const userProfile = useAtomValue(userProfileAtom);
+  const setError = useSetAtom(errorAtom);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>();
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime[]>();
   const { personsApi } = useApi();
   
@@ -32,11 +33,11 @@ function DashboardScreen () {
           setPersonTotalTime(fetchedPerson);
         }
       } catch (error) {
-        console.error(error);
+        setError(`${ "Person fetch has failed." }, ${ error }`);
       }
     }
     else {
-      setErrorMsg("Your account does not have any time bank entries.")
+      setError("Your account does not have any time bank entries.");
     }
     setIsLoading(false);
   }
@@ -49,8 +50,6 @@ function DashboardScreen () {
   return (
     <>{(isLoading)
       ?<div>Loading...</div>
-      :(errorMsg) 
-      ?<div>{errorMsg}</div>
       :<div>
         <div>{personTotalTime?.map((person) => {
           return (`Your balance is ${Math.trunc(person.balance / 60)} h ${(person.balance % 60) * -1} min`)
