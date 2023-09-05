@@ -1,27 +1,29 @@
 import config from "../../app/config";
+import { authAtom, userProfileAtom } from "../../atoms/auth";
+import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
-import { type Dispatch, type SetStateAction, useCallback, useEffect } from "react";
-import { type Auth } from "../../App";
+import { useCallback, useEffect } from "react";
 
 interface Props {
-  auth: Auth | undefined
-  setAuth: Dispatch<SetStateAction<Auth>>
-  userProfile: Keycloak.KeycloakProfile
-  setUserProfile: Dispatch<SetStateAction<Keycloak.KeycloakProfile>>
-  children: JSX.Element
+  children: JSX.Element;
 }
 
 const keycloak = new Keycloak(config.auth);
+
 /**
 * Provides Keycloak authentication functions, such as login and logout
 */
-const AuthenticationProvider = ({ auth, setAuth, setUserProfile, children }: Props) => {
+const AuthenticationProvider = ({ children }: Props) => {
+  const [auth, setAuth] = useAtom(authAtom);
+  const setUserProfile = useSetAtom(userProfileAtom);
+
   const updateAuthData = useCallback(() => {
     setAuth({
       token: keycloak?.tokenParsed,
       tokenRaw: keycloak?.token,
       logout: () => keycloak?.logout({ redirectUri: window.location.origin })
     });
+
     setUserProfile(keycloak.profile);
   }, [auth]);
 
