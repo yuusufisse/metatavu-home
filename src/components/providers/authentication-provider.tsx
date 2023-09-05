@@ -1,14 +1,15 @@
 import config from "../../app/config";
+import { authAtom, userProfileAtom } from "../../atoms/auth";
+import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { useCallback, useEffect } from "react";
-import { authAtom, userProfileAtom } from "../atoms/Auth";
-import { useAtom, useSetAtom } from "jotai";
 
 interface Props {
-  children: JSX.Element
+  children: JSX.Element;
 }
 
 const keycloak = new Keycloak(config.auth);
+
 /**
 * Provides Keycloak authentication functions, such as login and logout
 */
@@ -21,6 +22,7 @@ const AuthenticationProvider = ({ children }: Props) => {
       tokenRaw: keycloak?.token,
       logout: () => keycloak?.logout({ redirectUri: window.location.origin })
     });
+
     setUserProfile(keycloak.profile);
   }, [auth]);
 

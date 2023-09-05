@@ -5,7 +5,7 @@ import { useRouteError } from "react-router-dom";
  * 
  * @returns ReactElement
  */
-function ErrorPage () {
+const ErrorScreen = () => {
   const error: unknown = useRouteError();
   console.log(error);
 
@@ -22,4 +22,4 @@ function ErrorPage () {
   );
 }
 
-export default ErrorPage;
+export default ErrorScreen;
