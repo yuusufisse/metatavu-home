@@ -5,9 +5,9 @@ import { useLocale } from "../../../localization/LanguageSwitcher";
 /**
  * Dashboard screen component
  */
-function DashboardScreen () {
+const DashboardScreen = () => {
   const { locale } = useLocale();
-
+  const [auth] = useAtom(authAtom);
   React.useEffect(() => {
     strings.setLanguage(locale);
   }, [locale]);
