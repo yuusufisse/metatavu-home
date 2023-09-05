@@ -1,71 +1,33 @@
-import { Configuration, DailyEntriesApi, PersonsApi, SynchronizeApi, VacationRequestsApi, VacationRequestStatusApi } from "../generated/client";
+import config from "../app/config";
+import {
+  Configuration,
+  ConfigurationParameters,
+  DailyEntriesApi, 
+  PersonsApi, 
+  SynchronizeApi, 
+  VacationRequestsApi, 
+  VacationRequestStatusApi
+} from "../generated/client";
 
-/**
- * Utility class for loading api with predefined configuration
- */
-export default class Api {
+type ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
 
-  /**
-   * Gets api configuration
-   *
-   * @param token accessToken
-   * @returns new configuration
-   */
-  private static getConfiguration(token: string | undefined) {
-    return new Configuration({
-      basePath: process.env.VITE_API_BASE_URL,
-      accessToken: token
+const getConfigurationFactory =
+  <T>(ConfigConstructor: ConfigConstructor<T>, basePath: string, accessToken?: string) =>
+  () => {
+    return new ConfigConstructor({
+      basePath: basePath,
+      accessToken: accessToken
     });
-  }
+  };
 
-  /**
-   * Gets initialized DailyEntries API
-   * 
-   * @param token accessToken
-   * @returns initialized DailyEntries API
-   */
-  public static getDailyEntriesApi(token: string | undefined) {
-    return new DailyEntriesApi(Api.getConfiguration(token));
-  }
+export const getApiClient = (accessToken?: string) => {
+  const getConfiguration = getConfigurationFactory(Configuration, config.api.baseUrl, accessToken);
 
-  /**
-   * Gets initialized Persons API
-   * 
-   * @param token accessToken
-   * @returns initialized Persons API
-   */
-  public static getPersonsApi(token: string | undefined) {
-    return new PersonsApi(Api.getConfiguration(token));
-  }
-
-  /**
-   * Gets initialized Synchronize API
-   * 
-   * @param token accessToken
-   * @returns initialized Synchronize API
-   */
-  public static getSynchronizeApi(token: string | undefined) {
-    return new SynchronizeApi(Api.getConfiguration(token));
-  }
-
-  /**
-   * Gets initialized VacationRequests API
-   * 
-   * @param token accessToken
-   * @returns initialized VacationRequests API
-   */
-  public static getVacationRequestsApi(token: string | undefined) {
-    return new VacationRequestsApi(Api.getConfiguration(token));
-  }
-
-  /**
-   * Gets initialized VacationRequests API
-   * 
-   * @param token accessToken
-   * @returns initialized VacationRequests API
-   */
-  public static getVacationRequestStatusApi(token: string | undefined) {
-    return new VacationRequestStatusApi(Api.getConfiguration(token));
-  }
-  
-}
+  return {
+    dailyEntriesApi: new DailyEntriesApi(getConfiguration()),
+    personsApi: new PersonsApi(getConfiguration()),
+    synchronizeApi: new SynchronizeApi(getConfiguration()),
+    vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
+    vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())
+  };
+};
