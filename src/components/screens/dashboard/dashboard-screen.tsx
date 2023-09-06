@@ -4,34 +4,32 @@ import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { PersonTotalTime } from "../../../generated/client";
 import { errorAtom } from "../../../atoms/error";
+import LoaderWrapper from "../../generics/loader-wrapper";
+import { getHoursAndMinutes } from "../../../utils/time-utils";
 
 /**
  * Dashboard screen component
- * 
  */
 function DashboardScreen () {
   const auth = useAtomValue(authAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime[]>([]);
   const { personsApi } = useApi();
   
 /**
  * Initialize logged in person's time data.
- * 
  */
   const getPersons = async () => {
     setIsLoading(true);
-    //NOTE: Trainees do not have time bank entries, therefore a use keycloak ID from another employee for testing.
-    const loggedInPerson = await (await personsApi.listPersons({ active: true })).filter(person => person.keycloakId === userProfile?.id)
+    const fetchedPersons = await personsApi.listPersons({ active: true });
+    const loggedInPerson = fetchedPersons.filter(person => person.keycloakId === userProfile?.id);
 
-    if (loggedInPerson.length > 0) {
+    if (loggedInPerson.length) {
       try {
-        if (auth?.tokenRaw){
           const fetchedPerson : PersonTotalTime[] = await personsApi.listPersonTotalTime({personId: loggedInPerson[0].id});
           setPersonTotalTime(fetchedPerson);
-        }
       } catch (error) {
         setError(`${ "Person fetch has failed." }, ${ error }`);
       }
@@ -48,14 +46,12 @@ function DashboardScreen () {
   
 
   return (
-    <>{(isLoading)
-      ?<div>Loading...</div>
-      :<div>
-        <div>{personTotalTime?.map((person) => {
-          return (`Your balance is ${Math.trunc(person.balance / 60)} h ${(person.balance % 60) * -1} min`)
+    <LoaderWrapper loading={isLoading}>
+        <div>{personTotalTime.map((person) => {
+          return (`Your balance is ${getHoursAndMinutes(person.balance)}`)
       })}</div>
-      </div>
-    }</>
+        <button type="button" onClick={() => auth?.logout()}>Log out</button>
+    </LoaderWrapper>
   );
 }
 

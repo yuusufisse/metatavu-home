@@ -66,7 +66,7 @@ const ErrorHandler = ({ children }: Props) => {
         onCancel={() => setError(undefined)}
         onConfirm={() => setError(undefined)}
         cancelButtonText={"Close"}
-        title={"An error has occured"}
+        title={"An error has occurred"}
       >
         <DialogContent id="error-dialog-description">
           {error && (
