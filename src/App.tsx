@@ -3,7 +3,7 @@ import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 
 /**
