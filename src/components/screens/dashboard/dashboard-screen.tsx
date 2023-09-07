@@ -15,7 +15,7 @@ function DashboardScreen () {
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
   const [isLoading, setIsLoading] = useState(false);
-  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime[]>([]);
+  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const { personsApi } = useApi();
   
 /**
@@ -28,8 +28,8 @@ function DashboardScreen () {
 
     if (loggedInPerson.length) {
       try {
-          const fetchedPerson : PersonTotalTime[] = await personsApi.listPersonTotalTime({personId: loggedInPerson[0].id});
-          setPersonTotalTime(fetchedPerson);
+          const fetchedPerson = await personsApi.listPersonTotalTime({personId: loggedInPerson[0].id});
+          setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
         setError(`${ "Person fetch has failed." }, ${ error }`);
       }
@@ -47,10 +47,10 @@ function DashboardScreen () {
 
   return (
     <LoaderWrapper loading={isLoading}>
-        <div>{personTotalTime.map((person) => {
-          return (`Your balance is ${getHoursAndMinutes(person.balance)}`)
-      })}</div>
-        <button type="button" onClick={() => auth?.logout()}>Log out</button>
+      <div>
+        {(personTotalTime) ?`Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}` :null}
+      </div>
+      <button type="button" onClick={() => auth?.logout()}>Log out</button>
     </LoaderWrapper>
   );
 }

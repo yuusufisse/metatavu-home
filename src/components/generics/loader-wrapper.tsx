@@ -1,11 +1,12 @@
 import { Backdrop, CircularProgress } from "@mui/material";
+import { ReactNode } from "react";
 
 /**
  * Components properties
  */
 interface Props {
   loading: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
