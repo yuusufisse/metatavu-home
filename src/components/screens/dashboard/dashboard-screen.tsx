@@ -5,7 +5,9 @@ import { useApi } from "../../../hooks/use-api";
 import { PersonTotalTime } from "../../../generated/client";
 import { errorAtom } from "../../../atoms/error";
 import LoaderWrapper from "../../generics/loader-wrapper";
-import { getHoursAndMinutes } from "../../../utils/time-utils";
+import {  Box, Container, Grid } from "@mui/material";
+import BalanceCard from "./balance-card";
+import { Link } from "@mui/material";
 
 /**
  * Dashboard screen component
@@ -17,7 +19,20 @@ function DashboardScreen () {
   const [isLoading, setIsLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const { personsApi } = useApi();
-  
+
+  interface NavButtonProps {text: string, selected: boolean, sx_props: object} 
+  const NavButton = (props: NavButtonProps) => {
+    const {text, selected, sx_props} = props;
+    return (
+      <Link href="#" underline="none" sx={Object.assign({
+        "background-color": (selected ? "#dee2e5" : ""),
+        "height": "100%",
+        "padding": "15px"
+      }, sx_props)}>
+        {text}
+      </Link>
+    );
+  }
 /**
  * Initialize logged in person's time data.
  */
@@ -47,10 +62,54 @@ function DashboardScreen () {
 
   return (
     <LoaderWrapper loading={isLoading}>
-      <div>
-        {(personTotalTime) ?`Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}` :null}
-      </div>
-      <button type="button" onClick={() => auth?.logout()}>Log out</button>
+      <Container sx={{fontFamily: 'Nunito Sans'}}>
+        <Grid container sx={{
+                    "border-radius":"15px",
+                    "background-color":"#f2f2f2",
+                    "box-shadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
+                    p:3
+                }}>
+          <BalanceCard personTotalTime={personTotalTime} />
+        </Grid>
+        <br/>
+        <Grid container sx={{
+                    "border-radius":"15px",
+                    "background-color":"#f2f2f2",
+                    "box-shadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
+                    p:0
+                }}>
+          {/* nav start */}
+          <Box sx={{
+            width:"100%",
+            display:"flex",
+            justifyContent:"space-between",
+            "padding-top": "16px",
+            "padding-right": "22px",
+            "padding-bottom": "14px",
+            "padding-left": "0px"
+          }}>
+            <Box>
+              <NavButton text="Home" selected={true} sx_props={{
+                "border-top-left-radius": "15px",
+                "border-bottom-left-radius": "15px"
+              }}/>
+              <NavButton text="Admin" selected={false} sx_props={{}}/>
+              <NavButton text="On call" selected={false} sx_props={{}}/>
+            </Box>
+            <Box>
+              <Link href="#" type="button" onClick={() => auth?.logout()} sx={{
+                display:"flex",
+                justifyContent:"right"
+              }}>
+                Log out
+              </Link>
+
+            </Box>
+          </Box>
+          
+          {/* nav stop */}
+        </Grid>
+      </Container>
     </LoaderWrapper>
   );
 }
