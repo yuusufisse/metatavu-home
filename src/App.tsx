@@ -5,6 +5,7 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import ErrorHandler from "./components/contexts/error-handler";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import Vacations from "./components/screens/vacations/vacations-screen";
 
 /**
  * Application component
@@ -16,6 +17,11 @@ function App () {
     {
       path: "/",
       element: <DashboardScreen />,
+      errorElement: <ErrorScreen />
+    },
+    {
+      path: "/vacations",
+      element: <Vacations />,
       errorElement: <ErrorScreen />
     }
   ]);
