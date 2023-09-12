@@ -6,7 +6,11 @@ interface HomeNavProps { auth: Auth | undefined}
 const HomeNav = (props: HomeNavProps) => {
     const { auth } = props;
 
-    interface NavButtonProps {text: string, selected: boolean, sx_props: object} 
+    interface NavButtonProps {
+        text: string, 
+        selected: boolean, 
+        sx_props: object
+    } 
     const NavButton = (props: NavButtonProps) => {
       const {text, selected, sx_props} = props;
       return (
