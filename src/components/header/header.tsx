@@ -65,7 +65,7 @@ function Header () {
                     "box-shadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
                     p:0
                 }}>
-          <HomeNav auth={auth}/>
+          <HomeNav auth={ auth }/>
         </Grid>
       </Container>
     </LoaderWrapper>
