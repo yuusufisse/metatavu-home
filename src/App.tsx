@@ -1,10 +1,11 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import Header from "./components/header/header";
+import HomeScreen from "./components/screens/home/home-screen";
 
 /**
  * Application component
@@ -15,7 +16,7 @@ function App () {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <DashboardScreen />,
+      element: <HomeScreen />,
       errorElement: <ErrorScreen />
     }
   ]);
@@ -25,7 +26,8 @@ function App () {
       <ThemeProvider theme={theme}>
         <ErrorHandler>
           <AuthenticationProvider>
-            <RouterProvider router={router} />
+              <Header />
+              <RouterProvider router={router} />
           </AuthenticationProvider>
         </ErrorHandler>
       </ThemeProvider>
