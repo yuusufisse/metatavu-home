@@ -14,7 +14,10 @@ const HomeNav = (props: HomeNavProps) => {
     const NavButton = (props: NavButtonProps) => {
       const {text, selected, sx_props} = props;
       return (
-        <Link href="#" underline="none" sx={Object.assign({
+        <Link 
+            href="#"
+            underline="none"
+            sx={ Object.assign({
           "background-color": (selected ? "#dee2e5" : ""),
           "height": "100%",
           "padding": "15px"
