@@ -1,14 +1,18 @@
-import React from "react";
+import { useEffect } from 'react';
 import strings from "../../../localization/strings";
-import { useLocale } from "../../../localization/LanguageSwitcher";
+import { localeAtom } from "../../../atoms/localeAtom"; // Make sure the path is correct
+import { authAtom } from "../../../atoms/auth";
+import { useAtom } from "jotai";
 
 /**
  * Dashboard screen component
  */
 const DashboardScreen = () => {
-  const { locale } = useLocale();
+  const [locale] = useAtom(localeAtom);
+  
   const [auth] = useAtom(authAtom);
-  React.useEffect(() => {
+
+  useEffect(() => {
     strings.setLanguage(locale);
   }, [locale]);
 
@@ -19,4 +23,5 @@ const DashboardScreen = () => {
     </>
   );
 }
+
 export default DashboardScreen;

@@ -1,9 +1,10 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
-import LanguageSwitcher, { LocaleProvider } from "./localization/LanguageSwitcher";
+import LocaleToggle from "./components/locale-toggle/LocaleToggle";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
+import { Provider } from "jotai";
 
 /**
  * Application component
@@ -21,14 +22,14 @@ function App () {
 
   return (
     <div className="App">
-      <LocaleProvider>
+      <Provider>
         <ErrorHandler>
           <AuthenticationProvider>
-            <LanguageSwitcher />
+            <LocaleToggle />
             <RouterProvider router={router}  />
           </AuthenticationProvider>
         </ErrorHandler>
-      </LocaleProvider>
+      </Provider>
     </div>
   );
 }

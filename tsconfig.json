@@ -6,7 +6,6 @@
     "skipLibCheck": true,
     "useUnknownInCatchVariables": true,
     "strict": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
     /* Bundler mode */
