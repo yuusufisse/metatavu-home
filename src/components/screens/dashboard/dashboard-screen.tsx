@@ -44,13 +44,13 @@ function DashboardScreen () {
 
   useEffect(() => {
     getPersons();
-  }, [auth])
+  }, [ auth ])
   
 
   return (
     <LoaderWrapper loading={isLoading}>
       <div>
-        {(personTotalTime) ?`Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}` :null}
+        {(personTotalTime) ?`Your balance is ${ getHoursAndMinutes(Number(personTotalTime?.balance)) }` : null }
       </div>
       <div>
         {fetchedPersona ? fetchedPersona[1].firstName : null}
