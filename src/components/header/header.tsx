@@ -49,7 +49,7 @@ function Header () {
 
   return (
     <LoaderWrapper loading={isLoading}>
-      <Container sx={{fontFamily: 'Nunito Sans'}}>
+      <Container sx={{ fontFamily: 'Nunito Sans' }}>
         <Grid container sx={{
                     "border-radius":"15px",
                     "background-color":"#f2f2f2",
