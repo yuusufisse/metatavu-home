@@ -4,7 +4,7 @@ import { Auth } from "../../atoms/auth";
 interface HomeNavProps { auth: Auth | undefined}
 
 const HomeNav = (props: HomeNavProps) => {
-    const {auth} = props;
+    const { auth } = props;
 
     interface NavButtonProps {text: string, selected: boolean, sx_props: object} 
     const NavButton = (props: NavButtonProps) => {
