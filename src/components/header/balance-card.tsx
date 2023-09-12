@@ -24,7 +24,7 @@ const BalanceCard = (props: BalanceCardProps) => {
                 <Typography>
                     {hello + userProfile?.firstName}
                     <br/>
-                    {(personTotalTime) ?`Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}` :null}
+                    { (personTotalTime) ?`Your balance is ${ getHoursAndMinutes(Number(personTotalTime?.balance)) }` :null }
                 </Typography>
             </Grid>
             <Grid xs={12} sm={4}>
