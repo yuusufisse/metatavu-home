@@ -56,7 +56,7 @@ function Header () {
                     "box-shadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
                     p:3
                 }}>
-          <BalanceCard personTotalTime={personTotalTime} />
+          <BalanceCard personTotalTime={ personTotalTime } />
         </Grid>
         <br/>
         <Grid container sx={{
