@@ -19,7 +19,7 @@ const HomeNav = (props: HomeNavProps) => {
           "height": "100%",
           "padding": "15px"
         }, sx_props)}>
-          {text}
+          { text }
         </Link>
       );
     }
