@@ -38,7 +38,10 @@ const HomeNav = (props: HomeNavProps) => {
             "padding-left": "0px"
           }}>
             <Box>
-              <NavButton text="Home" selected={true} sx_props={{
+              <NavButton 
+                  text="Home" 
+                  selected={ true } 
+                  sx_props={{
                 "border-top-left-radius": "15px",
                 "border-bottom-left-radius": "15px"
               }}/>
