@@ -8,7 +8,7 @@ import { useAtomValue } from "jotai";
 interface BalanceCardProps {personTotalTime: PersonTotalTime | undefined}
 
 const BalanceCard = (props: BalanceCardProps) => {
-    const {personTotalTime} = props;
+    const { personTotalTime } = props;
     const userProfile = useAtomValue(userProfileAtom);
     const hello = "Hi, "; //put this in the localization file, SOMEBODY, PLEASE
 
