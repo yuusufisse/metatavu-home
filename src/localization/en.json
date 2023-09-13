@@ -1,3 +1,8 @@
 {
-    "notYetImplemented": "not yet implemented"
-  }
+  "notYetImplemented": "Not yet implemented",
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
+  },
+  "currentLocaleLabel": "Current Locale:"
+}

@@ -1,22 +1,33 @@
-import LocalizedStrings, { type LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
- * Type representing the shape of your translation strings
- */
-interface TranslationStrings {
-  notYetImplemented: string
+* Language names interface
+*/
+interface Localizations {
+  en: string;
+  fi: string;
 }
 
 /**
- * Interface describing localized strings
- */
-export interface IStrings extends LocalizedStringsMethods, TranslationStrings {
-    
+* Translations interface
+*/
+interface Translations {
+  notYetImplemented: string;
+  currentLocaleLabel: string;
+  localization: Localizations;
 }
 
-const strings: IStrings = new LocalizedStrings({
+/**
+* Localized strings
+*/
+export interface Localized extends LocalizedStringsMethods, Translations {}
+
+/**
+* Initialized localized strings
+*/
+const strings: Localized = new LocalizedStrings({
   en: en,
   fi: fi
 });

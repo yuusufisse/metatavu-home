@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import strings from "../../../localization/strings";
-import { localeAtom } from "../../../atoms/localeAtom"; // Make sure the path is correct
+import { localeAtom } from "../../../atoms/localeAtom";
 import { authAtom } from "../../../atoms/auth";
 import { useAtom } from "jotai";
 

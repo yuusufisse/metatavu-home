@@ -1,3 +1,9 @@
 {
-    "notYetImplemented": "ei vielä toteutettu"
-}
+    "notYetImplemented": "Ei vielä toteutettu",
+    "localization": {
+      "en": "EN",
+      "fi": "FI"
+    },
+    "currentLocaleLabel": "Nykyinen kieli:"
+  }
+  

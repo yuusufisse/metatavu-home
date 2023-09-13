@@ -1,22 +1,41 @@
 import { useAtom } from 'jotai';
 import { localeAtom } from '../../atoms/localeAtom';
 import strings from '../../localization/strings';
+import { Button } from '@mui/material';
+
 
 function LocaleToggle() {
     const [locale, setLocale] = useAtom(localeAtom);
 
-    const handleLocaleChange = (newLocale: string) => {
-        setLocale(newLocale);
-        strings.setLanguage(newLocale);
-    };
+        const handleLocaleChange = (newLocale: string) => {
+            setLocale(newLocale);
+            strings.setLanguage(newLocale);
+};
 
-    return (
-        <div>
-            <button onClick={() => handleLocaleChange("fi")}>FI</button>
-            <button onClick={() => handleLocaleChange("en")}>EN</button>
-            <p>Current Locale: {locale}</p>
-        </div>
-    );
+/**
+ * Renders localization buttons
+ */
+const renderLocalizationButtons = () => (
+    <div>
+      {strings.getAvailableLanguages().map((lang) => (
+        <Button
+            key={lang}
+            className={lang === locale ? "selected" : ""}
+            onClick={() => handleLocaleChange(lang)}
+        >
+            {strings.getString(`localization.${lang}`, locale)}
+        </Button>
+      ))}
+    </div>
+);
+
+
+return (
+    <div>
+        {renderLocalizationButtons()}
+        <p>{strings.currentLocaleLabel} {locale}</p>
+    </div>
+);
 }
 
 export default LocaleToggle;
