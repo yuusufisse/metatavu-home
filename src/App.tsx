@@ -7,13 +7,11 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import BalanceScreen from "./components/screens/timebank/balance-screen";
 
-
 /**
  * Application component
  *
  */
-function App () {
-
+function App() {
   const router = createBrowserRouter([
     {
       path: "/",
@@ -22,11 +20,10 @@ function App () {
     },
     {
       path: "/timebank",
-      element: <BalanceScreen/>,
+      element: <BalanceScreen />,
       errorElement: <ErrorScreen />
     }
   ]);
-
   return (
     <div className="App">
       <ThemeProvider theme={theme}>

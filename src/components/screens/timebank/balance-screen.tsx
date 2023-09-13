@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Timespan } from "../../../generated/client";
+import { useEffect, useState } from "react";
+import { PersonTotalTime, Timespan } from "../../../generated/client";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
 import {
   Card,
+  CircularProgress,
   List,
   ListItem,
   MenuItem,
@@ -11,29 +12,58 @@ import {
   Typography
 } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
-import { useAtomValue } from "jotai";
-import DashboardFetch from "../dashboard/dashboard-fetch";
+import { useAtomValue, useSetAtom } from "jotai";
+import { errorAtom } from "../../../atoms/error";
+import { personAtom } from "../../../atoms/person";
+import { useApi } from "../../../hooks/use-api";
+import { Link } from "react-router-dom";
 
 const BalanceScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const [timespanSelector, setTimespanSelector] = useState<string | undefined>("All");
-  const { personTotalTime } = DashboardFetch();
+  const setError = useSetAtom(errorAtom);
+  const { personsApi } = useApi();
+  const person = useAtomValue(personAtom);
+  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
+
+  /**
+   * Initialize logged in person's time data.
+   */
+  const getPersonData = async (timespan?: Timespan): Promise<void> => {
+    if (person) {
+      try {
+        const fetchedPerson = await personsApi.listPersonTotalTime({
+          personId: person?.id,
+          timespan: timespan
+        });
+        setPersonTotalTime(fetchedPerson[0]);
+      } catch (error) {
+        setError(`${"Person fetch has failed."}, ${error}`);
+      }
+    } else {
+      setError("Your account does not have any time bank entries.");
+    }
+  };
 
   const handleBalanceViewChange = (e?: SelectChangeEvent | undefined) => {
     setTimespanSelector(e?.target?.value);
     switch (e?.target.value) {
       case "Week":
-        return DashboardFetch(Timespan.WEEK);
+        return getPersonData(Timespan.WEEK);
       case "Month":
-        return DashboardFetch(Timespan.MONTH);
+        return getPersonData(Timespan.MONTH);
       case "Year":
-        return DashboardFetch(Timespan.YEAR);
+        return getPersonData(Timespan.YEAR);
       case "All":
-        return DashboardFetch(Timespan.ALL_TIME);
+        return getPersonData(Timespan.ALL_TIME);
       default:
-        return DashboardFetch(Timespan.ALL_TIME);
+        return getPersonData(Timespan.ALL_TIME);
     }
   };
+
+  useEffect(() => {
+    if (person) getPersonData();
+  }, []);
 
   return (
     <Card
@@ -46,6 +76,7 @@ const BalanceScreen = () => {
         backgroundColor: "lightgray"
       }}
     >
+      <Link to="/">HOME</Link>
       <Typography>
         Hello, {userProfile?.firstName} {userProfile?.lastName}
       </Typography>
@@ -71,19 +102,25 @@ const BalanceScreen = () => {
       <Typography sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <List>
           <ListItem>
-            {personTotalTime
-              ? `Balance: ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
-              : null}
+            {personTotalTime ? (
+              `Balance: ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
+            ) : (
+              <CircularProgress />
+            )}
           </ListItem>
           <ListItem>
-            {personTotalTime
-              ? `Logged time: ${getHoursAndMinutes(Number(personTotalTime?.logged))}`
-              : null}
+            {personTotalTime ? (
+              `Logged time: ${getHoursAndMinutes(Number(personTotalTime?.logged))}`
+            ) : (
+              <CircularProgress />
+            )}
           </ListItem>
           <ListItem>
-            {personTotalTime
-              ? `Expected: ${getHoursAndMinutes(Number(personTotalTime?.expected))}`
-              : null}
+            {personTotalTime ? (
+              `Expected: ${getHoursAndMinutes(Number(personTotalTime?.expected))}`
+            ) : (
+              <CircularProgress />
+            )}
           </ListItem>
         </List>
       </Typography>
