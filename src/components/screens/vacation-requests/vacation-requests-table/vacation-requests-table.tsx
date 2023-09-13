@@ -4,7 +4,7 @@ import { vacationRequestsAtom } from '../../../../atoms/vacationRequests';
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { columns } from './vacation-requsts-table-columns';
+import { columns } from './vacation-requests-table-columns';
 
 /**
  * Table to display vacation requests
