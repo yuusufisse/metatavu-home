@@ -2,11 +2,10 @@ import { Container } from "@mui/material";
 import LoaderWrapper from "../../generics/loader-wrapper";
 import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
-
 import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
-import getVacationRequests from "./vacation-requests-fetch";
+import getVacationRequests from "./get-vacation-requests";
 import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
-import getVacationRequestStatuses from "./vacation-request-statuses-fetch";
+import getVacationRequestStatuses from "./get-vacation-request-statuses";
 import VacationRequestsTable from "./vacation-requests-table/vacation-requests-table";
 
 const VacationRequestsScreen = () => {
@@ -21,10 +20,10 @@ const VacationRequestsScreen = () => {
    */
   useEffect(() => {
     setVacationRequests(vacationRequests);
-  },[ vacationRequests ])
+  },[ vacationRequests ]);
 
   /**
-   * Set vacation request statuses when vacation requests are fetched
+   * Set vacation request statuses to atom when vacation requests are fetched
    */
   useEffect(() => {
     if (!vacationRequestsLoading) {
