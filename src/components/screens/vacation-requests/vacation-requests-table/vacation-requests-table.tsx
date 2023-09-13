@@ -1,10 +1,11 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRowId } from "@mui/x-data-grid";
 import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
 import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
+import VacationRequestsTableToolbar from "./vacation-requests-table-toolbar";
 
 /**
  * Table to display vacation requests
@@ -14,6 +15,12 @@ function VacationRequestsTable() {
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
   const [rows, setRows] = useState<object[]>([]);
   const [pageSize] = useState<number>(10);
+  const [selectedRows, setSelectedRows] = useState<GridRowId[]>([]);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    createRows();
+  }, [vacationRequests, vacationRequestStatuses]);
 
   /**
    * Create vacation requests table rows
@@ -41,13 +48,19 @@ function VacationRequestsTable() {
     }
   };
 
-  useEffect(() => {
-    createRows();
-  }, [vacationRequests, vacationRequestStatuses]);
-
   return (
-    <Box sx={{ minHeight: 370, width: "100%" }}>
+    <Box
+      sx={{
+        minHeight: 370,
+        width: "100%"
+      }}
+      ref={containerRef}
+    >
+      <VacationRequestsTableToolbar selectedRows={selectedRows} />
       <DataGrid
+        onRowSelectionModelChange={(id) => {
+          setSelectedRows(id);
+        }}
         rows={rows}
         columns={columns}
         initialState={{
