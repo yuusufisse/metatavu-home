@@ -12,7 +12,7 @@ interface DeleteVacationRequestProps {
 /**
  * Functional component for a deleting vacation request
  */
-function DeleteVacationRequest(props: DeleteVacationRequestProps) {
+function DeleteVacationRequest(props: DeleteVacationRequestProps): void {
   const { id, index } = props;
   const { vacationRequestsApi } = useApi();
   const [vacationRequests, setVacationsRequests] = useAtom(vacationRequestsAtom);
@@ -39,11 +39,8 @@ function DeleteVacationRequest(props: DeleteVacationRequestProps) {
 
     if (vacationRequests) {
       setVacationsRequests(vacationRequests.filter((request) => request.id !== id));
-
-      handleEdit(index);
     }
   };
-  return {};
 }
 
 export default DeleteVacationRequest;
