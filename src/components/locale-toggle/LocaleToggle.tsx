@@ -29,7 +29,6 @@ const renderLocalizationButtons = () => (
     </div>
 );
 
-
 return (
     <div>
         {renderLocalizationButtons()}
