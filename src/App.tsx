@@ -5,6 +5,8 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import ErrorHandler from "./components/contexts/error-handler";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import BalanceScreen from "./components/screens/timebank/balance-screen";
+
 
 /**
  * Application component
@@ -16,6 +18,11 @@ function App () {
     {
       path: "/",
       element: <DashboardScreen />,
+      errorElement: <ErrorScreen />
+    },
+    {
+      path: "/timebank",
+      element: <BalanceScreen/>,
       errorElement: <ErrorScreen />
     }
   ]);

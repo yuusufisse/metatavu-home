@@ -2,14 +2,15 @@ import config from "../app/config";
 import {
   Configuration,
   ConfigurationParameters,
-  DailyEntriesApi, 
-  PersonsApi, 
-  SynchronizeApi, 
-  VacationRequestsApi, 
+  DailyEntriesApi,
+  PersonsApi,
+  SynchronizeApi,
+  VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
 
-type ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
+// rome-ignore lint/correctness/noUnusedVariables: <explanation>
+type  ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
 
 const getConfigurationFactory =
   <T>(ConfigConstructor: ConfigConstructor<T>, basePath: string, accessToken?: string) =>

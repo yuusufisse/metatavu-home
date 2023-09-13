@@ -2,16 +2,16 @@ import { cleanEnv, str, url } from "envalid";
 
 interface Config {
   auth: {
-    url: string
-    realm: string
-    clientId: string
-  }
+    url: string;
+    realm: string;
+    clientId: string;
+  };
   api: {
-    baseUrl: string
-  },
+    baseUrl: string;
+  };
   keycloak: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 const env = cleanEnv(import.meta.env, {
@@ -26,7 +26,7 @@ const config: Config = {
   auth: {
     url: env.VITE_KEYCLOAK_URL,
     realm: env.VITE_KEYCLOAK_REALM,
-    clientId: env.VITE_KEYCLOAK_CLIENT_ID,
+    clientId: env.VITE_KEYCLOAK_CLIENT_ID
   },
   api: {
     baseUrl: env.VITE_API_BASE_URL
