@@ -17,6 +17,7 @@ interface Translations {
   notYetImplemented: string;
   currentLocaleLabel: string;
   localization: Localizations;
+  logout: string;
 }
 
 /**

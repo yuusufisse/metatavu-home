@@ -1,8 +1,9 @@
 {
   "notYetImplemented": "Not yet implemented",
+  "currentLocaleLabel": "Current Locale:",
+  "logout": "Log out",
   "localization": {
-    "en": "EN",
-    "fi": "FI"
-  },
-  "currentLocaleLabel": "Current Locale:"
+    "en": "English",
+    "fi": "Finnish"
+  }
 }

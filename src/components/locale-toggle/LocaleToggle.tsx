@@ -1,40 +1,44 @@
 import { useAtom } from 'jotai';
-import { localeAtom } from '../../atoms/localeAtom';
 import strings from '../../localization/strings';
 import { Button } from '@mui/material';
-
-
-function LocaleToggle() {
-    const [locale, setLocale] = useAtom(localeAtom);
-
-        const handleLocaleChange = (newLocale: string) => {
-            setLocale(newLocale);
-            strings.setLanguage(newLocale);
-};
+import { languageAtom } from '../../atoms/languageAtom';
+import { Language } from '../../types';
 
 /**
- * Renders localization buttons
+ * Function to change language of the app
  */
-const renderLocalizationButtons = () => (
-    <div>
-      {strings.getAvailableLanguages().map((lang) => (
-        <Button
-            key={lang}
-            className={lang === locale ? "selected" : ""}
-            onClick={() => handleLocaleChange(lang)}
-        >
-            {strings.getString(`localization.${lang}`, locale)}
-        </Button>
-      ))}
-    </div>
-);
+function LocaleToggle() {
+    const [language, setLanguage] = useAtom(languageAtom);
 
-return (
-    <div>
-        {renderLocalizationButtons()}
-        <p>{strings.currentLocaleLabel} {locale}</p>
-    </div>
-);
+    const handleLocaleChange = (newLanguage: string) => {
+        setLanguage(newLanguage as Language);
+        strings.setLanguage(newLanguage);
+    };
+    
+
+    /**
+     * Renders localization buttons
+     */
+    const renderLocalizationButtons = () => (
+        <div>
+          {strings.getAvailableLanguages().map((lang) => (
+            <Button
+                key={lang}
+                className={lang === language ? "selected" : ""}
+                onClick={() => handleLocaleChange(lang)}
+            >
+                {strings.getString(`localization.${lang}`, language)}
+            </Button>
+          ))}
+        </div>
+    );
+
+    return (
+        <div>
+            {renderLocalizationButtons()}
+            <p>{strings.currentLocaleLabel} {language}</p>
+        </div>
+    );
 }
 
 export default LocaleToggle;
