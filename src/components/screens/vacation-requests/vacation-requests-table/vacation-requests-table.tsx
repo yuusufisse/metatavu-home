@@ -1,10 +1,10 @@
-import { DataGrid } from '@mui/x-data-grid';
-import { vacationRequestStatusesAtom } from '../../../../atoms/vacationRequestStatuses';
-import { vacationRequestsAtom } from '../../../../atoms/vacationRequests';
-import { useAtomValue } from 'jotai';
-import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import { columns } from './vacation-requests-table-columns';
+import { DataGrid } from "@mui/x-data-grid";
+import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
+import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
+import { useAtomValue } from "jotai";
+import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
+import { columns } from "./vacation-requests-table-columns";
 
 /**
  * Table to display vacation requests
@@ -12,8 +12,8 @@ import { columns } from './vacation-requests-table-columns';
 function VacationRequestsTable() {
   const vacationRequests = useAtomValue(vacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
-  const [ rows, setRows ] = useState<object[]>([]);
-  const [ pageSize ] = useState<number>(10);
+  const [rows, setRows] = useState<object[]>([]);
+  const [pageSize] = useState<number>(10);
 
   /**
    * Create vacation requests table rows
@@ -29,8 +29,8 @@ function VacationRequestsTable() {
           endDate: vacationRequest.endDate.toDateString(),
           days: vacationRequest.days,
           status: "No Status"
-        }
-        vacationRequestStatuses.forEach(vacationRequestStatus => {
+        };
+        vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
             row.status = vacationRequestStatus.status;
           }
@@ -39,25 +39,25 @@ function VacationRequestsTable() {
       });
       setRows(tempRows);
     }
-  }
+  };
 
   useEffect(() => {
     createRows();
-  },[ vacationRequests, vacationRequestStatuses ])
+  }, [vacationRequests, vacationRequestStatuses]);
 
   return (
-    <Box sx={{ minHeight: 370, width: '100%' }}>
+    <Box sx={{ minHeight: 370, width: "100%" }}>
       <DataGrid
-        rows={ rows }
-        columns={ columns }
+        rows={rows}
+        columns={columns}
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: pageSize,
-            },
-          },
+              pageSize: pageSize
+            }
+          }
         }}
-        pageSizeOptions={[ pageSize ]}
+        pageSizeOptions={[pageSize]}
         checkboxSelection
         disableRowSelectionOnClick
       />

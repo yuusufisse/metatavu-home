@@ -11,8 +11,7 @@ import VacationRequestsScreen from "./components/screens/vacation-requests/vacat
  * Application component
  *
  */
-function App () {
-
+function App() {
   const router = createBrowserRouter([
     {
       path: "/",

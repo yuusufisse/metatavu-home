@@ -9,10 +9,9 @@ import { errorAtom } from "../../../atoms/error";
  * Functional component for fetching vacation requests
  */
 const getVacationRequests = () => {
-
   const { personsApi, vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
-  const [ vacationRequests, setVacationRequests ] = useState<VacationRequest[]>([]);
+  const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
   const setError = useSetAtom(errorAtom);
   const [vacationRequestsLoading, setVacationRequestsLoading] = useState(true);
 
@@ -23,19 +22,21 @@ const getVacationRequests = () => {
     try {
       const fetchedPersons = await personsApi.listPersons({ active: true });
       // const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({personId: userProfile?.id}); // STAGING
-      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({ personId: fetchedPersons[0].keycloakId }); // TESTING
+      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
+        personId: fetchedPersons[0].keycloakId
+      }); // TESTING
       setVacationRequests(fetchedVacationRequests);
       setVacationRequestsLoading(false);
     } catch (error) {
-      setError(`${ "Person fetch has failed." }, ${ error }`);
+      setError(`${"Person fetch has failed."}, ${error}`);
     }
-  }
+  };
 
   useEffect(() => {
     fetchVacationsRequests();
-  },[ userProfile ]);
+  }, [userProfile]);
 
   return { vacationRequests, vacationRequestsLoading };
-}
+};
 
 export default getVacationRequests;

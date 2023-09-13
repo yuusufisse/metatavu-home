@@ -10,17 +10,18 @@ import VacationRequestsTable from "./vacation-requests-table/vacation-requests-t
 
 const VacationRequestsScreen = () => {
   const { vacationRequests, vacationRequestsLoading } = getVacationRequests();
-  const { latestVacationRequestStatuses, vacationRequestStatusesLoading } = getVacationRequestStatuses();
+  const { latestVacationRequestStatuses, vacationRequestStatusesLoading } =
+    getVacationRequestStatuses();
   const setVacationRequests = useSetAtom(vacationRequestsAtom);
   const setVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
-  const [ isLoading, setIsLoading ] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * Set vacation requests to atom when fetched
    */
   useEffect(() => {
     setVacationRequests(vacationRequests);
-  },[ vacationRequests ]);
+  }, [vacationRequests]);
 
   /**
    * Set vacation request statuses to atom when vacation requests are fetched
@@ -29,7 +30,7 @@ const VacationRequestsScreen = () => {
     if (!vacationRequestsLoading) {
       setVacationRequestStatuses(latestVacationRequestStatuses);
     }
-  },[ latestVacationRequestStatuses, vacationRequestsLoading ])
+  }, [latestVacationRequestStatuses, vacationRequestsLoading]);
 
   /**
    * Set loading to false, when both requests and their statuses are loaded
@@ -38,7 +39,7 @@ const VacationRequestsScreen = () => {
     if (!vacationRequestsLoading && !vacationRequestStatusesLoading) {
       setIsLoading(false);
     }
-  },[ vacationRequestsLoading, vacationRequestStatusesLoading ]);
+  }, [vacationRequestsLoading, vacationRequestStatusesLoading]);
 
   return (
     <Container>
@@ -47,6 +48,6 @@ const VacationRequestsScreen = () => {
       </LoaderWrapper>
     </Container>
   );
-}
+};
 
 export default VacationRequestsScreen;
