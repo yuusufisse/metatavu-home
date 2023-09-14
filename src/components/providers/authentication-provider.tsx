@@ -16,7 +16,6 @@ const keycloak = new Keycloak(config.auth);
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const setUserProfile = useSetAtom(userProfileAtom);
-
   const updateAuthData = useCallback(() => {
     setAuth({
       token: keycloak?.tokenParsed,

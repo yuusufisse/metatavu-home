@@ -1,7 +1,7 @@
 import { DialogContent, Divider, Typography } from "@mui/material";
 import { useAtom } from "jotai";
 import { ReactNode, useMemo } from "react";
-import { errorAtom } from "../../atoms/errorAtom";
+import { errorAtom } from "../../atoms/error";
 import GenericDialog from "../generics/generic-dialog";
 
 /**
@@ -66,7 +66,7 @@ const ErrorHandler = ({ children }: Props) => {
         onCancel={() => setError(undefined)}
         onConfirm={() => setError(undefined)}
         cancelButtonText={"Close"}
-        title={"An error has occured"}
+        title={"An error has occurred"}
       >
         <DialogContent id="error-dialog-description">
           {error && (

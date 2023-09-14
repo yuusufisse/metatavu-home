@@ -4,6 +4,8 @@ import LocaleToggle from "./components/locale-toggle/LocaleToggle";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./theme";
 
 /**
  * Application component
@@ -21,12 +23,14 @@ function App () {
 
   return (
     <div className="App">
-        <ErrorHandler>
+      <ThemeProvider theme={theme}>
+      <ErrorHandler>
           <AuthenticationProvider>
             <LocaleToggle />
             <RouterProvider router={router}  />
           </AuthenticationProvider>
         </ErrorHandler>
+      </ThemeProvider>
     </div>
   );
 }

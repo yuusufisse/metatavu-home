@@ -46,3 +46,4 @@ lerna-debug.log*
 
 # API spec
 /time-bank-api-spec/swagger.yaml
+/time-bank-api-spec/README.md
