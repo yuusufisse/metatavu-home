@@ -1,14 +1,14 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { GridRowId } from "@mui/x-data-grid";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
+import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
+import DeleteVacationRequests from "../delete-vacation-requests";
 
-interface VacationRequestsTableToolbarProps {
-  selectedRows: GridRowId[];
-}
-const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) => {
-  const { selectedRows } = props;
+const VacationRequestsTableToolbar = () => {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const selectedRows = useAtomValue(selectedRowIdsAtom);
+  const { deleteVacationRequests } = DeleteVacationRequests();
 
   useEffect(() => {
     if (selectedRows.length) {
@@ -17,6 +17,7 @@ const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) 
       setEditorOpen(false);
     }
   }, [selectedRows]);
+
   return (
     <Box
       sx={{
@@ -38,7 +39,11 @@ const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) 
             <Grid item xs={6} />
           )}
           <Grid item xs={6}>
-            <Button>
+            <Button
+              onClick={() => {
+                deleteVacationRequests();
+              }}
+            >
               <Delete />
               <Typography variant="h6">&nbsp;Delete</Typography>
             </Button>
