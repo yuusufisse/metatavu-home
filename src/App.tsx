@@ -10,8 +10,7 @@ import { theme } from "./theme";
  * Application component
  *
  */
-function App () {
-
+function App() {
   const router = createBrowserRouter([
     {
       path: "/",

@@ -2,10 +2,10 @@ import config from "../app/config";
 import {
   Configuration,
   ConfigurationParameters,
-  DailyEntriesApi, 
-  PersonsApi, 
-  SynchronizeApi, 
-  VacationRequestsApi, 
+  DailyEntriesApi,
+  PersonsApi,
+  SynchronizeApi,
+  VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
 
