@@ -1,11 +1,14 @@
-import { DataGrid, GridRowId } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
 import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
 import VacationRequestsTableToolbar from "./vacation-requests-table-toolbar";
+import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
+import { rowsAtom } from "../../../../atoms/rows";
+import { DataGridRow } from "../../../../types/data-types";
 
 /**
  * Table to display vacation requests
@@ -13,9 +16,9 @@ import VacationRequestsTableToolbar from "./vacation-requests-table-toolbar";
 function VacationRequestsTable() {
   const vacationRequests = useAtomValue(vacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
-  const [rows, setRows] = useState<object[]>([]);
+  const [rows, setRows] = useAtom(rowsAtom);
+  const setSelectedRowIds = useSetAtom(selectedRowIdsAtom);
   const [pageSize] = useState<number>(10);
-  const [selectedRows, setSelectedRows] = useState<GridRowId[]>([]);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -27,10 +30,10 @@ function VacationRequestsTable() {
    */
   const createRows = () => {
     if (vacationRequests && vacationRequestStatuses) {
-      const tempRows: object[] = [];
-      vacationRequests.forEach((vacationRequest, index) => {
-        const row = {
-          id: index,
+      const tempRows: DataGridRow[] = [];
+      vacationRequests.forEach((vacationRequest) => {
+        const row: DataGridRow = {
+          id: vacationRequest.id,
           type: vacationRequest.type,
           startDate: vacationRequest.startDate.toDateString(),
           endDate: vacationRequest.endDate.toDateString(),
@@ -56,10 +59,10 @@ function VacationRequestsTable() {
       }}
       ref={containerRef}
     >
-      <VacationRequestsTableToolbar selectedRows={selectedRows} />
+      <VacationRequestsTableToolbar />
       <DataGrid
-        onRowSelectionModelChange={(id) => {
-          setSelectedRows(id);
+        onRowSelectionModelChange={(index) => {
+          setSelectedRowIds(index);
         }}
         rows={rows}
         columns={columns}
