@@ -1,11 +1,10 @@
-import { authAtom, userProfileAtom } from "../../../atoms/auth";
+import { authAtom } from "../../../atoms/auth";
 import { Button, Card, CircularProgress, Typography } from "@mui/material";
 import { DateTime } from "luxon";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {  useAtomValue, useSetAtom } from "jotai";
 import { personAtom } from "../../../atoms/person";
 import { useEffect, useState } from "react";
-import config from "../../../app/config";
 import { errorAtom } from "../../../atoms/error";
 import { PersonTotalTime, Timespan } from "../../../generated/client";
 import { useApi } from "../../../hooks/use-api";
@@ -18,25 +17,12 @@ function DashboardScreen() {
   const auth = useAtomValue(authAtom);
   const setError = useSetAtom(errorAtom);
   const { personsApi } = useApi();
-  const [person, setPerson] = useAtom(personAtom);
+  const person = useAtomValue(personAtom);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
-  const userProfile = useAtomValue(userProfileAtom);
 
   useEffect(() => {
     if (person) getPersonData();
-    else getLoggedInPerson();
   }, [person]);
-
-  /**
-   * Get logged in person from keycloak ID.
-   */
-  const getLoggedInPerson = async (): Promise<void> => {
-    const fetchedPersons = await personsApi.listPersons({ active: true });
-    const loggedInPerson = fetchedPersons.filter(
-      (person) => person.keycloakId === config.keycloak.id || userProfile?.id
-    )[0];
-    setPerson(loggedInPerson);
-  };
 
   /**
    * Initialize logged in person's time data.

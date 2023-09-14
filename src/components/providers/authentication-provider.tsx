@@ -3,6 +3,8 @@ import { authAtom, userProfileAtom } from "../../atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { useCallback, useEffect } from "react";
+import { personAtom } from "../../atoms/person";
+import { useApi } from "../../hooks/use-api";
 
 interface Props {
   children: JSX.Element;
@@ -15,7 +17,10 @@ const keycloak = new Keycloak(config.auth);
  */
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
-  const setUserProfile = useSetAtom(userProfileAtom);
+  const [userProfile, setUserProfile] = useAtom(userProfileAtom);
+  const setPerson = useSetAtom(personAtom);
+  const { personsApi } = useApi();
+
   const updateAuthData = useCallback(() => {
     setAuth({
       token: keycloak?.tokenParsed,
@@ -65,6 +70,21 @@ const AuthenticationProvider = ({ children }: Props) => {
     } catch (error) {
       console.error(error);
     }
+  }, [auth]);
+
+  /**
+   * Sets the logged in person from keycloak ID as global state variable (atom)
+   */
+  const getLoggedInPerson = async (): Promise<void> => {
+    const fetchedPersons = await personsApi.listPersons({ active: true });
+    const loggedInPerson = fetchedPersons.filter(
+      (person) => person.keycloakId === config.keycloak.id || userProfile?.id
+    )[0];
+    setPerson(loggedInPerson);
+  };
+
+  useEffect(() => {
+    if (auth) getLoggedInPerson();
   }, [auth]);
 
   /**
