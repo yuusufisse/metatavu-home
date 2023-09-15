@@ -1,9 +1,15 @@
 {
-  "notYetImplemented": "Ei vielä toteutettu",
-  "currentLocaleLabel": "Nykyinen kieli:",
-  "logout": "Kirjaudu ulos",
+  "placeHolder": {
+    "notYetImplemented": "Ei vielä toteutettu"
+  },
+  "label": {
+    "currentLocaleLabel": "Nykyinen kieli:"
+  },
+  "header": {
+    "logout": "Kirjaudu ulos"
+  },
   "localization": {
-    "en": "Englanti",
-    "fi": "Suomi"
+    "en": "EN",
+    "fi": "FI"
   }
 }

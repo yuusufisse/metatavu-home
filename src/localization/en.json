@@ -1,9 +1,15 @@
 {
-  "notYetImplemented": "Not yet implemented",
-  "currentLocaleLabel": "Current Locale:",
-  "logout": "Log out",
+  "placeHolder": {
+    "notYetImplemented": "Not yet implemented"
+  },
+  "label": {
+    "currentLocaleLabel": "Current Locale:"
+  },
+  "header": {
+    "logout": "Log out"
+  },
   "localization": {
-    "en": "English",
-    "fi": "Finnish"
+    "en": "EN",
+    "fi": "FI"
   }
 }
