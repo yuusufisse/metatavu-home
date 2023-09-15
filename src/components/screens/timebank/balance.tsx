@@ -1,7 +1,7 @@
 import { Typography, List, ListItem, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import { getHoursAndMinutes } from "../../../utils/time-utils";
+import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
 
@@ -47,10 +47,11 @@ const Balance = (props: Props) => {
         <MenuItem value={"All"}>All time</MenuItem>
       </Select>
       <Typography sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        Time period: {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
         <List>
-          <ListItem>Balance: {getHoursAndMinutes(Number(personTotalTime?.balance))}`</ListItem>
-          <ListItem>Logged time: {getHoursAndMinutes(Number(personTotalTime?.logged))}`</ListItem>
-          <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}`</ListItem>
+          <ListItem>Balance: {getHoursAndMinutes(Number(personTotalTime?.balance))}</ListItem>
+          <ListItem>Logged time: {getHoursAndMinutes(Number(personTotalTime?.logged))}</ListItem>
+          <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}</ListItem>
         </List>
       </Typography>
     </>

@@ -6,7 +6,6 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
 import { personAtom } from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
-import { DateTime } from "luxon";
 import Balance from "./balance";
 
 const BalanceScreen = () => {
@@ -40,8 +39,6 @@ const BalanceScreen = () => {
           setPersonDailyEntry(values[1].value[0]);
         });
       } catch (error) {
-
-        
         setError(`${"Person fetch has failed."}, ${error}`);
       }
     } else {
@@ -84,13 +81,15 @@ const BalanceScreen = () => {
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <Balance
-          userProfile={userProfile}
-          handleBalanceViewChange={handleBalanceViewChange}
-          personDailyEntry={personDailyEntry}
-          personTotalTime={personTotalTime}
-          timespanSelector={timespanSelector}
-        />
+        <>
+          <Balance
+            userProfile={userProfile}
+            handleBalanceViewChange={handleBalanceViewChange}
+            personDailyEntry={personDailyEntry}
+            personTotalTime={personTotalTime}
+            timespanSelector={timespanSelector}
+          />
+        </>
       )}
     </Card>
   );
