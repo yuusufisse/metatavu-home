@@ -1,11 +1,16 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import DeleteVacationRequests from "../delete-vacation-requests";
 
-const VacationRequestsTableToolbar = () => {
+interface VacationRequestsTableToolbarProps {
+  skeleton?: boolean;
+}
+
+const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) => {
+  const { skeleton } = props;
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
   const selectedRows = useAtomValue(selectedRowIdsAtom);
   const { deleteVacationRequests } = DeleteVacationRequests();
@@ -50,7 +55,9 @@ const VacationRequestsTableToolbar = () => {
           </Grid>
         </Grid>
       ) : (
-        <Typography variant="h6">My Vacation Requests</Typography>
+        <Typography variant="h6">
+          {skeleton ? <Skeleton sx={{ width: "250px" }} /> : "My Vacation Requests"}
+        </Typography>
       )}
     </Box>
   );

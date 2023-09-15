@@ -9,6 +9,7 @@ import VacationRequestsTableToolbar from "./vacation-requests-table-toolbar";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import { rowsAtom } from "../../../../atoms/rows";
 import { DataGridRow } from "../../../../types/data-types";
+import VacationRequestsSkeletonTable from "./skeleton-table/skeleton-table";
 
 /**
  * Table to display vacation requests
@@ -59,24 +60,30 @@ function VacationRequestsTable() {
       }}
       ref={containerRef}
     >
-      <VacationRequestsTableToolbar />
-      <DataGrid
-        onRowSelectionModelChange={(index) => {
-          setSelectedRowIds(index);
-        }}
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: pageSize
-            }
-          }
-        }}
-        pageSizeOptions={[pageSize]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
+      {rows.length ? (
+        <>
+          <VacationRequestsTableToolbar />
+          <DataGrid
+            onRowSelectionModelChange={(index) => {
+              setSelectedRowIds(index);
+            }}
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: pageSize
+                }
+              }
+            }}
+            pageSizeOptions={[pageSize]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
+        </>
+      ) : (
+        <VacationRequestsSkeletonTable />
+      )}
     </Box>
   );
 }
