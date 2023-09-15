@@ -32,7 +32,7 @@ function DashboardScreen () {
     if (loggedInPerson.length) {
       try {
           const fetchedPerson = await personsApi.listPersonTotalTime({personId: loggedInPerson[0].id});
-          setPersonTotalTime(fetchedPerson[0]);
+            setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
         setError(`${ "Person fetch has failed." }, ${ error }`);
       }

@@ -5,31 +5,32 @@ import { languageAtom } from '../../atoms/languageAtom';
 import { Language } from '../../types';
 
 /**
- * Function to change language of the app
+ * LocalizationButtons component
  */
-function LocaleToggle() {
+const LocalizationButtons: React.FC = () => {
     const [language, setLanguage] = useAtom(languageAtom);
 
+    /**
+     * Method to handle locale change
+     */
     const handleLocaleChange = (newLanguage: string) => {
         setLanguage(newLanguage as Language);
-        strings.setLanguage(newLanguage);
     };
-    
 
     /**
      * Renders localization buttons
      */
     const renderLocalizationButtons = () => (
         <div>
-          {strings.getAvailableLanguages().map((lang) => (
-            <Button
-                key={lang}
-                className={lang === language ? "selected" : ""}
-                onClick={() => handleLocaleChange(lang)}
-            >
-                {strings.getString(`localization.${lang}`, language)}
-            </Button>
-          ))}
+            {strings.getAvailableLanguages().map((lang) => (
+                <Button
+                    key={lang}
+                    className={lang === language ? "selected" : ""}
+                    onClick={() => handleLocaleChange(lang)}
+                >
+                    {strings.getString(`localization.${lang}`, language)}
+                </Button>
+            ))}
         </div>
     );
 
@@ -41,4 +42,4 @@ function LocaleToggle() {
     );
 }
 
-export default LocaleToggle;
+export default LocalizationButtons;
