@@ -5,14 +5,14 @@ import Keycloak from "keycloak-js";
 import { useCallback, useEffect } from "react";
 
 interface Props {
-  children: JSX.Element[];
+  children: JSX.Element;
 }
 
 const keycloak = new Keycloak(config.auth);
 
 /**
-* Provides Keycloak authentication functions, such as login and logout
-*/
+ * Provides Keycloak authentication functions, such as login and logout
+ */
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const setUserProfile = useSetAtom(userProfileAtom);
@@ -36,9 +36,13 @@ const AuthenticationProvider = ({ children }: Props) => {
       keycloak.onTokenExpired = () => keycloak.updateToken(5);
 
       keycloak.onAuthRefreshError = () => keycloak.login();
-      keycloak.onAuthRefreshSuccess = () => { updateAuthData(); };
+      keycloak.onAuthRefreshSuccess = () => {
+        updateAuthData();
+      };
 
-      keycloak.onAuthError = error => { console.error(error); };
+      keycloak.onAuthError = (error) => {
+        console.error(error);
+      };
       keycloak.onAuthSuccess = async () => {
         try {
           await keycloak.loadUserProfile();
