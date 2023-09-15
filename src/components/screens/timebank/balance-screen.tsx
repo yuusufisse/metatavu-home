@@ -1,53 +1,58 @@
 import { useEffect, useState } from "react";
-import { PersonTotalTime, Timespan } from "../../../generated/client";
-import { getHoursAndMinutes } from "../../../utils/time-utils";
-import {
-  Card,
-  CircularProgress,
-  List,
-  ListItem,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography
-} from "@mui/material";
+import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
+import { Card, CircularProgress, SelectChangeEvent } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
 import { personAtom } from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
-import { Link } from "react-router-dom";
+import { DateTime } from "luxon";
+import Balance from "./balance";
 
 const BalanceScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
-  const [timespanSelector, setTimespanSelector] = useState<string | undefined>("All");
+  const [timespanSelector, setTimespanSelector] = useState<string>("All");
   const setError = useSetAtom(errorAtom);
-  const { personsApi } = useApi();
+  const { personsApi, dailyEntriesApi } = useApi();
   const person = useAtomValue(personAtom);
+  const [isLoading, setIsLoading] = useState(true);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
+  const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersonData = async (timespan?: Timespan): Promise<void> => {
+    setIsLoading(true);
     if (person) {
       try {
-        const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: person?.id,
-          timespan: timespan
+        Promise.allSettled([
+          await personsApi.listPersonTotalTime({
+            personId: person?.id,
+            timespan: timespan
+          }),
+          await dailyEntriesApi.listDailyEntries({
+            personId: person?.id,
+            before: new Date()
+          })
+        ]).then((values: any) => {
+          setPersonTotalTime(values[0].value[0]);
+          setPersonDailyEntry(values[1].value[0]);
         });
-        setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
+
+        
         setError(`${"Person fetch has failed."}, ${error}`);
       }
     } else {
       setError("Your account does not have any time bank entries.");
     }
+    setIsLoading(false);
   };
 
-  const handleBalanceViewChange = (e?: SelectChangeEvent | undefined) => {
-    setTimespanSelector(e?.target?.value);
-    switch (e?.target.value) {
+  const handleBalanceViewChange = (e: SelectChangeEvent) => {
+    setTimespanSelector(e.target.value);
+    switch (e.target.value) {
       case "Week":
         return getPersonData(Timespan.WEEK);
       case "Month":
@@ -63,7 +68,7 @@ const BalanceScreen = () => {
 
   useEffect(() => {
     if (person) getPersonData();
-  }, []);
+  }, [person]);
 
   return (
     <Card
@@ -76,54 +81,17 @@ const BalanceScreen = () => {
         backgroundColor: "lightgray"
       }}
     >
-      <Link to="/">HOME</Link>
-      <Typography>
-        Hello, {userProfile?.firstName} {userProfile?.lastName}
-      </Typography>
-      <br />
-      <Typography sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        Your work hour statistics of today:
-        {/* <List>
-          <ListItem>Balance: {getHoursAndMinutes(Number(personDailyEntry?.balance))}</ListItem>
-          <ListItem>Logged time: {getHoursAndMinutes(Number(personDailyEntry?.logged))}</ListItem>
-          <ListItem>Expected: {getHoursAndMinutes(Number(personDailyEntry?.expected))}</ListItem>
-        </List> */}
-      </Typography>
-      <br />
-      <Select
-        sx={{ width: "50%", marginBottom: "20px" }}
-        value={timespanSelector}
-        onChange={handleBalanceViewChange}
-      >
-        <MenuItem value={"Week"}>Week</MenuItem>
-        <MenuItem value={"Month"}>Month</MenuItem>
-        <MenuItem value={"All"}>All time</MenuItem>
-      </Select>
-      <Typography sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <List>
-          <ListItem>
-            {personTotalTime ? (
-              `Balance: ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
-            ) : (
-              <CircularProgress />
-            )}
-          </ListItem>
-          <ListItem>
-            {personTotalTime ? (
-              `Logged time: ${getHoursAndMinutes(Number(personTotalTime?.logged))}`
-            ) : (
-              <CircularProgress />
-            )}
-          </ListItem>
-          <ListItem>
-            {personTotalTime ? (
-              `Expected: ${getHoursAndMinutes(Number(personTotalTime?.expected))}`
-            ) : (
-              <CircularProgress />
-            )}
-          </ListItem>
-        </List>
-      </Typography>
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <Balance
+          userProfile={userProfile}
+          handleBalanceViewChange={handleBalanceViewChange}
+          personDailyEntry={personDailyEntry}
+          personTotalTime={personTotalTime}
+          timespanSelector={timespanSelector}
+        />
+      )}
     </Card>
   );
 };

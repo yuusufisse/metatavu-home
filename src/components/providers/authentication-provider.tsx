@@ -1,6 +1,6 @@
 import config from "../../app/config";
 import { authAtom, userProfileAtom } from "../../atoms/auth";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { useCallback, useEffect } from "react";
 import { personAtom } from "../../atoms/person";
@@ -18,7 +18,7 @@ const keycloak = new Keycloak(config.auth);
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const [userProfile, setUserProfile] = useAtom(userProfileAtom);
-  const setPerson = useSetAtom(personAtom);
+  const [person, setPerson] = useAtom(personAtom);
   const { personsApi } = useApi();
 
   const updateAuthData = useCallback(() => {
@@ -85,7 +85,7 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (auth) getLoggedInPerson();
-  }, [auth]);
+  }, [auth || person]);
 
   /**
    * Initializes authentication when component mounts
