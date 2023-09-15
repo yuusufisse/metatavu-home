@@ -11,8 +11,7 @@ import { theme } from "./theme";
  * Application component
  *
  */
-function App () {
-
+function App() {
   const router = createBrowserRouter([
     {
       path: "/",
@@ -27,7 +26,7 @@ function App () {
         <ErrorHandler>
           <AuthenticationProvider>
             <LocaleToggle />
-            <RouterProvider router={router}  />
+            <RouterProvider router={router} />
           </AuthenticationProvider>
         </ErrorHandler>
       </ThemeProvider>
