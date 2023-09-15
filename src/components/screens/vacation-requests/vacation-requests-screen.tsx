@@ -10,11 +10,9 @@ import VacationRequestsTable from "./vacation-requests-table/vacation-requests-t
 
 const VacationRequestsScreen = () => {
   const { vacationRequests, vacationRequestsLoading } = getVacationRequests();
-  const { latestVacationRequestStatuses, vacationRequestStatusesLoading } =
-    getVacationRequestStatuses();
+  const { latestVacationRequestStatuses } = getVacationRequestStatuses();
   const setVacationRequests = useSetAtom(vacationRequestsAtom);
   const setVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
-  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * Set vacation requests to atom when fetched
@@ -32,20 +30,9 @@ const VacationRequestsScreen = () => {
     }
   }, [latestVacationRequestStatuses, vacationRequestsLoading]);
 
-  /**
-   * Set loading to false, when both requests and their statuses are loaded
-   */
-  useEffect(() => {
-    if (!vacationRequestsLoading && !vacationRequestStatusesLoading) {
-      setIsLoading(false);
-    }
-  }, [vacationRequestsLoading, vacationRequestStatusesLoading]);
-
   return (
     <Container>
-      <LoaderWrapper loading={isLoading}>
-        <VacationRequestsTable />
-      </LoaderWrapper>
+      <VacationRequestsTable />
     </Container>
   );
 };
