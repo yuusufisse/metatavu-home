@@ -5,7 +5,7 @@ import Keycloak from "keycloak-js";
 import { useCallback, useEffect } from "react";
 
 interface Props {
-  children: JSX.Element[];
+  children: JSX.Element;
 }
 
 const keycloak = new Keycloak(config.auth);

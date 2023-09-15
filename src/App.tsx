@@ -11,13 +11,17 @@ import HomeScreen from "./components/screens/home/home-screen";
  * Application component
  *
  */
-function App () {
-
+const App = () => {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <HomeScreen />,
-      errorElement: <ErrorScreen />
+      element: <Header />,
+      children: [
+        {
+          path: "/",
+          element: <HomeScreen />,
+          errorElement: <ErrorScreen />
+        }
+      ]
     }
   ]);
 
@@ -26,13 +30,12 @@ function App () {
       <ThemeProvider theme={theme}>
         <ErrorHandler>
           <AuthenticationProvider>
-              <Header />
-              <RouterProvider router={router} />
+            <RouterProvider router={router} />
           </AuthenticationProvider>
         </ErrorHandler>
       </ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;
