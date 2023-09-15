@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material";
-import NunitoSans from "../fonts/NunitoSans.ttf";
+import NunitoSans from "../resources/fonts/NunitoSans.ttf";
 
 export const theme = createTheme({
   typography: {

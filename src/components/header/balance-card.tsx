@@ -1,7 +1,7 @@
 import { PersonTotalTime } from "../../generated/client";
 import { getHoursAndMinutes } from "../../utils/time-utils";
 import { Box, Grid, Typography } from "@mui/material";
-import Logo from "../../../img/Metatavu-icon.svg";
+import Logo from "../../../resources/img/Metatavu-icon.svg";
 import { userProfileAtom } from "../../atoms/auth";
 import { useAtomValue } from "jotai";
 
