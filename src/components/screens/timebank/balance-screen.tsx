@@ -4,7 +4,7 @@ import { Card, CircularProgress, SelectChangeEvent } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
-import { personAtom } from "../../../atoms/person";
+import { personAtom, personsAtom } from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
 import Balance from "./balance";
 
@@ -17,6 +17,8 @@ const BalanceScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
+  const persons = useAtomValue(personsAtom);
+  console.log(persons)
 
   /**
    * Initialize logged in person's time data.

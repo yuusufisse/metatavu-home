@@ -1,10 +1,11 @@
 import config from "../../app/config";
 import { authAtom, userProfileAtom } from "../../atoms/auth";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { useCallback, useEffect } from "react";
-import { personAtom } from "../../atoms/person";
+import { personAtom, personsAtom } from "../../atoms/person";
 import { useApi } from "../../hooks/use-api";
+import { Person } from "../../generated/client";
 
 interface Props {
   children: JSX.Element;
@@ -19,6 +20,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const [userProfile, setUserProfile] = useAtom(userProfileAtom);
   const [person, setPerson] = useAtom(personAtom);
+  const setPersons = useSetAtom(personsAtom);
   const { personsApi } = useApi();
 
   const updateAuthData = useCallback(() => {
@@ -78,9 +80,10 @@ const AuthenticationProvider = ({ children }: Props) => {
   const getLoggedInPerson = async (): Promise<void> => {
     const fetchedPersons = await personsApi.listPersons({ active: true });
     const loggedInPerson = fetchedPersons.filter(
-      (person) => person.keycloakId === config.keycloak.id || userProfile?.id
+      (person : Person) => person.keycloakId === config.keycloak.id || userProfile?.id
     )[0];
     setPerson(loggedInPerson);
+    setPersons(fetchedPersons);
   };
 
   useEffect(() => {
