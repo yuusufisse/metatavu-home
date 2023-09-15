@@ -3,34 +3,39 @@ import fi from "./fi.json";
 import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
-* Language names interface
-*/
-interface Localizations {
-  en: string;
-  fi: string;
+ * Localized strings
+ */
+export interface Localized extends LocalizedStringsMethods {
+  /**
+   * Translations related to generic words
+   */
+  label: {
+    currentLocaleLabel: string;
+  };
+  /**
+   * Translations related to header
+   */
+  header: {
+    logout: string;
+  };
+  /**
+   * Translations related to place holders
+   */
+  placeHolder: {
+    notYetImplemented: string;
+  };
+  /**
+   * Translations related to localization
+   */
+  localization: {
+    en: string;
+    fi: string;
+  };
 }
 
 /**
-* Translations interface
-*/
-interface Translations {
-  notYetImplemented: string;
-  currentLocaleLabel: string;
-  localization: Localizations;
-  logout: string;
-}
-
-/**
-* Localized strings
-*/
-export interface Localized extends LocalizedStringsMethods, Translations {}
-
-/**
-* Initialized localized strings
-*/
-const strings: Localized = new LocalizedStrings({
-  en: en,
-  fi: fi
-});
+ * Initialized localized strings
+ */
+const strings: Localized = new LocalizedStrings({ en: en, fi: fi });
 
 export default strings;
