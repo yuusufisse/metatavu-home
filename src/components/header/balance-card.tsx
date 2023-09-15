@@ -27,7 +27,6 @@ const BalanceCard = (props: BalanceCardProps) => {
   const { personTotalTime } = props;
   const userProfile = useAtomValue(userProfileAtom);
   const hello = "Hi, "; //put this in the localization file, SOMEBODY, PLEASE
-
   return (
     <>
       <Grid xs={12} sm={8}>
