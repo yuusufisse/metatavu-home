@@ -10,7 +10,7 @@ import { getHoursAndMinutes } from "../../../utils/time-utils";
 /**
  * Dashboard screen component
  */
-function DashboardScreen() {
+const DashboardScreen = () => {
   const auth = useAtomValue(authAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
