@@ -1,4 +1,4 @@
-import { Grid, Skeleton } from "@mui/material";
+import { Box, Grid, Skeleton } from "@mui/material";
 import { SkeletonTableRow } from "../../../../../types/data-types";
 
 const SkeletonTableRows = () => {
@@ -43,29 +43,30 @@ const SkeletonTableRows = () => {
 
   return (
     <>
-      {[...Array(10)].map(() => {
+      {[...Array(10)].map((item, idx) => {
         return (
-          <Grid
-            container
-            xs={12}
+          <Box
+            key={`skeleton-row-container${idx}`}
             sx={{
-              alignItems: "center",
               border: "1px solid lightgrey"
             }}
           >
-            {rows.map((row) => {
-              return (
-                <Skeleton
-                  variant={row.variant}
-                  sx={{
-                    height: row.height,
-                    width: row.width,
-                    margin: row.margin
-                  }}
-                />
-              );
-            })}
-          </Grid>
+            <Grid container alignItems="center">
+              {rows.map((row, idx) => {
+                return (
+                  <Skeleton
+                    variant={row.variant}
+                    key={`skeleton-row-${idx}`}
+                    sx={{
+                      height: row.height,
+                      width: row.width,
+                      margin: row.margin
+                    }}
+                  />
+                );
+              })}
+            </Grid>
+          </Box>
         );
       })}
     </>

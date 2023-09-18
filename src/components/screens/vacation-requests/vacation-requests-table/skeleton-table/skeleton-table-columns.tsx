@@ -48,10 +48,11 @@ const SkeletonTableColumns = () => {
         border: "1px solid lightgrey"
       }}
     >
-      {columns.map((column) => {
+      {columns.map((column, idx) => {
         return (
           <Skeleton
             variant={column.variant}
+            key={`skeleton-column-${idx}`}
             sx={{
               height: column.height,
               width: column.width,
