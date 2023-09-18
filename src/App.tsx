@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DashboardScreen from "./components/screens/dashboard/dashboard-screen";
-import LocaleToggle from "./components/localization-buttons/LocalizationButtons";
+import LocaleToggle from "./components/layout-components/localization-buttons";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
@@ -11,7 +11,7 @@ import { theme } from "./theme";
  * Application component
  *
  */
-function App() {
+const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
@@ -32,6 +32,6 @@ function App() {
       </ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;
