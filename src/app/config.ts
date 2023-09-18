@@ -2,13 +2,13 @@ import { cleanEnv, str, url } from "envalid";
 
 interface Config {
   auth: {
-    url: string
-    realm: string
-    clientId: string
-  }
+    url: string;
+    realm: string;
+    clientId: string;
+  };
   api: {
-    baseUrl: string
-  }
+    baseUrl: string;
+  };
 }
 
 const env = cleanEnv(import.meta.env, {
