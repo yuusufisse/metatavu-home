@@ -6,12 +6,15 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import ErrorHandler from "./components/contexts/error-handler";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "./atoms/languageAtom";
 
 /**
  * Application component
  *
  */
 const App = () => {
+  useAtomValue(languageAtom);
   const router = createBrowserRouter([
     {
       path: "/",
