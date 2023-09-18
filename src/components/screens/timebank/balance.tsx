@@ -1,9 +1,20 @@
-import { Typography, List, ListItem, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import React from "react";
+import {
+  Typography,
+  List,
+  ListItem,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Button,
+  Box
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
+import { ResponsiveContainer } from "recharts";
+import BalancePieChart from "./balance-piechart";
+import BalanceOverviewChart from "./balance-overviewchart";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -21,6 +32,7 @@ const Balance = (props: Props) => {
     timespanSelector,
     handleBalanceViewChange
   } = props;
+
   return (
     <>
       <Link to="/">HOME</Link>
@@ -46,14 +58,23 @@ const Balance = (props: Props) => {
         <MenuItem value={"Month"}>Month</MenuItem>
         <MenuItem value={"All"}>All time</MenuItem>
       </Select>
-      <Typography sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        Time period: {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
-        <List>
-          <ListItem>Balance: {getHoursAndMinutes(Number(personTotalTime?.balance))}</ListItem>
-          <ListItem>Logged time: {getHoursAndMinutes(Number(personTotalTime?.logged))}</ListItem>
-          <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}</ListItem>
-        </List>
+      <Typography sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <ResponsiveContainer width={300} height={300}>
+          <BalancePieChart personTotalTime={personTotalTime} />
+        </ResponsiveContainer>
+        <Box>
+          <List>
+            <ListItem sx={{ fontWeight: "bold" }}>
+              Time period: {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
+            </ListItem>
+            <ListItem>Balance: {getHoursAndMinutes(Number(personTotalTime?.balance))}</ListItem>
+            <ListItem>Logged time: {getHoursAndMinutes(Number(personTotalTime?.logged))}</ListItem>
+            <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}</ListItem>
+          </List>
+        </Box>
       </Typography>
+      <BalanceOverviewChart/>
+      <Button onClick={() => console.log(personTotalTime)}>TEST</Button>
     </>
   );
 };
