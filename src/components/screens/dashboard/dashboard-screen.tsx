@@ -11,7 +11,7 @@ import strings from "../../../localization/strings";
 /**
  * Dashboard screen component
  */
-function DashboardScreen() {
+const DashboardScreen = () => {
   const auth = useAtomValue(authAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
@@ -58,6 +58,6 @@ function DashboardScreen() {
       </button>
     </LoaderWrapper>
   );
-}
+};
 
 export default DashboardScreen;
