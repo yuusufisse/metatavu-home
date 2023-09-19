@@ -14,8 +14,10 @@ const LocalizationButtons = () => {
   /**
    * Method to handle locale change
    */
-  const handleLocaleChange = (_event: MouseEvent<HTMLElement>, newLanguage: Language | null) => {
-    setLanguage(newLanguage as Language);
+  const handleLocaleChange = (_event: MouseEvent<HTMLElement>, newLanguage: Language) => {
+    if (newLanguage) {
+      setLanguage(newLanguage as Language);
+    }
   };
 
   /**
@@ -30,6 +32,7 @@ const LocalizationButtons = () => {
     >
       {strings.getAvailableLanguages().map((availableLanguage, idx) => {
         const value = strings.getString(`localization.${availableLanguage}`, language);
+
         return (
           <ToggleButton value={availableLanguage} key={`${idx}`}>
             {value}
