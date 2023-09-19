@@ -6,6 +6,7 @@ import { PersonTotalTime } from "../../../generated/client";
 import { errorAtom } from "../../../atoms/error";
 import LoaderWrapper from "../../generics/loader-wrapper";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
+import strings from "../../../localization/strings";
 
 /**
  * Dashboard screen component
@@ -49,14 +50,16 @@ const DashboardScreen = () => {
     <LoaderWrapper loading={isLoading}>
       <div>
         {personTotalTime
-          ? `Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
+          ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
+              Number(personTotalTime?.balance)
+            )}`
           : null}
       </div>
-      <button type="button" onClick={() => auth?.logout()}>
-        Log out
+      <button type="button" onClick={auth?.logout}>
+        {strings.header.logout}
       </button>
     </LoaderWrapper>
   );
-}
+};
 
 export default DashboardScreen;

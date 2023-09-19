@@ -1,0 +1,19 @@
+{
+  "placeHolder": {
+    "notYetImplemented": "Ei vielä toteutettu"
+  },
+  "label": {
+    "currentLocaleLabel": "Nykyinen kieli:"
+  },
+  "header": {
+    "logout": "Kirjaudu ulos"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
+  },
+  "timebank": {
+    "balance": "Saldo",
+    "yourBalanceIs": "Saldosi on"
+  }
+}
