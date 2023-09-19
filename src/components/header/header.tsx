@@ -10,7 +10,7 @@ import BalanceCard from "./balance-card";
 import HomeNav from "./nav";
 
 /**
- * Dashboard screen component
+ * Header component
  */
 const Header = () => {
   const auth = useAtomValue(authAtom);

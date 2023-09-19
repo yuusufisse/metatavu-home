@@ -1,8 +1,5 @@
 /**
- * @module HomeScreen
- * @date 9/15/2023 - 11:39:05 AM
- *
- * @returns {*}
+ * Home screen component
  */
 const HomeScreen = () => {
     return (

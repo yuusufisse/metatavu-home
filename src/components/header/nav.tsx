@@ -1,37 +1,18 @@
 import { Box, Link } from "@mui/material";
 import { Auth } from "../../atoms/auth";
-import { NavButtonProps } from "../../types";
+import { NavButton } from "./navbutton";
 
 /**
- * Component props
- * @date 9/18/2023 - 4:04:33 PM
- *
- * @interface Props
- * @typedef {Props}
+ * Props for HomeNav component
  */
 interface Props {
   auth: Auth | undefined;
 }
 
+/**
+ * HomeNav component
+ */
 const HomeNav = ({ auth }: Props) => {
-
-  const NavButton = ({ text, selected, sx_props }: NavButtonProps) => (
-    <Link
-      href="#"
-      underline="none"
-      sx={Object.assign(
-        {
-          "background-color": selected ? "#dee2e5" : "",
-          height: "100%",
-          padding: "15px"
-        },
-        sx_props
-      )}
-    >
-      {text}
-    </Link>
-  );
-
   return (
     <Box
       sx={{

@@ -7,24 +7,15 @@ import { useAtomValue } from "jotai";
 
 /**
  * Component props
- * @date 9/15/2023 - 11:15:09 AM
- *
- * @interface BalanceCardProps
- * @typedef {BalanceCardProps}
  */
-interface BalanceCardProps {
+interface Props {
   personTotalTime: PersonTotalTime | undefined;
 }
 
 /**
  * Component for displaying user's balance
- * @date 9/15/2023 - 9:34:16 AM
- *
- * @param {BalanceCardProps} props
- * @returns {*}
  */
-const BalanceCard = (props: BalanceCardProps) => {
-  const { personTotalTime } = props;
+const BalanceCard = ({personTotalTime}: Props) => {
   const userProfile = useAtomValue(userProfileAtom);
   const hello = "Hi, "; //put this in the localization file, SOMEBODY, PLEASE
   return (
