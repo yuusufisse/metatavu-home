@@ -36,13 +36,14 @@ const BalanceOverviewChart = (props: Props) => {
           padding: theme.spacing(1)
         }}
       >
-        { `${name}: ${TimeUtils.convertToMinutesAndHours(time)}` }
+        {`${name}: ${getHoursAndMinutes(time)}`}
       </Typography>
     );
   };
 
   const renderCustomizedTooltip = (props: TooltipProps<ValueType, NameType>) => {
     const { active, payload } = props;
+    console.log(props);
 
     if (!active || !payload || !payload.length || !payload[0].payload) {
       return null;
@@ -51,19 +52,45 @@ const BalanceOverviewChart = (props: Props) => {
     const { billableProject, nonBillableProject, internal, expected, name } = payload[0].payload;
 
     return (
-      <Box>
+      <Box
+        style={{
+          padding: theme.spacing(1),
+          backgroundColor: "#fff",
+          border: "1px solid rgba(0, 0, 0, 0.4)"
+        }}
+      >
         <Typography
           variant="h6"
           style={{
             padding: theme.spacing(1)
           }}
         >
-          { name }
+          {name}
         </Typography>
-        { billableProject !== undefined && renderCustomizedTooltipRow(strings.billableProject, billableProject as number, theme.palette.success.main) }
-        { nonBillableProject !== undefined && renderCustomizedTooltipRow(strings.nonBillableProject, nonBillableProject as number, theme.palette.success.main) }
-        { internal !== undefined && renderCustomizedTooltipRow(strings.internal, internal as number, theme.palette.warning.main) }
-        { expected !== undefined && renderCustomizedTooltipRow(strings.expected, expected as number, theme.palette.info.main) }
+        {billableProject !== undefined &&
+          renderCustomizedTooltipRow(
+            strings.timebank.billableProject,
+            billableProject as number,
+            theme.palette.success.main
+          )}
+        {nonBillableProject !== undefined &&
+          renderCustomizedTooltipRow(
+            strings.timebank.nonBillableProject,
+            nonBillableProject as number,
+            theme.palette.success.main
+          )}
+        {internal !== undefined &&
+          renderCustomizedTooltipRow(
+            strings.timebank.internal,
+            internal as number,
+            theme.palette.warning.main
+          )}
+        {expected !== undefined &&
+          renderCustomizedTooltipRow(
+            strings.timebank.expected,
+            expected as number,
+            theme.palette.info.main
+          )}
       </Box>
     );
   };
@@ -78,8 +105,8 @@ const BalanceOverviewChart = (props: Props) => {
             tickFormatter={(value) => getHoursAndMinutes(value as number)}
           />
           <YAxis type="category" dataKey="name" />
-          {/* <Tooltip content={ renderCustomizedTooltip }/> */}
-          <Legend/>
+          <Tooltip content={renderCustomizedTooltip} />
+          <Legend />
           <Bar dataKey="project" barSize={60} stackId="a" fill={theme.palette.success.dark} />
           <Bar
             dataKey="nonBillableProject"

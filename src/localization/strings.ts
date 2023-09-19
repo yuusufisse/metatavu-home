@@ -37,6 +37,12 @@ export interface Localized extends LocalizedStringsMethods {
   timebank: {
     balance: string;
     yourBalanceIs: string;
+    logged: string;
+    expected: string;
+    billableProject: string;
+    nonBillableProject: string;
+    internal: string;
+    billableHours: string;
   };
 }
 

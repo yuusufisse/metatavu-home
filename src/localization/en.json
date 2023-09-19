@@ -14,6 +14,12 @@
   },
   "timebank": {
     "balance": "Balance",
-    "yourBalanceIs": "Your balance is"
+    "yourBalanceIs": "Your balance is",
+    "logged": "Logged",
+    "expected": "Expected",
+    "billableProject": "Billable",
+    "nonBillableProject": "Non-billable",
+    "internal": "Internal time",
+    "billableHours": "Minimum billing rate"
   }
 }

@@ -14,6 +14,12 @@
   },
   "timebank": {
     "balance": "Saldo",
-    "yourBalanceIs": "Saldosi on"
+    "yourBalanceIs": "Saldosi on",
+    "logged": "Kirjattu",
+    "expected": "Odotettu",
+    "billableProject": "Laskutettava",
+    "nonBillableProject": "Ei laskutettava",
+    "internal": "Sisäinen",
+    "billableHours": "Minimilaskutusaste"
   }
 }
