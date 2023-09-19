@@ -10,7 +10,7 @@ interface VacationRequestsTableToolbarProps {
   skeleton?: boolean;
 }
 
-const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) => {
+const TableToolbar = (props: VacationRequestsTableToolbarProps) => {
   const { skeleton } = props;
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const [formOpen, setFormOpen] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) 
       }}
     >
       {toolbarOpen ? (
-        <Grid container alignContent="space-around">
+        <Grid container alignContent="space-around" alignItems="center">
           {selectedRows.length === 1 ? (
             <Grid
               item
@@ -114,4 +114,4 @@ const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) 
   );
 };
 
-export default VacationRequestsTableToolbar;
+export default TableToolbar;
