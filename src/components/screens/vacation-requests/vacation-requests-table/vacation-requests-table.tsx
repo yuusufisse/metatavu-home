@@ -4,12 +4,12 @@ import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
-import { columns } from "./vacation-requests-table-columns";
-import VacationRequestsTableToolbar from "./vacation-requests-table-toolbar";
+import { columns } from "./table-columns";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import { rowsAtom } from "../../../../atoms/rows";
 import { DataGridRow } from "../../../../types/data-types";
 import VacationRequestsSkeletonTable from "./skeleton-table/skeleton-table";
+import TableToolbar from "./table-toolbar";
 
 /**
  * Table to display vacation requests
@@ -62,7 +62,7 @@ function VacationRequestsTable() {
     >
       {rows.length ? (
         <>
-          <VacationRequestsTableToolbar />
+          <TableToolbar />
           <DataGrid
             onRowSelectionModelChange={(index) => {
               setSelectedRowIds(index);
