@@ -1,7 +1,6 @@
 import { Box, Link } from "@mui/material";
 import { Auth } from "../../atoms/auth";
 import { NavButton } from "./navbutton";
-
 /**
  * Props for HomeNav component
  */

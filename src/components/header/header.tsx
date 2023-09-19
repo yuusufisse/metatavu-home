@@ -5,9 +5,10 @@ import { useApi } from "../../hooks/use-api";
 import { PersonTotalTime } from "../../generated/client";
 import { errorAtom } from "../../atoms/error";
 import LoaderWrapper from "../generics/loader-wrapper";
-import { Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import BalanceCard from "./balance-card";
 import HomeNav from "./nav";
+import LocalizationButtons from "../layout-components/localization-buttons";
 
 /**
  * Header component
@@ -59,7 +60,14 @@ const Header = () => {
             p: 3
           }}
         >
-          <BalanceCard personTotalTime={personTotalTime} />
+          <Grid item xs={6} md={10}>
+            <BalanceCard personTotalTime={personTotalTime} />
+          </Grid>
+          <Grid item xs={6} md={2}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <LocalizationButtons />
+            </Box>
+          </Grid>
         </Grid>
         <br />
         <Grid

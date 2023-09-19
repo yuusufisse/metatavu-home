@@ -4,6 +4,8 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import ErrorHandler from "./components/contexts/error-handler";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "./atoms/languageAtom";
 import Header from "./components/header/header";
 import HomeScreen from "./components/screens/home/home-screen";
 
@@ -12,6 +14,7 @@ import HomeScreen from "./components/screens/home/home-screen";
  *
  */
 const App = () => {
+  useAtomValue(languageAtom);
   const router = createBrowserRouter([
     {
       element: <Header />,
