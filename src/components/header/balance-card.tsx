@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import Logo from "../../../resources/img/Metatavu-icon.svg";
 import { userProfileAtom } from "../../atoms/auth";
 import { useAtomValue } from "jotai";
+import strings from "../../localization/strings";
 
 /**
  * Component props
@@ -15,9 +16,8 @@ interface Props {
 /**
  * Component for displaying user's balance
  */
-const BalanceCard = ({personTotalTime}: Props) => {
+const BalanceCard = ({ personTotalTime }: Props) => {
   const userProfile = useAtomValue(userProfileAtom);
-  const hello = "Hi, "; //put this in the localization file, SOMEBODY, PLEASE
   return (
     <>
       <Grid xs={12} sm={8}>
@@ -28,10 +28,12 @@ const BalanceCard = ({personTotalTime}: Props) => {
           src={Logo}
         />
         <Typography>
-          {hello + userProfile?.firstName}
+          {`${strings.header.hello}, ${userProfile?.firstName}!`}
           <br />
           {personTotalTime
-            ? `Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
+            ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
+                Number(personTotalTime?.balance)
+              )}`
             : null}
         </Typography>
       </Grid>
