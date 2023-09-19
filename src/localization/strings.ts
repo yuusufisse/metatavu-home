@@ -31,6 +31,13 @@ export interface Localized extends LocalizedStringsMethods {
     en: string;
     fi: string;
   };
+  /**
+   * Translations related to timebank
+   */
+  timebank: {
+    balance: string;
+    yourBalanceIs: string;
+  };
 }
 
 /**

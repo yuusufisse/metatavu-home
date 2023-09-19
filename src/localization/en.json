@@ -11,5 +11,9 @@
   "localization": {
     "en": "EN",
     "fi": "FI"
+  },
+  "timebank": {
+    "balance": "Balance",
+    "yourBalanceIs": "Your balance is"
   }
 }
