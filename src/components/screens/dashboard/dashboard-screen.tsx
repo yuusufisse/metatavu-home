@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
-import { Person, PersonTotalTime } from "../../../generated/client";
+import { PersonTotalTime } from "../../../generated/client";
 import { errorAtom } from "../../../atoms/error";
 import LoaderWrapper from "../../generics/loader-wrapper";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
