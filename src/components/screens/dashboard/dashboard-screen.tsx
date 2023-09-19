@@ -50,7 +50,9 @@ const DashboardScreen = () => {
     <LoaderWrapper loading={isLoading}>
       <div>
         {personTotalTime
-          ? `Your balance is ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
+          ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
+              Number(personTotalTime?.balance)
+            )}`
           : null}
       </div>
       <button type="button" onClick={auth?.logout}>
