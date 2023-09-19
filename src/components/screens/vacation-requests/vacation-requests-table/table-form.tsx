@@ -1,53 +1,44 @@
-import { Box, FormControl, Input, InputLabel, MenuItem } from "@mui/material";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import Select from "react-select";
+import { Box, Divider, FormControl, FormLabel, Select, TextField } from "@mui/material";
 import { VacationType } from "../../../../generated/client";
 
-interface VacationFormInput {
-  startDate: Date;
-  endDate: Date;
-  message: string;
-  days: number;
-  type: { label: string; value: VacationType };
-}
+import { ChangeEvent, useEffect, useState } from "react";
 
 const TableForm = () => {
-  const { control, handleSubmit } = useForm<VacationFormInput>();
+  const [message, setMessage] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [type, setType] = useState<VacationType>("VACATION");
+  const [days, setDays] = useState<number>(0);
 
-  const onSubmit = (data: VacationFormInput) => {
-    alert(JSON.stringify(data));
-  };
-
-  const options = (Object.keys(VacationType) as Array<keyof typeof VacationType>).map(
-    (vacationType) => {
-      return { label: vacationType, value: vacationType };
-    }
-  );
+  useEffect(() => {}, []);
 
   return (
     <Box
       sx={{
-        width: "100%",
-        border: "1px solid lightgrey"
+        width: "100%"
       }}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputLabel>First Name</InputLabel>
-        <Controller
-          name="firstName"
-          control={control}
-          render={({ field }) => <Input {...field} />}
-          defaultValue=""
-        />
-        <InputLabel>Vacation Type</InputLabel>
-        <Controller
-          name="type"
-          render={({ field }) => <Select {...field} options={options} />}
-          control={control}
-          defaultValue={options[0]}
-        />
-        <input type="submit" />
-      </form>
+      <Divider />
+      <Box sx={{ padding: "10px" }}>
+        <form>
+          <FormControl>
+            <FormLabel>Vacation Type</FormLabel>
+            <Select
+              value={type}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setType(event.target.value);
+              }}
+            />
+            <FormLabel>Message</FormLabel>
+            <TextField
+              value={message}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setMessage(event.target.value);
+              }}
+            />
+          </FormControl>
+        </form>
+      </Box>
     </Box>
   );
 };

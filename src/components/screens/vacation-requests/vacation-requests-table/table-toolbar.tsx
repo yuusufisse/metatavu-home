@@ -1,5 +1,5 @@
-import { Add, Delete, Edit } from "@mui/icons-material";
-import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
+import { Add, Cancel, Delete, Edit } from "@mui/icons-material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
@@ -92,19 +92,33 @@ const TableToolbar = (props: VacationRequestsTableToolbarProps) => {
               p: "10px"
             }}
           >
-            <Button
-              variant="contained"
-              disabled={formOpen}
-              sx={{
-                width: "100%"
-              }}
-              onClick={() => {
-                setFormOpen(true);
-              }}
-            >
-              <Add />
-              <Typography variant="h6">&nbsp;Create new</Typography>
-            </Button>
+            {formOpen ? (
+              <Button
+                variant="outlined"
+                sx={{
+                  width: "100%"
+                }}
+                onClick={() => {
+                  setFormOpen(false);
+                }}
+              >
+                <Cancel />
+                <Typography variant="h6">&nbsp;Cancel</Typography>
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                sx={{
+                  width: "100%"
+                }}
+                onClick={() => {
+                  setFormOpen(true);
+                }}
+              >
+                <Add />
+                <Typography variant="h6">&nbsp;Create new</Typography>
+              </Button>
+            )}
           </Grid>
         </Grid>
       )}

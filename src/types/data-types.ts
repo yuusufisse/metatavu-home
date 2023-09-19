@@ -22,3 +22,11 @@ export interface SkeletonTableRow {
   width: string | number;
   margin: string;
 }
+
+export interface VacationFormInput {
+  startDate: Date;
+  endDate: Date;
+  message: string;
+  days: number;
+  type: { label: string; value: VacationType };
+}
