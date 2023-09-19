@@ -63,7 +63,7 @@ const Balance = (props: Props) => {
           <BalancePieChart personTotalTime={personTotalTime} />
         </ResponsiveContainer>
         <Box>
-          <List>
+          <List sx={{ marginLeft: "5%" }}>
             <ListItem sx={{ fontWeight: "bold" }}>
               Time period: {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
             </ListItem>
@@ -74,7 +74,7 @@ const Balance = (props: Props) => {
         </Box>
       </Typography>
       <BalanceOverviewChart personTotalTime={personTotalTime} />
-      <Button onClick={() => console.log(personTotalTime)}>TEST</Button>
+      {/* <Button onClick={() => console.log(personTotalTime)}>TEST</Button> */}
     </>
   );
 };

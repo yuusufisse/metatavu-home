@@ -2,13 +2,13 @@ import config from "../../app/config";
 import { authAtom, userProfileAtom } from "../../atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
-import { useCallback, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import { personAtom, personsAtom } from "../../atoms/person";
 import { useApi } from "../../hooks/use-api";
 import { Person } from "../../generated/client";
 
 interface Props {
-  children: JSX.Element;
+  children: ReactNode;
 }
 
 const keycloak = new Keycloak(config.auth);

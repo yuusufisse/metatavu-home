@@ -37,10 +37,13 @@ export const workTimeData = (personTotalTime: PersonTotalTime | undefined) => {
 
 export const workTimeDataOverview = (personTotalTime: PersonTotalTime | undefined) => {
   return [
-    { name: "Project", project: personTotalTime?.billableProjectTime },
-    { name: "NonBillableProject", nonBillableProject: personTotalTime?.nonBillableProjectTime },
-    { name: "Expected", expected: personTotalTime?.expected },
-    { name: "Internal", internal: personTotalTime?.internalTime }
+    {
+      name: "Logged",
+      internal: personTotalTime?.internalTime,
+      project: personTotalTime?.billableProjectTime,
+      nonBillableProject: personTotalTime?.nonBillableProjectTime
+    },
+    { name: "Expected", expected: personTotalTime?.expected }
   ];
 };
 

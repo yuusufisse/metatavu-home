@@ -1,6 +1,5 @@
 import { authAtom } from "../../../atoms/auth";
 import { Button, Card, CircularProgress, Typography } from "@mui/material";
-import { DateTime } from "luxon";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
 import { useAtomValue, useSetAtom } from "jotai";
 import { personAtom } from "../../../atoms/person";
@@ -66,9 +65,6 @@ const DashboardScreen = () => {
           {strings.header.logout}
         </Button>
         <br />
-        <Button color="info" variant="contained" onClick={() => console.log(DateTime.now())}>
-          TEST
-        </Button>
       </Card>
     );
 };
