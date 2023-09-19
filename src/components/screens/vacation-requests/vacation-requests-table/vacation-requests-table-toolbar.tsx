@@ -27,24 +27,23 @@ const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) 
     <Box
       sx={{
         border: "1px solid lightgrey",
-        p: "15px",
         m: "0"
       }}
     >
       {editorOpen ? (
-        <Grid container alignContent="space-around">
+        <Grid container alignContent="space-around" alignItems="center">
           {selectedRows.length === 1 ? (
-            <Grid item xs={6}>
-              <Button>
+            <Grid item xs={6} sx={{ p: "10px" }}>
+              <Button variant="contained" sx={{ width: "100%" }}>
                 <Edit />
                 <Typography variant="h6">&nbsp;Edit</Typography>
               </Button>
             </Grid>
-          ) : (
-            <Grid item xs={6} />
-          )}
-          <Grid item xs={6}>
+          ) : null}
+          <Grid item xs={selectedRows.length === 1 ? 6 : 12} sx={{ p: "10px" }}>
             <Button
+              variant="contained"
+              sx={{ width: "100%" }}
               onClick={() => {
                 deleteVacationRequests();
               }}
@@ -55,9 +54,13 @@ const VacationRequestsTableToolbar = (props: VacationRequestsTableToolbarProps) 
           </Grid>
         </Grid>
       ) : (
-        <Typography variant="h6">
-          {skeleton ? <Skeleton sx={{ width: "250px" }} /> : "My Vacation Requests"}
-        </Typography>
+        <Grid item xs={12} sx={{ p: "10px", height: "64px" }}>
+          <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+            <Typography variant="h5">
+              {skeleton ? <Skeleton sx={{ width: "250px" }} /> : "My Vacation Requests"}
+            </Typography>
+          </Box>
+        </Grid>
       )}
     </Box>
   );
