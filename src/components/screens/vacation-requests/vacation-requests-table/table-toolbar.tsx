@@ -83,9 +83,7 @@ const TableToolbar = (props: VacationRequestsTableToolbarProps) => {
               p: "10px"
             }}
           >
-            <Typography variant="h5">
-              {skeleton ? <Skeleton sx={{ width: "250px" }} /> : "My Vacation Requests"}
-            </Typography>
+            <Typography variant="h5">My Vacation Requests</Typography>
           </Grid>
           <Grid
             item
@@ -96,6 +94,7 @@ const TableToolbar = (props: VacationRequestsTableToolbarProps) => {
           >
             <Button
               variant="contained"
+              disabled={formOpen}
               sx={{
                 width: "100%"
               }}
