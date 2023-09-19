@@ -35,9 +35,18 @@ export const workTimeData = (personTotalTime: PersonTotalTime | undefined) => {
   ];
 };
 
+export const workTimeDataOverview = (personTotalTime: PersonTotalTime | undefined) => {
+  return [
+    { name: "Project", project: personTotalTime?.billableProjectTime },
+    { name: "NonBillableProject", nonBillableProject: personTotalTime?.nonBillableProjectTime },
+    { name: "Expected", expected: personTotalTime?.expected },
+    { name: "Internal", internal: personTotalTime?.internalTime }
+  ];
+};
+
 export const renderCustomizedLabel = (props: CustomLabel) => {
   return `${props.name}\n${getHoursAndMinutes(props.value)}`;
-}
+};
 
 export const dateEntriesPreprocess = (dateEntries: DailyEntry[]) => {
   const workTimeData: WorkTimeData[] = [];
@@ -48,22 +57,28 @@ export const dateEntriesPreprocess = (dateEntries: DailyEntry[]) => {
     expected: 0
   };
 
-  dateEntries.forEach(
-    entry => {
-      const { date, expected, billableProjectTime, nonBillableProjectTime, internalTime, balance, logged } = entry;
+  dateEntries.forEach((entry) => {
+    const {
+      date,
+      expected,
+      billableProjectTime,
+      nonBillableProjectTime,
+      internalTime,
+      balance,
+      logged
+    } = entry;
 
-      workTimeData.push({
-        name: new Date(date).toLocaleDateString(),
-        expected: expected,
-        billableProject: billableProjectTime,
-        nonBillableProject: nonBillableProjectTime,
-        internal: internalTime
-      });
-      workTimeTotalData.balance += balance;
-      workTimeTotalData.logged += logged;
-      workTimeTotalData.expected += expected;
-    }
-  );
+    workTimeData.push({
+      name: new Date(date).toLocaleDateString(),
+      expected: expected,
+      billableProject: billableProjectTime,
+      nonBillableProject: nonBillableProjectTime,
+      internal: internalTime
+    });
+    workTimeTotalData.balance += balance;
+    workTimeTotalData.logged! += logged;
+    workTimeTotalData.expected! += expected;
+  });
 
   return { workTimeData: workTimeData, workTimeTotalData: workTimeTotalData };
 };

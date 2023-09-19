@@ -73,7 +73,7 @@ const Balance = (props: Props) => {
           </List>
         </Box>
       </Typography>
-      <BalanceOverviewChart/>
+      <BalanceOverviewChart personTotalTime={personTotalTime} />
       <Button onClick={() => console.log(personTotalTime)}>TEST</Button>
     </>
   );
