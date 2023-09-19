@@ -3,6 +3,7 @@ import strings from "../../localization/strings";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { languageAtom } from "../../atoms/languageAtom";
 import { Language } from "../../types";
+import { MouseEvent } from "react";
 
 /**
  * LocalizationButtons component
@@ -13,10 +14,7 @@ const LocalizationButtons = () => {
   /**
    * Method to handle locale change
    */
-  const handleLocaleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newLanguage: Language | null
-  ) => {
+  const handleLocaleChange = (_event: MouseEvent<HTMLElement>, newLanguage: Language | null) => {
     setLanguage(newLanguage as Language);
   };
 
@@ -24,23 +22,21 @@ const LocalizationButtons = () => {
    * Renders localization buttons
    */
   const renderLocalizationButtons = () => (
-    <div>
-      <ToggleButtonGroup
-        value={language}
-        exclusive
-        onChange={handleLocaleChange}
-        aria-label="localization"
-      >
-        {strings.getAvailableLanguages().map((availableLanguage, idx) => {
-          const value = strings.getString(`localization.${availableLanguage}`, language);
-          return (
-            <ToggleButton value={availableLanguage} key={`${idx}`}>
-              {value}
-            </ToggleButton>
-          );
-        })}
-      </ToggleButtonGroup>
-    </div>
+    <ToggleButtonGroup
+      value={language}
+      exclusive
+      onChange={handleLocaleChange}
+      aria-label="localization"
+    >
+      {strings.getAvailableLanguages().map((availableLanguage, idx) => {
+        const value = strings.getString(`localization.${availableLanguage}`, language);
+        return (
+          <ToggleButton value={availableLanguage} key={`${idx}`}>
+            {value}
+          </ToggleButton>
+        );
+      })}
+    </ToggleButtonGroup>
   );
 
   return <div>{renderLocalizationButtons()}</div>;
