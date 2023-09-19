@@ -3,6 +3,7 @@ import { useRouteError } from "react-router-dom";
 /**
  * Error page for displaying error status text and message
  *
+ * @returns ReactElement
  */
 const ErrorScreen = () => {
   const error: unknown = useRouteError();

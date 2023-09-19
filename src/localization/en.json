@@ -1,0 +1,19 @@
+{
+  "placeHolder": {
+    "notYetImplemented": "Not yet implemented"
+  },
+  "label": {
+    "currentLocaleLabel": "Current Locale:"
+  },
+  "header": {
+    "logout": "Log out"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
+  },
+  "timebank": {
+    "balance": "Balance",
+    "yourBalanceIs": "Your balance is"
+  }
+}
