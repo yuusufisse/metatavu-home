@@ -6,12 +6,7 @@ import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import DeleteVacationRequests from "../delete-vacation-requests";
 import TableForm from "./table-form";
 
-interface VacationRequestsTableToolbarProps {
-  skeleton?: boolean;
-}
-
-const TableToolbar = (props: VacationRequestsTableToolbarProps) => {
-  const { skeleton } = props;
+const TableToolbar = () => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const [formOpen, setFormOpen] = useState<boolean>(false);
   const selectedRows = useAtomValue(selectedRowIdsAtom);
