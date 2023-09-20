@@ -54,9 +54,9 @@ const Header = () => {
         <Grid
           container
           sx={{
-            "border-radius": "15px",
-            "background-color": "#f2f2f2",
-            "box-shadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
+            "borderRadius": "15px",
+            "backgroundColor": "#f2f2f2",
+            "boxShadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
             p: 3
           }}
         >
@@ -73,9 +73,9 @@ const Header = () => {
         <Grid
           container
           sx={{
-            "border-radius": "15px",
-            "background-color": "#f2f2f2",
-            "box-shadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
+            "borderRadius": "15px",
+            "backgroundColor": "#f2f2f2",
+            "boxShadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
             p: 0
           }}
         >

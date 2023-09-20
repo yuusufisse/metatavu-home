@@ -1,16 +1,24 @@
 import { Link } from "@mui/material";
-import { NavButtonProps } from "../../types";
+
+/**
+ * NavButton Props
+ */
+export interface Props {
+  text: string;
+  selected: boolean;
+  sx_props?: object;
+}
 
 /**
  * NavButton component
  */
-export const NavButton = ({ text, selected, sx_props }: NavButtonProps) => (
+export const NavButton = ({ text, selected, sx_props }: Props) => (
   <Link
     href="#"
     underline="none"
     sx={Object.assign(
       {
-        "background-color": selected ? "#dee2e5" : "",
+        "backgroundColor": selected ? "#dee2e5" : "",
         height: "100%",
         padding: "15px"
       },

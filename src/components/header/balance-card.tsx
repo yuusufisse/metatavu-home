@@ -20,7 +20,7 @@ const BalanceCard = ({ personTotalTime }: Props) => {
   const userProfile = useAtomValue(userProfileAtom);
   return (
     <>
-      <Grid xs={12} sm={8}>
+      <Grid>
         <Box
           component="img"
           sx={{ height: 48, filter: "invert(100%)" }}

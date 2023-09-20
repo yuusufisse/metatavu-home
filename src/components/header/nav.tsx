@@ -19,10 +19,10 @@ const HomeNav = ({ auth }: Props) => {
         width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        "padding-top": "16px",
-        "padding-right": "22px",
-        "padding-bottom": "14px",
-        "padding-left": "0px"
+        "paddingTop": "16px",
+        "paddingRight": "22px",
+        "paddingBottom": "14px",
+        "paddingLeft": "0px"
       }}
     >
       <Box>
@@ -30,8 +30,8 @@ const HomeNav = ({ auth }: Props) => {
           text={strings.header.home}
           selected={true}
           sx_props={{
-            "border-top-left-radius": "15px",
-            "border-bottom-left-radius": "15px"
+            "borderTopLeftRadius": "15px",
+            "borderBottomLeftRadius": "15px"
           }}
         />
         <NavButton text={strings.header.admin} selected={false} />
