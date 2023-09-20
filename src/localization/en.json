@@ -6,7 +6,11 @@
     "currentLocaleLabel": "Current Locale:"
   },
   "header": {
-    "logout": "Log out"
+    "hello": "Hi",
+    "logout": "Log out",
+    "home": "Home",
+    "admin": "Administration",
+    "onCall": "On Call"
   },
   "localization": {
     "en": "EN",
