@@ -1,5 +1,5 @@
 import { Add, Cancel, Delete, Edit } from "@mui/icons-material";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Collapse, Grid, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
@@ -117,7 +117,9 @@ const TableToolbar = () => {
           </Grid>
         </Grid>
       )}
-      {formOpen ? <TableForm /> : null}
+      <Collapse in={formOpen}>
+        <TableForm />
+      </Collapse>
     </Box>
   );
 };
