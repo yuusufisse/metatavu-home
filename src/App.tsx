@@ -12,30 +12,31 @@ import HomeScreen from "./components/screens/home/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
-const router = createBrowserRouter([
-  {
-    element: <Header />,
-    children: [
-      {
-        path: "/",
-        element: <HomeScreen />,
-        errorElement: <ErrorScreen />
-      },
-      {
-        path: "/vacations",
-        element: <VacationRequestsScreen />,
-        errorElement: <ErrorScreen />
-      }
-    ]
-  }
-]);
-
 /**
  * Application component
  *
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Header />,
+      children: [
+        {
+          path: "/home",
+          element: <HomeScreen />,
+          errorElement: <ErrorScreen />
+        },
+        {
+          path: "/vacations",
+          element: <VacationRequestsScreen />,
+          errorElement: <ErrorScreen />
+        }
+      ]
+    }
+  ]);
 
   return (
     <div className="App">
