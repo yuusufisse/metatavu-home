@@ -2,8 +2,9 @@ import { Box, Link } from "@mui/material";
 import { Auth } from "../../atoms/auth";
 import { NavButton } from "./navbutton";
 import strings from "../../localization/strings";
+
 /**
- * Props for HomeNav component
+ * Component properties
  */
 interface Props {
   auth: Auth | undefined;
@@ -11,6 +12,7 @@ interface Props {
 
 /**
  * HomeNav component
+ * @param props component properties
  */
 const HomeNav = ({ auth }: Props) => {
   return (

@@ -20,7 +20,7 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const { personsApi } = useApi();
-
+w
   /**
    * Initialize logged in person's time data.
    */
