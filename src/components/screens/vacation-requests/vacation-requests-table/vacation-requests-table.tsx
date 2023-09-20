@@ -14,7 +14,7 @@ import TableToolbar from "./table-toolbar";
 /**
  * Table to display vacation requests
  */
-function VacationRequestsTable() {
+const VacationRequestsTable = () => {
   const vacationRequests = useAtomValue(vacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
   const [rows, setRows] = useAtom(rowsAtom);
@@ -86,6 +86,6 @@ function VacationRequestsTable() {
       )}
     </Box>
   );
-}
+};
 
 export default VacationRequestsTable;
