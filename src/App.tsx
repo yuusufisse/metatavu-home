@@ -10,43 +10,44 @@ import { languageAtom } from "./atoms/languageAtom";
 import Header from "./components/header/header";
 import HomeScreen from "./components/screens/home/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+
+const router = createBrowserRouter([
+  {
+    element: <Header />,
+    children: [
+      {
+        path: "/",
+        element: <HomeScreen />,
+        errorElement: <ErrorScreen />
+      },
+      {
+        path: "/vacations",
+        element: <VacationRequestsScreen />,
+        errorElement: <ErrorScreen />
+      }
+    ]
+  }
+]);
 
 /**
  * Application component
  *
  */
 const App = () => {
-  useAtomValue(languageAtom);
-  const router = createBrowserRouter([
-    {
-      element: <Header />,
-      children: [
-        {
-          path: "/",
-          element: <HomeScreen />,
-          errorElement: <ErrorScreen />
-        },
-        {
-          path: "/vacations",
-          element: <VacationRequestsScreen />,
-          errorElement: <ErrorScreen />
-        }
-      ]
-    }
-  ]);
+  const language = useAtomValue(languageAtom);
 
   return (
     <div className="App">
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ThemeProvider theme={theme}>
-          <ErrorHandler>
-            <AuthenticationProvider>
+      <ThemeProvider theme={theme}>
+        <ErrorHandler>
+          <AuthenticationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
               <RouterProvider router={router} />
-            </AuthenticationProvider>
-          </ErrorHandler>
-        </ThemeProvider>
-      </LocalizationProvider>
+            </LocalizationProvider>
+          </AuthenticationProvider>
+        </ErrorHandler>
+      </ThemeProvider>
     </div>
   );
 };
