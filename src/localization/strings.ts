@@ -21,6 +21,7 @@ export interface Localized extends LocalizedStringsMethods {
     home: string;
     admin: string;
     onCall: string;
+    timebank: string;
   };
   /**
    * Translations related to place holders

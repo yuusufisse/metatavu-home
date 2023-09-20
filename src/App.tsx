@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import BalanceScreen from "./components/screens/timebank/balance-screen";
 import { useAtomValue } from "jotai";
@@ -24,6 +24,11 @@ const App = () => {
           path: "/",
           element: <HomeScreen />,
           errorElement: <ErrorScreen />
+        },
+        {
+          path: "/timebank",
+          element: <BalanceScreen />,
+          errorElement: <ErrorScreen />
         }
       ]
     }
@@ -31,11 +36,13 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
+        <CssBaseline>
         <ErrorHandler>
           <AuthenticationProvider>
             <RouterProvider router={router} />
           </AuthenticationProvider>
         </ErrorHandler>
+        </CssBaseline>
       </ThemeProvider>
     </div>
   );

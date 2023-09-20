@@ -1,6 +1,6 @@
 import { PersonTotalTime } from "../../generated/client";
 import { getHoursAndMinutes } from "../../utils/time-utils";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import Logo from "../../../resources/img/Metatavu-icon.svg";
 import { userProfileAtom } from "../../atoms/auth";
 import { useAtomValue } from "jotai";
@@ -34,7 +34,7 @@ const BalanceCard = ({ personTotalTime }: Props) => {
             ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
                 Number(personTotalTime?.balance)
               )}`
-            : null}
+            : <CircularProgress sx={{scale:"50%"}}/>}
         </Typography>
       </Grid>
     </>

@@ -10,7 +10,8 @@
     "logout": "Kirjaudu ulos",
     "home": "Koti",
     "admin": "Ylläpito",
-    "onCall": "Päivystys"
+    "onCall": "Päivystys",
+    "timebank": "Aikapankki"
   },
   "localization": {
     "en": "EN",

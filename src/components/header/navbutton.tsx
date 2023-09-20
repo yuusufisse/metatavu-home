@@ -6,15 +6,16 @@ import { Link } from "@mui/material";
 export interface Props {
   text: string;
   selected: boolean;
+  route?: string;
   sx_props?: object;
 }
 
 /**
  * NavButton component
  */
-export const NavButton = ({ text, selected, sx_props }: Props) => (
+export const NavButton = ({ text, selected, route, sx_props }: Props) => (
   <Link
-    href="#"
+    href={route}
     underline="none"
     sx={Object.assign(
       {

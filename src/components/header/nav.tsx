@@ -1,7 +1,9 @@
-import { Box, Link } from "@mui/material";
+import { Box } from "@mui/material";
 import { Auth } from "../../atoms/auth";
 import { NavButton } from "./navbutton";
 import strings from "../../localization/strings";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router";
 
 /**
  * Component properties
@@ -15,29 +17,36 @@ interface Props {
  * @param props component properties
  */
 const HomeNav = ({ auth }: Props) => {
+  const location = useLocation();
   return (
     <Box
       sx={{
         width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        "paddingTop": "16px",
-        "paddingRight": "22px",
-        "paddingBottom": "14px",
-        "paddingLeft": "0px"
+        paddingTop: "16px",
+        paddingRight: "22px",
+        paddingBottom: "14px",
+        paddingLeft: "0px"
       }}
     >
       <Box>
         <NavButton
           text={strings.header.home}
-          selected={true}
+          route={"/"}
+          selected={location.pathname === "/"}
           sx_props={{
-            "borderTopLeftRadius": "15px",
-            "borderBottomLeftRadius": "15px"
+            borderTopLeftRadius: "15px",
+            borderBottomLeftRadius: "15px"
           }}
         />
         <NavButton text={strings.header.admin} selected={false} />
         <NavButton text={strings.header.onCall} selected={false} />
+        <NavButton
+          text={strings.header.timebank}
+          route={"/timebank"}
+          selected={location.pathname === "/timebank"}
+        />
       </Box>
       <Box>
         <Link

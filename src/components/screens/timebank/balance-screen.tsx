@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
-import { Card, CircularProgress, SelectChangeEvent } from "@mui/material";
+import { Grid, CircularProgress, SelectChangeEvent } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
@@ -68,15 +68,13 @@ const BalanceScreen = () => {
   }, [person]);
 
   return (
-    <Card
-      sx={{
-        width: "25%",
-        textAlign: "center",
-        margin: "auto",
-        marginTop: "5%",
-        padding: "20px",
-        backgroundColor: "lightgray"
-      }}
+    <Grid
+    sx={{
+      borderRadius: "15px",
+      backgroundColor: "#f2f2f2",
+      boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+      p: 3
+    }}
     >
       {isLoading ? (
         <CircularProgress />
@@ -91,7 +89,7 @@ const BalanceScreen = () => {
           />
         </>
       )}
-    </Card>
+    </Grid>
   );
 };
 

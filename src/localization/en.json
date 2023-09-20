@@ -10,7 +10,8 @@
     "logout": "Log out",
     "home": "Home",
     "admin": "Administration",
-    "onCall": "On Call"
+    "onCall": "On Call",
+    "timebank": "Timebank"
   },
   "localization": {
     "en": "EN",

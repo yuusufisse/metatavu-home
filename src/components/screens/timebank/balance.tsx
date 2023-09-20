@@ -1,12 +1,11 @@
 import {
-  Typography,
+  Box,
   List,
   ListItem,
   Select,
   MenuItem,
   SelectChangeEvent,
   Button,
-  Box
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
@@ -35,19 +34,14 @@ const Balance = (props: Props) => {
 
   return (
     <>
-      <Link to="/">HOME</Link>
-      <Typography>
-        Hello, {userProfile?.firstName} {userProfile?.lastName}
-      </Typography>
-      <br />
-      <Typography sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Box>
         Latest entry {personDailyEntry?.date.toLocaleDateString()}
         <List>
           <ListItem>Balance: {getHoursAndMinutes(Number(personDailyEntry?.balance))}</ListItem>
           <ListItem>Logged time: {getHoursAndMinutes(Number(personDailyEntry?.logged))}</ListItem>
           <ListItem>Expected: {getHoursAndMinutes(Number(personDailyEntry?.expected))}</ListItem>
         </List>
-      </Typography>
+      </Box>
       <br />
       <Select
         sx={{ width: "50%", marginBottom: "20px" }}
@@ -58,7 +52,7 @@ const Balance = (props: Props) => {
         <MenuItem value={"Month"}>Month</MenuItem>
         <MenuItem value={"All"}>All time</MenuItem>
       </Select>
-      <Typography sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+      <Box>
         <ResponsiveContainer width={300} height={300}>
           <BalancePieChart personTotalTime={personTotalTime} />
         </ResponsiveContainer>
@@ -72,7 +66,7 @@ const Balance = (props: Props) => {
             <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}</ListItem>
           </List>
         </Box>
-      </Typography>
+      </Box>
       <BalanceOverviewChart personTotalTime={personTotalTime} />
       {/* <Button onClick={() => console.log(personTotalTime)}>TEST</Button> */}
     </>
