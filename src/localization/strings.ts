@@ -16,7 +16,11 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to header
    */
   header: {
+    hello: string;
     logout: string;
+    home: string;
+    admin: string;
+    onCall: string;
   };
   /**
    * Translations related to place holders
