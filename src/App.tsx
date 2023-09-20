@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests/vacation-requests-screen";
 import { useAtomValue } from "jotai";
@@ -41,13 +41,15 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <ErrorHandler>
-          <AuthenticationProvider>
-            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
-              <RouterProvider router={router} />
-            </LocalizationProvider>
-          </AuthenticationProvider>
-        </ErrorHandler>
+        <CssBaseline>
+          <ErrorHandler>
+            <AuthenticationProvider>
+              <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
+                <RouterProvider router={router} />
+              </LocalizationProvider>
+            </AuthenticationProvider>
+          </ErrorHandler>
+        </CssBaseline>
       </ThemeProvider>
     </div>
   );
