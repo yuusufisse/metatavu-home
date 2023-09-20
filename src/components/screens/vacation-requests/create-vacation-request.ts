@@ -1,9 +1,10 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../../atoms/auth";
-import { NewVacation } from "../../../types/data-types";
+
 import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
 import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
+import { VacationData } from "../../../types";
 
 /**
  * Functional component for creating a new vacation request
@@ -19,7 +20,7 @@ const CreateVacationRequest = () => {
    * Handle vacation apply button
    * Sends vacation request to database
    */
-  const createVacationRequest = async (newVacation: NewVacation) => {
+  const createVacationRequest = async (vacationData: VacationData) => {
     if (!userProfile || !userProfile.id) return;
 
     try {
@@ -27,13 +28,13 @@ const CreateVacationRequest = () => {
         vacationRequest: {
           personId: userProfile.id,
           createdBy: userProfile.id,
-          startDate: newVacation.startDate,
-          endDate: newVacation.endDate,
-          type: newVacation.type,
-          message: newVacation.message,
+          startDate: vacationData.startDate,
+          endDate: vacationData.endDate,
+          type: vacationData.type,
+          message: vacationData.message,
           createdAt: new Date(),
           updatedAt: new Date(),
-          days: newVacation.days
+          days: vacationData.days
         }
       });
 
