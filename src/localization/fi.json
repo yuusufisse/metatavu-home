@@ -6,7 +6,11 @@
     "currentLocaleLabel": "Nykyinen kieli:"
   },
   "header": {
-    "logout": "Kirjaudu ulos"
+    "hello": "Hei",
+    "logout": "Kirjaudu ulos",
+    "home": "Koti",
+    "admin": "Ylläpito",
+    "onCall": "Päivystys"
   },
   "localization": {
     "en": "EN",
