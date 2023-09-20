@@ -9,6 +9,8 @@ import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests/vacation-requests-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 /**
  * Application component
@@ -31,14 +33,16 @@ const App = () => {
 
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <ErrorHandler>
-          <AuthenticationProvider>
-            <LocaleToggle />
-            <RouterProvider router={router} />
-          </AuthenticationProvider>
-        </ErrorHandler>
-      </ThemeProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <ThemeProvider theme={theme}>
+          <ErrorHandler>
+            <AuthenticationProvider>
+              <LocaleToggle />
+              <RouterProvider router={router} />
+            </AuthenticationProvider>
+          </ErrorHandler>
+        </ThemeProvider>
+      </LocalizationProvider>
     </div>
   );
 };
