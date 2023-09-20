@@ -13,16 +13,26 @@ import {
 import { VacationType } from "../../../../generated/client";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
+import { DateTime } from "luxon";
 
 const TableForm = () => {
   const [message, setMessage] = useState<string>("");
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<DateTime | null>(DateTime.now());
+  const [endDate, setEndDate] = useState<DateTime | null>(DateTime.now());
   const [type, setType] = useState<string>("VACATION");
   const [days, setDays] = useState<number>(0);
 
-  useEffect(() => {}, []);
+  /**
+   * Calculate time difference between startDate and endDate and assign it to days state
+   */
+  useEffect(() => {
+    let diff;
+    if (startDate && endDate) {
+      diff = endDate.diff(startDate, ["days"]);
+      setDays(diff.days);
+    }
+  }, [startDate, endDate]);
 
   return (
     <Box
@@ -44,7 +54,11 @@ const TableForm = () => {
             >
               {(Object.keys(VacationType) as Array<keyof typeof VacationType>).map(
                 (vacationType) => {
-                  return <MenuItem value={vacationType}>{vacationType}</MenuItem>;
+                  return (
+                    <MenuItem key={vacationType} value={vacationType}>
+                      {vacationType}
+                    </MenuItem>
+                  );
                 }
               )}
             </Select>
@@ -56,7 +70,6 @@ const TableForm = () => {
               }}
               sx={{ marginBottom: "5px" }}
             />
-            <LocalizationProvider />
             <FormLabel sx={{ marginBottom: "5px" }}>Duration</FormLabel>
             <Grid container>
               <DatePicker
@@ -68,6 +81,7 @@ const TableForm = () => {
               <DatePicker
                 label="End Date"
                 value={endDate}
+                minDate={startDate}
                 onChange={(newValue) => setEndDate(newValue)}
               />
             </Grid>
