@@ -6,11 +6,13 @@ import { VacationRequestStatus } from "../../../generated/client";
 import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
 
 /**
- * Functional component for fetching vacation request statuses
+ * Get vacation requests statuses,
+ * a functional component for fetching vacation request statuses
  *
- * @returns latestVacationRequestStatuses array of filtered vacation request statuses, vacationRequestStatusesLoading boolean to indicate if vacation request statuses are loading
+ * @returns latestVacationRequestStatuses array of filtered vacation request statuses,
+ * vacationRequestStatusesLoading boolean to indicate if vacation request statuses are loading
  */
-const getVacationRequestStatuses = () => {
+const GetVacationRequestStatuses = () => {
   const { vacationRequestStatusApi } = useApi();
   const vacationRequests = useAtomValue(vacationRequestsAtom);
   const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
@@ -101,4 +103,4 @@ const getVacationRequestStatuses = () => {
   return { latestVacationRequestStatuses, vacationRequestStatusesLoading };
 };
 
-export default getVacationRequestStatuses;
+export default GetVacationRequestStatuses;
