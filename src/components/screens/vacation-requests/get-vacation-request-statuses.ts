@@ -7,6 +7,8 @@ import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
 
 /**
  * Functional component for fetching vacation request statuses
+ *
+ * @returns latestVacationRequestStatuses array of filtered vacation request statuses, vacationRequestStatusesLoading boolean to indicate if vacation request statuses are loading
  */
 const getVacationRequestStatuses = () => {
   const { vacationRequestStatusApi } = useApi();
