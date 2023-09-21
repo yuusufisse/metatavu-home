@@ -6,9 +6,10 @@ import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
 
 /**
- * Functional component for fetching vacation requests
+ * Get vacation requests, a functional component for fetching vacation requests
  *
- * @returns vacationRequests array of vacation requests, vacationRequestsLoading boolean to indicate is vacation requests are loading
+ * @returns vacationRequests array of vacation requests,
+ * vacationRequestsLoading boolean to indicate is vacation requests are loading
  */
 const getVacationRequests = () => {
   const { personsApi, vacationRequestsApi } = useApi();

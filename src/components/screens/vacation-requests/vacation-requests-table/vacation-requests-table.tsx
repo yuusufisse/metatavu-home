@@ -12,7 +12,8 @@ import TableToolbar from "./table-toolbar";
 import { DataGridRow } from "../../../../types";
 
 /**
- * Table to display vacation requests
+ * Vacation requests table root component, display a table of vacation requests
+ *
  */
 const VacationRequestsTable = () => {
   const vacationRequests = useAtomValue(vacationRequestsAtom);

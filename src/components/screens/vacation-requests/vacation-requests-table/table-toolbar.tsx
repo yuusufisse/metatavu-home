@@ -6,6 +6,10 @@ import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import DeleteVacationRequests from "../delete-vacation-requests";
 import TableForm from "./table-form";
 
+/**
+ * Table tool bar component, provides functionality to alter vacation requests table
+ *
+ */
 const TableToolbar = () => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const [formOpen, setFormOpen] = useState<boolean>(false);
