@@ -7,6 +7,8 @@ import { errorAtom } from "../../../atoms/error";
 
 /**
  * Functional component for fetching vacation requests
+ *
+ * @returns vacationRequests array of vacation requests, vacationRequestsLoading boolean to indicate is vacation requests are loading
  */
 const getVacationRequests = () => {
   const { personsApi, vacationRequestsApi } = useApi();
