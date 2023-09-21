@@ -11,11 +11,9 @@ import {
   TextField
 } from "@mui/material";
 import { VacationType } from "../../../../generated/client";
-
 import { ChangeEvent, useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-
 import getLocalizedVacationType from "../../../../utils/vacation-type-utils";
 import { VacationData } from "../../../../types";
 import CreateVacationRequest from "../create-vacation-request";
@@ -79,6 +77,7 @@ const TableForm = () => {
    * Handle submit
    */
   const handleSubmit = () => {
+    // TODO: Vacation data validation
     createVacationRequest(vacationData);
   };
 
