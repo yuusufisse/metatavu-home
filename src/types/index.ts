@@ -14,6 +14,7 @@ export interface DataGridRow {
   startDate: string;
   endDate: string;
   days: number;
+  message: string | undefined;
   status: string;
 }
 
