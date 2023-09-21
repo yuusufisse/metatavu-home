@@ -5,6 +5,9 @@ import { VacationType } from "../generated/client";
  */
 export type Language = "fi" | "en";
 
+/**
+ * Type describing row for data grid table
+ */
 export interface DataGridRow {
   id: string | undefined;
   type: VacationType;
@@ -14,6 +17,9 @@ export interface DataGridRow {
   status: string;
 }
 
+/**
+ * Type describing column for skeleton table
+ */
 export interface SkeletonTableColumn {
   variant: string;
   height: number | string;
@@ -21,6 +27,9 @@ export interface SkeletonTableColumn {
   margin: number | string;
 }
 
+/**
+ * Type describing row for skeleton table
+ */
 export interface SkeletonTableRow {
   variant: string;
   height: string | number;
@@ -28,18 +37,13 @@ export interface SkeletonTableRow {
   margin: string;
 }
 
-// export interface VacationData {
-//   startDate: Date | undefined | null;
-//   endDate: Date | undefined | null;
-//   type: VacationType | undefined | null;
-//   message: string | undefined | null;
-//   days: number | undefined | null;
-// }
-
+/**
+ * Type describing data for vacation request
+ */
 export interface VacationData {
-  startDate: Date;
-  endDate: Date;
-  type: VacationType;
-  message: string;
-  days: number;
+  startDate: Date | undefined | null;
+  endDate: Date | undefined | null;
+  type: VacationType | undefined | null;
+  message: string | undefined | null;
+  days: number | undefined | null;
 }
