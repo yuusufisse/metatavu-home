@@ -1,4 +1,4 @@
-import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 
 /**
  * NavButton Props
@@ -6,7 +6,7 @@ import { Link } from "@mui/material";
 export interface Props {
   text: string;
   selected: boolean;
-  route?: string;
+  route: string;
   sx_props?: object;
 }
 
@@ -15,13 +15,14 @@ export interface Props {
  */
 export const NavButton = ({ text, selected, route, sx_props }: Props) => (
   <Link
-    href={route}
-    underline="none"
-    sx={Object.assign(
+    to={route}
+    style={Object.assign(
       {
-        "backgroundColor": selected ? "#dee2e5" : "",
+        backgroundColor: selected ? "#dee2e5" : "",
         height: "100%",
-        padding: "15px"
+        padding: "15px",
+        textDecoration: "none",
+        color: "black"
       },
       sx_props
     )}

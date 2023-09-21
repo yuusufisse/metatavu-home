@@ -27,6 +27,14 @@ export interface WorkTimeTotalData {
   expected?: number;
 }
 
+export const dailyEntryToChart = (dailyEntry: DailyEntry | undefined) => {
+  return [
+    { name: "Billable", dataKey: dailyEntry?.billableProjectTime },
+    { name: "NonBillable", dataKey: dailyEntry?.nonBillableProjectTime },
+    { name: "Internal", dataKey: dailyEntry?.internalTime }
+  ];
+};
+
 export const workTimeData = (personTotalTime: PersonTotalTime | undefined) => {
   return [
     { name: "Billable", dataKey: personTotalTime?.billableProjectTime },
@@ -40,7 +48,7 @@ export const workTimeDataOverview = (personTotalTime: PersonTotalTime | undefine
     {
       name: "Logged",
       internal: personTotalTime?.internalTime,
-      project: personTotalTime?.billableProjectTime,
+      billableProject: personTotalTime?.billableProjectTime,
       nonBillableProject: personTotalTime?.nonBillableProjectTime
     },
     { name: "Expected", expected: personTotalTime?.expected }
@@ -48,7 +56,7 @@ export const workTimeDataOverview = (personTotalTime: PersonTotalTime | undefine
 };
 
 export const renderCustomizedLabel = (props: CustomLabel) => {
-  return `${props.name}\n${getHoursAndMinutes(props.value)}`;
+  return `${props.name} ${getHoursAndMinutes(props.value)}`;
 };
 
 export const dateEntriesPreprocess = (dateEntries: DailyEntry[]) => {
@@ -79,8 +87,8 @@ export const dateEntriesPreprocess = (dateEntries: DailyEntry[]) => {
       internal: internalTime
     });
     workTimeTotalData.balance += balance;
-    workTimeTotalData.logged! += logged;
-    workTimeTotalData.expected! += expected;
+    workTimeTotalData.logged += logged;
+    workTimeTotalData.expected += expected;
   });
 
   return { workTimeData: workTimeData, workTimeTotalData: workTimeTotalData };

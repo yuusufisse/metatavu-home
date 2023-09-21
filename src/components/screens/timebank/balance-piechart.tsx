@@ -1,18 +1,19 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, TooltipProps } from "recharts";
-import { workTimeData, renderCustomizedLabel } from "../../../utils/chart-utils";
-import { PersonTotalTime } from "../../../generated/client";
-import { Box, Typography } from "@mui/material";
+import { workTimeData, renderCustomizedLabel, dailyEntryToChart } from "../../../utils/chart-utils";
+import { DailyEntry, PersonTotalTime } from "../../../generated/client";
+import { Box, Button, Typography } from "@mui/material";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 import { theme } from "../../../theme";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
 
 interface Props {
   personTotalTime: PersonTotalTime | undefined;
+  dailyEntries: DailyEntry[] | undefined
 }
 
 const BalancePieChart = (props: Props) => {
-  const { personTotalTime } = props;
+  const { personTotalTime, dailyEntries } = props;
 
   const COLORS = [
     theme.palette.success.dark,
@@ -22,7 +23,7 @@ const BalancePieChart = (props: Props) => {
 
   const renderCustomizedTooltip = (props: TooltipProps<ValueType, NameType>) => {
     const { active, payload } = props;
-
+    console.log(active, payload)
     if (!active || !payload || !payload.length) {
       return null;
     }
@@ -54,17 +55,18 @@ const BalancePieChart = (props: Props) => {
     );
   };
   return (
-    <ResponsiveContainer width={300} height={300}>
+    <>
+    <ResponsiveContainer width={"50%"} height={200}>
       <PieChart>
         <Pie
-          data={workTimeData(personTotalTime)}
+          data={dailyEntryToChart(dailyEntries[1])}
           dataKey="dataKey"
           cx="50%"
           cy="50%"
           outerRadius={50}
           label={renderCustomizedLabel}
         >
-          {workTimeData(personTotalTime).map((_entry, index) => (
+          {dailyEntryToChart(dailyEntries[1]).map((_entry, index) => (
             <>
               <Cell key={`cell-${index}`} fill={COLORS[index]} />
               <Tooltip content={renderCustomizedTooltip} />
@@ -74,6 +76,8 @@ const BalancePieChart = (props: Props) => {
         <Tooltip content={renderCustomizedTooltip} />
       </PieChart>
     </ResponsiveContainer>
+    <Button onClick={() => console.log(dailyEntryToChart(dailyEntries[0]))}>TEST</Button>
+    </>
   );
 };
 

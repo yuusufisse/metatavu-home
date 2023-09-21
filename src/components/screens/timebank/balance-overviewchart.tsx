@@ -1,6 +1,5 @@
 import {
   BarChart,
-  CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
@@ -12,9 +11,8 @@ import {
 import { PersonTotalTime } from "../../../generated/client";
 import { workTimeDataOverview } from "../../../utils/chart-utils";
 import { theme } from "../../../theme";
-import { Button } from "@mui/base";
 import strings from "../../../localization/strings";
-import { getHoursAndMinutes } from "../../../utils/time-utils";
+import { getHours, getHoursAndMinutes } from "../../../utils/time-utils";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
@@ -26,6 +24,8 @@ interface Props {
 const BalanceOverviewChart = (props: Props) => {
   const { personTotalTime } = props;
   const data = workTimeDataOverview(personTotalTime);
+  const domainStart = 0;
+  const domainEnd = 1 * 60 * 40;
 
   const renderCustomizedTooltipRow = (name: string, time: number, color: string) => {
     return (
@@ -97,17 +97,33 @@ const BalanceOverviewChart = (props: Props) => {
 
   return (
     <>
-      <ResponsiveContainer width={400} height={200}>
-        <BarChart data={data} layout="vertical" barGap={0}>
+      <ResponsiveContainer width="50%" height={200}>
+        <BarChart
+          data={data}
+          layout="vertical"
+          barGap={0}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5
+          }}
+        >
           <XAxis
             type="number"
             axisLine={false}
-            tickFormatter={(value) => getHoursAndMinutes(value as number)}
+            tickFormatter={(value) => getHours(value as number)}
+            domain={[dataMin => dataMin, dataMax => dataMax * 1.10]}
           />
           <YAxis type="category" dataKey="name" />
           <Tooltip content={renderCustomizedTooltip} />
           <Legend />
-          <Bar dataKey="project" barSize={60} stackId="a" fill={theme.palette.success.dark} />
+          <Bar
+            dataKey="billableProject"
+            barSize={60}
+            stackId="a"
+            fill={theme.palette.success.dark}
+          />
           <Bar
             dataKey="nonBillableProject"
             barSize={60}
@@ -118,7 +134,6 @@ const BalanceOverviewChart = (props: Props) => {
           <Bar dataKey="expected" barSize={60} stackId="a" fill={theme.palette.info.main} />
         </BarChart>
       </ResponsiveContainer>
-      {/* <Button onClick={() => console.log(data)}>TEST</Button> */}
     </>
   );
 };
