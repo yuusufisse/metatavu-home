@@ -48,7 +48,7 @@ const CreateVacationRequest = () => {
           vacationRequest: vacationRequest
         });
 
-        setVacationRequests([...vacationRequests, createdRequest]);
+        setVacationRequests([createdRequest, ...vacationRequests]);
         // createVacationRequestStatus(createdRequest.id);
       }
     } catch (error) {
