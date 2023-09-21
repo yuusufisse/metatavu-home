@@ -26,6 +26,12 @@ export const columns: GridColDef[] = [
     editable: false
   },
   {
+    field: "message",
+    headerName: "Message",
+    width: 150,
+    editable: false
+  },
+  {
     field: "status",
     headerName: "Status",
     width: 150,
