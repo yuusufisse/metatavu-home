@@ -9,6 +9,8 @@ import { VacationRequest, VacationRequestStatus } from "../../../generated/clien
 
 /**
  * Functional component for a deleting vacation request
+ *
+ * @returns deleteVacationRequests, function to delete vacation requests
  */
 const DeleteVacationRequests = () => {
   const { vacationRequestsApi } = useApi();
@@ -46,7 +48,7 @@ const DeleteVacationRequests = () => {
   };
 
   /**
-   * Method to delete vacation requests
+   * Delete vacation requests
    *
    * @param id id updated vacation request
    * @param index index of request in list
