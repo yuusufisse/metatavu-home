@@ -7,9 +7,9 @@ import { Box } from "@mui/material";
 import { columns } from "./table-columns";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import { rowsAtom } from "../../../../atoms/rows";
-import { DataGridRow } from "../../../../types/data-types";
 import VacationRequestsSkeletonTable from "./skeleton-table/skeleton-table";
 import TableToolbar from "./table-toolbar";
+import { DataGridRow } from "../../../../types";
 
 /**
  * Table to display vacation requests
@@ -39,11 +39,15 @@ const VacationRequestsTable = () => {
           startDate: vacationRequest.startDate.toDateString(),
           endDate: vacationRequest.endDate.toDateString(),
           days: vacationRequest.days,
+          message: "No message",
           status: "No Status"
         };
         vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
             row.status = vacationRequestStatus.status;
+          }
+          if (vacationRequest.message.length) {
+            row.message = vacationRequest.message;
           }
         });
         tempRows.push(row);
