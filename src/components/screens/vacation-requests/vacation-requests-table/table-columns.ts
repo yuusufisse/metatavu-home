@@ -1,5 +1,8 @@
 import { GridColDef } from "@mui/x-data-grid";
 
+/**
+ * Define columns for data grid
+ */
 export const columns: GridColDef[] = [
   {
     field: "type",
