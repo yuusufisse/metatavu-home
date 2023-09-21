@@ -8,7 +8,7 @@ import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatu
 import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
 
 /**
- * Functional component for a deleting vacation request
+ * Delete vacation requests, a functional component for deleting a vacation request
  *
  * @returns deleteVacationRequests, function to delete vacation requests
  */
