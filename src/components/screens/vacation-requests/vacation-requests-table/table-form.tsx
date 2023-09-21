@@ -18,32 +18,46 @@ import { DateTime } from "luxon";
 
 import getLocalizedVacationType from "../../../../utils/vacation-type-utils";
 import { VacationData } from "../../../../types";
+import CreateVacationRequest from "../create-vacation-request";
 
+/**
+ * Table form component, provides a form to create a new vacation request
+ *
+ */
 const TableForm = () => {
+  const dateTimeNow = DateTime.now();
+  const dateTimeNowString = dateTimeNow.toJSDate();
   const [type, setType] = useState<string>(VacationType.VACATION);
   const [message, setMessage] = useState<string>("");
-  const [startDate, setStartDate] = useState<DateTime | null>(DateTime.now());
-  const [endDate, setEndDate] = useState<DateTime | null>(DateTime.now());
+  const [startDate, setStartDate] = useState<DateTime | null>(dateTimeNow);
+  const [endDate, setEndDate] = useState<DateTime | null>(dateTimeNow);
   const [days, setDays] = useState<number>();
-  const [createdVacation, setCreatedVacation] = useState<CreatedVacation>({
+  const [vacationData, setVacationData] = useState<VacationData>({
     type: "VACATION",
     message: "",
-    startDate: DateTime.now().toJSDate(),
-    endDate: DateTime.now().toJSDate(),
-    days: 0
+    startDate: dateTimeNowString,
+    endDate: dateTimeNowString,
+    days: 1
   });
+  const { createVacationRequest } = CreateVacationRequest();
 
   /**
-   * Calculate time difference between startDate and endDate and assign it to days state
+   * Calculate time difference between startDate and endDate and assign it to days,
+   * and set endDate as startDate if startDate is ahead of endDate,
+   * and set days to 1 if startDate and endDate are equal
+   * (in case user requests for a one-day vacation)
    */
   useEffect(() => {
-    let diff;
     if (startDate && endDate) {
       if (startDate > endDate) {
         setEndDate(startDate);
       }
-      diff = endDate.diff(startDate, ["days"]);
-      setDays(Number(Math.round(diff.days)));
+      if (startDate === endDate) {
+        setDays(1);
+      } else {
+        const diff = endDate.diff(startDate, ["days"]);
+        setDays(Number(Math.round(diff.days)));
+      }
     }
   }, [startDate, endDate]);
 
@@ -51,20 +65,21 @@ const TableForm = () => {
    * Update created vacation request object
    */
   useEffect(() => {
-    if (type && message && startDate && endDate && days) {
-      const tempCreatedVacation: VacationData = {
-        type: getLocalizedVacationType(type) || "VACATION",
-        message: message,
-        startDate: startDate?.toJSDate(),
-        endDate: endDate?.toJSDate(),
-        days: days
-      };
-      setCreatedVacation(tempCreatedVacation);
-    }
+    const tempVacationData: VacationData = {
+      type: getLocalizedVacationType(type),
+      message: message,
+      startDate: startDate?.toJSDate(),
+      endDate: endDate?.toJSDate(),
+      days: days
+    };
+    setVacationData(tempVacationData);
   }, [type, message, startDate, endDate, days]);
 
+  /**
+   * Handle submit
+   */
   const handleSubmit = () => {
-    console.log(JSON.stringify(createdVacation));
+    createVacationRequest(vacationData);
   };
 
   return (
@@ -123,7 +138,7 @@ const TableForm = () => {
                     sx={{ width: "100%", padding: "0 5px 0 0" }}
                     label="Start Date"
                     value={startDate}
-                    minDate={DateTime.now()}
+                    minDate={dateTimeNow}
                     onChange={(newValue) => setStartDate(newValue)}
                   />
                   <DatePicker
@@ -140,34 +155,6 @@ const TableForm = () => {
               </FormControl>
             </form>
           </Grid>
-          {/* <Grid
-            item
-            xs={6}
-            sx={{
-              padding: "10px"
-            }}
-          >
-            <Typography
-              variant="body1"
-              color={"grey"}
-              sx={{
-                marginBottom: "5px"
-              }}
-            >
-              This is how your request body looks like:
-            </Typography>
-            <Paper
-              sx={{
-                padding: "20px",
-                overflow: "hidden",
-                whiteSpace: "nowrap"
-              }}
-            >
-              <pre style={{ textOverflow: "ellipsis" }}>
-                {JSON.stringify(createdVacation, null, 2)}
-              </pre>
-            </Paper>
-          </Grid> */}
         </Grid>
       </Box>
     </Box>
