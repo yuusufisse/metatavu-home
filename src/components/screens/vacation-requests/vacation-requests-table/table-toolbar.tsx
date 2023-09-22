@@ -122,7 +122,7 @@ const TableToolbar = () => {
         </Grid>
       )}
       <Collapse in={formOpen}>
-        <TableForm />
+        <TableForm setFormOpen={setFormOpen} />
       </Collapse>
     </Box>
   );
