@@ -2,7 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
 import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./table-columns";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
@@ -10,6 +10,8 @@ import { rowsAtom } from "../../../../atoms/rows";
 import VacationRequestsSkeletonTable from "./skeleton-table/skeleton-table";
 import TableToolbar from "./table-toolbar";
 import { DataGridRow } from "../../../../types";
+import { DateTime } from "luxon";
+import { languageAtom } from "../../../../atoms/languageAtom";
 
 /**
  * Vacation requests table root component, display a table of vacation requests
@@ -20,8 +22,8 @@ const VacationRequestsTable = () => {
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
   const [rows, setRows] = useAtom(rowsAtom);
   const setSelectedRowIds = useSetAtom(selectedRowIdsAtom);
-  const [pageSize] = useState<number>(10);
   const containerRef = useRef(null);
+  const language = useAtomValue(languageAtom);
 
   useEffect(() => {
     createRows();
@@ -37,8 +39,15 @@ const VacationRequestsTable = () => {
         const row: DataGridRow = {
           id: vacationRequest.id,
           type: vacationRequest.type,
-          startDate: vacationRequest.startDate.toDateString(),
-          endDate: vacationRequest.endDate.toDateString(),
+          updatedAt: DateTime.fromJSDate(vacationRequest.updatedAt)
+            .setLocale(language)
+            .toLocaleString(),
+          startDate: DateTime.fromJSDate(vacationRequest.startDate)
+            .setLocale(language)
+            .toLocaleString(),
+          endDate: DateTime.fromJSDate(vacationRequest.endDate)
+            .setLocale(language)
+            .toLocaleString(),
           days: vacationRequest.days,
           message: "No message",
           status: "No Status"
@@ -60,7 +69,7 @@ const VacationRequestsTable = () => {
   return (
     <Box
       sx={{
-        minHeight: 370,
+        height: "631px",
         width: "100%"
       }}
       ref={containerRef}
@@ -69,21 +78,14 @@ const VacationRequestsTable = () => {
         <>
           <TableToolbar />
           <DataGrid
+            autoPageSize
+            sx={{ height: "100%" }}
             onRowSelectionModelChange={(index) => {
               setSelectedRowIds(index);
             }}
             rows={rows}
             columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: pageSize
-                }
-              }
-            }}
-            pageSizeOptions={[pageSize]}
             checkboxSelection
-            disableRowSelectionOnClick
           />
         </>
       ) : (
