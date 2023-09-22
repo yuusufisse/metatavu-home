@@ -1,4 +1,4 @@
-import { Box, List, ListItem, Select, MenuItem, Button } from "@mui/material";
+import { Box, List, ListItem, Select, MenuItem, Button, SelectChangeEvent } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
@@ -6,16 +6,15 @@ import BalancePieChart from "./balance-piechart";
 import BalanceOverviewChart from "./balance-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import { ChangeEvent } from "react";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
-  personTotalTime: PersonTotalTime | undefined;
-  personDailyEntry: DailyEntry | undefined;
+  personTotalTime: PersonTotalTime;
+  personDailyEntry: DailyEntry;
   dailyEntries: DailyEntry[];
   timespanSelector: string;
-  handleBalanceViewChange: (e) => void;
-  handleDailyEntryChange: (e: ChangeEvent<HTMLInputElement> | null) => void;
+  handleBalanceViewChange: (e: SelectChangeEvent) => void;
+  handleDailyEntryChange: (e: DateTime | null) => void;
 }
 
 const Balance = (props: Props) => {
@@ -30,25 +29,24 @@ const Balance = (props: Props) => {
 
   /**
    * Disables the days from the DatePicker which have zero logged and expected hours.
-   * @param day 
+   * @param day
    * @returns boolean value which controls the disabled dates
    */
-  const disableNullEntries = (day): boolean => {
+  const disableNullEntries = (day : DateTime): boolean => {
     const nullEntries = dailyEntries?.filter(
       (item) =>
         item.logged === 0 &&
         item.expected === 0 &&
-        DateTime.fromJSDate(item.date).day === day.c.day &&
-        DateTime.fromJSDate(item.date).month === day.c.month &&
-        DateTime.fromJSDate(item.date).year === day.c.year
+        DateTime.fromJSDate(item.date).day === day.day &&
+        DateTime.fromJSDate(item.date).month === day.month &&
+        DateTime.fromJSDate(item.date).year === day.year
     );
-    return nullEntries.length
-      ? DateTime.fromJSDate(nullEntries[0].date).day === day.c.day &&
-          DateTime.fromJSDate(nullEntries[0].date).month === day.c.month &&
-          DateTime.fromJSDate(nullEntries[0].date).year === day.c.year
+    return nullEntries?.length
+      ? DateTime.fromJSDate(nullEntries[0].date).day === day.day &&
+          DateTime.fromJSDate(nullEntries[0].date).month === day.month &&
+          DateTime.fromJSDate(nullEntries[0].date).year === day.year
       : false;
   };
-
   return (
     <>
       <DatePicker
@@ -56,10 +54,9 @@ const Balance = (props: Props) => {
           width: "50%",
           marginLeft: "25%",
           marginRight: "25%",
-          marginBottom: "1%",
-          textAlign: "center"
+          marginBottom: "1%"
         }}
-        label="Select daily entry date"
+        label="Select entry date"
         disableFuture
         onChange={handleDailyEntryChange}
         value={DateTime.fromJSDate(dailyEntries[0].date)}

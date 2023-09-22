@@ -18,7 +18,7 @@ import { Box } from "@mui/system";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 interface Props {
-  personTotalTime: PersonTotalTime | undefined;
+  personTotalTime: PersonTotalTime;
 }
 
 const BalanceOverviewChart = (props: Props) => {
@@ -121,18 +121,32 @@ const BalanceOverviewChart = (props: Props) => {
           <Legend />
           <Bar
             dataKey="billableProject"
+            name="Billable"
             barSize={60}
             stackId="a"
             fill={theme.palette.success.dark}
           />
           <Bar
             dataKey="nonBillableProject"
+            name="Non Billable"
             barSize={60}
             stackId="a"
             fill={theme.palette.success.light}
           />
-          <Bar dataKey="internal" barSize={60} stackId="a" fill={theme.palette.warning.main} />
-          <Bar dataKey="expected" barSize={60} stackId="a" fill={theme.palette.info.main} />
+          <Bar
+            dataKey="internal"
+            name="Internal"
+            barSize={60}
+            stackId="a"
+            fill={theme.palette.warning.main}
+          />
+          <Bar
+            dataKey="expected"
+            name="Expected"
+            barSize={60}
+            stackId="a"
+            fill={theme.palette.info.main}
+          />
         </BarChart>
       </ResponsiveContainer>
     </>

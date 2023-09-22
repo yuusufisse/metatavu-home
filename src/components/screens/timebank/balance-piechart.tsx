@@ -8,9 +8,9 @@ import { theme } from "../../../theme";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
 
 interface Props {
-  personTotalTime: PersonTotalTime | undefined;
-  dailyEntries: DailyEntry[] | undefined;
-  personDailyEntry: DailyEntry | undefined;
+  personTotalTime: PersonTotalTime;
+  dailyEntries: DailyEntry[];
+  personDailyEntry: DailyEntry;
 }
 
 const BalancePieChart = (props: Props) => {

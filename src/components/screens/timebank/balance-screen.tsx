@@ -54,13 +54,13 @@ const BalanceScreen = () => {
    * Changes the displayed daily entry via the Date Picker.
    * @param e Event value (date)
    */
-  const handleDailyEntryChange = (e) => {
+  const handleDailyEntryChange = (selectedDate : DateTime | null) => {
     setPersonDailyEntry(
       dailyEntries?.filter(
         (item) =>
-          DateTime.fromJSDate(item.date).day === e.c.day &&
-          DateTime.fromJSDate(item.date).month === e.c.month &&
-          DateTime.fromJSDate(item.date).year === e.c.year
+          DateTime.fromJSDate(item.date).day === selectedDate?.day &&
+          DateTime.fromJSDate(item.date).month === selectedDate?.month &&
+          DateTime.fromJSDate(item.date).year === selectedDate?.year
       )[0]
     );
   };
