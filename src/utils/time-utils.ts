@@ -14,23 +14,23 @@ export const getHoursAndMinutes = (minutes: number): string => {
  * @param type choose method @param value input value to adjust @param exp exponent
  * @returns adjusted value
  */
-const decimalAdjust = (type: string, value: number, exp: number) => {
-  if (!["round", "floor", "ceil"].includes(type)) {
-    throw new TypeError(
-      "The type of decimal adjustment must be one of 'round', 'floor', or 'ceil'."
-    );
-  }
-  if (exp % 1 !== 0 || Number.isNaN(value)) {
-    return NaN;
-  } else if (exp === 0) {
-    return Math[type](value);
-  }
-  const [magnitude, exponent = 0] = value.toString().split("e");
-  const adjustedValue = Math[type](`${magnitude}e${exponent - exp}`);
-  // Shift back
-  const [newMagnitude, newExponent = 0] = adjustedValue.toString().split("e");
-  return Number(`${newMagnitude}e${+newExponent + exp}`);
-};
+// const decimalAdjust = (type: string, value: number, exp: number) => {
+//   if (!["round", "floor", "ceil"].includes(type)) {
+//     throw new TypeError(
+//       "The type of decimal adjustment must be one of 'round', 'floor', or 'ceil'."
+//     );
+//   }
+//   if (exp % 1 !== 0 || Number.isNaN(value)) {
+//     return NaN;
+//   } else if (exp === 0) {
+//     return Math[type](value);
+//   }
+//   const [magnitude, exponent = 0] = value.toString().split("e");
+//   const adjustedValue = Math[type](`${magnitude}e${exponent - exp}`);
+//   // Shift back
+//   const [newMagnitude, newExponent = 0] = adjustedValue.toString().split("e");
+//   return Number(`${newMagnitude}e${+newExponent + exp}`);
+// };
 
 /**
  * Converts inputted minutes into rounded hours
@@ -38,7 +38,7 @@ const decimalAdjust = (type: string, value: number, exp: number) => {
  * @returns inputted minute value in X h
  */
 export const getHours = (minutes: number): string => {
-  return `${decimalAdjust("round", Math.trunc(minutes / 60), 1)} h`;
+  return `${Math.trunc(minutes / 60)} h`;
 };
 /**
  * Formats inputted time period from @PersonTotalTime

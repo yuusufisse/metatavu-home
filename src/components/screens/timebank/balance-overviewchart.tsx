@@ -24,8 +24,6 @@ interface Props {
 const BalanceOverviewChart = (props: Props) => {
   const { personTotalTime } = props;
   const data = workTimeDataOverview(personTotalTime);
-  const domainStart = 0;
-  const domainEnd = 1 * 60 * 40;
 
   const renderCustomizedTooltipRow = (name: string, time: number, color: string) => {
     return (
@@ -40,10 +38,13 @@ const BalanceOverviewChart = (props: Props) => {
       </Typography>
     );
   };
-
+  /**
+   * Renders a customized tooltip when hovering over the chart
+   * @param props props passed from the parent (chart)
+   * @returns JSX element as a tooltip
+   */
   const renderCustomizedTooltip = (props: TooltipProps<ValueType, NameType>) => {
     const { active, payload } = props;
-    console.log(props);
 
     if (!active || !payload || !payload.length || !payload[0].payload) {
       return null;
@@ -113,7 +114,7 @@ const BalanceOverviewChart = (props: Props) => {
             type="number"
             axisLine={false}
             tickFormatter={(value) => getHours(value as number)}
-            domain={[dataMin => dataMin, dataMax => dataMax * 1.10]}
+            domain={[(dataMin: number) => dataMin, (dataMax: number) => dataMax * 1.1]}
           />
           <YAxis type="category" dataKey="name" />
           <Tooltip content={renderCustomizedTooltip} />

@@ -58,38 +58,3 @@ export const workTimeDataOverview = (personTotalTime: PersonTotalTime | undefine
 export const renderCustomizedLabel = (props: CustomLabel) => {
   return `${props.name} ${getHoursAndMinutes(props.value)}`;
 };
-
-export const dateEntriesPreprocess = (dateEntries: DailyEntry[]) => {
-  const workTimeData: WorkTimeData[] = [];
-  const workTimeTotalData: WorkTimeTotalData = {
-    name: "WorkTimeData",
-    balance: 0,
-    logged: 0,
-    expected: 0
-  };
-
-  dateEntries.forEach((entry) => {
-    const {
-      date,
-      expected,
-      billableProjectTime,
-      nonBillableProjectTime,
-      internalTime,
-      balance,
-      logged
-    } = entry;
-
-    workTimeData.push({
-      name: new Date(date).toLocaleDateString(),
-      expected: expected,
-      billableProject: billableProjectTime,
-      nonBillableProject: nonBillableProjectTime,
-      internal: internalTime
-    });
-    workTimeTotalData.balance += balance;
-    workTimeTotalData.logged += logged;
-    workTimeTotalData.expected += expected;
-  });
-
-  return { workTimeData: workTimeData, workTimeTotalData: workTimeTotalData };
-};

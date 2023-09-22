@@ -7,11 +7,11 @@ import { errorAtom } from "../../../atoms/error";
 import { personAtom } from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
 import Balance from "./balance";
+import { DateTime } from "luxon";
 
 const BalanceScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const [timespanSelector, setTimespanSelector] = useState<string>("All");
-  const [dailyEntrySelector, setDailyEntrySelector] = useState<DailyEntry>();
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const person = useAtomValue(personAtom);
@@ -20,9 +20,10 @@ const BalanceScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
 
-  /**
-   * Initialize logged in person's time data.
-   */
+/**
+ * Fetches the person's total time and daily entries
+ * @param timespan Timespan string which controls if @PersonTotalTime results are condensed into weeks, months, years or all time
+ */
   const getPersonData = async (timespan?: Timespan): Promise<void> => {
     setIsLoading(true);
     if (person) {
@@ -33,14 +34,12 @@ const BalanceScreen = () => {
             timespan: timespan
           }),
           await dailyEntriesApi.listDailyEntries({
-            personId: person?.id,
-            before: new Date()
+            personId: person?.id
           })
         ]).then((values: any) => {
           setPersonTotalTime(values[0].value[0]);
-          setPersonDailyEntry(values[1].value[0]);
           setDailyEntries(values[1].value);
-          console.log(dailyEntries);
+          setPersonDailyEntry(values[1].value[0]);
         });
       } catch (error) {
         setError(`${"Person fetch has failed."}, ${error}`);
@@ -51,30 +50,26 @@ const BalanceScreen = () => {
     setIsLoading(false);
   };
 
-  // const getDailyEntry = async (): Promise<void> => {
-  //   setIsLoading(true);
-  //   if (person) {
-  //     try {
-  //       Promise.resolve([
-  //         await dailyEntriesApi.listDailyEntries({
-  //           personId: person?.id,
-  //           before: new Date()
-  //         })
-  //       ]).then((values: any) => {
-  //         setPersonTotalTime(values[0].value[0]);
-  //         setPersonDailyEntry(values[1].value[0]);
-  //         setDailyEntries(values[1].value);
-  //         console.log(dailyEntries);
-  //       });
-  //     } catch (error) {
-  //       setError(`${"Person fetch has failed."}, ${error}`);
-  //     }
-  //   } else {
-  //     setError("Your account does not have any time bank entries.");
-  //   }
-  //   setIsLoading(false);
-  // };
+  /**
+   * Changes the displayed daily entry via the Date Picker.
+   * @param e Event value (date)
+   */
+  const handleDailyEntryChange = (e) => {
+    setPersonDailyEntry(
+      dailyEntries?.filter(
+        (item) =>
+          DateTime.fromJSDate(item.date).day === e.c.day &&
+          DateTime.fromJSDate(item.date).month === e.c.month &&
+          DateTime.fromJSDate(item.date).year === e.c.year
+      )[0]
+    );
+  };
 
+  /**
+   * Changes the displayed timespan of @PersonTotalTime results
+   * @param e Event value (string)
+   * @returns function call with the selected timespan
+   */
   const handleBalanceViewChange = (e: SelectChangeEvent) => {
     setTimespanSelector(e.target.value);
     switch (e.target.value) {
@@ -89,10 +84,6 @@ const BalanceScreen = () => {
       default:
         return getPersonData(Timespan.ALL_TIME);
     }
-  };
-
-  const handleDailyChange = (e: SelectChangeEvent) => {
-    setDailyEntrySelector(e.target.value);
   };
 
   useEffect(() => {
@@ -114,6 +105,7 @@ const BalanceScreen = () => {
         <>
           <Balance
             userProfile={userProfile}
+            handleDailyEntryChange={handleDailyEntryChange}
             handleBalanceViewChange={handleBalanceViewChange}
             personDailyEntry={personDailyEntry}
             dailyEntries={dailyEntries}

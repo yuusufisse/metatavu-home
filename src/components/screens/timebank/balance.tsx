@@ -1,18 +1,21 @@
-import { Box, List, ListItem, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Box, List, ListItem, Select, MenuItem, Button } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
 import BalancePieChart from "./balance-piechart";
 import BalanceOverviewChart from "./balance-overviewchart";
+import { DatePicker } from "@mui/x-date-pickers";
+import { DateTime } from "luxon";
+import { ChangeEvent } from "react";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
   personTotalTime: PersonTotalTime | undefined;
   personDailyEntry: DailyEntry | undefined;
-  dailyEntries: DailyEntry[] | undefined;
+  dailyEntries: DailyEntry[];
   timespanSelector: string;
-  handleBalanceViewChange: (e: SelectChangeEvent) => void;
-  handleDailyEntryChange: (e: SelectChangeEvent) => void;
+  handleBalanceViewChange: (e) => void;
+  handleDailyEntryChange: (e: ChangeEvent<HTMLInputElement> | null) => void;
 }
 
 const Balance = (props: Props) => {
@@ -25,9 +28,30 @@ const Balance = (props: Props) => {
     dailyEntries
   } = props;
 
+  /**
+   * Disables the days from the DatePicker which have zero logged and expected hours.
+   * @param day 
+   * @returns boolean value which controls the disabled dates
+   */
+  const disableNullEntries = (day): boolean => {
+    const nullEntries = dailyEntries?.filter(
+      (item) =>
+        item.logged === 0 &&
+        item.expected === 0 &&
+        DateTime.fromJSDate(item.date).day === day.c.day &&
+        DateTime.fromJSDate(item.date).month === day.c.month &&
+        DateTime.fromJSDate(item.date).year === day.c.year
+    );
+    return nullEntries.length
+      ? DateTime.fromJSDate(nullEntries[0].date).day === day.c.day &&
+          DateTime.fromJSDate(nullEntries[0].date).month === day.c.month &&
+          DateTime.fromJSDate(nullEntries[0].date).year === day.c.year
+      : false;
+  };
+
   return (
     <>
-      <Select
+      <DatePicker
         sx={{
           width: "50%",
           marginLeft: "25%",
@@ -35,16 +59,20 @@ const Balance = (props: Props) => {
           marginBottom: "1%",
           textAlign: "center"
         }}
-        value={timespanSelector}
-        onChange={handleBalanceViewChange}
-      >
-        {dailyEntries?.map((entry: DailyEntry) => {
-          // rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-          return <MenuItem>{entry.date.toLocaleDateString()}</MenuItem>;
-        })}
-      </Select>
+        label="Select daily entry date"
+        disableFuture
+        onChange={handleDailyEntryChange}
+        value={DateTime.fromJSDate(dailyEntries[0].date)}
+        minDate={DateTime.fromJSDate(dailyEntries[dailyEntries?.length - 1].date)}
+        maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
+        shouldDisableDate={disableNullEntries}
+      />
       <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-        <BalancePieChart personTotalTime={personTotalTime} dailyEntries={dailyEntries} />
+        <BalancePieChart
+          personDailyEntry={personDailyEntry}
+          personTotalTime={personTotalTime}
+          dailyEntries={dailyEntries}
+        />
         <List sx={{ marginLeft: "5%" }}>
           <ListItem sx={{ fontWeight: "bold" }}>
             Latest entry {personDailyEntry?.date.toLocaleDateString()}
@@ -89,7 +117,9 @@ const Balance = (props: Props) => {
           <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}</ListItem>
         </List>
       </Box>
-      {/* <Button onClick={() => console.log(personTotalTime)}>TEST</Button> */}
+      <Button onClick={() => console.log(DateTime.local(), new Date(2023, 9, 19).getTime())}>
+        DATE
+      </Button>
     </>
   );
 };
