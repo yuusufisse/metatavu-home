@@ -82,7 +82,7 @@ const GetVacationRequestStatuses = () => {
         });
 
         if (tempVacationRequestStatuses.length > 0) {
-          const pickedStatus = tempVacationRequestStatuses.reduce((a, b) => {
+          const latestStatus = tempVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
             } else if (a.updatedAt) {
@@ -91,7 +91,7 @@ const GetVacationRequestStatuses = () => {
               return b;
             }
           });
-          tempLatestVacationRequestStatuses.push(pickedStatus);
+          tempLatestVacationRequestStatuses.push(latestStatus);
         }
       });
 
