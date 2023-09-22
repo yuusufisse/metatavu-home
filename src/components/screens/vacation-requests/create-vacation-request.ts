@@ -5,7 +5,8 @@ import { errorAtom } from "../../../atoms/error";
 import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
 import { VacationData } from "../../../types";
 import { VacationRequest } from "../../../generated/client";
-import { nullCheckObjectProps } from "../../../utils/null-check-utils";
+import { hasAllPropsDefined } from "../../../utils/check-utils";
+import CreateVacationRequestStatus from "./create-vacation-request-status";
 
 /**
  * Functional component for creating a new vacation request
@@ -17,7 +18,7 @@ const CreateVacationRequest = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
   const setError = useSetAtom(errorAtom);
-  // const { createVacationRequestStatus } = CreateVacationRequestStatus();
+  const { createVacationRequestStatus } = CreateVacationRequestStatus();
 
   /**
    * Create vacation request
@@ -31,8 +32,8 @@ const CreateVacationRequest = () => {
       const tempVacationRequest = {
         personId: userProfile.id,
         createdBy: userProfile.id,
-        startDate: vacationData.startDate,
-        endDate: vacationData.endDate,
+        startDate: vacationData.startDate?.toJSDate(),
+        endDate: vacationData.endDate?.toJSDate(),
         type: vacationData.type,
         message: vacationData.message,
         createdAt: new Date(),
@@ -40,16 +41,14 @@ const CreateVacationRequest = () => {
         days: vacationData.days
       };
 
-      const propsAreValid = nullCheckObjectProps(tempVacationRequest);
-
-      if (propsAreValid) {
+      if (hasAllPropsDefined(tempVacationRequest)) {
         const vacationRequest = <VacationRequest>tempVacationRequest;
         const createdRequest = await vacationRequestsApi.createVacationRequest({
           vacationRequest: vacationRequest
         });
 
         setVacationRequests([createdRequest, ...vacationRequests]);
-        // createVacationRequestStatus(createdRequest.id);
+        createVacationRequestStatus(createdRequest);
       }
     } catch (error) {
       setError(`${"Creating vacation request has failed."}, ${error}`);
