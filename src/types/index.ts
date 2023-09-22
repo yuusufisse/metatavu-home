@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { VacationType } from "../generated/client";
 
 /**
@@ -11,6 +12,7 @@ export type Language = "fi" | "en";
 export interface DataGridRow {
   id: string | undefined;
   type: VacationType;
+  updatedAt: string;
   startDate: string;
   endDate: string;
   days: number;
@@ -42,8 +44,8 @@ export interface SkeletonTableRow {
  * Type describing data for vacation request
  */
 export interface VacationData {
-  startDate: Date | undefined | null;
-  endDate: Date | undefined | null;
+  startDate: DateTime | undefined | null;
+  endDate: DateTime | undefined | null;
   type: VacationType | undefined | null;
   message: string | undefined | null;
   days: number | undefined | null;
