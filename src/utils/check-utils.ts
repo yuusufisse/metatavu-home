@@ -4,7 +4,7 @@
  * @param object Object to be null-checked on every of its prop
  * @returns boolean, indicates if any prop is null within the object
  */
-export const nullCheckObjectProps = (object: object): boolean => {
+export const hasAllPropsDefined = (object: object): boolean => {
   Object.keys(object).map((prop) => {
     if (prop !== null || prop !== undefined) {
       return false;
