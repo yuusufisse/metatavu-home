@@ -11,74 +11,78 @@ import {
   TextField
 } from "@mui/material";
 import { VacationType } from "../../../../generated/client";
-import { ChangeEvent, useEffect, useState } from "react";
-import { DatePicker } from "@mui/x-date-pickers";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import getLocalizedVacationType from "../../../../utils/vacation-type-utils";
 import { VacationData } from "../../../../types";
 import CreateVacationRequest from "../create-vacation-request";
+import { hasAllPropsDefined } from "../../../../utils/check-utils";
+import DateRangePicker from "../../../generics/date-range-picker";
 
 /**
- * Table form component, provides a form to create a new vacation request
- *
+ * Table form props
  */
-const TableForm = () => {
+interface TableFormProps {
+  setFormOpen: Dispatch<SetStateAction<boolean>>;
+}
+/**
+ * Table form component, provides a form to create a new vacation request
+ * @props TableFormProps
+ */
+const TableForm = (props: TableFormProps) => {
+  const { setFormOpen } = props;
   const dateTimeNow = DateTime.now();
-  const dateTimeNowString = dateTimeNow.toJSDate();
-  const [type, setType] = useState<string>(VacationType.VACATION);
-  const [message, setMessage] = useState<string>("");
-  const [startDate, setStartDate] = useState<DateTime | null>(dateTimeNow);
-  const [endDate, setEndDate] = useState<DateTime | null>(dateTimeNow);
-  const [days, setDays] = useState<number>();
   const [vacationData, setVacationData] = useState<VacationData>({
-    type: "VACATION",
+    startDate: dateTimeNow,
+    endDate: dateTimeNow,
+    type: VacationType.VACATION,
     message: "",
-    startDate: dateTimeNowString,
-    endDate: dateTimeNowString,
     days: 1
   });
   const { createVacationRequest } = CreateVacationRequest();
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
 
   /**
-   * Calculate time difference between startDate and endDate and assign it to days,
-   * and set endDate as startDate if startDate is ahead of endDate,
-   * and set days to 1 if startDate and endDate are equal
-   * (in case user requests for a one-day vacation)
+   * Vacation data validation
    */
   useEffect(() => {
-    if (startDate && endDate) {
-      if (startDate > endDate) {
-        setEndDate(startDate);
-      }
-      if (startDate === endDate) {
-        setDays(1);
-      } else {
-        const diff = endDate.diff(startDate, ["days"]);
-        setDays(Number(Math.round(diff.days)));
-      }
+    if (hasAllPropsDefined(vacationData) && vacationData.message?.length) {
+      setReadyToSubmit(true);
+    } else {
+      setReadyToSubmit(false);
     }
-  }, [startDate, endDate]);
+  });
 
   /**
-   * Update created vacation request object
+   * Handle form submit
+   * Pass vacation data to createVacationRequest and clear vacationData
    */
-  useEffect(() => {
-    const tempVacationData: VacationData = {
-      type: getLocalizedVacationType(type),
-      message: message,
-      startDate: startDate?.toJSDate(),
-      endDate: endDate?.toJSDate(),
-      days: days
-    };
-    setVacationData(tempVacationData);
-  }, [type, message, startDate, endDate, days]);
-
-  /**
-   * Handle submit
-   */
-  const handleSubmit = () => {
-    // TODO: Vacation data validation
+  const handleFormSubmit = () => {
     createVacationRequest(vacationData);
+    setFormOpen(false);
+    setVacationData({
+      type: "VACATION",
+      message: "",
+      startDate: dateTimeNow,
+      endDate: dateTimeNow,
+      days: 1
+    });
+  };
+
+  /**
+   * Handle dates
+   * @param startDate
+   * @param endDate
+   */
+  const setDates = (
+    startDate: DateTime | null | undefined,
+    endDate: DateTime | null | undefined
+  ) => {
+    setVacationData({
+      ...vacationData,
+      startDate: startDate,
+      endDate: endDate
+    });
   };
 
   return (
@@ -94,16 +98,19 @@ const TableForm = () => {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                handleSubmit();
+                handleFormSubmit();
               }}
             >
               <FormControl sx={{ width: "100%" }}>
                 <FormLabel>Vacation Type</FormLabel>
                 <Select
                   name="type"
-                  value={type}
+                  value={String(vacationData.type)}
                   onChange={(event: SelectChangeEvent<string>) => {
-                    setType(event.target.value);
+                    setVacationData({
+                      ...vacationData,
+                      type: getLocalizedVacationType(event.target.value)
+                    });
                   }}
                   sx={{ marginBottom: "5px", width: "100%" }}
                 >
@@ -119,36 +126,24 @@ const TableForm = () => {
                 </Select>
                 <FormLabel>Message</FormLabel>
                 <TextField
-                  value={message}
+                  value={vacationData.message}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    setMessage(event.target.value);
+                    setVacationData({
+                      ...vacationData,
+                      message: event.target.value
+                    });
                   }}
                   sx={{ marginBottom: "5px" }}
                 />
                 <FormLabel sx={{ marginBottom: "5px" }}>Duration</FormLabel>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignContent: "center",
-                    alignItems: "center"
-                  }}
+                <DateRangePicker dateTimeNow={dateTimeNow} setDates={setDates} />
+                <Button
+                  disabled={!readyToSubmit}
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{ marginTop: "10px" }}
                 >
-                  <DatePicker
-                    sx={{ width: "100%", padding: "0 5px 0 0" }}
-                    label="Start Date"
-                    value={startDate}
-                    minDate={dateTimeNow}
-                    onChange={(newValue) => setStartDate(newValue)}
-                  />
-                  <DatePicker
-                    sx={{ width: "100%", padding: "0 0 0 5px" }}
-                    label="End Date"
-                    value={endDate}
-                    minDate={startDate}
-                    onChange={(newValue) => setEndDate(newValue)}
-                  />
-                </Box>
-                <Button type="submit" variant="contained" sx={{ marginTop: "10px" }}>
                   Submit
                 </Button>
               </FormControl>
