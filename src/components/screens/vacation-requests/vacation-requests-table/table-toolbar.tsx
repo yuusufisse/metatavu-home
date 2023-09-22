@@ -13,16 +13,16 @@ import TableForm from "./table-form";
 const TableToolbar = () => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const [formOpen, setFormOpen] = useState<boolean>(false);
-  const selectedRows = useAtomValue(selectedRowIdsAtom);
+  const selectedRowIds = useAtomValue(selectedRowIdsAtom);
   const { deleteVacationRequests } = DeleteVacationRequests();
 
   useEffect(() => {
-    if (selectedRows.length) {
+    if (selectedRowIds.length) {
       setToolbarOpen(true);
     } else {
       setToolbarOpen(false);
     }
-  }, [selectedRows]);
+  }, [selectedRowIds]);
 
   return (
     <Box
@@ -33,7 +33,7 @@ const TableToolbar = () => {
     >
       {toolbarOpen ? (
         <Grid container alignContent="space-around" alignItems="center">
-          {selectedRows.length === 1 ? (
+          {selectedRowIds.length === 1 ? (
             <Grid
               item
               xs={6}
@@ -54,7 +54,7 @@ const TableToolbar = () => {
           ) : null}
           <Grid
             item
-            xs={selectedRows.length === 1 ? 6 : 12}
+            xs={selectedRowIds.length === 1 ? 6 : 12}
             sx={{
               p: "10px"
             }}
