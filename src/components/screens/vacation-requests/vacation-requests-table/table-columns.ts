@@ -11,6 +11,12 @@ export const columns: GridColDef[] = [
     editable: false
   },
   {
+    field: "updatedAt",
+    headerName: "Updated At",
+    width: 150,
+    editable: false
+  },
+  {
     field: "startDate",
     headerName: "Start Date",
     width: 150,
@@ -24,8 +30,8 @@ export const columns: GridColDef[] = [
   },
   {
     field: "days",
-    headerName: "Duration(days)",
-    width: 150,
+    headerName: "Days",
+    width: 80,
     editable: false
   },
   {
