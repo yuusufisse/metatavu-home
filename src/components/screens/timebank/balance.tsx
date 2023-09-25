@@ -1,4 +1,4 @@
-import { Box, List, ListItem, Select, MenuItem, Button, SelectChangeEvent } from "@mui/material";
+import { Box, List, ListItem, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
@@ -6,6 +6,7 @@ import BalancePieChart from "./balance-piechart";
 import BalanceOverviewChart from "./balance-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
+import strings from "../../../localization/strings";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -32,21 +33,22 @@ const Balance = (props: Props) => {
    * @param day
    * @returns boolean value which controls the disabled dates
    */
-  const disableNullEntries = (day : DateTime): boolean => {
+  const disableNullEntries = (date: DateTime): boolean => {
     const nullEntries = dailyEntries?.filter(
       (item) =>
         item.logged === 0 &&
         item.expected === 0 &&
-        DateTime.fromJSDate(item.date).day === day.day &&
-        DateTime.fromJSDate(item.date).month === day.month &&
-        DateTime.fromJSDate(item.date).year === day.year
+        DateTime.fromJSDate(item.date).day === date.day &&
+        DateTime.fromJSDate(item.date).month === date.month &&
+        DateTime.fromJSDate(item.date).year === date.year
     );
     return nullEntries?.length
-      ? DateTime.fromJSDate(nullEntries[0].date).day === day.day &&
-          DateTime.fromJSDate(nullEntries[0].date).month === day.month &&
-          DateTime.fromJSDate(nullEntries[0].date).year === day.year
+      ? DateTime.fromJSDate(nullEntries[0].date).day === date.day &&
+          DateTime.fromJSDate(nullEntries[0].date).month === date.month &&
+          DateTime.fromJSDate(nullEntries[0].date).year === date.year
       : false;
   };
+
   return (
     <>
       <DatePicker
@@ -56,15 +58,15 @@ const Balance = (props: Props) => {
           marginRight: "25%",
           marginBottom: "1%"
         }}
-        label="Select entry date"
+        label={strings.timebank.selectEntry}
         disableFuture
         onChange={handleDailyEntryChange}
         value={DateTime.fromJSDate(dailyEntries[0].date)}
-        minDate={DateTime.fromJSDate(dailyEntries[dailyEntries?.length - 1].date)}
+        minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
         shouldDisableDate={disableNullEntries}
       />
-      <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
         <BalancePieChart
           personDailyEntry={personDailyEntry}
           personTotalTime={personTotalTime}
@@ -72,19 +74,26 @@ const Balance = (props: Props) => {
         />
         <List sx={{ marginLeft: "5%" }}>
           <ListItem sx={{ fontWeight: "bold" }}>
-            Latest entry {personDailyEntry?.date.toLocaleDateString()}
+            {strings.timebank.latestEntry}{" "}
+            {personDailyEntry.date.toLocaleDateString(strings.localization.time)}
           </ListItem>
           <ListItem>
-            Billable: {getHoursAndMinutes(Number(personDailyEntry?.billableProjectTime))}
+            {strings.timebank.billableProject}:{" "}
+            {getHoursAndMinutes(Number(personDailyEntry.billableProjectTime))}
           </ListItem>
           <ListItem>
-            Non-billable: {getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))}
+            {strings.timebank.nonBillableProject}:{" "}
+            {getHoursAndMinutes(Number(personDailyEntry.nonBillableProjectTime))}
           </ListItem>
           <ListItem>
-            Internal: {getHoursAndMinutes(Number(personDailyEntry?.internalTime))}
+            {strings.timebank.internal}: {getHoursAndMinutes(Number(personDailyEntry.internalTime))}
           </ListItem>
-          <ListItem>Logged: {getHoursAndMinutes(Number(personDailyEntry?.logged))}</ListItem>
-          <ListItem>Expected: {getHoursAndMinutes(Number(personDailyEntry?.expected))}</ListItem>
+          <ListItem>
+            {strings.timebank.logged}: {getHoursAndMinutes(Number(personDailyEntry.logged))}
+          </ListItem>
+          <ListItem>
+            {strings.timebank.expected}: {getHoursAndMinutes(Number(personDailyEntry.expected))}
+          </ListItem>
         </List>
       </Box>
       <br />
@@ -99,24 +108,28 @@ const Balance = (props: Props) => {
         value={timespanSelector}
         onChange={handleBalanceViewChange}
       >
-        <MenuItem value={"Week"}>Week</MenuItem>
-        <MenuItem value={"Month"}>Month</MenuItem>
-        <MenuItem value={"All"}>All time</MenuItem>
+        <MenuItem value={"Week"}>{strings.timeExpressions.week}</MenuItem>
+        <MenuItem value={"Month"}>{strings.timeExpressions.month}</MenuItem>
+        <MenuItem value={"All"}>{strings.timeExpressions.allTime}</MenuItem>
       </Select>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <BalanceOverviewChart personTotalTime={personTotalTime} />
         <List sx={{ marginLeft: "5%" }}>
           <ListItem sx={{ fontWeight: "bold" }}>
-            Time period: {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
+            {strings.timebank.timeperiod}:{" "}
+            {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
           </ListItem>
-          <ListItem>Balance: {getHoursAndMinutes(Number(personTotalTime?.balance))}</ListItem>
-          <ListItem>Logged time: {getHoursAndMinutes(Number(personTotalTime?.logged))}</ListItem>
-          <ListItem>Expected: {getHoursAndMinutes(Number(personTotalTime?.expected))}</ListItem>
+          <ListItem>
+            {strings.timebank.balance} {getHoursAndMinutes(Number(personTotalTime?.balance))}
+          </ListItem>
+          <ListItem>
+            {strings.timebank.logged}: {getHoursAndMinutes(Number(personTotalTime?.logged))}
+          </ListItem>
+          <ListItem>
+            {strings.timebank.expected}: {getHoursAndMinutes(Number(personTotalTime?.expected))}
+          </ListItem>
         </List>
       </Box>
-      <Button onClick={() => console.log(DateTime.local(), new Date(2023, 9, 19).getTime())}>
-        DATE
-      </Button>
     </>
   );
 };

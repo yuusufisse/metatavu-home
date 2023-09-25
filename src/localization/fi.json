@@ -15,7 +15,8 @@
   },
   "localization": {
     "en": "EN",
-    "fi": "FI"
+    "fi": "FI",
+    "time": "fi-FI"
   },
   "timebank": {
     "balance": "Saldo",
@@ -25,6 +26,24 @@
     "billableProject": "Laskutettava",
     "nonBillableProject": "Ei laskutettava",
     "internal": "Sisäinen",
-    "billableHours": "Minimilaskutusaste"
+    "billableHours": "Minimilaskutusaste",
+    "timeperiod": "Aikaväli",
+    "noData": "Ei kirjattua dataa",
+    "selectEntry": "Valitse aikakirjaus",
+    "latestEntry": "Viimeisin aikakirjaus"
+  },
+  "timeExpressions": {
+    "monday": "Maanantai",
+    "tuesday": "Tiistai",
+    "wednesday": "Keskiviikko",
+    "thursday": "Torstai",
+    "friday": "Perjantai",
+    "saturday": "Lauantai",
+    "sunday": "Sunnuntai",
+    "day": "Päivä",
+    "week": "Viikko",
+    "month": "Kuukausi",
+    "year": "Vuosi",
+    "allTime": "Koko ajalta"
   }
 }

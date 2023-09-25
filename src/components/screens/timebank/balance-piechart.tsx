@@ -6,6 +6,7 @@ import { Box, Typography } from "@mui/material";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 import { theme } from "../../../theme";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
+import strings from "../../../localization/strings";
 
 interface Props {
   personTotalTime: PersonTotalTime;
@@ -23,7 +24,7 @@ const BalancePieChart = (props: Props) => {
   ];
   /**
    * Renders a customized tooltip when hovering over the chart
-   * @param props props passed from the parent (chart)
+   * @param props props, such as displayed data (payload), passed from the parent (chart)
    * @returns JSX element as a tooltip
    */
   const renderCustomizedTooltip = (props: TooltipProps<ValueType, NameType>) => {
@@ -39,9 +40,9 @@ const BalancePieChart = (props: Props) => {
     }
 
     const sectionName = {
-      Billable: "Billable",
-      NonBillable: "Non-billable",
-      Internal: "Internal"
+      Billable: strings.timebank.billableProject,
+      NonBillable: strings.timebank.nonBillableProject,
+      Internal: strings.timebank.internal,
     }[selectedData.name];
 
     return (
@@ -60,24 +61,28 @@ const BalancePieChart = (props: Props) => {
   };
   return (
     <ResponsiveContainer width={"50%"} height={200}>
-      <PieChart>
-        <Pie
-          data={dailyEntryToChart(personDailyEntry)}
-          dataKey="dataKey"
-          cx="50%"
-          cy="50%"
-          outerRadius={50}
-          label={renderCustomizedLabel}
-        >
-          {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
-            <>
-              <Cell key={`cell-${index}`} fill={COLORS[index]} />
-              <Tooltip content={renderCustomizedTooltip} />
-            </>
-          ))}
-        </Pie>
-        <Tooltip content={renderCustomizedTooltip} />
-      </PieChart>
+      {personDailyEntry.logged ? (
+        <PieChart>
+          <Pie
+            data={dailyEntryToChart(personDailyEntry)}
+            dataKey="dataKey"
+            cx="50%"
+            cy="50%"
+            outerRadius={50}
+            label={renderCustomizedLabel}
+          >
+            {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
+              <>
+                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                <Tooltip content={renderCustomizedTooltip} />
+              </>
+            ))}
+          </Pie>
+          <Tooltip content={renderCustomizedTooltip} />
+        </PieChart>
+      ) : (
+        <Typography sx={{ textAlign: "center", marginTop: "12%" }}>{strings.timebank.noData}</Typography>
+      )}
     </ResponsiveContainer>
   );
 };

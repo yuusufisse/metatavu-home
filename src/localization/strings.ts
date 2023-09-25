@@ -35,6 +35,7 @@ export interface Localized extends LocalizedStringsMethods {
   localization: {
     en: string;
     fi: string;
+    time: string;
   };
   /**
    * Translations related to timebank
@@ -48,6 +49,27 @@ export interface Localized extends LocalizedStringsMethods {
     nonBillableProject: string;
     internal: string;
     billableHours: string;
+    timeperiod: string;
+    noData: string;
+    selectEntry: string;
+    latestEntry: string;
+  };
+  /**
+   * General time-related expressions
+   */
+  timeExpressions: {
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+    day: string;
+    week: string;
+    month: string;
+    year: string;
+    allTime: string;
   };
 }
 

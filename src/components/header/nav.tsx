@@ -40,8 +40,8 @@ const HomeNav = ({ auth }: Props) => {
             borderBottomLeftRadius: "15px"
           }}
         />
-        <NavButton text={strings.header.admin} selected={false} />
-        <NavButton text={strings.header.onCall} selected={false} />
+        <NavButton text={strings.header.admin} route={"#"} selected={false} />
+        <NavButton text={strings.header.onCall} route={"#"} selected={false} />
         <NavButton
           text={strings.header.timebank}
           route={"/timebank"}
@@ -50,10 +50,10 @@ const HomeNav = ({ auth }: Props) => {
       </Box>
       <Box>
         <Link
-          href="#"
+          to="#"
           type="button"
           onClick={() => auth?.logout()}
-          sx={{
+          style={{
             display: "flex",
             justifyContent: "right"
           }}

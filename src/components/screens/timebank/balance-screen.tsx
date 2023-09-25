@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
-import { Grid, CircularProgress, SelectChangeEvent, Button } from "@mui/material";
+import { Grid, CircularProgress, SelectChangeEvent } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
@@ -11,7 +11,7 @@ import { DateTime } from "luxon";
 
 const BalanceScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
-  const [timespanSelector, setTimespanSelector] = useState<string>("All");
+  const [timespanSelector, setTimespanSelector] = useState("All");
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const person = useAtomValue(personAtom);
@@ -20,27 +20,24 @@ const BalanceScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
 
-/**
- * Fetches the person's total time and daily entries
- * @param timespan Timespan string which controls if @PersonTotalTime results are condensed into weeks, months, years or all time
- */
+  /**
+   * Fetches the person's total time and daily entries
+   * @param timespan Timespan string which controls if @PersonTotalTime results are condensed into weeks, months, years or all time
+   */
   const getPersonData = async (timespan?: Timespan): Promise<void> => {
     setIsLoading(true);
     if (person) {
       try {
-        Promise.allSettled([
-          await personsApi.listPersonTotalTime({
-            personId: person?.id,
-            timespan: timespan
-          }),
-          await dailyEntriesApi.listDailyEntries({
-            personId: person?.id
-          })
-        ]).then((values: any) => {
-          setPersonTotalTime(values[0].value[0]);
-          setDailyEntries(values[1].value);
-          setPersonDailyEntry(values[1].value[0]);
+        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+          personId: person?.id,
+          timespan: timespan
         });
+        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+          personId: person?.id
+        });
+        setPersonTotalTime(fetchedPersonTotalTime[0]);
+        setDailyEntries(fetchedDailyEntries);
+        setPersonDailyEntry(fetchedDailyEntries[0]);
       } catch (error) {
         setError(`${"Person fetch has failed."}, ${error}`);
       }
@@ -52,9 +49,9 @@ const BalanceScreen = () => {
 
   /**
    * Changes the displayed daily entry via the Date Picker.
-   * @param e Event value (date)
+   * @param selectedDate selected date from DatePicker
    */
-  const handleDailyEntryChange = (selectedDate : DateTime | null) => {
+  const handleDailyEntryChange = (selectedDate: DateTime | null) => {
     setPersonDailyEntry(
       dailyEntries?.filter(
         (item) =>
@@ -103,16 +100,19 @@ const BalanceScreen = () => {
         <CircularProgress sx={{ textAlign: "center" }} />
       ) : (
         <>
-          <Balance
-            userProfile={userProfile}
-            handleDailyEntryChange={handleDailyEntryChange}
-            handleBalanceViewChange={handleBalanceViewChange}
-            personDailyEntry={personDailyEntry}
-            dailyEntries={dailyEntries}
-            personTotalTime={personTotalTime}
-            timespanSelector={timespanSelector}
-          />
-          <Button onClick={() => console.log(dailyEntries)}>LOG</Button>
+          {personDailyEntry && dailyEntries && personTotalTime ? (
+            <Balance
+              userProfile={userProfile}
+              handleDailyEntryChange={handleDailyEntryChange}
+              handleBalanceViewChange={handleBalanceViewChange}
+              personDailyEntry={personDailyEntry}
+              dailyEntries={dailyEntries}
+              personTotalTime={personTotalTime}
+              timespanSelector={timespanSelector}
+            />
+          ) : (
+            setError("Could not find time entries")
+          )}
         </>
       )}
     </Grid>

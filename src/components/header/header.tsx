@@ -1,15 +1,13 @@
 import { useAtomValue, useSetAtom } from "jotai";
-import { authAtom, userProfileAtom } from "../../atoms/auth";
-import { ReactNode, useEffect, useState } from "react";
+import { authAtom } from "../../atoms/auth";
+import { useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { PersonTotalTime } from "../../generated/client";
 import { errorAtom } from "../../atoms/error";
-import LoaderWrapper from "../generics/loader-wrapper";
 import { Box, Container, Grid } from "@mui/material";
 import BalanceCard from "./balance-card";
 import HomeNav from "./nav";
 import LocalizationButtons from "../layout-components/localization-buttons";
-import config from "../../app/config";
 import { personAtom } from "../../atoms/person";
 import { Outlet } from "react-router";
 
@@ -18,9 +16,7 @@ import { Outlet } from "react-router";
  */
 const Header = () => {
   const auth = useAtomValue(authAtom);
-  const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState(false);
   const person = useAtomValue(personAtom);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const { personsApi } = useApi();

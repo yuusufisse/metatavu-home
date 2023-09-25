@@ -9,7 +9,7 @@ import {
   TooltipProps
 } from "recharts";
 import { PersonTotalTime } from "../../../generated/client";
-import { workTimeDataOverview } from "../../../utils/chart-utils";
+import { totalTimeToChart } from "../../../utils/chart-utils";
 import { theme } from "../../../theme";
 import strings from "../../../localization/strings";
 import { getHours, getHoursAndMinutes } from "../../../utils/time-utils";
@@ -23,7 +23,7 @@ interface Props {
 
 const BalanceOverviewChart = (props: Props) => {
   const { personTotalTime } = props;
-  const data = workTimeDataOverview(personTotalTime);
+  const data = totalTimeToChart(personTotalTime);
 
   const renderCustomizedTooltipRow = (name: string, time: number, color: string) => {
     return (
@@ -40,7 +40,7 @@ const BalanceOverviewChart = (props: Props) => {
   };
   /**
    * Renders a customized tooltip when hovering over the chart
-   * @param props props passed from the parent (chart)
+   * @param props props, such as chart values, passed from the parent (chart)
    * @returns JSX element as a tooltip
    */
   const renderCustomizedTooltip = (props: TooltipProps<ValueType, NameType>) => {
@@ -114,35 +114,35 @@ const BalanceOverviewChart = (props: Props) => {
             type="number"
             axisLine={false}
             tickFormatter={(value) => getHours(value as number)}
-            domain={[(dataMin: number) => dataMin, (dataMax: number) => dataMax * 1.1]}
+            domain={[0, (dataMax: number) => dataMax * 1.1]}
           />
           <YAxis type="category" dataKey="name" />
           <Tooltip content={renderCustomizedTooltip} />
           <Legend />
           <Bar
             dataKey="billableProject"
-            name="Billable"
+            name={strings.timebank.billableProject}
             barSize={60}
             stackId="a"
             fill={theme.palette.success.dark}
           />
           <Bar
             dataKey="nonBillableProject"
-            name="Non Billable"
+            name={strings.timebank.nonBillableProject}
             barSize={60}
             stackId="a"
             fill={theme.palette.success.light}
           />
           <Bar
             dataKey="internal"
-            name="Internal"
+            name={strings.timebank.internal}
             barSize={60}
             stackId="a"
             fill={theme.palette.warning.main}
           />
           <Bar
             dataKey="expected"
-            name="Expected"
+            name={strings.timebank.expected}
             barSize={60}
             stackId="a"
             fill={theme.palette.info.main}

@@ -11,13 +11,14 @@ import Header from "./components/header/header";
 import HomeScreen from "./components/screens/home/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+import strings from "./localization/strings";
 
 /**
  * Application component
  *
  */
 const App = () => {
-  const language = useAtomValue(languageAtom);
+  const _language = useAtomValue(languageAtom); //Unused variable is required to enable the rendering of language changes
   const router = createBrowserRouter([
     {
       element: <Header />,
@@ -41,7 +42,10 @@ const App = () => {
         <CssBaseline>
           <ErrorHandler>
             <AuthenticationProvider>
-              <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
+              <LocalizationProvider
+                dateAdapter={AdapterLuxon}
+                adapterLocale={strings.localization.time}
+              >
                 <RouterProvider router={router} />
               </LocalizationProvider>
             </AuthenticationProvider>

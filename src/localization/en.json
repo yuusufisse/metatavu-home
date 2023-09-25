@@ -15,7 +15,8 @@
   },
   "localization": {
     "en": "EN",
-    "fi": "FI"
+    "fi": "FI",
+    "time": "en-GB"
   },
   "timebank": {
     "balance": "Balance",
@@ -25,6 +26,24 @@
     "billableProject": "Billable",
     "nonBillableProject": "Non-billable",
     "internal": "Internal time",
-    "billableHours": "Minimum billing rate"
+    "billableHours": "Minimum billing rate",
+    "timeperiod": "Time period",
+    "noData": "No logged data",
+    "selectEntry": "Select date entry",
+    "latestEntry": "Latest entry"
+  },
+  "timeExpressions": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "allTime": "All time"
   }
 }
