@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import DeleteVacationRequests from "../delete-vacation-requests";
 import TableForm from "./table-form";
+import DeleteVacationRequestStatuses from "../delete-vacation-request-statuses";
 
 /**
  * Table tool bar component, provides functionality to alter vacation requests table
@@ -15,6 +16,7 @@ const TableToolbar = () => {
   const [formOpen, setFormOpen] = useState<boolean>(false);
   const selectedRowIds = useAtomValue(selectedRowIdsAtom);
   const { deleteVacationRequests } = DeleteVacationRequests();
+  const { deleteVacationRequestStatuses } = DeleteVacationRequestStatuses();
 
   useEffect(() => {
     if (selectedRowIds.length) {
@@ -23,6 +25,11 @@ const TableToolbar = () => {
       setToolbarOpen(false);
     }
   }, [selectedRowIds]);
+
+  const deleteData = async () => {
+    await deleteVacationRequestStatuses();
+    await deleteVacationRequests();
+  };
 
   return (
     <Box
@@ -65,7 +72,7 @@ const TableToolbar = () => {
                 width: "100%"
               }}
               onClick={() => {
-                deleteVacationRequests();
+                deleteData();
               }}
             >
               <Delete />

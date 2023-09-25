@@ -5,7 +5,7 @@ import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
 import { rowsAtom } from "../../../atoms/rows";
 import { selectedRowIdsAtom } from "../../../atoms/selectedRowIds";
 import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
-import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
+import { VacationRequest } from "../../../generated/client";
 
 /**
  * Delete vacation requests, a functional component for deleting a vacation request
@@ -15,20 +15,17 @@ import { VacationRequest, VacationRequestStatus } from "../../../generated/clien
 const DeleteVacationRequests = () => {
   const { vacationRequestsApi } = useApi();
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useAtom(
-    vacationRequestStatusesAtom
-  );
+  const [vacationRequestStatuses] = useAtom(vacationRequestStatusesAtom);
   const setError = useSetAtom(errorAtom);
   const rows = useAtomValue(rowsAtom);
   const selectedRowIds = useAtomValue(selectedRowIdsAtom);
 
   /**
-   * Delete selected rows containing vacation requests and statuses
+   * Delete selected vacation requests from vacation requests atom
    */
-  const deleteRows = () => {
+  const deleteVacationRequestRows = () => {
     if (rows.length && vacationRequests && vacationRequestStatuses) {
       let tempVacationRequests: VacationRequest[] = vacationRequests;
-      let tempVacationRequestStatuses: VacationRequestStatus[] = vacationRequestStatuses;
 
       selectedRowIds.forEach((selectedRow) => {
         rows.forEach((row) => {
@@ -36,22 +33,15 @@ const DeleteVacationRequests = () => {
             tempVacationRequests = tempVacationRequests.filter(
               (vacationRequest) => vacationRequest.id !== row.id
             );
-            tempVacationRequestStatuses = tempVacationRequestStatuses.filter(
-              (vacationRequestStatus) => vacationRequestStatus.vacationRequestId !== row.id
-            );
           }
         });
       });
       setVacationRequests(tempVacationRequests);
-      setVacationRequestStatuses(tempVacationRequestStatuses);
     }
   };
 
   /**
    * Delete vacation requests
-   *
-   * @param id id updated vacation request
-   * @param index index of request in list
    */
   const deleteVacationRequests = async () => {
     if (vacationRequests && selectedRowIds.length) {
@@ -61,7 +51,7 @@ const DeleteVacationRequests = () => {
             await vacationRequestsApi.deleteVacationRequest({
               id: String(selectedRow)
             });
-            deleteRows();
+            deleteVacationRequestRows();
           } catch (error) {
             setError(`${"Deleting vacation request has failed."}, ${error}`);
           }
