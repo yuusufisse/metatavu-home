@@ -18,8 +18,20 @@ const VacationRequestsSkeletonTable = () => {
           height: "56px"
         }}
       >
-        <Skeleton variant="rounded" sx={{ width: "60px", margin: "0 30px 0 0" }} />
-        <Skeleton variant="rounded" sx={{ width: "60px", margin: "0 20px 0 0" }} />
+        <Skeleton
+          variant="rounded"
+          sx={{
+            width: "60px",
+            margin: "0 30px 0 0"
+          }}
+        />
+        <Skeleton
+          variant="rounded"
+          sx={{
+            width: "60px",
+            margin: "0 20px 0 0"
+          }}
+        />
       </Grid>
     </>
   );
