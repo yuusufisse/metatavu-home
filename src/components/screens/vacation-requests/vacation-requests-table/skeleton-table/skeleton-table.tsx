@@ -1,12 +1,12 @@
 import { Grid, Skeleton } from "@mui/material";
 import SkeletonTableColumns from "./skeleton-table-columns";
 import SkeletonTableRows from "./skeleton-table-rows";
-import TableToolbar from "../table-toolbar";
+import TableToolbar from "../vacation-requests-table-toolbar";
 
 const VacationRequestsSkeletonTable = () => {
   return (
     <>
-      <TableToolbar skeleton={true} />
+      <TableToolbar />
       <SkeletonTableColumns />
       <SkeletonTableRows />
       <Grid
