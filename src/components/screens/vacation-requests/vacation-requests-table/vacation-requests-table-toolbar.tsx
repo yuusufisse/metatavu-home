@@ -4,7 +4,7 @@ import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import DeleteVacationRequests from "../delete-vacation-requests";
-import TableForm from "./table-form";
+import TableForm from "./vacation-requests-table-form";
 import DeleteVacationRequestStatuses from "../delete-vacation-request-statuses";
 
 /**
