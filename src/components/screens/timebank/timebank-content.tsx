@@ -2,8 +2,8 @@ import { Box, List, ListItem, Select, MenuItem, SelectChangeEvent } from "@mui/m
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
-import BalancePieChart from "./balance-piechart";
-import BalanceOverviewChart from "./balance-overviewchart";
+import TimebankPieChart from "./timebank-piechart";
+import TimebankOverviewChart from "./timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
@@ -18,7 +18,7 @@ interface Props {
   handleDailyEntryChange: (e: DateTime | null) => void;
 }
 
-const Balance = (props: Props) => {
+const TimebankContent = (props: Props) => {
   const {
     personTotalTime,
     personDailyEntry,
@@ -67,7 +67,7 @@ const Balance = (props: Props) => {
         shouldDisableDate={disableNullEntries}
       />
       <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <BalancePieChart
+        <TimebankPieChart
           personDailyEntry={personDailyEntry}
           personTotalTime={personTotalTime}
           dailyEntries={dailyEntries}
@@ -113,7 +113,7 @@ const Balance = (props: Props) => {
         <MenuItem value={"All"}>{strings.timeExpressions.allTime}</MenuItem>
       </Select>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <BalanceOverviewChart personTotalTime={personTotalTime} />
+        <TimebankOverviewChart personTotalTime={personTotalTime} />
         <List sx={{ marginLeft: "5%" }}>
           <ListItem sx={{ fontWeight: "bold" }}>
             {strings.timebank.timeperiod}:{" "}
@@ -134,4 +134,4 @@ const Balance = (props: Props) => {
   );
 };
 
-export default Balance;
+export default TimebankContent;

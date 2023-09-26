@@ -21,7 +21,7 @@ interface Props {
   personTotalTime: PersonTotalTime;
 }
 
-const BalanceOverviewChart = (props: Props) => {
+const TimebankOverviewChart = (props: Props) => {
   const { personTotalTime } = props;
   const data = totalTimeToChart(personTotalTime);
 
@@ -153,4 +153,4 @@ const BalanceOverviewChart = (props: Props) => {
   );
 };
 
-export default BalanceOverviewChart;
+export default TimebankOverviewChart;

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
-import { Grid, CircularProgress, SelectChangeEvent } from "@mui/material";
+import { Grid, CircularProgress, SelectChangeEvent, Box } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
 import { personAtom } from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
-import Balance from "./balance";
+import TimebankContent from "./timebank-content";
 import { DateTime } from "luxon";
 
-const BalanceScreen = () => {
+const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const [timespanSelector, setTimespanSelector] = useState("All");
   const setError = useSetAtom(errorAtom);
@@ -87,21 +87,25 @@ const BalanceScreen = () => {
     if (person) getPersonData();
   }, [person]);
 
-  return (
-    <Grid
-      sx={{
-        borderRadius: "15px",
-        backgroundColor: "#f2f2f2",
-        boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-        p: 3
-      }}
-    >
-      {isLoading ? (
-        <CircularProgress sx={{ textAlign: "center" }} />
-      ) : (
+  if (isLoading)
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <CircularProgress />
+      </Box>
+    );
+  else
+    return (
+      <Grid
+        sx={{
+          borderRadius: "15px",
+          backgroundColor: "#f2f2f2",
+          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+          p: 3
+        }}
+      >
         <>
           {personDailyEntry && dailyEntries && personTotalTime ? (
-            <Balance
+            <TimebankContent
               userProfile={userProfile}
               handleDailyEntryChange={handleDailyEntryChange}
               handleBalanceViewChange={handleBalanceViewChange}
@@ -114,9 +118,8 @@ const BalanceScreen = () => {
             setError("Could not find time entries")
           )}
         </>
-      )}
-    </Grid>
-  );
+      </Grid>
+    );
 };
 
-export default BalanceScreen;
+export default TimebankScreen;

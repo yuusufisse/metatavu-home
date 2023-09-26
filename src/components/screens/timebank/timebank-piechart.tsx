@@ -14,7 +14,7 @@ interface Props {
   personDailyEntry: DailyEntry;
 }
 
-const BalancePieChart = (props: Props) => {
+const TimebankPieChart = (props: Props) => {
   const { personDailyEntry } = props;
 
   const COLORS = [
@@ -87,4 +87,4 @@ const BalancePieChart = (props: Props) => {
   );
 };
 
-export default BalancePieChart;
+export default TimebankPieChart;

@@ -4,7 +4,7 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import ErrorHandler from "./components/contexts/error-handler";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
-import BalanceScreen from "./components/screens/timebank/balance-screen";
+import BalanceScreen from "./components/screens/timebank/timebank-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
 import Header from "./components/header/header";
