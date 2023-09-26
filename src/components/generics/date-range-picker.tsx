@@ -47,7 +47,7 @@ const DateRangePicker = (props: DateRangePickerProps) => {
     }
     setStartDate(startDate);
     setEndDate(tempEndDate);
-    setDates(startDate, tempEndDate);
+    setDates(startDate, tempEndDate, days);
   };
 
   return (

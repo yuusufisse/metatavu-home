@@ -91,12 +91,14 @@ const TableForm = (props: TableFormProps) => {
    */
   const setDates = (
     startDate: DateTime | null | undefined,
-    endDate: DateTime | null | undefined
+    endDate: DateTime | null | undefined,
+    days: number
   ) => {
     setVacationData({
       ...vacationData,
       startDate: startDate,
-      endDate: endDate
+      endDate: endDate,
+      days: days
     });
   };
 
