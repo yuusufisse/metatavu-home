@@ -1,41 +1,40 @@
 import { Container } from "@mui/material";
-import { useEffect } from "react";
-import { useSetAtom } from "jotai";
-import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
-import getVacationRequests from "./get-vacation-requests";
-import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
+import { useState } from "react";
+import GetVacationRequests from "./get-vacation-requests";
 import getVacationRequestStatuses from "./get-vacation-request-statuses";
 import VacationRequestsTable from "./vacation-requests-table/vacation-requests-table";
+import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
 
 /**
  * Vacation requests screen
  *
  */
 const VacationRequestsScreen = () => {
-  const { vacationRequests, vacationRequestsLoading } = getVacationRequests();
-  const { latestVacationRequestStatuses } = getVacationRequestStatuses();
-  const setVacationRequests = useSetAtom(vacationRequestsAtom);
-  const setVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
-
-  /**
-   * Set vacation requests to atom when fetched
-   */
-  useEffect(() => {
-    setVacationRequests(vacationRequests);
-  }, [vacationRequests]);
-
-  /**
-   * Set vacation request statuses to atom when vacation requests are fetched
-   */
-  useEffect(() => {
-    if (!vacationRequestsLoading) {
-      setVacationRequestStatuses(latestVacationRequestStatuses);
-    }
-  }, [latestVacationRequestStatuses, vacationRequestsLoading]);
+  const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
+  const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
+    []
+  );
+  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useState<
+    VacationRequestStatus[]
+  >([]);
+  const { vacationRequestsLoading } = GetVacationRequests({
+    setVacationRequests: setVacationRequests
+  });
+  const { vacationRequestStatusesLoading } = getVacationRequestStatuses({
+    vacationRequests: vacationRequests,
+    vacationRequestStatuses: vacationRequestStatuses,
+    setVacationRequestStatuses: setVacationRequestStatuses,
+    setLatestVacationRequestStatuses: setLatestVacationRequestStatuses
+  });
 
   return (
     <Container>
-      <VacationRequestsTable />
+      <VacationRequestsTable
+        vacationRequests={vacationRequests}
+        vacationRequestStatuses={latestVacationRequestStatuses}
+        setVacationRequests={setVacationRequests}
+        setVacationRequestStatuses={setVacationRequestStatuses}
+      />
     </Container>
   );
 };

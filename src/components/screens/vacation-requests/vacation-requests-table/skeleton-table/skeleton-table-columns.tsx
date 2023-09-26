@@ -1,5 +1,5 @@
 import { Grid, Skeleton } from "@mui/material";
-import { SkeletonTableColumn } from "../../../../../types/data-types";
+import { SkeletonTableColumn } from "../../../../../types";
 
 const SkeletonTableColumns = () => {
   const columns: SkeletonTableColumn[] = [

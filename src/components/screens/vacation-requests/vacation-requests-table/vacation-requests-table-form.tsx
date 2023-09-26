@@ -10,7 +10,7 @@ import {
   SelectChangeEvent,
   TextField
 } from "@mui/material";
-import { VacationType } from "../../../../generated/client";
+import { VacationRequest, VacationRequestStatus, VacationType } from "../../../../generated/client";
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import getLocalizedVacationType from "../../../../utils/vacation-type-utils";
@@ -20,17 +20,27 @@ import { hasAllPropsDefined } from "../../../../utils/check-utils";
 import DateRangePicker from "../../../generics/date-range-picker";
 
 /**
- * Table form props
+ * Interface describing Table Form Props
  */
 interface TableFormProps {
   setFormOpen: Dispatch<SetStateAction<boolean>>;
+  vacationRequests: VacationRequest[];
+  vacationRequestStatuses: VacationRequestStatus[];
+  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
+  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
 /**
  * Table form component, provides a form to create a new vacation request
  * @props TableFormProps
  */
 const TableForm = (props: TableFormProps) => {
-  const { setFormOpen } = props;
+  const {
+    setFormOpen,
+    vacationRequestStatuses,
+    setVacationRequestStatuses,
+    vacationRequests,
+    setVacationRequests
+  } = props;
   const dateTimeNow = DateTime.now();
   const [vacationData, setVacationData] = useState<VacationData>({
     startDate: dateTimeNow,
@@ -39,7 +49,12 @@ const TableForm = (props: TableFormProps) => {
     message: "",
     days: 1
   });
-  const { createVacationRequest } = CreateVacationRequest();
+  const { createVacationRequest } = CreateVacationRequest({
+    vacationRequests: vacationRequests,
+    vacationRequestStatuses: vacationRequestStatuses,
+    setVacationRequestStatuses: setVacationRequestStatuses,
+    setVacationRequests: setVacationRequests
+  });
   const [readyToSubmit, setReadyToSubmit] = useState(false);
 
   /**

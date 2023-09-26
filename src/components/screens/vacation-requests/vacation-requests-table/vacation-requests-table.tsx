@@ -1,21 +1,48 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { useSetAtom } from "jotai";
-import { useRef } from "react";
+import { DataGrid, GridRowParams, GridRowSelectionModel } from "@mui/x-data-grid";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
-import { selectedRowIdsAtom } from "../../../../atoms/selectedRowIds";
 import VacationRequestsSkeletonTable from "./skeleton-table/skeleton-table";
-import TableToolbar from "./vacation-requests-table-toolbar";
+import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
+import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
+import { DataGridRow } from "../../../../types";
 
+/**
+ * Interface describing Vacation Requests Table Props
+ */
+interface VacationRequestsTableProps {
+  vacationRequests: VacationRequest[];
+  vacationRequestStatuses: VacationRequestStatus[];
+  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
+  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+}
 /**
  * Vacation requests table root component, display a table of vacation requests
  *
+ * @props VacationRequestsTableProps
  */
-const VacationRequestsTable = () => {
-  const setSelectedRowIds = useSetAtom(selectedRowIdsAtom);
+const VacationRequestsTable = (props: VacationRequestsTableProps) => {
+  const {
+    vacationRequests,
+    vacationRequestStatuses,
+    setVacationRequests,
+    setVacationRequestStatuses
+  } = props;
   const containerRef = useRef(null);
-  const rows = VacationRequestsTableRows();
+  const [rows, setRows] = useState<DataGridRow[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>();
+  const { createDataGridRows } = VacationRequestsTableRows();
+
+  useEffect(() => {
+    if (vacationRequests.length) {
+      const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
+      if (createdRows) {
+        setRows(createdRows);
+      }
+    }
+  }, [vacationRequests.length, vacationRequestStatuses.length, formOpen]);
 
   return (
     <Box
@@ -27,7 +54,16 @@ const VacationRequestsTable = () => {
     >
       {rows.length ? (
         <>
-          <TableToolbar />
+          <TableToolbar
+            vacationRequests={vacationRequests}
+            setVacationRequests={setVacationRequests}
+            setVacationRequestStatuses={setVacationRequestStatuses}
+            vacationRequestStatuses={vacationRequestStatuses}
+            setFormOpen={setFormOpen}
+            formOpen={formOpen}
+            selectedRowIds={selectedRowIds}
+            rows={rows}
+          />
           <DataGrid
             autoPageSize
             sx={{ height: "100%" }}
@@ -37,6 +73,8 @@ const VacationRequestsTable = () => {
             rows={rows}
             columns={columns}
             checkboxSelection
+            rowSelectionModel={selectedRowIds}
+            isRowSelectable={(params: GridRowParams) => (formOpen ? false : true)}
           />
         </>
       ) : (

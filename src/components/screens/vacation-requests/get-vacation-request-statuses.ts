@@ -1,26 +1,34 @@
-import { useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
-import { useEffect, useState } from "react";
-import { VacationRequestStatus } from "../../../generated/client";
-import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
 
+/**
+ * Interface describing Get Vacation Request Statuses Props
+ */
+interface GetVacationRequestStatusesProps {
+  vacationRequests: VacationRequest[];
+  vacationRequestStatuses: VacationRequestStatus[];
+  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  setLatestVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+}
 /**
  * Get vacation requests statuses,
  * a functional component for fetching vacation request statuses
  *
+ * @props GetVacationRequestStatusesProps
  * @returns latestVacationRequestStatuses array of filtered vacation request statuses,
  * vacationRequestStatusesLoading boolean to indicate if vacation request statuses are loading
  */
-const GetVacationRequestStatuses = () => {
+const GetVacationRequestStatuses = (props: GetVacationRequestStatusesProps) => {
+  const {
+    vacationRequests,
+    vacationRequestStatuses,
+    setVacationRequestStatuses,
+    setLatestVacationRequestStatuses
+  } = props;
   const { vacationRequestStatusApi } = useApi();
-  const vacationRequests = useAtomValue(vacationRequestsAtom);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
-    []
-  );
-  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useState<
-    VacationRequestStatus[]
-  >([]);
   const setError = useSetAtom(errorAtom);
   const [vacationRequestStatusesLoading, setVacationRequestStatusesLoading] = useState(true);
 
@@ -100,7 +108,9 @@ const GetVacationRequestStatuses = () => {
     }
   };
 
-  return { latestVacationRequestStatuses, vacationRequestStatusesLoading };
+  return {
+    vacationRequestStatusesLoading
+  };
 };
 
 export default GetVacationRequestStatuses;

@@ -1,22 +1,32 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
-import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
 import {
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses
 } from "../../../generated/client";
 import { hasAllPropsDefined } from "../../../utils/check-utils";
+import { Dispatch, SetStateAction } from "react";
 
-const CreateVacationRequestStatus = () => {
+/**
+ * Interface describing Create Vacation Request Status Props
+ */
+interface CreateVacationRequestStatusProps {
+  vacationRequestStatuses: VacationRequestStatus[];
+  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+}
+/**
+ * Create vacation request status
+ *
+ * @param props CreateVacationRequestStatusProps
+ */
+const CreateVacationRequestStatus = (props: CreateVacationRequestStatusProps) => {
+  const { vacationRequestStatuses, setVacationRequestStatuses } = props;
   const { vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useAtom(
-    vacationRequestStatusesAtom
-  );
 
   const createVacationRequestStatus = async (createdRequest: VacationRequest) => {
     if (!userProfile || !userProfile.id) return;

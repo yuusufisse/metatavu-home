@@ -1,27 +1,45 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
-import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
 import { VacationData } from "../../../types";
-import { VacationRequest } from "../../../generated/client";
+import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
 import { hasAllPropsDefined } from "../../../utils/check-utils";
 import CreateVacationRequestStatus from "./create-vacation-request-status";
+import { Dispatch, SetStateAction } from "react";
 
+/**
+ * Interface describing Create Vacation Request Props
+ */
+interface CreateVacationRequestProps {
+  vacationRequests: VacationRequest[];
+  vacationRequestStatuses: VacationRequestStatus[];
+  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
+  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+}
 /**
  * Functional component for creating a new vacation request
  *
+ * @props CreateVacationRequestProps
  * @returns createVacationRequest, function to create a new vacation request
  */
-const CreateVacationRequest = () => {
+const CreateVacationRequest = (props: CreateVacationRequestProps) => {
+  const {
+    vacationRequestStatuses,
+    setVacationRequestStatuses,
+    vacationRequests,
+    setVacationRequests
+  } = props;
   const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
-  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
   const setError = useSetAtom(errorAtom);
-  const { createVacationRequestStatus } = CreateVacationRequestStatus();
+  const { createVacationRequestStatus } = CreateVacationRequestStatus({
+    vacationRequestStatuses: vacationRequestStatuses,
+    setVacationRequestStatuses: setVacationRequestStatuses
+  });
 
   /**
-   * Create vacation request
+   * Create a vacation request
    *
    * @param vacationData vacation data, data for vacation request
    */
@@ -47,8 +65,8 @@ const CreateVacationRequest = () => {
           vacationRequest: vacationRequest
         });
 
-        setVacationRequests([createdRequest, ...vacationRequests]);
         createVacationRequestStatus(createdRequest);
+        setVacationRequests([createdRequest, ...vacationRequests]);
       }
     } catch (error) {
       setError(`${"Creating vacation request has failed."}, ${error}`);

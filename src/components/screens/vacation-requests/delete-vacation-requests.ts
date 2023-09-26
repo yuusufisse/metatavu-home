@@ -1,30 +1,38 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
-import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
-import { rowsAtom } from "../../../atoms/rows";
-import { selectedRowIdsAtom } from "../../../atoms/selectedRowIds";
-import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
-import { VacationRequest } from "../../../generated/client";
+import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
+import { Dispatch, SetStateAction } from "react";
+import { GridRowId } from "@mui/x-data-grid";
+import { DataGridRow } from "../../../types";
 
+/**
+ * Interface describing Delete Vacation Requests Props
+ */
+interface DeleteVacationRequestsProps {
+  vacationRequests: VacationRequest[];
+  vacationRequestStatuses: VacationRequestStatus[];
+  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
+  selectedRowIds: GridRowId[] | undefined;
+  rows: DataGridRow[];
+}
 /**
  * Delete vacation requests, a functional component for deleting a vacation request
  *
+ * @props DeleteVacationRequestsProps
  * @returns deleteVacationRequests, function to delete vacation requests
  */
-const DeleteVacationRequests = () => {
+const DeleteVacationRequests = (props: DeleteVacationRequestsProps) => {
+  const { vacationRequests, setVacationRequests, vacationRequestStatuses, selectedRowIds, rows } =
+    props;
   const { vacationRequestsApi } = useApi();
-  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
-  const [vacationRequestStatuses] = useAtom(vacationRequestStatusesAtom);
   const setError = useSetAtom(errorAtom);
-  const rows = useAtomValue(rowsAtom);
-  const selectedRowIds = useAtomValue(selectedRowIdsAtom);
 
   /**
    * Delete selected vacation requests from vacation requests atom
    */
   const deleteVacationRequestRows = () => {
-    if (rows.length && vacationRequests && vacationRequestStatuses) {
+    if (rows.length && vacationRequests && vacationRequestStatuses && selectedRowIds) {
       let tempVacationRequests: VacationRequest[] = vacationRequests;
 
       selectedRowIds.forEach((selectedRow) => {
@@ -44,7 +52,7 @@ const DeleteVacationRequests = () => {
    * Delete vacation requests
    */
   const deleteVacationRequests = async () => {
-    if (vacationRequests && selectedRowIds.length) {
+    if (vacationRequests && selectedRowIds) {
       await Promise.all(
         selectedRowIds.map(async (selectedRow) => {
           try {

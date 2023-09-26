@@ -1,5 +1,5 @@
 import { Box, Grid, Skeleton } from "@mui/material";
-import { SkeletonTableRow } from "../../../../../types/data-types";
+import { SkeletonTableRow } from "../../../../../types";
 
 const SkeletonTableRows = () => {
   const rows: SkeletonTableRow[] = [
@@ -43,7 +43,7 @@ const SkeletonTableRows = () => {
 
   return (
     <>
-      {[...Array(10)].map((item, idx) => {
+      {[...Array(10)].map((_item, idx) => {
         return (
           <Box
             key={`skeleton-row-container${idx}`}

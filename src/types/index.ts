@@ -2,6 +2,11 @@ import { DateTime } from "luxon";
 import { VacationType } from "../generated/client";
 
 /**
+ * Type describing Icon properties
+ */
+export type ButtonIconProps = {};
+
+/**
  * Type describing available languages
  */
 export type Language = "fi" | "en";

@@ -1,20 +1,26 @@
 import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { VacationRequest } from "../../../generated/client";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
 
 /**
+ * Interface describing get Vacation Requests Props
+ */
+interface getVacationRequestsProps {
+  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
+}
+/**
  * Get vacation requests, a functional component for fetching vacation requests
  *
  * @returns vacationRequests array of vacation requests,
  * vacationRequestsLoading boolean to indicate is vacation requests are loading
  */
-const getVacationRequests = () => {
+const GetVacationRequests = (props: getVacationRequestsProps) => {
+  const { setVacationRequests } = props;
   const { personsApi, vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
-  const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
   const setError = useSetAtom(errorAtom);
   const [vacationRequestsLoading, setVacationRequestsLoading] = useState(true);
 
@@ -39,7 +45,7 @@ const getVacationRequests = () => {
     fetchVacationsRequests();
   }, [userProfile]);
 
-  return { vacationRequests, vacationRequestsLoading };
+  return { vacationRequestsLoading };
 };
 
-export default getVacationRequests;
+export default GetVacationRequests;

@@ -1,27 +1,17 @@
 import { DataGridRow } from "../../../../types";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../../../atoms/languageAtom";
-import { VacationRequest } from "../../../../generated/client";
-import { rowsAtom } from "../../../../atoms/rows";
-import { useAtom, useAtomValue } from "jotai";
-import { useEffect } from "react";
-import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
-import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
+import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
+import { useAtomValue } from "jotai";
 
 /**
  * Vacation requests table rows
  * Creates the rows and sets rowsAtom, when vacationRequestsAtom change
  *
+ * @returns createDataGridRows, a function to create data grid rows
  */
 function VacationRequestsTableRows() {
   const language = useAtomValue(languageAtom);
-  const vacationRequests = useAtomValue(vacationRequestsAtom);
-  const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
-  const [rows, setRows] = useAtom(rowsAtom);
-
-  useEffect(() => {
-    createRows();
-  }, [vacationRequests, vacationRequestStatuses]);
 
   /**
    * Create vacation request data grid row
@@ -29,7 +19,7 @@ function VacationRequestsTableRows() {
    * @param vacationRequest vacation request
    * @returns dataGridRow
    */
-  const createRow = (vacationRequest: VacationRequest): DataGridRow => {
+  const createDataGridRow = (vacationRequest: VacationRequest): DataGridRow => {
     const row: DataGridRow = {
       id: vacationRequest.id,
       type: vacationRequest.type,
@@ -51,12 +41,15 @@ function VacationRequestsTableRows() {
   /**
    * Create vacation requests data grid rows
    */
-  const createRows = () => {
+  const createDataGridRows = (
+    vacationRequests: VacationRequest[],
+    vacationRequestStatuses: VacationRequestStatus[]
+  ): DataGridRow[] | undefined => {
     if (vacationRequests && vacationRequestStatuses) {
       const tempRows: DataGridRow[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
-        const row = createRow(vacationRequest);
+        const row = createDataGridRow(vacationRequest);
 
         vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
@@ -70,11 +63,11 @@ function VacationRequestsTableRows() {
         tempRows.push(row);
       });
 
-      setRows(tempRows);
+      return tempRows;
     }
   };
 
-  return rows;
+  return { createDataGridRows };
 }
 
 export default VacationRequestsTableRows;
