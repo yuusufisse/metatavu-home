@@ -7,7 +7,7 @@ import { GridRowId } from "@mui/x-data-grid";
 import { DataGridRow } from "../../../types";
 
 /**
- * Interface describing Delete Vacation Requests Props
+ * Component properties
  */
 interface DeleteVacationRequestsProps {
   vacationRequests: VacationRequest[];
@@ -16,11 +16,12 @@ interface DeleteVacationRequestsProps {
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[];
 }
+
 /**
- * Delete vacation requests, a functional component for deleting a vacation request
+ * Delete vacation requests functional component
  *
- * @props DeleteVacationRequestsProps
- * @returns deleteVacationRequests, function to delete vacation requests
+ * @param props DeleteVacationRequestsProps
+ * @returns deleteVacationRequests
  */
 const DeleteVacationRequests = (props: DeleteVacationRequestsProps) => {
   const { vacationRequests, setVacationRequests, vacationRequestStatuses, selectedRowIds, rows } =
@@ -29,7 +30,7 @@ const DeleteVacationRequests = (props: DeleteVacationRequestsProps) => {
   const setError = useSetAtom(errorAtom);
 
   /**
-   * Delete selected vacation requests from vacation requests atom
+   * Delete vacation requests from data grid rows
    */
   const deleteVacationRequestRows = () => {
     if (rows.length && vacationRequests && vacationRequestStatuses && selectedRowIds) {

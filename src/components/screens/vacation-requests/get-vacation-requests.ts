@@ -6,35 +6,36 @@ import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
 
 /**
- * Interface describing get Vacation Requests Props
+ * Component properties
  */
-interface getVacationRequestsProps {
-  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
+interface GetVacationRequestsProps {
+  setVacationRequests?: Dispatch<SetStateAction<VacationRequest[]>>;
 }
+
 /**
- * Get vacation requests, a functional component for fetching vacation requests
+ * Get vacation requests functional component
  *
- * @returns vacationRequests array of vacation requests,
- * vacationRequestsLoading boolean to indicate is vacation requests are loading
+ * @param props component properties
+ * @returns vacationRequestsLoading
  */
-const GetVacationRequests = (props: getVacationRequestsProps) => {
+const GetVacationRequests = (props: GetVacationRequestsProps) => {
   const { setVacationRequests } = props;
-  const { personsApi, vacationRequestsApi } = useApi();
+  const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
   const [vacationRequestsLoading, setVacationRequestsLoading] = useState(true);
 
   /**
-   * Fetch vacation requests using the API
+   * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
     try {
-      const fetchedPersons = await personsApi.listPersons({ active: true });
-      // const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({personId: userProfile?.id}); // STAGING
       const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-        personId: fetchedPersons[0].keycloakId
-      }); // TESTING
-      setVacationRequests(fetchedVacationRequests);
+        personId: userProfile?.id
+      });
+      if (setVacationRequests) {
+        setVacationRequests(fetchedVacationRequests);
+      }
       setVacationRequestsLoading(false);
     } catch (error) {
       setError(`${"Person fetch has failed."}, ${error}`);

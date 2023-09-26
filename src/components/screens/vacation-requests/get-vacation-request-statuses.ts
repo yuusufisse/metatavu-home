@@ -5,21 +5,20 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
 
 /**
- * Interface describing Get Vacation Request Statuses Props
+ * Component properties
  */
 interface GetVacationRequestStatusesProps {
   vacationRequests: VacationRequest[];
   vacationRequestStatuses: VacationRequestStatus[];
-  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
-  setLatestVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  setVacationRequestStatuses?: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  setLatestVacationRequestStatuses?: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
+
 /**
- * Get vacation requests statuses,
- * a functional component for fetching vacation request statuses
+ * Get vacation request statuses functional component
  *
- * @props GetVacationRequestStatusesProps
- * @returns latestVacationRequestStatuses array of filtered vacation request statuses,
- * vacationRequestStatusesLoading boolean to indicate if vacation request statuses are loading
+ * @param props GetVacationRequestStatusesProps
+ * @returns vacationRequestStatusesLoading
  */
 const GetVacationRequestStatuses = (props: GetVacationRequestStatusesProps) => {
   const {
@@ -65,8 +64,9 @@ const GetVacationRequestStatuses = (props: GetVacationRequestStatusesProps) => {
             });
           })
         );
-
-        setVacationRequestStatuses(vacationRequestStatuses);
+        if (setVacationRequestStatuses) {
+          setVacationRequestStatuses(vacationRequestStatuses);
+        }
       } catch (error) {
         setError(`${"Fetching vacation request statuses failed."}, ${error}`);
       }
@@ -74,7 +74,7 @@ const GetVacationRequestStatuses = (props: GetVacationRequestStatusesProps) => {
   };
 
   /**
-   * Filters all the latest vacation request statuses, so there would be only one status for each request showed on the UI
+   * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async () => {
     if (vacationRequests) {
@@ -102,8 +102,9 @@ const GetVacationRequestStatuses = (props: GetVacationRequestStatusesProps) => {
           tempLatestVacationRequestStatuses.push(latestStatus);
         }
       });
-
-      setLatestVacationRequestStatuses(tempLatestVacationRequestStatuses);
+      if (setLatestVacationRequestStatuses) {
+        setLatestVacationRequestStatuses(tempLatestVacationRequestStatuses);
+      }
       setVacationRequestStatusesLoading(false);
     }
   };

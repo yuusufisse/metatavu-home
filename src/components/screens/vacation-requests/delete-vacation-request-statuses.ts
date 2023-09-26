@@ -7,7 +7,7 @@ import { DataGridRow } from "../../../types";
 import { useSetAtom } from "jotai";
 
 /**
- * Interface describing Delete Vacation Request Statuses Props
+ * Component properties
  */
 interface DeleteVacationRequestStatusesProps {
   vacationRequestStatuses: VacationRequestStatus[];
@@ -15,11 +15,12 @@ interface DeleteVacationRequestStatusesProps {
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[];
 }
+
 /**
- * Delete vacation requests, a functional component for deleting a vacation request
+ * Delete vacation requests functional component
  *
- * @props DeleteVacationRequestStatusesProps
- * @returns deleteVacationRequests, function to delete vacation requests
+ * @param props DeleteVacationRequestStatusesProps
+ * @returns deleteVacationRequestStatuses
  */
 const DeleteVacationRequestStatuses = (props: DeleteVacationRequestStatusesProps) => {
   const { vacationRequestStatuses, setVacationRequestStatuses, selectedRowIds, rows } = props;

@@ -9,7 +9,7 @@ import CreateVacationRequestStatus from "./create-vacation-request-status";
 import { Dispatch, SetStateAction } from "react";
 
 /**
- * Interface describing Create Vacation Request Props
+ * Component properties
  */
 interface CreateVacationRequestProps {
   vacationRequests: VacationRequest[];
@@ -17,11 +17,12 @@ interface CreateVacationRequestProps {
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
+
 /**
- * Functional component for creating a new vacation request
+ * Create vacation request functional component
  *
- * @props CreateVacationRequestProps
- * @returns createVacationRequest, function to create a new vacation request
+ * @param props CreateVacationRequestProps
+ * @returns createVacationRequest
  */
 const CreateVacationRequest = (props: CreateVacationRequestProps) => {
   const {
