@@ -54,7 +54,8 @@ const TableToolbar = (props: TableToolbarProps) => {
     vacationRequests: vacationRequests,
     setVacationRequests: setVacationRequests,
     vacationRequestStatuses: vacationRequestStatuses,
-    selectedRowIds: selectedRowIds
+    selectedRowIds: selectedRowIds,
+    rows: rows
   });
   const { deleteVacationRequestStatuses } = DeleteVacationRequestStatuses({
     setVacationRequestStatuses: setVacationRequestStatuses,
