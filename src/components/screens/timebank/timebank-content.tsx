@@ -7,6 +7,7 @@ import TimebankOverviewChart from "./timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
+import TimebankMultiBarChart from "./timebank-multibarchart";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -129,6 +130,9 @@ const TimebankContent = (props: Props) => {
             {strings.timebank.expected}: {getHoursAndMinutes(Number(personTotalTime?.expected))}
           </ListItem>
         </List>
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <TimebankMultiBarChart personTotalTime={personTotalTime} />
       </Box>
     </>
   );

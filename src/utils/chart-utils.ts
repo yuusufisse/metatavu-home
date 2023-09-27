@@ -36,6 +36,22 @@ export const totalTimeToChart = (personTotalTime: PersonTotalTime) => {
   ];
 };
 /**
+ * Reformats inputted person total time object to be presented in the bar chart
+ * @param personTotalTime 
+ * @returns an array of objects, each object representing a bar in the bar chart
+ */
+export const generateMultiBarChart = (personTotalTime: PersonTotalTime) => {
+  return [
+    {
+      name: strings.timebank.logged,
+      internal: personTotalTime.internalTime,
+      billableProject: personTotalTime.billableProjectTime,
+      nonBillableProject: personTotalTime.nonBillableProjectTime,
+      expected: personTotalTime.expected
+    }
+  ];
+};
+/**
  * Renders custom labels in the pie chart
  * @param props Props from the pie chart data, such as name and value
  * @returns custom label
