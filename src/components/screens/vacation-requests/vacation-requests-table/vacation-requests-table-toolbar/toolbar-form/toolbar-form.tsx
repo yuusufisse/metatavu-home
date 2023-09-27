@@ -1,29 +1,19 @@
-import {
-  Box,
-  Button,
-  Divider,
-  FormControl,
-  FormLabel,
-  Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField
-} from "@mui/material";
+import { Box, Divider, Grid } from "@mui/material";
 import {
   VacationRequest,
   VacationRequestStatus,
   VacationType
 } from "../../../../../../generated/client";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import getLocalizedVacationType from "../../../../../../utils/vacation-type-utils";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../../../types";
 import CreateVacationRequest from "../../../create-vacation-request";
 import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
-import DateRangePicker from "../../../../../generics/date-range-picker";
 import { GridRowId } from "@mui/x-data-grid";
 import UpdateVacationRequest from "../../../update-vacation-request";
+import FormFields from "./form-fields";
+import { getVacationDataFromRow } from "./get-vacation-data-from-row";
+import { determineToolbarFormMode } from "../../../../../../utils/toolbar-utils";
 
 /**
  * Component properties
@@ -68,6 +58,10 @@ const TableForm = (props: TableFormProps) => {
     message: "",
     days: 1
   });
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
+  const [selectedVacationRequestId, setSelectedVacationRequestId] = useState<string | undefined>(
+    undefined
+  );
   const { createVacationRequest } = CreateVacationRequest({
     vacationRequests: vacationRequests,
     vacationRequestStatuses: vacationRequestStatuses,
@@ -78,10 +72,6 @@ const TableForm = (props: TableFormProps) => {
     vacationRequests: vacationRequests,
     setVacationRequests: setVacationRequests
   });
-  const [readyToSubmit, setReadyToSubmit] = useState(false);
-  const [selectedVacationRequestId, setSelectedVacationRequestId] = useState<string | undefined>(
-    undefined
-  );
 
   /**
    * Reset vacation data
@@ -102,50 +92,27 @@ const TableForm = (props: TableFormProps) => {
    * Determine toolbar form mode
    */
   useEffect(() => {
-    if (selectedRowIds) {
-      switch (true) {
-        case selectedRowIds.length === 0 && formOpen:
-          setToolbarFormMode(ToolbarFormModes.CREATE);
-          break;
-        case selectedRowIds.length === 1:
-          setToolbarFormMode(ToolbarFormModes.EDIT);
-          break;
-        default:
-          setToolbarFormMode(ToolbarFormModes.NONE);
-          break;
-      }
-    }
+    determineToolbarFormMode({
+      formOpen: formOpen,
+      selectedRowIds: selectedRowIds,
+      setToolbarFormMode: setToolbarFormMode
+    });
   }, [selectedRowIds, formOpen]);
 
   /**
-   * Set vacation data if toolbar form is opened in edit mode
+   * Set vacation data from selected row if toolbar is in edit mode
    */
   useEffect(() => {
     if (toolbarFormMode === ToolbarFormModes.EDIT && selectedRowIds?.length && rows?.length) {
-      const selectedVacationRow = rows.find((row) => row.id === selectedRowIds[0]);
-
-      if (selectedVacationRow) {
-        const selectedVacationRequest = vacationRequests.find(
-          (vacationRequest) => vacationRequest.id === selectedVacationRow.id
-        );
-
-        if (selectedVacationRequest) {
-          const startDate = DateTime.fromJSDate(selectedVacationRequest.startDate);
-          const endDate = DateTime.fromJSDate(selectedVacationRequest.endDate);
-          const days = selectedVacationRequest.days;
-
-          setVacationData({
-            type: selectedVacationRequest.type,
-            message: selectedVacationRequest.message,
-            startDate: startDate,
-            endDate: endDate,
-            days: days
-          });
-          setSelectedVacationRequestId(selectedVacationRequest.id);
-          setInitialStartDate(startDate);
-          setInitialEndDate(endDate);
-        }
-      }
+      getVacationDataFromRow({
+        rows: rows,
+        selectedRowIds: selectedRowIds,
+        vacationRequests: vacationRequests,
+        setSelectedVacationRequestId: setSelectedVacationRequestId,
+        setInitialStartDate: setInitialStartDate,
+        setInitialEndDate: setInitialEndDate,
+        setVacationData: setVacationData
+      });
     } else {
       resetVacationData();
     }
@@ -175,26 +142,6 @@ const TableForm = (props: TableFormProps) => {
     resetVacationData();
   };
 
-  /**
-   * Handle dates
-   *
-   * @param startDate
-   * @param endDate
-   * @param days
-   */
-  const setDates = (
-    startDate: DateTime | undefined,
-    endDate: DateTime | undefined,
-    days: number
-  ) => {
-    setVacationData({
-      ...vacationData,
-      startDate: startDate,
-      endDate: endDate,
-      days: days
-    });
-  };
-
   return (
     <Box sx={{ width: "100%" }}>
       <Divider />
@@ -207,57 +154,14 @@ const TableForm = (props: TableFormProps) => {
                 handleFormSubmit();
               }}
             >
-              <FormControl sx={{ width: "100%" }}>
-                <FormLabel>Vacation Type</FormLabel>
-                <Select
-                  name="type"
-                  value={String(vacationData.type)}
-                  onChange={(event: SelectChangeEvent<string>) => {
-                    setVacationData({
-                      ...vacationData,
-                      type: getLocalizedVacationType(event.target.value)
-                    });
-                  }}
-                  sx={{ marginBottom: "5px", width: "100%" }}
-                >
-                  {(Object.keys(VacationType) as Array<keyof typeof VacationType>).map(
-                    (vacationType) => {
-                      return (
-                        <MenuItem key={vacationType} value={vacationType}>
-                          {vacationType}
-                        </MenuItem>
-                      );
-                    }
-                  )}
-                </Select>
-                <FormLabel>Message</FormLabel>
-                <TextField
-                  value={vacationData.message}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    setVacationData({
-                      ...vacationData,
-                      message: event.target.value
-                    });
-                  }}
-                  sx={{ marginBottom: "5px" }}
-                />
-                <FormLabel sx={{ marginBottom: "5px" }}>Duration</FormLabel>
-                <DateRangePicker
-                  dateTimeNow={dateTimeNow}
-                  setDates={setDates}
-                  initialStartDate={initialStartDate}
-                  initialEndDate={initialEndDate}
-                />
-                <Button
-                  disabled={!readyToSubmit}
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  sx={{ marginTop: "10px" }}
-                >
-                  Submit
-                </Button>
-              </FormControl>
+              <FormFields
+                dateTimeNow={dateTimeNow}
+                initialEndDate={initialEndDate}
+                initialStartDate={initialStartDate}
+                readyToSubmit={readyToSubmit}
+                setVacationData={setVacationData}
+                vacationData={vacationData}
+              />
             </form>
           </Grid>
         </Grid>

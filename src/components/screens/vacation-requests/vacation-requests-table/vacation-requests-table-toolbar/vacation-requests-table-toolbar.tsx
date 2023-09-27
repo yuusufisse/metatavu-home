@@ -24,6 +24,7 @@ interface TableToolbarProps {
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[];
 }
+
 /**
  * Table toolbar component
  *
@@ -121,6 +122,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     <Box
       sx={{
         border: "1px solid lightgrey",
+        borderBottom: "0px",
         margin: "0"
       }}
     >

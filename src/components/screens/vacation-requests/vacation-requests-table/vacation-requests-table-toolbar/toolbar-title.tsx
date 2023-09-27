@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ToolbarFormModes } from "../../../../../types";
 import { Typography } from "@mui/material";
+import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
 
 /**
  * Component props
@@ -15,19 +16,10 @@ interface ToolbarTitleProps {
 const ToolbarTitle = (props: ToolbarTitleProps) => {
   const { toolbarFormMode } = props;
   const [title, setTitle] = useState<string>("My vacation requests");
+
   useEffect(() => {
     if (toolbarFormMode) {
-      switch (true) {
-        case toolbarFormMode === ToolbarFormModes.CREATE:
-          setTitle("Create a new vacation request");
-          break;
-        case toolbarFormMode === ToolbarFormModes.EDIT:
-          setTitle("Edit a vacation request");
-          break;
-        default:
-          setTitle("My vacation requests");
-          break;
-      }
+      setTitle(getToolbarTitle(toolbarFormMode));
     }
   }, [toolbarFormMode]);
   return <Typography variant="h5">{title}</Typography>;
