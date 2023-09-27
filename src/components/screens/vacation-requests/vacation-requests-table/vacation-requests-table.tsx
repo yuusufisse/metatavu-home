@@ -1,8 +1,7 @@
 import { DataGrid, GridRowSelectionModel } from "@mui/x-data-grid";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { Box, Skeleton } from "@mui/material";
+import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
-import VacationRequestsSkeletonTable from "./skeleton-table-rows/skeleton-table";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
 import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
