@@ -2,17 +2,17 @@ import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 
 /**
- * Interface describing DeleteButton properties
+ * Component properties
  */
-interface DeleteButtonProps {
+interface ToolbarDeleteButtonProps {
   deleteVacationsData: Function;
 }
 /**
  * Delete Button component
  *
- * @param props DeleteButtonProps
+ * @param props ToolbarDeleteButtonProps
  */
-const DeleteButton = (props: DeleteButtonProps) => {
+const ToolbarDeleteButton = (props: ToolbarDeleteButtonProps) => {
   const { deleteVacationsData } = props;
   return (
     <Button
@@ -30,4 +30,4 @@ const DeleteButton = (props: DeleteButtonProps) => {
   );
 };
 
-export default DeleteButton;
+export default ToolbarDeleteButton;

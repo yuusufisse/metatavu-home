@@ -4,7 +4,7 @@ import { ButtonIconProps } from "../../types";
 import { Button, Typography } from "@mui/material";
 
 /**
- * Interface describing FormOpen Toggle Button properties
+ * Component properties
  */
 interface ToggleButtonProps {
   children?: ReactNode;

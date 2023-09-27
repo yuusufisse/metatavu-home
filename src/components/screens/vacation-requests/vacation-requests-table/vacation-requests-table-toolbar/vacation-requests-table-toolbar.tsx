@@ -1,26 +1,18 @@
 import { Add, Cancel, Edit } from "@mui/icons-material";
-import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
+import { Box, Collapse, Grid, styled } from "@mui/material";
 import { ComponentType, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import DeleteVacationRequests from "../../delete-vacation-requests";
-import TableForm from "../vacation-requests-table-form";
+import ToolbarForm from "./toolbar-form/toolbar-form";
 import DeleteVacationRequestStatuses from "../../delete-vacation-request-statuses";
 import { VacationRequest, VacationRequestStatus } from "../../../../../generated/client";
 import { GridRowId } from "@mui/x-data-grid";
-import { ButtonIconProps, DataGridRow } from "../../../../../types";
+import { ButtonIconProps, DataGridRow, ToolbarFormModes } from "../../../../../types";
 import GenericToggleButton from "../../../../generics/generic-toggle-button";
-import DeleteButton from "./delete-button";
+import ToolbarDeleteButton from "./toolbar-delete-button";
+import ToolbarTitle from "./toolbar-title";
 
 /**
- * Enum describing table form modes
- */
-enum tableFormMode {
-  CREATE = "CREATE",
-  EDIT = "EDIT",
-  NONE = "NONE"
-}
-
-/**
- * Interface describing Table Toolbar Props
+ * Component properties
  */
 interface TableToolbarProps {
   vacationRequests: VacationRequest[];
@@ -33,9 +25,9 @@ interface TableToolbarProps {
   rows: DataGridRow[];
 }
 /**
- * Table tool bar component, provides functionality to alter vacation requests table
+ * Table toolbar component
  *
- * @props TableToolbarProps
+ * @param props TableToolbarProps
  */
 const TableToolbar = (props: TableToolbarProps) => {
   const {
@@ -49,7 +41,6 @@ const TableToolbar = (props: TableToolbarProps) => {
     rows
   } = props;
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
-  // const [formEditMode, setFormEditMode] = useState<tableFormMode>(tableFormMode.NONE);
   const { deleteVacationRequests } = DeleteVacationRequests({
     vacationRequests: vacationRequests,
     setVacationRequests: setVacationRequests,
@@ -63,7 +54,11 @@ const TableToolbar = (props: TableToolbarProps) => {
     selectedRowIds: selectedRowIds,
     rows: rows
   });
+  const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
 
+  /**
+   * Set toolbar open
+   */
   useEffect(() => {
     if (selectedRowIds) {
       setToolbarOpen(true);
@@ -80,15 +75,8 @@ const TableToolbar = (props: TableToolbarProps) => {
     await deleteVacationRequests();
   };
 
-  const handleFormMode = (mode: tableFormMode) => {
-    if (mode === tableFormMode.CREATE) {
-    } else if (mode === tableFormMode.EDIT) {
-    } else {
-    }
-  };
-
   /**
-   * Interface describing FormOpen Toggle Button properties
+   * FormOpen Toggle Button component properties
    */
   interface FormOpenToggleButtonProps {
     children?: ReactNode;
@@ -114,14 +102,16 @@ const TableToolbar = (props: TableToolbarProps) => {
     );
   };
 
-  const ToolbarTitle = () => {
-    return <Typography variant="h5">My Vacation Requests</Typography>;
-  };
-
+  /**
+   * Toolbar grid item component
+   */
   const ToolbarGridItem = styled(Grid)({
     padding: "10px"
   });
 
+  /**
+   * Toolbar grid container component
+   */
   const ToolbarGridContainer = styled(Grid)({
     alignContent: "space-around",
     alignItems: "center"
@@ -142,13 +132,13 @@ const TableToolbar = (props: TableToolbarProps) => {
             </ToolbarGridItem>
           ) : null}
           <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
-            <DeleteButton deleteVacationsData={deleteVacationsData} />
+            <ToolbarDeleteButton deleteVacationsData={deleteVacationsData} />
           </ToolbarGridItem>
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>
           <ToolbarGridItem item xs={6}>
-            <ToolbarTitle />
+            <ToolbarTitle toolbarFormMode={toolbarFormMode} />
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>
             {formOpen ? (
@@ -160,12 +150,17 @@ const TableToolbar = (props: TableToolbarProps) => {
         </ToolbarGridContainer>
       )}
       <Collapse in={formOpen}>
-        <TableForm
+        <ToolbarForm
+          formOpen={formOpen}
           vacationRequests={vacationRequests}
           setVacationRequests={setVacationRequests}
           setFormOpen={setFormOpen}
           setVacationRequestStatuses={setVacationRequestStatuses}
           vacationRequestStatuses={vacationRequestStatuses}
+          selectedRowIds={selectedRowIds}
+          rows={rows}
+          toolbarFormMode={toolbarFormMode}
+          setToolbarFormMode={setToolbarFormMode}
         />
       </Collapse>
     </Box>

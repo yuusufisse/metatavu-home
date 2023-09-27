@@ -5,10 +5,9 @@ import { VacationRequest, VacationRequestStatus } from "../../../../generated/cl
 import { useAtomValue } from "jotai";
 
 /**
- * Vacation requests table rows
- * Creates the rows and sets rowsAtom, when vacationRequestsAtom change
+ * Vacation requests table rows functional component
  *
- * @returns createDataGridRows, a function to create data grid rows
+ * @returns createDataGridRows
  */
 function VacationRequestsTableRows() {
   const language = useAtomValue(languageAtom);

@@ -1,27 +1,50 @@
 import { Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getTimeDifferenceInDays } from "../../utils/time-utils";
 
+/**
+ * Component properties
+ */
 interface DateRangePickerProps {
   dateTimeNow: DateTime;
   setDates: Function;
+  initialStartDate?: DateTime;
+  initialEndDate?: DateTime;
 }
 /**
- * Date range picker
- * Handles date change and day difference between start and end
+ * Date range picker component
  *
- * @props DateRangePickerProps
+ * @param props DateRangePickerProps
  */
 const DateRangePicker = (props: DateRangePickerProps) => {
-  const { dateTimeNow, setDates } = props;
-  const [startDate, setStartDate] = useState<DateTime | null | undefined>(dateTimeNow);
-  const [endDate, setEndDate] = useState<DateTime | null | undefined>(dateTimeNow);
+  const { dateTimeNow, setDates, initialStartDate, initialEndDate } = props;
+  const [startDate, setStartDate] = useState<DateTime | null | undefined>(
+    initialStartDate ? initialStartDate : dateTimeNow
+  );
+  const [endDate, setEndDate] = useState<DateTime | null | undefined>(
+    initialEndDate ? initialEndDate : dateTimeNow
+  );
 
   /**
-   * Calculate time difference between startDate and endDate and assign it to days,
-   * and set endDate as startDate if startDate is ahead of endDate,
-   * and set days to 1 if startDate and endDate are equal
+   * Set startDate and endDate on initial dates changing
+   */
+  useEffect(() => {
+    if (initialStartDate) {
+      setStartDate(initialStartDate);
+    } else {
+      setStartDate(dateTimeNow);
+    }
+    if (initialEndDate) {
+      setEndDate(initialEndDate);
+    } else {
+      setEndDate(dateTimeNow);
+    }
+  }, [initialStartDate, initialEndDate]);
+
+  /**
+   * Handle date change
    *
    * @returns startDate, endDate, days
    */
@@ -38,11 +61,7 @@ const DateRangePicker = (props: DateRangePickerProps) => {
       if (startDate === endDate) {
         days = 1;
       } else {
-        const diff = endDate.diff(startDate, ["days"]);
-        days = Number(Math.round(diff.days)) + 1;
-        if (days < 1) {
-          days = 1;
-        }
+        days = getTimeDifferenceInDays(startDate, endDate);
       }
     }
     setStartDate(startDate);

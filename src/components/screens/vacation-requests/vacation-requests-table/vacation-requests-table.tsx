@@ -1,4 +1,4 @@
-import { DataGrid, GridRowParams, GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, GridRowSelectionModel } from "@mui/x-data-grid";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
@@ -9,7 +9,7 @@ import { VacationRequest, VacationRequestStatus } from "../../../../generated/cl
 import { DataGridRow } from "../../../../types";
 
 /**
- * Interface describing Vacation Requests Table Props
+ * Component properties
  */
 interface VacationRequestsTableProps {
   vacationRequests: VacationRequest[];
@@ -18,7 +18,7 @@ interface VacationRequestsTableProps {
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
 /**
- * Vacation requests table root component, display a table of vacation requests
+ * Vacation requests table component
  *
  * @props VacationRequestsTableProps
  */
@@ -32,9 +32,12 @@ const VacationRequestsTable = (props: VacationRequestsTableProps) => {
   const containerRef = useRef(null);
   const [rows, setRows] = useState<DataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);
-  const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>();
+  const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
   const { createDataGridRows } = VacationRequestsTableRows();
 
+  /**
+   * Set data grid rows
+   */
   useEffect(() => {
     if (vacationRequests.length) {
       const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
@@ -42,7 +45,7 @@ const VacationRequestsTable = (props: VacationRequestsTableProps) => {
         setRows(createdRows);
       }
     }
-  }, [vacationRequests.length, vacationRequestStatuses.length, formOpen]);
+  }, [vacationRequests, vacationRequestStatuses, formOpen]);
 
   return (
     <Box
@@ -74,7 +77,7 @@ const VacationRequestsTable = (props: VacationRequestsTableProps) => {
             columns={columns}
             checkboxSelection
             rowSelectionModel={selectedRowIds}
-            isRowSelectable={(params: GridRowParams) => (formOpen ? false : true)}
+            isRowSelectable={() => (formOpen ? false : true)}
           />
         </>
       ) : (

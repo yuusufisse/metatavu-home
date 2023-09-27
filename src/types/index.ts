@@ -2,6 +2,15 @@ import { DateTime } from "luxon";
 import { VacationType } from "../generated/client";
 
 /**
+ * Enum describing table form modes
+ */
+export enum ToolbarFormModes {
+  CREATE = "CREATE",
+  EDIT = "EDIT",
+  NONE = "NONE"
+}
+
+/**
  * Type describing Icon properties
  */
 export type ButtonIconProps = {};
@@ -49,9 +58,9 @@ export interface SkeletonTableRow {
  * Type describing data for vacation request
  */
 export interface VacationData {
-  startDate: DateTime | undefined | null;
-  endDate: DateTime | undefined | null;
+  startDate: DateTime | undefined;
+  endDate: DateTime | undefined;
   type: VacationType | undefined | null;
-  message: string | undefined | null;
-  days: number | undefined | null;
+  message: string | undefined;
+  days: number | undefined;
 }

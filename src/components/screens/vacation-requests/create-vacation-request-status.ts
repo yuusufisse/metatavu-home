@@ -11,7 +11,7 @@ import { hasAllPropsDefined } from "../../../utils/check-utils";
 import { Dispatch, SetStateAction } from "react";
 
 /**
- * Interface describing Create Vacation Request Status Props
+ * Component properties
  */
 interface CreateVacationRequestStatusProps {
   vacationRequestStatuses: VacationRequestStatus[];
