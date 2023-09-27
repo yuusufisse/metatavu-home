@@ -1,10 +1,9 @@
-import { PersonTotalTime } from "../../generated/client";
-import { getHoursAndMinutes } from "../../utils/time-utils";
-import { Box, Grid, Typography } from "@mui/material";
-import Logo from "../../../resources/img/Metatavu-icon.svg";
-import { userProfileAtom } from "../../atoms/auth";
+import { PersonTotalTime } from "../../../generated/client";
+import { getHoursAndMinutes } from "../../../utils/time-utils";
+import { Grid, Typography } from "@mui/material";
+import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue } from "jotai";
-import strings from "../../localization/strings";
+import strings from "../../../localization/strings";
 
 /**
  * Component props
@@ -21,12 +20,6 @@ const BalanceCard = ({ personTotalTime }: Props) => {
   return (
     <>
       <Grid>
-        <Box
-          component="img"
-          sx={{ height: 48, filter: "invert(100%)" }}
-          alt="Metatavu logo"
-          src={Logo}
-        />
         <Typography>
           {`${strings.header.hello}, ${userProfile?.firstName}!`}
           <br />

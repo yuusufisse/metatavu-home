@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import ErrorHandler from "./components/contexts/error-handler";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
@@ -15,8 +15,10 @@ import HomeScreen from "./components/screens/home/home-screen";
  */
 const App = () => {
   useAtomValue(languageAtom);
+
   const router = createBrowserRouter([
     {
+      path: "/",
       element: <Header />,
       children: [
         {
@@ -33,7 +35,9 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <ErrorHandler>
           <AuthenticationProvider>
-            <RouterProvider router={router} />
+            <CssBaseline>
+              <RouterProvider router={router} />
+            </CssBaseline>
           </AuthenticationProvider>
         </ErrorHandler>
       </ThemeProvider>

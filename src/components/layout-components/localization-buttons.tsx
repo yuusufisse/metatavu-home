@@ -1,9 +1,30 @@
 import { useAtom } from "jotai";
 import strings from "../../localization/strings";
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { ToggleButton, ToggleButtonGroup, Tooltip, styled } from "@mui/material";
 import { languageAtom } from "../../atoms/languageAtom";
 import { Language } from "../../types";
 import { MouseEvent } from "react";
+
+/**
+ * Styled toggle button group component
+ */
+const LanguageButtons = styled(ToggleButtonGroup)(({ theme }) => ({
+  "& .MuiToggleButtonGroup-grouped": {
+    margin: theme.spacing(1),
+    border: 0,
+    width: 48,
+    height: 48,
+    "&.Mui-disabled": {
+      border: 0
+    },
+    "&:not(:first-of-type)": {
+      borderRadius: "50%"
+    },
+    "&:first-of-type": {
+      borderRadius: "50%"
+    }
+  }
+}));
 
 /**
  * LocalizationButtons component
@@ -20,11 +41,8 @@ const LocalizationButtons = () => {
     }
   };
 
-  /**
-   * Renders localization buttons
-   */
-  const renderLocalizationButtons = () => (
-    <ToggleButtonGroup
+  return (
+    <LanguageButtons
       value={language}
       exclusive
       onChange={handleLocaleChange}
@@ -34,15 +52,15 @@ const LocalizationButtons = () => {
         const value = strings.getString(`localization.${availableLanguage}`, language);
 
         return (
-          <ToggleButton value={availableLanguage} key={`${idx}`}>
-            {value}
-          </ToggleButton>
+          <Tooltip title="Switch language">
+            <ToggleButton value={availableLanguage} key={`${idx}`} selected>
+              {value}
+            </ToggleButton>
+          </Tooltip>
         );
       })}
-    </ToggleButtonGroup>
+    </LanguageButtons>
   );
-
-  return <div>{renderLocalizationButtons()}</div>;
 };
 
 export default LocalizationButtons;
