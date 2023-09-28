@@ -72,6 +72,9 @@ const TableToolbar = (props: TableToolbarProps) => {
    * Delete vacation requests and statuses
    */
   const deleteVacationsData = async () => {
+    /* TODO: Prompt a confirmation on delete,
+    (in case pressing delete was accidental),
+    perhaps can make use of the generic-dialog component for this */
     await deleteVacationRequestStatuses();
     await deleteVacationRequests();
   };
