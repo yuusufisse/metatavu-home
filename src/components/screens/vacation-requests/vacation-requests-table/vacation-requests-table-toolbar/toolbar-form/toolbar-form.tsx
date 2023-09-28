@@ -84,8 +84,8 @@ const TableForm = (props: TableFormProps) => {
       endDate: dateTimeNow,
       days: 1
     });
-    setInitialStartDate(undefined);
-    setInitialEndDate(undefined);
+    setInitialStartDate(dateTimeNow);
+    setInitialEndDate(dateTimeNow);
   };
 
   /**
@@ -122,7 +122,7 @@ const TableForm = (props: TableFormProps) => {
    * Vacation data validation
    */
   useEffect(() => {
-    if (hasAllPropsDefined(vacationData) && vacationData.message?.length) {
+    if (hasAllPropsDefined(vacationData)) {
       setReadyToSubmit(true);
     } else {
       setReadyToSubmit(false);
