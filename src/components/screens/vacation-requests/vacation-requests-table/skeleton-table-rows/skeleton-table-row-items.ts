@@ -4,7 +4,10 @@ import { SkeletonTableRow } from "../../../../../types";
  * Define row items
  */
 export const rowItems: SkeletonTableRow[] = [
-  /* TODO: Automate this */
+  /* TODO: Automate this. Write a script to generate this list
+  of row items dynamically. The width of each column in the data grid, 
+  for example, could provide the needed numbers for calculating 
+  the appropriate properties for these skeleton row items. */
   {
     variant: "rounded",
     height: "20px",
