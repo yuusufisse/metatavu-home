@@ -29,11 +29,7 @@ const GenericToggleButton = (props: GenericToggleButtonProps) => {
         width: "100%"
       }}
       onClick={() => {
-        if (value) {
-          setValue(false);
-        } else {
-          setValue(true);
-        }
+        setValue(!value);
       }}
     >
       {ButtonIcon ? <ButtonIcon /> : null}
