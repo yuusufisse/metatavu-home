@@ -25,10 +25,7 @@ export const getTimeDifferenceInDays = (
   let days;
   if (startDate && endDate) {
     const diff = endDate.diff(startDate, ["days"]);
-    days = Number(Math.round(diff.days)) + 1;
-    if (days < 1) {
-      days = 1;
-    }
+    days = Number(Math.round(diff.days));
   }
   return days;
 };
