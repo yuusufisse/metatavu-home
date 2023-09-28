@@ -9,7 +9,7 @@ import { getTimeDifferenceInDays } from "../../utils/time-utils";
  */
 interface DateRangePickerProps {
   dateTimeNow: DateTime;
-  setDates: Function;
+  setDates: (startDate: DateTime | undefined, endDate: DateTime | undefined, days: number) => void;
   initialStartDate?: DateTime;
   initialEndDate?: DateTime;
 }
@@ -20,10 +20,10 @@ interface DateRangePickerProps {
  */
 const DateRangePicker = (props: DateRangePickerProps) => {
   const { dateTimeNow, setDates, initialStartDate, initialEndDate } = props;
-  const [startDate, setStartDate] = useState<DateTime | null | undefined>(
+  const [startDate, setStartDate] = useState<DateTime | undefined>(
     initialStartDate ? initialStartDate : dateTimeNow
   );
-  const [endDate, setEndDate] = useState<DateTime | null | undefined>(
+  const [endDate, setEndDate] = useState<DateTime | undefined>(
     initialEndDate ? initialEndDate : dateTimeNow
   );
 
@@ -48,10 +48,7 @@ const DateRangePicker = (props: DateRangePickerProps) => {
    *
    * @returns startDate, endDate, days
    */
-  const handleDateChange = (
-    startDate: DateTime | null | undefined,
-    endDate: DateTime | null | undefined
-  ) => {
+  const handleDateChange = (startDate: DateTime | undefined, endDate: DateTime | undefined) => {
     if (startDate && endDate) {
       if (startDate > endDate) {
         setEndDate(startDate);
@@ -79,14 +76,14 @@ const DateRangePicker = (props: DateRangePickerProps) => {
         label="Start Date"
         value={startDate}
         minDate={dateTimeNow}
-        onChange={(newValue) => handleDateChange(newValue, endDate)}
+        onChange={(newValue) => newValue && handleDateChange(newValue, endDate)}
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
         label="End Date"
         value={endDate}
         minDate={startDate}
-        onChange={(newValue) => handleDateChange(startDate, newValue)}
+        onChange={(newValue) => newValue && handleDateChange(startDate, newValue)}
       />
     </Box>
   );
