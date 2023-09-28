@@ -52,21 +52,13 @@ const DateRangePicker = (props: DateRangePickerProps) => {
     startDate: DateTime | null | undefined,
     endDate: DateTime | null | undefined
   ) => {
-    let days;
-    let tempEndDate = endDate;
     if (startDate && endDate) {
       if (startDate > endDate) {
-        tempEndDate = startDate;
-      }
-      if (startDate === endDate) {
-        days = 1;
-      } else {
-        days = getTimeDifferenceInDays(startDate, endDate);
-      }
+        setEndDate(startDate);
+      } else setEndDate(endDate);
     }
     setStartDate(startDate);
-    setEndDate(tempEndDate);
-    setDates(startDate, tempEndDate, days);
+    setDates(startDate, endDate, getTimeDifferenceInDays(startDate, endDate));
   };
 
   return (
