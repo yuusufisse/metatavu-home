@@ -52,10 +52,9 @@ const UpdateVacationRequest = (props: UpdateVacationRequestProps) => {
       };
 
       if (hasAllPropsDefined(tempVacationRequest) && vacationRequestId) {
-        const vacationRequest = <VacationRequest>tempVacationRequest;
         const updatedRequest = await vacationRequestsApi.updateVacationRequest({
           id: vacationRequestId,
-          vacationRequest: vacationRequest
+          vacationRequest: tempVacationRequest as VacationRequest
         });
         const tempVacationRequests = vacationRequests.map((vacationRequest) => {
           if (vacationRequest.id === updatedRequest.id) {
