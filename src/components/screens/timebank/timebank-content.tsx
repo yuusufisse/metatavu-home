@@ -9,6 +9,7 @@ import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
 import TimebankMultiBarChart from "./timebank-multibarchart";
 import DateRangePicker from "./timebank-daterange-picker";
+import { useState } from "react";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -29,6 +30,8 @@ const TimebankContent = (props: Props) => {
     handleDailyEntryChange,
     dailyEntries
   } = props;
+
+  const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>();
 
   /**
    * Disables the days from the DatePicker which have zero logged and expected hours.
@@ -113,6 +116,7 @@ const TimebankContent = (props: Props) => {
         <MenuItem value={"Week"}>{strings.timeExpressions.week}</MenuItem>
         <MenuItem value={"Month"}>{strings.timeExpressions.month}</MenuItem>
         <MenuItem value={"All"}>{strings.timeExpressions.allTime}</MenuItem>
+        <MenuItem value={"By time range"}>By time range</MenuItem>
       </Select>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <TimebankOverviewChart personTotalTime={personTotalTime} />
@@ -138,11 +142,12 @@ const TimebankContent = (props: Props) => {
           personDailyEntry={personDailyEntry}
           dailyEntries={dailyEntries}
           personTotalTime={personTotalTime}
+          setSelectedEntries={setSelectedEntries}
           timespanSelector={timespanSelector}
           disableNullEntries={disableNullEntries}
         />
       <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <TimebankMultiBarChart personTotalTime={personTotalTime} />
+        <TimebankMultiBarChart selectedEntries={selectedEntries} />
       </Box>
     </>
   );

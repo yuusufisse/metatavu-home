@@ -8,8 +8,7 @@ import {
   ResponsiveContainer,
   TooltipProps
 } from "recharts";
-import { PersonTotalTime } from "../../../generated/client";
-import { generateMultiBarChart } from "../../../utils/chart-utils";
+import { DailyEntry } from "../../../generated/client";
 import { theme } from "../../../theme";
 import strings from "../../../localization/strings";
 import { getHours, getHoursAndMinutes } from "../../../utils/time-utils";
@@ -18,12 +17,26 @@ import { Box } from "@mui/system";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 interface Props {
-  personTotalTime: PersonTotalTime;
+  selectedEntries: DailyEntry[] | undefined
 }
 
 const TimebankMultiBarChart = (props: Props) => {
-  const { personTotalTime } = props;
-  const data = generateMultiBarChart(personTotalTime);
+  const { selectedEntries } = props;
+  const data = selectedEntries?.map((entry) => {
+    return(
+      {
+        name: entry.date.toLocaleDateString(),
+        internal: entry.internalTime,
+        billableProject: entry.billableProjectTime,
+        nonBillableProject: entry.nonBillableProjectTime,
+        expected: entry.expected
+      })
+  })
+
+  // useEffect(() => {
+  //   data = generateMultiBarChart(selectedEntries);
+  // }, [selectedEntries])
+  
 
   const renderCustomizedTooltipRow = (name: string, time: number, color: string) => {
     return (

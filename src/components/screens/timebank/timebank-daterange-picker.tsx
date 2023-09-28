@@ -1,15 +1,17 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 // import strings from "../../../localization/strings";
 import { SelectChangeEvent } from "@mui/material";
 import { PersonTotalTime, DailyEntry } from "../../../generated/client";
+import strings from "../../../localization/strings";
 
 interface Props {
   personTotalTime: PersonTotalTime;
   personDailyEntry: DailyEntry;
   dailyEntries: DailyEntry[];
   timespanSelector: string;
+  setSelectedEntries: Dispatch<SetStateAction<DailyEntry[] | undefined>>;
   handleBalanceViewChange: (e: SelectChangeEvent) => void;
   handleDailyEntryChange: (e: DateTime | null) => void;
   disableNullEntries: (e: DateTime) => boolean;
@@ -27,28 +29,29 @@ const DateRangePicker = (props: Props) => {
     // timespanSelector,
     // handleBalanceViewChange,
     // handleDailyEntryChange,
+    setSelectedEntries,
     dailyEntries,
     disableNullEntries
   } = props;
 
   const [range, setRange] = useState<Range>();
-  console.log(range);
 
   useEffect(() => {
     if (range?.start && range?.end) {
       const selectedDays = range?.start.diff(range.end, "days").toObject();
       const result = [];
-      for (let i = 0; i < selectedDays?.days; i++) {
+      
+      for (let i = 0; i < selectedDays.days; i++) {
         result.push(
           dailyEntries.filter((item) => {
             return (
-              DateTime.fromJSDate(item.date).toLocaleString() ===
-              range.end.plus({ days: i + 1 }).toLocaleString()
+              DateTime.fromJSDate(item.date).toISODate() ===
+              range?.end.plus({ days: i + 1 }).toISODate()
             );
           })[0]
         );
       }
-      console.log(result);
+      setSelectedEntries(result);
     }
   }, [range]);
 

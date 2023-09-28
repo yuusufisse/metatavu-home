@@ -19,6 +19,7 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
+  const [multiChartChosen, setMultiChartChosen] = useState(false);
 
   /**
    * Fetches the person's total time and daily entries
@@ -71,15 +72,17 @@ const TimebankScreen = () => {
     setTimespanSelector(e.target.value);
     switch (e.target.value) {
       case "Week":
-        return getPersonData(Timespan.WEEK);
+        getPersonData(Timespan.WEEK);
       case "Month":
-        return getPersonData(Timespan.MONTH);
+        getPersonData(Timespan.MONTH);
       case "Year":
-        return getPersonData(Timespan.YEAR);
+        getPersonData(Timespan.YEAR);
       case "All":
-        return getPersonData(Timespan.ALL_TIME);
+        getPersonData(Timespan.ALL_TIME);
+      case "Range":
+        setMultiChartChosen(true);
       default:
-        return getPersonData(Timespan.ALL_TIME);
+        getPersonData(Timespan.ALL_TIME);
     }
   };
 
@@ -113,6 +116,7 @@ const TimebankScreen = () => {
               dailyEntries={dailyEntries}
               personTotalTime={personTotalTime}
               timespanSelector={timespanSelector}
+              multiChartChosen={multiChartChosen}
             />
           ) : (
             setError("Could not find time entries")
