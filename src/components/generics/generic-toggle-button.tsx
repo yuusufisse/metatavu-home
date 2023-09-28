@@ -15,6 +15,7 @@ interface GenericToggleButtonProps {
   ButtonIcon?: ComponentType<ButtonIconProps>;
   title?: string;
 }
+
 /**
  * Generic Toggle Button component
  *
