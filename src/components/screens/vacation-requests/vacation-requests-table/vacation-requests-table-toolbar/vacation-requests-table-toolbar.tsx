@@ -131,14 +131,14 @@ const TableToolbar = (props: TableToolbarProps) => {
     >
       {toolbarOpen && !formOpen && selectedRowIds?.length ? (
         <ToolbarGridContainer container>
+          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
+            <ToolbarDeleteButton deleteVacationsData={deleteVacationsData} />
+          </ToolbarGridItem>
           {selectedRowIds?.length === 1 ? (
             <ToolbarGridItem item xs={6}>
               <FormOpenToggleButton title="Edit" ButtonIcon={Edit} />
             </ToolbarGridItem>
           ) : null}
-          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
-            <ToolbarDeleteButton deleteVacationsData={deleteVacationsData} />
-          </ToolbarGridItem>
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>
