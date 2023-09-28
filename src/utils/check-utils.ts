@@ -5,10 +5,11 @@
  * @returns boolean, indicates if any prop is null within the object
  */
 export const hasAllPropsDefined = (object: object): boolean => {
-  Object.keys(object).map((prop) => {
-    if (prop !== null || prop !== undefined) {
-      return false;
+  let response = true;
+  Object.values(object).map((prop) => {
+    if (prop === null || prop === undefined) {
+      response = false;
     }
   });
-  return true;
+  return response;
 };
