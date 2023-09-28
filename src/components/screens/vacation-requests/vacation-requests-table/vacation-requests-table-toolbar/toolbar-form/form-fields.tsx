@@ -14,6 +14,7 @@ import DateRangePicker from "../../../../../generics/date-range-picker";
 import { VacationData } from "../../../../../../types";
 import { SetStateAction } from "jotai";
 import { DateTime } from "luxon";
+import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
 /**
  * Component properties
  */
@@ -23,7 +24,6 @@ interface FormFieldsProps {
   dateTimeNow: DateTime;
   initialStartDate: DateTime | undefined;
   initialEndDate: DateTime | undefined;
-  readyToSubmit: boolean;
 }
 
 /**
@@ -32,14 +32,7 @@ interface FormFieldsProps {
  * @param props FormFieldsProps
  */
 const FormFields = (props: FormFieldsProps) => {
-  const {
-    vacationData,
-    setVacationData,
-    dateTimeNow,
-    initialEndDate,
-    initialStartDate,
-    readyToSubmit
-  } = props;
+  const { vacationData, setVacationData, dateTimeNow, initialEndDate, initialStartDate } = props;
 
   /**
    * Set dates to vacationData
@@ -105,7 +98,7 @@ const FormFields = (props: FormFieldsProps) => {
       />
 
       <Button
-        disabled={!readyToSubmit}
+        disabled={!hasAllPropsDefined(vacationData)}
         type="submit"
         variant="contained"
         size="large"

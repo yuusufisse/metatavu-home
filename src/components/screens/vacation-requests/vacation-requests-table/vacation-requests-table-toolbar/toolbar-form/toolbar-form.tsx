@@ -8,7 +8,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../../../types";
 import CreateVacationRequest from "../../../create-vacation-request";
-import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
 import { GridRowId } from "@mui/x-data-grid";
 import UpdateVacationRequest from "../../../update-vacation-request";
 import FormFields from "./form-fields";
@@ -58,7 +57,6 @@ const TableForm = (props: TableFormProps) => {
     message: "",
     days: 1
   });
-  const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [selectedVacationRequestId, setSelectedVacationRequestId] = useState<string | undefined>(
     undefined
   );
@@ -78,10 +76,10 @@ const TableForm = (props: TableFormProps) => {
    */
   const resetVacationData = () => {
     setVacationData({
-      type: "VACATION",
-      message: "",
+      type: VacationType.VACATION,
       startDate: dateTimeNow,
       endDate: dateTimeNow,
+      message: "",
       days: 1
     });
     setInitialStartDate(dateTimeNow);
@@ -119,17 +117,6 @@ const TableForm = (props: TableFormProps) => {
   }, [toolbarFormMode]);
 
   /**
-   * Vacation data validation
-   */
-  useEffect(() => {
-    if (hasAllPropsDefined(vacationData)) {
-      setReadyToSubmit(true);
-    } else {
-      setReadyToSubmit(false);
-    }
-  }, [vacationData]);
-
-  /**
    * Handle form submit
    */
   const handleFormSubmit = () => {
@@ -158,7 +145,6 @@ const TableForm = (props: TableFormProps) => {
                 dateTimeNow={dateTimeNow}
                 initialEndDate={initialEndDate}
                 initialStartDate={initialStartDate}
-                readyToSubmit={readyToSubmit}
                 setVacationData={setVacationData}
                 vacationData={vacationData}
               />
