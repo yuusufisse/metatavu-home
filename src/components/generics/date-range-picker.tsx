@@ -44,7 +44,7 @@ const DateRangePicker = (props: DateRangePickerProps) => {
   }, [initialStartDate, initialEndDate]);
 
   /**
-   * Handle date change
+   * Handle date change and calculate days
    *
    * @returns startDate, endDate, days
    */
@@ -57,8 +57,13 @@ const DateRangePicker = (props: DateRangePickerProps) => {
         setEndDate(startDate);
       } else setEndDate(endDate);
     }
-    setStartDate(startDate);
-    setDates(startDate, endDate, getTimeDifferenceInDays(startDate, endDate));
+    let days = getTimeDifferenceInDays(startDate, endDate);
+    if ((days && days < 1) || !days) {
+      days = 1;
+    } else {
+      days += 1;
+    }
+    setDates(startDate, endDate, days);
   };
 
   return (

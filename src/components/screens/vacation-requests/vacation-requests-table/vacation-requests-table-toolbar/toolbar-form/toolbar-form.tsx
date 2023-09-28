@@ -127,7 +127,7 @@ const TableForm = (props: TableFormProps) => {
     } else {
       setReadyToSubmit(false);
     }
-  });
+  }, [vacationData]);
 
   /**
    * Handle form submit
