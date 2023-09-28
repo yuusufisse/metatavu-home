@@ -8,6 +8,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
 import TimebankMultiBarChart from "./timebank-multibarchart";
+import DateRangePicker from "./timebank-daterange-picker";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -131,6 +132,15 @@ const TimebankContent = (props: Props) => {
           </ListItem>
         </List>
       </Box>
+      <DateRangePicker
+          handleDailyEntryChange={handleDailyEntryChange}
+          handleBalanceViewChange={handleBalanceViewChange}
+          personDailyEntry={personDailyEntry}
+          dailyEntries={dailyEntries}
+          personTotalTime={personTotalTime}
+          timespanSelector={timespanSelector}
+          disableNullEntries={disableNullEntries}
+        />
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <TimebankMultiBarChart personTotalTime={personTotalTime} />
       </Box>

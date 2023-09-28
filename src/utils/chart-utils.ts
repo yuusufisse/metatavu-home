@@ -21,7 +21,7 @@ export const dailyEntryToChart = (dailyEntry: DailyEntry) => {
 };
 /**
  * Reformats inputted person total time object to be presented in the bar chart
- * @param personTotalTime 
+ * @param personTotalTime
  * @returns an array of objects, each object representing a bar in the bar chart
  */
 export const totalTimeToChart = (personTotalTime: PersonTotalTime) => {
@@ -37,11 +37,32 @@ export const totalTimeToChart = (personTotalTime: PersonTotalTime) => {
 };
 /**
  * Reformats inputted person total time object to be presented in the bar chart
- * @param personTotalTime 
+ * @param personTotalTime
  * @returns an array of objects, each object representing a bar in the bar chart
  */
 export const generateMultiBarChart = (personTotalTime: PersonTotalTime) => {
-  return [
+  const data = [
+    {
+      name: strings.timebank.logged,
+      internal: personTotalTime.internalTime,
+      billableProject: personTotalTime.billableProjectTime,
+      nonBillableProject: personTotalTime.nonBillableProjectTime,
+      expected: personTotalTime.expected
+    },
+    {
+      name: strings.timebank.logged,
+      internal: personTotalTime.internalTime,
+      billableProject: personTotalTime.billableProjectTime,
+      nonBillableProject: personTotalTime.nonBillableProjectTime,
+      expected: personTotalTime.expected
+    },
+    {
+      name: strings.timebank.logged,
+      internal: personTotalTime.internalTime,
+      billableProject: personTotalTime.billableProjectTime,
+      nonBillableProject: personTotalTime.nonBillableProjectTime,
+      expected: personTotalTime.expected
+    },
     {
       name: strings.timebank.logged,
       internal: personTotalTime.internalTime,
@@ -50,6 +71,7 @@ export const generateMultiBarChart = (personTotalTime: PersonTotalTime) => {
       expected: personTotalTime.expected
     }
   ];
+  return data;
 };
 /**
  * Renders custom labels in the pie chart
