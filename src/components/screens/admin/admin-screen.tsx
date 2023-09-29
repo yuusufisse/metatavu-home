@@ -7,9 +7,6 @@ const AdminScreen = () => {
   const authToken = useAtomValue(authAtom)?.token;
 
   const isAdmin = (accessToken?: KeycloakTokenParsed): boolean => {
-    if (!!accessToken?.realm_access) {
-      console.log(accessToken.realm_access?.roles);
-    }
     return !!accessToken?.realm_access && accessToken.realm_access?.roles.includes("admin");
   };
 
