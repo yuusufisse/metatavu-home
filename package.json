@@ -35,8 +35,7 @@
     "react-select": "^5.7.4"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.7.0",
-    "@types/luxon": "^3.3.2",
+    "@openapitools/openapi-generator-cli": "2.5.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
