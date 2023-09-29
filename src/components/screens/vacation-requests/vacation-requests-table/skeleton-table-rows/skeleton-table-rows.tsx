@@ -19,7 +19,7 @@ const SkeletonTableRows = () => {
               {rowItems.map((rowItem, idx) => {
                 return (
                   <Skeleton
-                    variant={rowItem.variant}
+                    variant={rowItem.variant as "rounded" | "text" | "rectangular" | "circular"}
                     key={`skeleton-row-${idx}`}
                     sx={{
                       height: rowItem.height,
