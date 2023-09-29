@@ -9,6 +9,7 @@ import { Box, Container, Grid } from "@mui/material";
 import BalanceCard from "./balance-card";
 import HomeNav from "./nav";
 import LocalizationButtons from "../layout-components/localization-buttons";
+import { Outlet } from "react-router";
 
 /**
  * Header component
@@ -49,14 +50,14 @@ const Header = () => {
   }, [auth]);
 
   return (
-    <LoaderWrapper loading={isLoading}>
+    <>
       <Container sx={{ fontFamily: "Nunito Sans" }}>
         <Grid
           container
           sx={{
-            "borderRadius": "15px",
-            "backgroundColor": "#f2f2f2",
-            "boxShadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
+            borderRadius: "15px",
+            backgroundColor: "#f2f2f2",
+            boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
             p: 3
           }}
         >
@@ -73,16 +74,19 @@ const Header = () => {
         <Grid
           container
           sx={{
-            "borderRadius": "15px",
-            "backgroundColor": "#f2f2f2",
-            "boxShadow": "5px 5px 5px 0 rgba(50,50,50,0.1)",
+            borderRadius: "15px",
+            backgroundColor: "#f2f2f2",
+            boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
             p: 0
           }}
         >
           <HomeNav auth={auth} />
         </Grid>
       </Container>
-    </LoaderWrapper>
+      <Container sx={{ fontFamily: "Nunito Sans", marginTop: "20px" }}>
+        <Outlet />
+      </Container>
+    </>
   );
 };
 
