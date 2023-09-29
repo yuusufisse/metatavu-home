@@ -76,14 +76,14 @@ const DateRangePicker = (props: DateRangePickerProps) => {
         label="Start Date"
         value={startDate}
         minDate={dateTimeNow}
-        onChange={(newValue) => newValue && handleDateChange(newValue, endDate)}
+        onChange={(newValue: DateTime) => newValue && handleDateChange(newValue, endDate)}
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
         label="End Date"
         value={endDate}
         minDate={startDate}
-        onChange={(newValue) => newValue && handleDateChange(startDate, newValue)}
+        onChange={(newValue: DateTime) => newValue && handleDateChange(startDate, newValue)}
       />
     </Box>
   );
