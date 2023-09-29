@@ -8,6 +8,7 @@ import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
 import Header from "./components/header/header";
 import HomeScreen from "./components/screens/home/home-screen";
+import AdminScreen from "./components/screens/admin/admin-screen";
 
 /**
  * Application component
@@ -22,6 +23,11 @@ const App = () => {
         {
           path: "/",
           element: <HomeScreen />,
+          errorElement: <ErrorScreen />
+        },
+        {
+          path: "/admin",
+          element: <AdminScreen />,
           errorElement: <ErrorScreen />
         }
       ]
