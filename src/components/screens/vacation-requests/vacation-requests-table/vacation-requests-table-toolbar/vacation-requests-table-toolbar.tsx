@@ -1,15 +1,15 @@
 import { Add, Cancel, Edit } from "@mui/icons-material";
 import { Box, Collapse, Grid, styled } from "@mui/material";
-import { ComponentType, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DeleteVacationRequests from "../../delete-vacation-requests";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import DeleteVacationRequestStatuses from "../../delete-vacation-request-statuses";
 import { VacationRequest, VacationRequestStatus } from "../../../../../generated/client";
 import { GridRowId } from "@mui/x-data-grid";
-import { ButtonIconProps, DataGridRow, ToolbarFormModes } from "../../../../../types";
-import GenericToggleButton from "../../../../generics/generic-toggle-button";
+import { DataGridRow, ToolbarFormModes } from "../../../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import ToolbarTitle from "./toolbar-title";
+import FormToggleButton from "./toolbar-form-toggle-button";
 
 /**
  * Component properties
@@ -80,33 +80,6 @@ const TableToolbar = (props: TableToolbarProps) => {
   };
 
   /**
-   * FormOpen Toggle Button component properties
-   */
-  interface FormOpenToggleButtonProps {
-    children?: ReactNode;
-    buttonVariant?: "text" | "contained" | "outlined";
-    ButtonIcon?: ComponentType<ButtonIconProps>;
-    title?: string;
-  }
-  /**
-   * FormOpen Toggle Button component
-   *
-   * @param props FormOpenToggleButtonProps
-   */
-  const FormOpenToggleButton = (props: FormOpenToggleButtonProps) => {
-    const { ButtonIcon, title, buttonVariant } = props;
-    return (
-      <GenericToggleButton
-        value={formOpen}
-        setValue={setFormOpen}
-        title={title}
-        ButtonIcon={ButtonIcon}
-        buttonVariant={buttonVariant}
-      />
-    );
-  };
-
-  /**
    * Toolbar grid item component
    */
   const ToolbarGridItem = styled(Grid)({
@@ -136,7 +109,12 @@ const TableToolbar = (props: TableToolbarProps) => {
           </ToolbarGridItem>
           {selectedRowIds?.length === 1 ? (
             <ToolbarGridItem item xs={6}>
-              <FormOpenToggleButton title="Edit" ButtonIcon={Edit} />
+              <FormToggleButton
+                title="Edit"
+                ButtonIcon={Edit}
+                value={formOpen}
+                setValue={setFormOpen}
+              />
             </ToolbarGridItem>
           ) : null}
         </ToolbarGridContainer>
@@ -147,9 +125,20 @@ const TableToolbar = (props: TableToolbarProps) => {
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>
             {formOpen ? (
-              <FormOpenToggleButton title="Cancel" ButtonIcon={Cancel} buttonVariant="outlined" />
+              <FormToggleButton
+                title="Cancel"
+                ButtonIcon={Cancel}
+                value={formOpen}
+                setValue={setFormOpen}
+                buttonVariant="outlined"
+              />
             ) : (
-              <FormOpenToggleButton title="Create" ButtonIcon={Add} />
+              <FormToggleButton
+                value={formOpen}
+                setValue={setFormOpen}
+                title="Create"
+                ButtonIcon={Add}
+              />
             )}
           </ToolbarGridItem>
         </ToolbarGridContainer>
