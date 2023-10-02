@@ -24,13 +24,12 @@ interface CreateVacationRequestProps {
  * @param props CreateVacationRequestProps
  * @returns createVacationRequest
  */
-const CreateVacationRequest = (props: CreateVacationRequestProps) => {
-  const {
-    vacationRequestStatuses,
-    setVacationRequestStatuses,
-    vacationRequests,
-    setVacationRequests
-  } = props;
+const CreateVacationRequest = ({
+  vacationRequestStatuses,
+  setVacationRequestStatuses,
+  vacationRequests,
+  setVacationRequests
+}: CreateVacationRequestProps) => {
   const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);

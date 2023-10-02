@@ -23,9 +23,13 @@ interface DeleteVacationRequestsProps {
  * @param props DeleteVacationRequestsProps
  * @returns deleteVacationRequests
  */
-const DeleteVacationRequests = (props: DeleteVacationRequestsProps) => {
-  const { vacationRequests, setVacationRequests, vacationRequestStatuses, selectedRowIds, rows } =
-    props;
+const DeleteVacationRequests = ({
+  vacationRequests,
+  setVacationRequests,
+  vacationRequestStatuses,
+  selectedRowIds,
+  rows
+}: DeleteVacationRequestsProps) => {
   const { vacationRequestsApi } = useApi();
   const setError = useSetAtom(errorAtom);
 

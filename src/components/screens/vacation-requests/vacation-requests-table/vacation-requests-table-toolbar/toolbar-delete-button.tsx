@@ -12,8 +12,7 @@ interface ToolbarDeleteButtonProps {
  *
  * @param props ToolbarDeleteButtonProps
  */
-const ToolbarDeleteButton = (props: ToolbarDeleteButtonProps) => {
-  const { deleteVacationsData } = props;
+const ToolbarDeleteButton = ({ deleteVacationsData }: ToolbarDeleteButtonProps) => {
   return (
     <Button
       variant="contained"

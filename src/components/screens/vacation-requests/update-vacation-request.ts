@@ -21,8 +21,10 @@ interface UpdateVacationRequestProps {
  * @param props UpdateVacationRequestProps
  * @returns updateVacationRequest
  */
-const UpdateVacationRequest = (props: UpdateVacationRequestProps) => {
-  const { vacationRequests, setVacationRequests } = props;
+const UpdateVacationRequest = ({
+  vacationRequests,
+  setVacationRequests
+}: UpdateVacationRequestProps) => {
   const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);

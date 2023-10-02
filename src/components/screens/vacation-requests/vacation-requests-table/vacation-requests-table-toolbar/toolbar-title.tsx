@@ -13,8 +13,7 @@ interface ToolbarTitleProps {
 /**
  * Toolbar title component
  */
-const ToolbarTitle = (props: ToolbarTitleProps) => {
-  const { toolbarFormMode } = props;
+const ToolbarTitle = ({ toolbarFormMode }: ToolbarTitleProps) => {
   const [title, setTitle] = useState<string>("My vacation requests");
 
   useEffect(() => {

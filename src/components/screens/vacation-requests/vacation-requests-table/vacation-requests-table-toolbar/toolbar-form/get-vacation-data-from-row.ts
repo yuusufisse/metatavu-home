@@ -20,16 +20,15 @@ interface getVacationDataFromRowProps {
 /**
  * Get vacation data from row functional component
  */
-export const getVacationDataFromRow = (props: getVacationDataFromRowProps) => {
-  const {
-    rows,
-    selectedRowIds,
-    setInitialEndDate,
-    setInitialStartDate,
-    setSelectedVacationRequestId,
-    vacationRequests,
-    setVacationData
-  } = props;
+export const getVacationDataFromRow = ({
+  rows,
+  selectedRowIds,
+  setInitialEndDate,
+  setInitialStartDate,
+  setSelectedVacationRequestId,
+  vacationRequests,
+  setVacationData
+}: getVacationDataFromRowProps) => {
   const selectedVacationRow = rows.find((row) => row.id === selectedRowIds[0]);
 
   if (selectedVacationRow) {

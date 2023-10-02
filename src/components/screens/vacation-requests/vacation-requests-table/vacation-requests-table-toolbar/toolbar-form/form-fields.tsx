@@ -31,9 +31,13 @@ interface FormFieldsProps {
  *
  * @param props FormFieldsProps
  */
-const FormFields = (props: FormFieldsProps) => {
-  const { vacationData, setVacationData, dateTimeNow, initialEndDate, initialStartDate } = props;
-
+const FormFields = ({
+  vacationData,
+  setVacationData,
+  dateTimeNow,
+  initialEndDate,
+  initialStartDate
+}: FormFieldsProps) => {
   /**
    * Set dates to vacationData
    *

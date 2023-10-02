@@ -21,8 +21,15 @@ interface FormToggleButtonProps {
  *
  * @param props FormToggleButtonProps
  */
-const FormToggleButton = (props: FormToggleButtonProps) => {
-  const { children, value, setValue, ButtonIcon, title, titleVariant, buttonVariant } = props;
+const FormToggleButton = ({
+  children,
+  value,
+  setValue,
+  ButtonIcon,
+  title,
+  titleVariant,
+  buttonVariant
+}: FormToggleButtonProps) => {
   return (
     <Button
       variant={buttonVariant ? buttonVariant : "contained"}

@@ -34,19 +34,18 @@ interface TableFormProps {
  *
  * @param props TableFormProps
  */
-const TableForm = (props: TableFormProps) => {
-  const {
-    formOpen,
-    setFormOpen,
-    vacationRequestStatuses,
-    setVacationRequestStatuses,
-    vacationRequests,
-    setVacationRequests,
-    selectedRowIds,
-    rows,
-    toolbarFormMode,
-    setToolbarFormMode
-  } = props;
+const TableForm = ({
+  formOpen,
+  setFormOpen,
+  vacationRequestStatuses,
+  setVacationRequestStatuses,
+  vacationRequests,
+  setVacationRequests,
+  selectedRowIds,
+  rows,
+  toolbarFormMode,
+  setToolbarFormMode
+}: TableFormProps) => {
   const dateTimeNow = DateTime.now();
   const [initialStartDate, setInitialStartDate] = useState<DateTime | undefined>(dateTimeNow);
   const [initialEndDate, setInitialEndDate] = useState<DateTime | undefined>(dateTimeNow);

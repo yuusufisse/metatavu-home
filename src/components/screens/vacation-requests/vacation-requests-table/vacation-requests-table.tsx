@@ -22,13 +22,12 @@ interface VacationRequestsTableProps {
  *
  * @props VacationRequestsTableProps
  */
-const VacationRequestsTable = (props: VacationRequestsTableProps) => {
-  const {
-    vacationRequests,
-    vacationRequestStatuses,
-    setVacationRequests,
-    setVacationRequestStatuses
-  } = props;
+const VacationRequestsTable = ({
+  vacationRequests,
+  vacationRequestStatuses,
+  setVacationRequests,
+  setVacationRequestStatuses
+}: VacationRequestsTableProps) => {
   const containerRef = useRef(null);
   const [rows, setRows] = useState<DataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);
@@ -69,7 +68,7 @@ const VacationRequestsTable = (props: VacationRequestsTableProps) => {
         <DataGrid
           autoPageSize
           sx={{ height: "100%" }}
-          onRowSelectionModelChange={(index) => {
+          onRowSelectionModelChange={(index: GridRowSelectionModel) => {
             setSelectedRowIds(index);
           }}
           rows={rows}

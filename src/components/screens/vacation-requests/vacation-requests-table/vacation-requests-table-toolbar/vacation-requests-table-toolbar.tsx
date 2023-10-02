@@ -30,17 +30,16 @@ interface TableToolbarProps {
  *
  * @param props TableToolbarProps
  */
-const TableToolbar = (props: TableToolbarProps) => {
-  const {
-    vacationRequests,
-    setVacationRequests,
-    vacationRequestStatuses,
-    setVacationRequestStatuses,
-    setFormOpen,
-    formOpen,
-    selectedRowIds,
-    rows
-  } = props;
+const TableToolbar = ({
+  vacationRequests,
+  setVacationRequests,
+  vacationRequestStatuses,
+  setVacationRequestStatuses,
+  setFormOpen,
+  formOpen,
+  selectedRowIds,
+  rows
+}: TableToolbarProps) => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const { deleteVacationRequests } = DeleteVacationRequests({
     vacationRequests: vacationRequests,

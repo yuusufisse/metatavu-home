@@ -18,8 +18,12 @@ interface DateRangePickerProps {
  *
  * @param props DateRangePickerProps
  */
-const DateRangePicker = (props: DateRangePickerProps) => {
-  const { dateTimeNow, setDates, initialStartDate, initialEndDate } = props;
+const DateRangePicker = ({
+  dateTimeNow,
+  setDates,
+  initialStartDate,
+  initialEndDate
+}: DateRangePickerProps) => {
   const [startDate, setStartDate] = useState<DateTime | undefined>(
     initialStartDate ? initialStartDate : dateTimeNow
   );
@@ -76,14 +80,14 @@ const DateRangePicker = (props: DateRangePickerProps) => {
         label="Start Date"
         value={startDate}
         minDate={dateTimeNow}
-        onChange={(newValue: DateTime) => newValue && handleDateChange(newValue, endDate)}
+        onChange={(newValue: DateTime | null) => newValue && handleDateChange(newValue, endDate)}
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
         label="End Date"
         value={endDate}
         minDate={startDate}
-        onChange={(newValue: DateTime) => newValue && handleDateChange(startDate, newValue)}
+        onChange={(newValue: DateTime | null) => newValue && handleDateChange(startDate, newValue)}
       />
     </Box>
   );

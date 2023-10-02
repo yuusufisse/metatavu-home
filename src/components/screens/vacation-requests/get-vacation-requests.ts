@@ -18,8 +18,7 @@ interface GetVacationRequestsProps {
  * @param props component properties
  * @returns vacationRequestsLoading
  */
-const GetVacationRequests = (props: GetVacationRequestsProps) => {
-  const { setVacationRequests } = props;
+const GetVacationRequests = ({ setVacationRequests }: GetVacationRequestsProps) => {
   const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);

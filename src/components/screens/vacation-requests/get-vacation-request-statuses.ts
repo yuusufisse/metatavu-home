@@ -20,13 +20,12 @@ interface GetVacationRequestStatusesProps {
  * @param props GetVacationRequestStatusesProps
  * @returns vacationRequestStatusesLoading
  */
-const GetVacationRequestStatuses = (props: GetVacationRequestStatusesProps) => {
-  const {
-    vacationRequests,
-    vacationRequestStatuses,
-    setVacationRequestStatuses,
-    setLatestVacationRequestStatuses
-  } = props;
+const GetVacationRequestStatuses = ({
+  vacationRequests,
+  vacationRequestStatuses,
+  setVacationRequestStatuses,
+  setLatestVacationRequestStatuses
+}: GetVacationRequestStatusesProps) => {
   const { vacationRequestStatusApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [vacationRequestStatusesLoading, setVacationRequestStatusesLoading] = useState(true);
