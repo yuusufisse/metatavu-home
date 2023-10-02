@@ -12,8 +12,7 @@ const Layout = () => {
       <Container>
         <NavBar/>
       </Container>
-      {/* HEADER END 
-          CONTENT START */}
+      {/* HEADER END *** CONTENT START */}
       <Container sx={{ marginTop: 4 }}>
         <Outlet />
       </Container>

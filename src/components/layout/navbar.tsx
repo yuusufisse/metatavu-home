@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -23,15 +23,15 @@ import { useAtomValue } from "jotai";
  */
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
-  
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [currentPage, setCurrentPage] = useState<string>("Home");
+  const [currentPage, setCurrentPage] = useState<string>("");
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -41,6 +41,15 @@ const NavBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleClickLogOut = () => {
+    auth?.logout();
+  };
+
+  const handleNavItemClick = (event: MouseEvent<HTMLElement>) => {
+    const target = event.target as HTMLLinkElement;
+    setCurrentPage(target.innerText);
   };
 
   const pageRoutes = ["/", "/timebank", "/vacations", "/oncall", "/admin"];
@@ -93,10 +102,7 @@ const NavBar = () => {
                     component={Link}
                     to={pageRoutes.slice(1)[index]}
                     key={strings.header.pages[index]}
-                    onClick={() => {
-                      handleCloseNavMenu();
-                      setCurrentPage(page);
-                    }}
+                    onClick={handleNavItemClick}
                   >
                     {page}
                   </MenuItem>
@@ -112,10 +118,7 @@ const NavBar = () => {
                   key={page}
                   to={pageRoutes.slice(1)[index]}
                   style={{ margin: 2, display: "block" }}
-                  onClick={() => {
-                    handleCloseNavMenu();
-                    setCurrentPage(page);
-                  }}
+                  onClick={handleNavItemClick}
                 >
                   <Button>{page}</Button>
                 </Link>
@@ -144,14 +147,7 @@ const NavBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    auth?.logout();
-                  }}
-                >
-                  <Typography textAlign="center">{strings.header.logout}</Typography>
-                </MenuItem>
+                <MenuItem onClick={handleClickLogOut}>{strings.header.logout}</MenuItem>
               </Menu>
             </Box>
           </Toolbar>
