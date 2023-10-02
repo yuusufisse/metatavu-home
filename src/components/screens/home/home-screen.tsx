@@ -1,15 +1,52 @@
 
 import { Grid } from "@mui/material";
 import BalanceCard from "./balance-card";
+import { useAtomValue } from "jotai";
+import { useApi } from "../../../hooks/use-api";
+import { useEffect, useState } from "react";
+import { authAtom, userProfileAtom } from "../../../atoms/auth";
 
 /**
  * Home screen component
  */
 const HomeScreen = () => {
+    const userProfile = useAtomValue(userProfileAtom);
+    const { personsApi } = useApi();
+    const [personTotalTime, setPersonTotalTime] = useState();
+    const [error, setError] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+  
+    /**
+     * Initialize logged in person's time data.
+     */
+    const getPersons = async () => {
+      setIsLoading(true);
+      const fetchedPersons = await personsApi.listPersons({ active: true });
+      const loggedInPerson = fetchedPersons.filter((person) => person.keycloakId === userProfile?.id);
+  
+      if (loggedInPerson.length) {
+        try {
+          const fetchedPerson = await personsApi.listPersonTotalTime({
+            personId: loggedInPerson.id
+          });
+          setPersonTotalTime(fetchedPerson[0]);
+        } catch (error) {
+          setError(`${"Person fetch has failed."}, ${error}`);
+        }
+      } else {
+        setError("Your account does not have any time bank entries.");
+      }
+      setIsLoading(false);
+    };
+  
+    useEffect(() => {
+      getPersons();
+    }, [authAtom]);
+
     return (
         <Grid container>
             <Grid item xs={12} md={4}>
-                <BalanceCard />
+                <BalanceCard personTotalTime={personTotalTime}/>
             </Grid>
             <Grid item xs={12} md={8}>
                 {/* TODO: MORE CARDS */}
