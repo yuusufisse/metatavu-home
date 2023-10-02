@@ -22,6 +22,10 @@ export interface Localized extends LocalizedStringsMethods {
     admin: string;
     onCall: string;
     balance: string;
+    pages: string[];
+    changeLanguage: string;
+    openSettings: string;
+    openUserMenu: string;
   };
   /**
    * Translations related to place holders

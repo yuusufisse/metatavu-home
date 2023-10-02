@@ -8,10 +8,15 @@
   "header": {
     "hello": "Hei",
     "logout": "Kirjaudu ulos",
-    "home": "Koti",
-    "admin": "Ylläpito",
-    "onCall": "Päivystys",
-    "balance": "Saldo"
+    "pages": [
+      "Aikapankki",
+      "Lomat",
+      "Päivystys",
+      "Ylläpito"
+    ],
+    "changeLanguage": "Vaihda kieltä",
+    "openSettings": "Asetukset",
+    "openUserMenu": "Käyttäjävalikko"
   },
   "localization": {
     "en": "EN",

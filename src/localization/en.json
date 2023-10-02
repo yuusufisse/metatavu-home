@@ -8,10 +8,15 @@
   "header": {
     "hello": "Hi",
     "logout": "Log out",
-    "home": "Home",
-    "admin": "Administration",
-    "onCall": "On Call",
-    "balance": "Balance"
+    "pages": [
+      "Timebank",
+      "Vacations",
+      "On Call",
+      "Administration"
+    ],
+    "changeLanguage": "Change language",
+    "openSettings": "Open settings",
+    "openUserMenu": "Open user menu"
   },
   "localization": {
     "en": "EN",
