@@ -9,6 +9,7 @@
     "hello": "Hi",
     "logout": "Log out",
     "pages": [
+      "Home",
       "Timebank",
       "Vacations",
       "On Call",

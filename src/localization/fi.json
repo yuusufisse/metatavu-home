@@ -9,6 +9,7 @@
     "hello": "Hei",
     "logout": "Kirjaudu ulos",
     "pages": [
+      "Koti",
       "Aikapankki",
       "Lomat",
       "Päivystys",
