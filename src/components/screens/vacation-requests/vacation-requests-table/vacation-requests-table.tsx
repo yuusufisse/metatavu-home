@@ -7,6 +7,8 @@ import VacationRequestsTableRows from "./vacation-requests-table-rows";
 import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
 import { DataGridRow } from "../../../../types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
+import { languageAtom } from "../../../../atoms/languageAtom";
+import { useAtomValue } from "jotai";
 
 /**
  * Component properties
@@ -33,6 +35,7 @@ const VacationRequestsTable = ({
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
   const { createDataGridRows } = VacationRequestsTableRows();
+  const language = useAtomValue(languageAtom);
 
   /**
    * Set data grid rows
@@ -44,7 +47,7 @@ const VacationRequestsTable = ({
         setRows(createdRows);
       }
     }
-  }, [vacationRequests, vacationRequestStatuses, formOpen]);
+  }, [vacationRequests, vacationRequestStatuses, formOpen, language]);
 
   return (
     <Box
