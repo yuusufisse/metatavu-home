@@ -22,8 +22,7 @@ import { Button } from "@mui/material";
  */
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [currentPage, setCurrentPage] = useState<string>("Home");
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null); 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -41,8 +40,8 @@ const NavBar = () => {
       <AppBar position="relative">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link to="/">
-              <Button sx={{ marginLeft: -1, height: 48 }} onClick={() => setCurrentPage("Home")}>
+            <Link to="/"> {/* Remove when showing navitems */}
+              <Button sx={{ marginLeft: -1, height: 48 }}>
                 <img
                   src={Logo}
                   alt="Metatavu logo"
