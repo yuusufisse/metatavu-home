@@ -1,9 +1,8 @@
 import { PersonTotalTime } from "../../../generated/client";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
-import { Grid, Typography, Button, Card, CardActions, CardContent } from "@mui/material";
-import { userProfileAtom } from "../../../atoms/auth";
-import { useAtomValue } from "jotai";
+import { Grid, Typography, Card, CardContent, Skeleton } from "@mui/material";
 import strings from "../../../localization/strings";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 /**
  * Component props
@@ -16,25 +15,28 @@ interface Props {
  * Component for displaying user's balance
  */
 const BalanceCard = ({ personTotalTime }: Props) => {
-  const userProfile = useAtomValue(userProfileAtom);
   return (
     <>
       <Card>
         <CardContent>
-          <h4>{strings.timebank.balance}</h4>
+          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
 
-        <Grid>
-          <Typography>
-            {`${strings.header.hello}, ${userProfile?.firstName}!`}
-            <br />
-            {strings.timebank.yourBalanceIs}
-            {personTotalTime
-              ? `${getHoursAndMinutes(
-                  Number(personTotalTime?.balance)
-                )}`
-              : "..."}
-          </Typography>
-        </Grid>
+          <Grid container>
+            <Grid item xs={1}>
+              <ScheduleIcon />
+            </Grid>
+            <Grid item xs={11}>
+              {personTotalTime ? (
+                <Typography>
+                  {personTotalTime
+                    ? `   ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
+                    : "..."}
+                </Typography>
+              ) : (
+                <Skeleton />
+              )}
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
     </>

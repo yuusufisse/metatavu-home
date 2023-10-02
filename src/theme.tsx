@@ -43,12 +43,23 @@ export const theme: Theme = createTheme({
     },
     MuiAvatar: {
       styleOverrides: {
-        root:{
+        root: {
           height: 48,
           width: 48
         }
       }
+    },
+    MuiCard: {
+      defaultProps: {
+        elevation: 4
+      },
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f5f5f5"
+        }
+      }
     }
+
   },
   shape: {
     borderRadius: 15,
