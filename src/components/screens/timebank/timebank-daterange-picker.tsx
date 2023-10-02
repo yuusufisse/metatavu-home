@@ -1,19 +1,11 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-// import strings from "../../../localization/strings";
-import { SelectChangeEvent } from "@mui/material";
-import { PersonTotalTime, DailyEntry } from "../../../generated/client";
-import strings from "../../../localization/strings";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { DailyEntry } from "../../../generated/client";
 
 interface Props {
-  personTotalTime: PersonTotalTime;
-  personDailyEntry: DailyEntry;
   dailyEntries: DailyEntry[];
-  timespanSelector: string;
   setSelectedEntries: Dispatch<SetStateAction<DailyEntry[] | undefined>>;
-  handleBalanceViewChange: (e: SelectChangeEvent) => void;
-  handleDailyEntryChange: (e: DateTime | null) => void;
   disableNullEntries: (e: DateTime) => boolean;
 }
 
@@ -23,35 +15,36 @@ interface Range {
 }
 
 const DateRangePicker = (props: Props) => {
-  const {
-    // personTotalTime,
-    // personDailyEntry,
-    // timespanSelector,
-    // handleBalanceViewChange,
-    // handleDailyEntryChange,
-    setSelectedEntries,
-    dailyEntries,
-    disableNullEntries
-  } = props;
+  const { setSelectedEntries, dailyEntries, disableNullEntries } = props;
 
-  const [range, setRange] = useState<Range>();
+  const [range, setRange] = useState<Range>({
+    start: DateTime.now(),
+    end: DateTime.now()
+  });
 
+  /**
+   * useEffect that triggers on range DatePicker changes.
+   * A for-loop that goes through the selected days, then sets entries from those days into a state to be displayed in the multi bar chart.
+   * Filters null-entries, commonly weekends.
+   */
   useEffect(() => {
-    if (range?.start && range?.end) {
+    if (range.start && range.end) {
       const selectedDays = range?.start.diff(range.end, "days").toObject();
       const result = [];
-      
-      for (let i = 0; i < selectedDays.days; i++) {
+
+      for (let i = 0; selectedDays.days && i <= selectedDays.days; i++) {
         result.push(
           dailyEntries.filter((item) => {
             return (
+              item.logged !== 0 &&
+              item.expected !== 0 &&
               DateTime.fromJSDate(item.date).toISODate() ===
-              range?.end.plus({ days: i + 1 }).toISODate()
+                range.end?.plus({ days: i }).toISODate()
             );
           })[0]
         );
       }
-      setSelectedEntries(result);
+      setSelectedEntries(result.filter((item) => item !== undefined));
     }
   }, [range]);
 
@@ -59,14 +52,12 @@ const DateRangePicker = (props: Props) => {
     <>
       <DatePicker
         sx={{
-          width: "50%",
-          marginLeft: "25%",
-          marginRight: "25%",
-          marginBottom: "1%"
+          width: "24%",
+          mx:"1%"
         }}
         label={"Start"}
         disableFuture
-        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
+        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
         value={DateTime.fromJSDate(dailyEntries[0].date)}
         minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
@@ -74,14 +65,12 @@ const DateRangePicker = (props: Props) => {
       />
       <DatePicker
         sx={{
-          width: "50%",
-          marginLeft: "25%",
-          marginRight: "25%",
-          marginBottom: "1%"
+          width: "24%",
+          mx:"1%"
         }}
         label={"End"}
         disableFuture
-        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
+        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
         value={DateTime.fromJSDate(dailyEntries[0].date)}
         minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}

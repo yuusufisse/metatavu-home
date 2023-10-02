@@ -42,7 +42,7 @@ const TimebankPieChart = (props: Props) => {
     const sectionName = {
       Billable: strings.timebank.billableProject,
       NonBillable: strings.timebank.nonBillableProject,
-      Internal: strings.timebank.internal,
+      Internal: strings.timebank.internal
     }[selectedData.name];
 
     return (
@@ -60,7 +60,7 @@ const TimebankPieChart = (props: Props) => {
     );
   };
   return (
-    <ResponsiveContainer width={"50%"} height={200}>
+    <ResponsiveContainer width={"75%"} height={200}>
       {personDailyEntry.logged ? (
         <PieChart>
           <Pie
@@ -81,7 +81,9 @@ const TimebankPieChart = (props: Props) => {
           <Tooltip content={renderCustomizedTooltip} />
         </PieChart>
       ) : (
-        <Typography sx={{ textAlign: "center", marginTop: "12%" }}>{strings.timebank.noData}</Typography>
+        <Typography sx={{ textAlign: "center", marginTop: "12%" }}>
+          {strings.timebank.noData}
+        </Typography>
       )}
     </ResponsiveContainer>
   );

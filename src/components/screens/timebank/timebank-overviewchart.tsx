@@ -98,7 +98,7 @@ const TimebankOverviewChart = (props: Props) => {
 
   return (
     <>
-      <ResponsiveContainer width="50%" height={200}>
+      <ResponsiveContainer width="75%" height={250}>
         <BarChart
           data={data}
           layout="vertical"
@@ -114,7 +114,7 @@ const TimebankOverviewChart = (props: Props) => {
             type="number"
             axisLine={false}
             tickFormatter={(value) => getHours(value as number)}
-            domain={[0, (dataMax: number) => dataMax * 1.1]}
+            domain={[0, (dataMax: number) => dataMax]}
           />
           <YAxis type="category" dataKey="name" />
           <Tooltip content={renderCustomizedTooltip} />

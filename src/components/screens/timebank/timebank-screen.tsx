@@ -11,7 +11,7 @@ import { DateTime } from "luxon";
 
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
-  const [timespanSelector, setTimespanSelector] = useState("All");
+  const [timespanSelector, setTimespanSelector] = useState("Week");
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const person = useAtomValue(personAtom);
@@ -19,7 +19,6 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
-  const [multiChartChosen, setMultiChartChosen] = useState(false);
 
   /**
    * Fetches the person's total time and daily entries
@@ -55,10 +54,7 @@ const TimebankScreen = () => {
   const handleDailyEntryChange = (selectedDate: DateTime | null) => {
     setPersonDailyEntry(
       dailyEntries?.filter(
-        (item) =>
-          DateTime.fromJSDate(item.date).day === selectedDate?.day &&
-          DateTime.fromJSDate(item.date).month === selectedDate?.month &&
-          DateTime.fromJSDate(item.date).year === selectedDate?.year
+        (item) => DateTime.fromJSDate(item.date).toISODate() === selectedDate?.toISODate()
       )[0]
     );
   };
@@ -72,17 +68,15 @@ const TimebankScreen = () => {
     setTimespanSelector(e.target.value);
     switch (e.target.value) {
       case "Week":
-        getPersonData(Timespan.WEEK);
+        return getPersonData(Timespan.WEEK);
       case "Month":
-        getPersonData(Timespan.MONTH);
+        return getPersonData(Timespan.MONTH);
       case "Year":
-        getPersonData(Timespan.YEAR);
+        return getPersonData(Timespan.YEAR);
       case "All":
-        getPersonData(Timespan.ALL_TIME);
-      case "Range":
-        setMultiChartChosen(true);
+        return getPersonData(Timespan.ALL_TIME);
       default:
-        getPersonData(Timespan.ALL_TIME);
+        return getPersonData(Timespan.WEEK);
     }
   };
 
@@ -116,7 +110,6 @@ const TimebankScreen = () => {
               dailyEntries={dailyEntries}
               personTotalTime={personTotalTime}
               timespanSelector={timespanSelector}
-              multiChartChosen={multiChartChosen}
             />
           ) : (
             setError("Could not find time entries")
