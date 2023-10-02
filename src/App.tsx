@@ -6,8 +6,8 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
-import Header from "./components/header/header";
 import HomeScreen from "./components/screens/home/home-screen";
+import Layout from "./components/layout/layout";
 
 /**
  * Application component
@@ -19,12 +19,24 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Header />,
+      element: <Layout />,
       children: [
         {
           path: "/",
           element: <HomeScreen />,
-          errorElement: <ErrorScreen />
+          errorElement: <ErrorScreen />,
+        },
+        {
+          path: "/timebank",
+        },
+        {
+          path: "/vacations",
+        },
+        {
+          path: "/oncall",
+        },
+        {
+          path: "/admin",
         }
       ]
     }
