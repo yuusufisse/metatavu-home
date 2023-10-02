@@ -21,23 +21,21 @@ const BalanceCard = ({ personTotalTime }: Props) => {
     <>
       <Card>
         <CardContent>
-          <h1>Home</h1>
+          <h4>{strings.timebank.balance}</h4>
 
         <Grid>
           <Typography>
             {`${strings.header.hello}, ${userProfile?.firstName}!`}
             <br />
+            {strings.timebank.yourBalanceIs}
             {personTotalTime
-              ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
+              ? `${getHoursAndMinutes(
                   Number(personTotalTime?.balance)
                 )}`
-              : null}
+              : "..."}
           </Typography>
         </Grid>
         </CardContent>
-        <CardActions>
-          <Button>BTN</Button>
-        </CardActions>
       </Card>
     </>
   );

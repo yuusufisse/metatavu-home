@@ -8,8 +8,11 @@ import BalanceCard from "./balance-card";
 const HomeScreen = () => {
     return (
         <Grid container>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={4}>
                 <BalanceCard />
+            </Grid>
+            <Grid item xs={12} md={8}>
+                {/* TODO: MORE CARDS */}
             </Grid>
         </Grid>
     );
