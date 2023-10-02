@@ -1,18 +1,20 @@
 import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
+import { SetStateAction } from "jotai";
+import { Dispatch } from "react";
 
 /**
  * Component properties
  */
 interface ToolbarDeleteButtonProps {
-  deleteVacationsData: Function;
+  setConfirmation: Dispatch<SetStateAction<string | undefined>>;
 }
 /**
  * Delete Button component
  *
  * @param props ToolbarDeleteButtonProps
  */
-const ToolbarDeleteButton = ({ deleteVacationsData }: ToolbarDeleteButtonProps) => {
+const ToolbarDeleteButton = ({ setConfirmation }: ToolbarDeleteButtonProps) => {
   return (
     <Button
       variant="contained"
@@ -20,7 +22,7 @@ const ToolbarDeleteButton = ({ deleteVacationsData }: ToolbarDeleteButtonProps) 
         width: "100%"
       }}
       onClick={() => {
-        deleteVacationsData();
+        setConfirmation("Delete the selected Vacation Request(s)?");
       }}
     >
       <Delete />

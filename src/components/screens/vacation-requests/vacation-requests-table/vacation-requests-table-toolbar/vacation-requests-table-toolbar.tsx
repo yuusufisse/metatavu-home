@@ -10,6 +10,7 @@ import { DataGridRow, ToolbarFormModes } from "../../../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import ToolbarTitle from "./toolbar-title";
 import FormToggleButton from "./toolbar-form-toggle-button";
+import ConfirmationHandler from "../../../../contexts/confirmation-handler";
 
 /**
  * Component properties
@@ -55,6 +56,7 @@ const TableToolbar = ({
     rows: rows
   });
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
+  const [confirmation, setConfirmation] = useState<string | undefined>(undefined);
 
   /**
    * Set toolbar open
@@ -71,9 +73,6 @@ const TableToolbar = ({
    * Delete vacation requests and statuses
    */
   const deleteVacationsData = async () => {
-    /* TODO: Prompt a confirmation on delete,
-    (in case pressing delete was accidental),
-    perhaps can make use of the generic-dialog component for this */
     await deleteVacationRequestStatuses();
     await deleteVacationRequests();
   };
@@ -101,61 +100,67 @@ const TableToolbar = ({
         margin: "0"
       }}
     >
-      {toolbarOpen && !formOpen && selectedRowIds?.length ? (
-        <ToolbarGridContainer container>
-          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
-            <ToolbarDeleteButton deleteVacationsData={deleteVacationsData} />
-          </ToolbarGridItem>
-          {selectedRowIds?.length === 1 ? (
-            <ToolbarGridItem item xs={6}>
-              <FormToggleButton
-                title="Edit"
-                ButtonIcon={Edit}
-                value={formOpen}
-                setValue={setFormOpen}
-              />
+      <ConfirmationHandler
+        confirmation={confirmation}
+        setConfirmation={setConfirmation}
+        deleteVacationsData={deleteVacationsData}
+      >
+        {toolbarOpen && !formOpen && selectedRowIds?.length ? (
+          <ToolbarGridContainer container>
+            <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
+              <ToolbarDeleteButton setConfirmation={setConfirmation} />
             </ToolbarGridItem>
-          ) : null}
-        </ToolbarGridContainer>
-      ) : (
-        <ToolbarGridContainer container>
-          <ToolbarGridItem item xs={6}>
-            <ToolbarTitle toolbarFormMode={toolbarFormMode} />
-          </ToolbarGridItem>
-          <ToolbarGridItem item xs={6}>
-            {formOpen ? (
-              <FormToggleButton
-                title="Cancel"
-                ButtonIcon={Cancel}
-                value={formOpen}
-                setValue={setFormOpen}
-                buttonVariant="outlined"
-              />
-            ) : (
-              <FormToggleButton
-                value={formOpen}
-                setValue={setFormOpen}
-                title="Create"
-                ButtonIcon={Add}
-              />
-            )}
-          </ToolbarGridItem>
-        </ToolbarGridContainer>
-      )}
-      <Collapse in={formOpen}>
-        <ToolbarForm
-          formOpen={formOpen}
-          vacationRequests={vacationRequests}
-          setVacationRequests={setVacationRequests}
-          setFormOpen={setFormOpen}
-          setVacationRequestStatuses={setVacationRequestStatuses}
-          vacationRequestStatuses={vacationRequestStatuses}
-          selectedRowIds={selectedRowIds}
-          rows={rows}
-          toolbarFormMode={toolbarFormMode}
-          setToolbarFormMode={setToolbarFormMode}
-        />
-      </Collapse>
+            {selectedRowIds?.length === 1 ? (
+              <ToolbarGridItem item xs={6}>
+                <FormToggleButton
+                  title="Edit"
+                  ButtonIcon={Edit}
+                  value={formOpen}
+                  setValue={setFormOpen}
+                />
+              </ToolbarGridItem>
+            ) : null}
+          </ToolbarGridContainer>
+        ) : (
+          <ToolbarGridContainer container>
+            <ToolbarGridItem item xs={6}>
+              <ToolbarTitle toolbarFormMode={toolbarFormMode} />
+            </ToolbarGridItem>
+            <ToolbarGridItem item xs={6}>
+              {formOpen ? (
+                <FormToggleButton
+                  title="Cancel"
+                  ButtonIcon={Cancel}
+                  value={formOpen}
+                  setValue={setFormOpen}
+                  buttonVariant="outlined"
+                />
+              ) : (
+                <FormToggleButton
+                  value={formOpen}
+                  setValue={setFormOpen}
+                  title="Create"
+                  ButtonIcon={Add}
+                />
+              )}
+            </ToolbarGridItem>
+          </ToolbarGridContainer>
+        )}
+        <Collapse in={formOpen}>
+          <ToolbarForm
+            formOpen={formOpen}
+            vacationRequests={vacationRequests}
+            setVacationRequests={setVacationRequests}
+            setFormOpen={setFormOpen}
+            setVacationRequestStatuses={setVacationRequestStatuses}
+            vacationRequestStatuses={vacationRequestStatuses}
+            selectedRowIds={selectedRowIds}
+            rows={rows}
+            toolbarFormMode={toolbarFormMode}
+            setToolbarFormMode={setToolbarFormMode}
+          />
+        </Collapse>
+      </ConfirmationHandler>
     </Box>
   );
 };
