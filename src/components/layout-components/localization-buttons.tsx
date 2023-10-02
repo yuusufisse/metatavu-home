@@ -3,7 +3,7 @@ import strings from "../../localization/strings";
 import { ToggleButton, ToggleButtonGroup, Tooltip, styled } from "@mui/material";
 import { languageAtom } from "../../atoms/languageAtom";
 import { Language } from "../../types";
-import { MouseEvent } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 /**
  * Styled toggle button group component
@@ -29,9 +29,10 @@ const LanguageButtons = styled(ToggleButtonGroup)(({ theme }) => ({
 /**
  * LocalizationButtons component
  */
-const LocalizationButtons = () => {
+const LocalizationButton = () => {
+  const [selected, setSelected] = useState(false);
   const [language, setLanguage] = useAtom(languageAtom);
-
+  const availableLanguages = strings.getAvailableLanguages();
   /**
    * Method to handle locale change
    */
@@ -41,6 +42,10 @@ const LocalizationButtons = () => {
     }
   };
 
+  useEffect(() => {
+    setLanguage(availableLanguages[selected?1:0] as Language);
+  }, [selected]);
+
   return (
     <LanguageButtons
       value={language}
@@ -48,19 +53,19 @@ const LocalizationButtons = () => {
       onChange={handleLocaleChange}
       aria-label="localization"
     >
-      {strings.getAvailableLanguages().map((availableLanguage, idx) => {
-        const value = strings.getString(`localization.${availableLanguage}`, language);
-
-        return (
-          <Tooltip title="Switch language">
-            <ToggleButton value={availableLanguage} key={`${idx}`} selected>
-              {value}
-            </ToggleButton>
-          </Tooltip>
-        );
-      })}
+      <Tooltip title={strings.header.changeLanguage}>
+        <ToggleButton 
+          value={language} 
+          selected={selected}
+          onChange={() => {
+            setSelected(!selected)
+          }}
+        >
+          {language}
+        </ToggleButton>
+      </Tooltip>
     </LanguageButtons>
   );
 };
 
-export default LocalizationButtons;
+export default LocalizationButton;

@@ -13,13 +13,24 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Logo from "../../../resources/img/Metatavu-icon.svg";
 import LocalizationButtons from "../layout-components/localization-buttons";
+import strings from "../../localization/strings";
+import { Auth } from "../../atoms/auth";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+/**
+ * Component properties
+ */
+interface Props {
+  auth: Auth | undefined;
+}
 
-function ResponsiveAppBar() {
+/**
+ * HomeNav component
+ * @param props component properties
+ */
+const ResponsiveAppBar = ({ auth }: Props) => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [currentPage, setCurrentPage] = useState<string>("Home");
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -42,14 +53,14 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters>
           <Box
             component="img"
-            sx={{ height: 48, filter: "invert(100%)" }}
+            sx={{ height: 32, filter: "invert(100%)" }}  //not dark mode compatible solution
             alt="Metatavu logo"
             src={Logo}
           />
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="mobile menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -75,25 +86,40 @@ function ResponsiveAppBar() {
                 display: { xs: "block", md: "none" }
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {strings.header.pages.map((page, index) => (
+                <MenuItem 
+                  key={strings.header.pages[index]} 
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    setCurrentPage(page);
+                  }}>
+                  {page}
                 </MenuItem>
               ))}
             </Menu>
+            <Button disabled>
+              {currentPage}
+            </Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, display: "block" }}>
+            {strings.header.pages.map((page) => (
+              <Button 
+                key={page} 
+                sx={{ my: 2, display: "block" }}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  setCurrentPage(page);
+                }}
+              >
                 {page}
               </Button>
             ))}
           </Box>
           <LocalizationButtons />
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title={strings.header.openUserMenu}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt=""/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -112,11 +138,13 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem 
+                onClick={() => {
+                  handleCloseUserMenu(); 
+                  auth?.logout();
+                }}>
+                <Typography textAlign="center">{strings.header.logout}</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

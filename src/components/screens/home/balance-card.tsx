@@ -1,6 +1,6 @@
 import { PersonTotalTime } from "../../../generated/client";
 import { getHoursAndMinutes } from "../../../utils/time-utils";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Button, Card, CardActions, CardContent } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue } from "jotai";
 import strings from "../../../localization/strings";
@@ -19,17 +19,26 @@ const BalanceCard = ({ personTotalTime }: Props) => {
   const userProfile = useAtomValue(userProfileAtom);
   return (
     <>
-      <Grid>
-        <Typography>
-          {`${strings.header.hello}, ${userProfile?.firstName}!`}
-          <br />
-          {personTotalTime
-            ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
-                Number(personTotalTime?.balance)
-              )}`
-            : null}
-        </Typography>
-      </Grid>
+      <Card>
+        <CardContent>
+          <h1>Home</h1>
+
+        <Grid>
+          <Typography>
+            {`${strings.header.hello}, ${userProfile?.firstName}!`}
+            <br />
+            {personTotalTime
+              ? `${strings.timebank.yourBalanceIs} ${getHoursAndMinutes(
+                  Number(personTotalTime?.balance)
+                )}`
+              : null}
+          </Typography>
+        </Grid>
+        </CardContent>
+        <CardActions>
+          <Button>BTN</Button>
+        </CardActions>
+      </Card>
     </>
   );
 };

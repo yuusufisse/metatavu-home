@@ -41,6 +41,14 @@ export const theme: Theme = createTheme({
         arrow: true,
       }
     },
+    MuiAvatar: {
+      styleOverrides: {
+        root:{
+          height: 48,
+          width: 48
+        }
+      }
+    }
   },
   shape: {
     borderRadius: 15,

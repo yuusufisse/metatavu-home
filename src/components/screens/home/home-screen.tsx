@@ -1,18 +1,17 @@
-import { Button, Card, CardActions, CardContent } from "@mui/material";
+
+import { Grid } from "@mui/material";
+import BalanceCard from "./balance-card";
 
 /**
  * Home screen component
  */
 const HomeScreen = () => {
     return (
-        <Card>
-            <CardContent>
-                <h1>Home</h1>
-            </CardContent>
-            <CardActions>
-                <Button>BTN</Button>
-            </CardActions>
-        </Card>
+        <Grid container>
+            <Grid item xs={12}>
+                <BalanceCard />
+            </Grid>
+        </Grid>
     );
 }
 
