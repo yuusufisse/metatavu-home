@@ -15,6 +15,7 @@ import Logo from "../../../resources/img/Metatavu-icon.svg";
 import LocalizationButtons from "../layout-components/localization-buttons";
 import strings from "../../localization/strings";
 import { Auth } from "../../atoms/auth";
+import { Link } from "react-router-dom";
 
 /**
  * Component properties
@@ -47,13 +48,15 @@ const ResponsiveAppBar = ({ auth }: Props) => {
     setAnchorElUser(null);
   };
 
+  const pageRoutes = ["/", "/vacations", "/oncall", "/admin"];
+
   return (
     <AppBar position="relative">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
             component="img"
-            sx={{ height: 32, filter: "invert(100%)" }}  //not dark mode compatible solution
+            sx={{ height: 32, filter: "invert(100%)" }} //not dark mode compatible solution
             alt="Metatavu logo"
             src={Logo}
           />
@@ -87,39 +90,41 @@ const ResponsiveAppBar = ({ auth }: Props) => {
               }}
             >
               {strings.header.pages.map((page, index) => (
-                <MenuItem 
-                  key={strings.header.pages[index]} 
+                <MenuItem
+                  key={strings.header.pages[index]}
                   onClick={() => {
                     handleCloseNavMenu();
                     setCurrentPage(page);
-                  }}>
+                  }}
+                >
                   {page}
                 </MenuItem>
               ))}
             </Menu>
             <Button disabled>
-              {currentPage}
+              <Typography>{currentPage}</Typography>
             </Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {strings.header.pages.map((page) => (
-              <Button 
-                key={page} 
-                sx={{ my: 2, display: "block" }}
+            {strings.header.pages.map((page, index) => (
+              <Link
+                key={page}
+                to={pageRoutes[index]}
+                style={{ margin: 2, display: "block" }}
                 onClick={() => {
                   handleCloseNavMenu();
                   setCurrentPage(page);
                 }}
               >
                 {page}
-              </Button>
+              </Link>
             ))}
           </Box>
           <LocalizationButtons />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={strings.header.openUserMenu}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt=""/>
+                <Avatar alt="" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -138,11 +143,12 @@ const ResponsiveAppBar = ({ auth }: Props) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem 
+              <MenuItem
                 onClick={() => {
-                  handleCloseUserMenu(); 
+                  handleCloseUserMenu();
                   auth?.logout();
-                }}>
+                }}
+              >
                 <Typography textAlign="center">{strings.header.logout}</Typography>
               </MenuItem>
             </Menu>
@@ -151,5 +157,5 @@ const ResponsiveAppBar = ({ auth }: Props) => {
       </Container>
     </AppBar>
   );
-}
+};
 export default ResponsiveAppBar;
