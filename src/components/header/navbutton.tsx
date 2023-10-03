@@ -9,7 +9,6 @@ export interface Props {
   route: string;
   sx_props?: object;
 }
-
 /**
  * NavButton component
  */

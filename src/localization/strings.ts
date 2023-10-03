@@ -53,6 +53,8 @@ export interface Localized extends LocalizedStringsMethods {
     noData: string;
     selectEntry: string;
     latestEntry: string;
+    barChartDescription: string;
+    pieChartDescription: string;
   };
   /**
    * General time-related expressions

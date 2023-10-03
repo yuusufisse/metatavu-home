@@ -75,12 +75,12 @@ const AuthenticationProvider = ({ children }: Props) => {
   }, [auth]);
 
   /**
-   * Sets the logged in person from keycloak ID as global state variable (atom)
+   * Sets the logged in person from keycloak ID into global state (atom)
    */
   const getLoggedInPerson = async (): Promise<void> => {
     const fetchedPersons = await personsApi.listPersons({ active: true });
     const loggedInPerson = fetchedPersons.filter(
-      (person : Person) => person.keycloakId === config.keycloak.id || userProfile?.id
+      (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
     )[0];
     setPerson(loggedInPerson);
     setPersons(fetchedPersons);

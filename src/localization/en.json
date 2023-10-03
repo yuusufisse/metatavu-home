@@ -30,7 +30,9 @@
     "timeperiod": "Time period",
     "noData": "No logged data",
     "selectEntry": "Select date entry",
-    "latestEntry": "Latest entry"
+    "latestEntry": "Latest entry",
+    "barChartDescription": "Summary of time entries by time span",
+    "pieChartDescription": "Select a specific time entry or range"
   },
   "timeExpressions": {
     "monday": "Monday",

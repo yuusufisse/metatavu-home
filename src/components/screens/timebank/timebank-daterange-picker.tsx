@@ -23,13 +23,13 @@ const DateRangePicker = (props: Props) => {
   });
 
   /**
-   * useEffect that triggers on range DatePicker changes.
-   * A for-loop that goes through the selected days, then sets entries from those days into a state to be displayed in the multi bar chart.
+   * useEffect that triggers on DatePicker range changes.
+   * Runs a for-loop that goes through the selected days, then sets entries from those days into a state to be displayed in the multi bar chart.
    * Filters null-entries, commonly weekends.
    */
   useEffect(() => {
     if (range.start && range.end) {
-      const selectedDays = range?.start.diff(range.end, "days").toObject();
+      const selectedDays = range?.end.diff(range.start, "days").toObject();
       const result = [];
 
       for (let i = 0; selectedDays.days && i <= selectedDays.days; i++) {
@@ -39,7 +39,7 @@ const DateRangePicker = (props: Props) => {
               item.logged !== 0 &&
               item.expected !== 0 &&
               DateTime.fromJSDate(item.date).toISODate() ===
-                range.end?.plus({ days: i }).toISODate()
+                range.start?.plus({ days: i }).toISODate()
             );
           })[0]
         );
@@ -53,11 +53,11 @@ const DateRangePicker = (props: Props) => {
       <DatePicker
         sx={{
           width: "24%",
-          mx:"1%"
+          mx: "1%"
         }}
         label={"Start"}
         disableFuture
-        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
+        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
         value={DateTime.fromJSDate(dailyEntries[0].date)}
         minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
@@ -66,11 +66,11 @@ const DateRangePicker = (props: Props) => {
       <DatePicker
         sx={{
           width: "24%",
-          mx:"1%"
+          mx: "1%"
         }}
         label={"End"}
         disableFuture
-        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
+        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
         value={DateTime.fromJSDate(dailyEntries[0].date)}
         minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}

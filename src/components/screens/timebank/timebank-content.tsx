@@ -7,22 +7,26 @@ import {
   SelectChangeEvent,
   FormControlLabel,
   Checkbox,
-  ListItemText
+  ListItemText,
+  CircularProgress,
+  Typography
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, PersonTotalTime } from "../../../generated/client";
-import TimebankPieChart from "./timebank-piechart";
-import TimebankOverviewChart from "./timebank-overviewchart";
+import TimebankPieChart from "./charts/timebank-piechart";
+import TimebankOverviewChart from "./charts/timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
-import TimebankMultiBarChart from "./timebank-multibarchart";
+import TimebankMultiBarChart from "./charts/timebank-multibarchart";
 import DateRangePicker from "./timebank-daterange-picker";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { theme } from "../../../theme";
 
 interface Props {
+  personTotalTimeLoading: boolean;
+  setPersonTotalTimeLoading: Dispatch<SetStateAction<boolean>>;
   userProfile: KeycloakProfile | undefined;
   personTotalTime: PersonTotalTime;
   personDailyEntry: DailyEntry;
@@ -39,7 +43,8 @@ const TimebankContent = (props: Props) => {
     timespanSelector,
     handleBalanceViewChange,
     handleDailyEntryChange,
-    dailyEntries
+    dailyEntries,
+    personTotalTimeLoading
   } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>();
@@ -65,20 +70,57 @@ const TimebankContent = (props: Props) => {
   };
 
   /**
+   *
+   */
+  const renderOverViewChart = () => {
+    if (personTotalTimeLoading) return <CircularProgress sx={{ margin: "auto", mt: "5%" }} />;
+    else
+      return (
+        <>
+          <TimebankOverviewChart personTotalTime={personTotalTime} />
+          <List dense sx={{ marginLeft: "5%" }}>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.timeperiod}
+                secondary={formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                sx={{
+                  color: getHoursAndMinutes(Number(personTotalTime?.balance)).startsWith("-")
+                    ? theme.palette.error.main
+                    : theme.palette.success.main
+                }}
+                primary={strings.timebank.balance}
+                secondary={getHoursAndMinutes(Number(personTotalTime?.balance))}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.logged}
+                secondary={getHoursAndMinutes(Number(personTotalTime?.logged))}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.expected}
+                secondary={getHoursAndMinutes(Number(personTotalTime?.expected))}
+              />
+            </ListItem>
+          </List>
+        </>
+      );
+  };
+
+  /**
    * Renders a daily entry pie chart or a bar chart of daily entries from a selected range.
    * @returns JSX.Element consisting of either chart component
    */
   const renderDailyEntryOrRangeChart = () => {
     if (byRange.dailyEntries) {
       return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
-    } else
-      return (
-        <TimebankPieChart
-          personDailyEntry={personDailyEntry}
-          personTotalTime={personTotalTime}
-          dailyEntries={dailyEntries}
-        />
-      );
+    } else return <TimebankPieChart personDailyEntry={personDailyEntry} />;
   };
 
   /**
@@ -98,7 +140,7 @@ const TimebankContent = (props: Props) => {
       return (
         <DatePicker
           sx={{
-            width: "50%",
+            width: "40%",
             marginRight: "1%"
           }}
           label={strings.timebank.selectEntry}
@@ -115,6 +157,10 @@ const TimebankContent = (props: Props) => {
 
   return (
     <>
+      <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
+        {strings.timebank.barChartDescription}
+      </Typography>
+
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Select
           sx={{
@@ -132,43 +178,17 @@ const TimebankContent = (props: Props) => {
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
-        <TimebankOverviewChart personTotalTime={personTotalTime} />
-        <List dense sx={{ marginLeft: "5%" }}>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.timeperiod}
-              secondary={formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              sx={{
-                color: getHoursAndMinutes(Number(personTotalTime?.balance)).startsWith("-")
-                  ? theme.palette.error.main
-                  : theme.palette.success.main
-              }}
-              primary={strings.timebank.balance}
-              secondary={getHoursAndMinutes(Number(personTotalTime?.balance))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.logged}
-              secondary={getHoursAndMinutes(Number(personTotalTime?.logged))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.expected}
-              secondary={getHoursAndMinutes(Number(personTotalTime?.expected))}
-            />
-          </ListItem>
-        </List>
+        {renderOverViewChart()}
       </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", mt: "10%" }}>
+      <Typography variant="h5" sx={{ textAlign: "center", mb: "1%" }}>
+        {strings.timebank.pieChartDescription}
+      </Typography>
+
+      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
         {renderDatePickers()}
         <FormControlLabel
+          sx={{ display: "inline" }}
           label="By range"
           control={
             <Checkbox

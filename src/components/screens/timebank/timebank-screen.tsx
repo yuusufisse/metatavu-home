@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
-import { Grid, CircularProgress, SelectChangeEvent, Box } from "@mui/material";
+import { Grid, CircularProgress, SelectChangeEvent } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
@@ -15,36 +15,52 @@ const TimebankScreen = () => {
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const person = useAtomValue(personAtom);
-  const [isLoading, setIsLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [personTotalTimeLoading, setPersonTotalTimeLoading] = useState(true);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
 
   /**
    * Fetches the person's total time and daily entries
-   * @param timespan Timespan string which controls if @PersonTotalTime results are condensed into weeks, months, years or all time
+   * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
    */
-  const getPersonData = async (timespan?: Timespan): Promise<void> => {
-    setIsLoading(true);
+  const getPersonTotalTime = async (timespan?: Timespan): Promise<void> => {
+    setPersonTotalTimeLoading(true);
     if (person) {
       try {
         const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
           personId: person?.id,
           timespan: timespan
         });
-        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: person?.id
-        });
         setPersonTotalTime(fetchedPersonTotalTime[0]);
-        setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(fetchedDailyEntries[0]);
       } catch (error) {
         setError(`${"Person fetch has failed."}, ${error}`);
       }
     } else {
       setError("Your account does not have any time bank entries.");
     }
-    setIsLoading(false);
+    setPersonTotalTimeLoading(false);
+  };
+
+  /**
+   * Fetches the person's total time and daily entries
+   * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
+   */
+  const getPersonDailyEntries = async (): Promise<void> => {
+    if (person) {
+      try {
+        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+          personId: person?.id
+        });
+        setDailyEntries(fetchedDailyEntries);
+        setPersonDailyEntry(fetchedDailyEntries[0]);
+      } catch (error) {
+        setError(`${"Person fetch has failed."}, ${error}`);
+      }
+    } else {
+      setError("No daily entries found.");
+    }
   };
 
   /**
@@ -68,27 +84,41 @@ const TimebankScreen = () => {
     setTimespanSelector(e.target.value);
     switch (e.target.value) {
       case "Week":
-        return getPersonData(Timespan.WEEK);
+        return getPersonTotalTime(Timespan.WEEK);
       case "Month":
-        return getPersonData(Timespan.MONTH);
+        return getPersonTotalTime(Timespan.MONTH);
       case "Year":
-        return getPersonData(Timespan.YEAR);
+        return getPersonTotalTime(Timespan.YEAR);
       case "All":
-        return getPersonData(Timespan.ALL_TIME);
+        return getPersonTotalTime(Timespan.ALL_TIME);
       default:
-        return getPersonData(Timespan.WEEK);
+        return getPersonTotalTime(Timespan.WEEK);
     }
   };
 
   useEffect(() => {
-    if (person) getPersonData();
+    if (person) getPersonTotalTime();
+    getPersonDailyEntries();
   }, [person]);
 
-  if (isLoading)
+  useEffect(() => {
+    if (personTotalTime && dailyEntries) setInitialLoading(false);
+  }, [personTotalTime, dailyEntries]);
+
+  if (initialLoading)
     return (
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Grid
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          borderRadius: "15px",
+          backgroundColor: "#f2f2f2",
+          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+          p: 3
+        }}
+      >
         <CircularProgress />
-      </Box>
+      </Grid>
     );
   else
     return (
@@ -103,6 +133,8 @@ const TimebankScreen = () => {
         <>
           {personDailyEntry && dailyEntries && personTotalTime ? (
             <TimebankContent
+              personTotalTimeLoading={personTotalTimeLoading}
+              setPersonTotalTimeLoading={setPersonTotalTimeLoading}
               userProfile={userProfile}
               handleDailyEntryChange={handleDailyEntryChange}
               handleBalanceViewChange={handleBalanceViewChange}

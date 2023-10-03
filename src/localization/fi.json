@@ -30,7 +30,9 @@
     "timeperiod": "Aikaväli",
     "noData": "Ei kirjattua dataa",
     "selectEntry": "Valitse aikakirjaus",
-    "latestEntry": "Viimeisin aikakirjaus"
+    "latestEntry": "Viimeisin aikakirjaus",
+    "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
+    "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli"
   },
   "timeExpressions": {
     "monday": "Maanantai",
