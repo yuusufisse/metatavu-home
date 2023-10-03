@@ -4,9 +4,9 @@ import { Dispatch } from "react";
 import { ToolbarFormModes } from "../types";
 
 /**
- * Determine toolbar form mode props
+ * DetermineToolbarFormMode properties
  */
-interface determineToolbarFormModeProps {
+interface DetermineToolbarFormModeProps {
   selectedRowIds: GridRowId[] | undefined;
   formOpen: boolean;
   setToolbarFormMode: Dispatch<SetStateAction<ToolbarFormModes>>;
@@ -14,9 +14,14 @@ interface determineToolbarFormModeProps {
 
 /**
  * Determine toolbar form mode
+ *
+ * @param props utility properties
  */
-export const determineToolbarFormMode = (props: determineToolbarFormModeProps) => {
-  const { formOpen, selectedRowIds, setToolbarFormMode } = props;
+export const determineToolbarFormMode = ({
+  formOpen,
+  selectedRowIds,
+  setToolbarFormMode
+}: DetermineToolbarFormModeProps) => {
   if (selectedRowIds) {
     switch (true) {
       case selectedRowIds.length === 0 && formOpen:
@@ -31,6 +36,7 @@ export const determineToolbarFormMode = (props: determineToolbarFormModeProps) =
     }
   }
 };
+
 /**
  * Get toolbar title
  *

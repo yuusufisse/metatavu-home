@@ -126,7 +126,9 @@ const TableForm = ({
       updateVacationRequest(vacationData, selectedVacationRequestId);
     }
     setFormOpen(false);
-    resetVacationData();
+    if (toolbarFormMode !== ToolbarFormModes.EDIT) {
+      resetVacationData();
+    }
   };
 
   return (

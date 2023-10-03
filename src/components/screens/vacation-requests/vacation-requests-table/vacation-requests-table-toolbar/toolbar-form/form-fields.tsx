@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   TextField
 } from "@mui/material";
-import getLocalizedVacationType from "../../../../../../utils/vacation-type-utils";
+import getVacationTypeByString from "../../../../../../utils/vacation-type-utils";
 import { VacationType } from "../../../../../../generated/client";
 import { ChangeEvent, Dispatch } from "react";
 import DateRangePicker from "../../../../../generics/date-range-picker";
@@ -68,7 +68,7 @@ const FormFields = ({
         onChange={(event: SelectChangeEvent<string>) => {
           setVacationData({
             ...vacationData,
-            type: getLocalizedVacationType(event.target.value)
+            type: getVacationTypeByString(event.target.value)
           });
         }}
         sx={{ marginBottom: "5px", width: "100%" }}

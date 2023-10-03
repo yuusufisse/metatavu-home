@@ -5,7 +5,7 @@ import { VacationType } from "../generated/client";
  *
  * @param typeString filter scope as string
  */
-const getLocalizedVacationType = (typeString: string) => {
+const getVacationTypeByString = (typeString: string) => {
   switch (typeString) {
     case "VACATION":
       return VacationType.VACATION;
@@ -20,8 +20,8 @@ const getLocalizedVacationType = (typeString: string) => {
     case "CHILD_SICKNESS":
       return VacationType.CHILD_SICKNESS;
     default:
-      return null;
+      return undefined;
   }
 };
 
-export default getLocalizedVacationType;
+export default getVacationTypeByString;
