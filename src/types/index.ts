@@ -48,7 +48,7 @@ export interface SkeletonTableColumn {
  * Type describing row for skeleton table
  */
 export interface SkeletonTableRow {
-  variant: string;
+  variant: "rounded" | "text" | "rectangular" | "circular";
   height: string | number;
   width: string | number;
   margin: string;
