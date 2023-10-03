@@ -7,7 +7,6 @@ import {
   VacationRequestStatus,
   VacationRequestStatuses
 } from "../../../generated/client";
-import { hasAllPropsDefined } from "../../../utils/check-utils";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -36,20 +35,18 @@ const CreateVacationRequestStatus = ({
     if (!userProfile || !userProfile.id) return;
 
     try {
-      const tempCreatedStatus = {
-        vacationRequestId: createdRequest.id,
-        status: VacationRequestStatuses.PENDING,
-        message: createdRequest.message,
-        createdAt: new Date(),
-        createdBy: userProfile.id,
-        updatedAt: new Date(),
-        updatedBy: userProfile.id
-      };
-      if (hasAllPropsDefined(tempCreatedStatus) && createdRequest.id) {
-        const vacationRequestStatus = <VacationRequestStatus>tempCreatedStatus;
+      if (createdRequest.id) {
         const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
           id: createdRequest.id,
-          vacationRequestStatus: vacationRequestStatus
+          vacationRequestStatus: {
+            vacationRequestId: createdRequest.id,
+            status: VacationRequestStatuses.PENDING,
+            message: createdRequest.message,
+            createdAt: new Date(),
+            createdBy: userProfile.id,
+            updatedAt: new Date(),
+            updatedBy: userProfile.id
+          }
         });
 
         setVacationRequestStatuses([createdStatus, ...vacationRequestStatuses]);

@@ -37,7 +37,7 @@ const GetVacationRequests = ({ setVacationRequests }: Props) => {
       }
       setVacationRequestsLoading(false);
     } catch (error) {
-      setError(`${"Person fetch has failed."}, ${error}`);
+      setError(`${"Vacation requests fetch has failed."}, ${error}`);
     }
   };
 

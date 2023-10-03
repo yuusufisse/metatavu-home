@@ -10,8 +10,8 @@ import { VacationRequest, VacationRequestStatus } from "../../../generated/clien
 interface Props {
   vacationRequests: VacationRequest[];
   vacationRequestStatuses: VacationRequestStatus[];
-  setVacationRequestStatuses?: Dispatch<SetStateAction<VacationRequestStatus[]>>;
-  setLatestVacationRequestStatuses?: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  setLatestVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
 
 /**
@@ -63,9 +63,7 @@ const GetVacationRequestStatuses = ({
             });
           })
         );
-        if (setVacationRequestStatuses) {
-          setVacationRequestStatuses(vacationRequestStatuses);
-        }
+        setVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${"Fetching vacation request statuses failed."}, ${error}`);
       }
@@ -77,19 +75,19 @@ const GetVacationRequestStatuses = ({
    */
   const filterLatestVacationRequestStatuses = async () => {
     if (vacationRequests) {
-      const tempLatestVacationRequestStatuses: VacationRequestStatus[] = [];
+      const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
-        const tempVacationRequestStatuses: VacationRequestStatus[] = [];
+        const selectedVacationRequestStatuses: VacationRequestStatus[] = [];
 
         vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
-            tempVacationRequestStatuses.push(vacationRequestStatus);
+            selectedVacationRequestStatuses.push(vacationRequestStatus);
           }
         });
 
-        if (tempVacationRequestStatuses.length > 0) {
-          const latestStatus = tempVacationRequestStatuses.reduce((a, b) => {
+        if (selectedVacationRequestStatuses.length > 0) {
+          const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
             } else if (a.updatedAt) {
@@ -98,12 +96,10 @@ const GetVacationRequestStatuses = ({
               return b;
             }
           });
-          tempLatestVacationRequestStatuses.push(latestStatus);
+          selectedLatestVacationRequestStatuses.push(latestStatus);
         }
       });
-      if (setLatestVacationRequestStatuses) {
-        setLatestVacationRequestStatuses(tempLatestVacationRequestStatuses);
-      }
+      setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
       setVacationRequestStatusesLoading(false);
     }
   };

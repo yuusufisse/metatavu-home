@@ -32,20 +32,15 @@ const DeleteVacationRequestStatuses = ({
   const setError = useSetAtom(errorAtom);
 
   /**
-   * Delete selected vacation requests from vacation requests statuses atom
+   * Delete selected vacation requests from vacation requests statuses
    */
   const deleteVacationRequestStatusRows = () => {
     if (rows.length && vacationRequestStatuses && selectedRowIds) {
-      let tempVacationRequestStatuses: VacationRequestStatus[] = vacationRequestStatuses;
-
-      selectedRowIds.forEach((selectedRow) => {
-        rows.forEach((row) => {
-          if (row.id === selectedRow) {
-            tempVacationRequestStatuses = tempVacationRequestStatuses.filter(
-              (vacationRequestStatus) => vacationRequestStatus.vacationRequestId !== row.id
-            );
-          }
-        });
+      let tempVacationRequestStatuses: VacationRequestStatus[] = [];
+      selectedRowIds.forEach((selectedRowId) => {
+        tempVacationRequestStatuses = vacationRequestStatuses.filter(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId !== selectedRowId
+        );
       });
       setVacationRequestStatuses(tempVacationRequestStatuses);
     }
@@ -57,25 +52,21 @@ const DeleteVacationRequestStatuses = ({
   const deleteVacationRequestStatuses = async () => {
     if (vacationRequestStatuses.length && selectedRowIds) {
       await Promise.all(
-        vacationRequestStatuses.map(async (vacationRequestStatus) => {
-          await Promise.all(
-            selectedRowIds.map(async (selectedRow) => {
-              if (
-                selectedRow === vacationRequestStatus.vacationRequestId &&
-                vacationRequestStatus.id
-              ) {
-                try {
-                  await vacationRequestStatusApi.deleteVacationRequestStatus({
-                    id: vacationRequestStatus.id,
-                    statusId: vacationRequestStatus.id
-                  });
-                  deleteVacationRequestStatusRows();
-                } catch (error) {
-                  setError(`${"Deleting vacation request statuses has failed"}, ${error}`);
-                }
-              }
-            })
-          );
+        selectedRowIds.map(async (selectedRowId): Promise<void> => {
+          try {
+            const foundVacationRequestStatus = vacationRequestStatuses.find(
+              (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+            );
+            if (foundVacationRequestStatus?.id) {
+              await vacationRequestStatusApi.deleteVacationRequestStatus({
+                id: foundVacationRequestStatus.id,
+                statusId: foundVacationRequestStatus.id
+              });
+            }
+            deleteVacationRequestStatusRows();
+          } catch (error) {
+            setError(`${"Deleting vacation request statuses has failed"}, ${error}`);
+          }
         })
       );
     }

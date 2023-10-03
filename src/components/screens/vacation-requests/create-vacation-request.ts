@@ -4,7 +4,6 @@ import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
 import { VacationData } from "../../../types";
 import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
-import { hasAllPropsDefined } from "../../../utils/check-utils";
 import CreateVacationRequestStatus from "./create-vacation-request-status";
 import { Dispatch, SetStateAction } from "react";
 
@@ -47,22 +46,25 @@ const CreateVacationRequest = ({
     if (!userProfile || !userProfile.id) return;
 
     try {
-      const tempVacationRequest = {
-        personId: userProfile.id,
-        createdBy: userProfile.id,
-        startDate: vacationData.startDate?.toJSDate(),
-        endDate: vacationData.endDate?.toJSDate(),
-        type: vacationData.type,
-        message: vacationData.message,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        days: vacationData.days
-      };
-
-      if (hasAllPropsDefined(tempVacationRequest)) {
-        const vacationRequest = <VacationRequest>tempVacationRequest;
+      if (
+        vacationData.startDate &&
+        vacationData.endDate &&
+        vacationData.type &&
+        vacationData.message &&
+        vacationData.days
+      ) {
         const createdRequest = await vacationRequestsApi.createVacationRequest({
-          vacationRequest: vacationRequest
+          vacationRequest: {
+            personId: userProfile.id,
+            createdBy: userProfile.id,
+            startDate: vacationData.startDate?.toJSDate(),
+            endDate: vacationData.endDate?.toJSDate(),
+            type: vacationData.type,
+            message: vacationData.message,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            days: vacationData.days
+          }
         });
 
         createVacationRequestStatus(createdRequest);

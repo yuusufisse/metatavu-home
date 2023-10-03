@@ -4,7 +4,6 @@ import { useApi } from "../../../hooks/use-api";
 import { errorAtom } from "../../../atoms/error";
 import { VacationData } from "../../../types";
 import { VacationRequest } from "../../../generated/client";
-import { hasAllPropsDefined } from "../../../utils/check-utils";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -38,22 +37,29 @@ const UpdateVacationRequest = ({ vacationRequests, setVacationRequests }: Props)
     if (!userProfile || !userProfile.id) return;
 
     try {
-      const tempVacationRequest = {
-        personId: userProfile.id,
-        createdBy: userProfile.id,
-        startDate: vacationData.startDate?.toJSDate(),
-        endDate: vacationData.endDate?.toJSDate(),
-        type: vacationData.type,
-        message: vacationData.message,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        days: vacationData.days
-      };
-
-      if (hasAllPropsDefined(tempVacationRequest) && vacationRequestId) {
+      const vacationRequest = vacationRequests.find(
+        (vacationRequest) => vacationRequest.id === vacationRequestId
+      );
+      if (
+        vacationRequest &&
+        vacationRequestId &&
+        vacationData.startDate &&
+        vacationData.endDate &&
+        vacationData.type &&
+        vacationData.message &&
+        vacationData.days
+      ) {
         const updatedRequest = await vacationRequestsApi.updateVacationRequest({
           id: vacationRequestId,
-          vacationRequest: tempVacationRequest as VacationRequest
+          vacationRequest: {
+            ...vacationRequest,
+            startDate: vacationData.startDate.toJSDate(),
+            endDate: vacationData.endDate.toJSDate(),
+            type: vacationData.type,
+            message: vacationData.message,
+            updatedAt: new Date(),
+            days: vacationData.days
+          }
         });
         const tempVacationRequests = vacationRequests.map((vacationRequest) => {
           if (vacationRequest.id === updatedRequest.id) {
