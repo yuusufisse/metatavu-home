@@ -60,7 +60,7 @@ export interface SkeletonTableRow {
 export interface VacationData {
   startDate: DateTime | undefined;
   endDate: DateTime | undefined;
-  type: VacationType | undefined | null;
+  type: VacationType | undefined;
   message: string | undefined;
   days: number | undefined;
 }
