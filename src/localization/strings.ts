@@ -18,10 +18,6 @@ export interface Localized extends LocalizedStringsMethods {
   header: {
     hello: string;
     logout: string;
-    home: string;
-    admin: string;
-    onCall: string;
-    balance: string;
     pages: string[];
     changeLanguage: string;
     openSettings: string;
