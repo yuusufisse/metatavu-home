@@ -19,6 +19,7 @@ interface Props {
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
+
 /**
  * Vacation requests table component
  *

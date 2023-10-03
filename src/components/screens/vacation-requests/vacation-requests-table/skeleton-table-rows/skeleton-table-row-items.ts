@@ -1,7 +1,7 @@
 import { SkeletonTableRow } from "../../../../../types";
 
 /**
- * Define row items
+ * Define skeleton row items
  */
 export const rowItems: SkeletonTableRow[] = [
   /* TODO: Automate this. Write a script to generate this list

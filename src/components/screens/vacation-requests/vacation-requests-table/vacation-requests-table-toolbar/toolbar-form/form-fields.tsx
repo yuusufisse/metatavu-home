@@ -15,6 +15,7 @@ import { VacationData } from "../../../../../../types";
 import { SetStateAction } from "jotai";
 import { DateTime } from "luxon";
 import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
+
 /**
  * Component properties
  */

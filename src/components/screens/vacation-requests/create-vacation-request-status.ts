@@ -17,10 +17,12 @@ interface Props {
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
+
 /**
  * Create vacation request status
  *
  * @param props component properties
+ * @returns createVacationRequestStatus
  */
 const CreateVacationRequestStatus = ({
   vacationRequestStatuses,

@@ -17,6 +17,7 @@ interface Props {
   setInitialEndDate: Dispatch<SetStateAction<DateTime | undefined>>;
   setVacationData: Dispatch<SetStateAction<VacationData>>;
 }
+
 /**
  * Get vacation data from row functional component
  *

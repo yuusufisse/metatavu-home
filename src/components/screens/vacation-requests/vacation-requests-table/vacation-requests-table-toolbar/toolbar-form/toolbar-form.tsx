@@ -29,6 +29,7 @@ interface Props {
   toolbarFormMode: ToolbarFormModes;
   setToolbarFormMode: Dispatch<SetStateAction<ToolbarFormModes>>;
 }
+
 /**
  * Table form component
  *
