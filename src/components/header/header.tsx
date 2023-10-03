@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { PersonTotalTime } from "../../generated/client";
 import { errorAtom } from "../../atoms/error";
-import LoaderWrapper from "../generics/loader-wrapper";
 import { Box, Container, Grid } from "@mui/material";
 import BalanceCard from "./balance-card";
 import HomeNav from "./nav";
@@ -18,7 +17,6 @@ const Header = () => {
   const auth = useAtomValue(authAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const { personsApi } = useApi();
 
@@ -26,7 +24,6 @@ const Header = () => {
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setIsLoading(true);
     const fetchedPersons = await personsApi.listPersons({ active: true });
     const loggedInPerson = fetchedPersons.filter((person) => person.keycloakId === userProfile?.id);
 
@@ -42,7 +39,6 @@ const Header = () => {
     } else {
       setError("Your account does not have any time bank entries.");
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
