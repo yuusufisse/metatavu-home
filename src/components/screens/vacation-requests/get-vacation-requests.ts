@@ -8,7 +8,7 @@ import { errorAtom } from "../../../atoms/error";
 /**
  * Component properties
  */
-interface GetVacationRequestsProps {
+interface Props {
   setVacationRequests?: Dispatch<SetStateAction<VacationRequest[]>>;
 }
 
@@ -18,7 +18,7 @@ interface GetVacationRequestsProps {
  * @param props component properties
  * @returns vacationRequestsLoading
  */
-const GetVacationRequests = ({ setVacationRequests }: GetVacationRequestsProps) => {
+const GetVacationRequests = ({ setVacationRequests }: Props) => {
   const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);

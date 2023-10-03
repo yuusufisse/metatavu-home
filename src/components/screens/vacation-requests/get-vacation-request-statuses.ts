@@ -7,7 +7,7 @@ import { VacationRequest, VacationRequestStatus } from "../../../generated/clien
 /**
  * Component properties
  */
-interface GetVacationRequestStatusesProps {
+interface Props {
   vacationRequests: VacationRequest[];
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequestStatuses?: Dispatch<SetStateAction<VacationRequestStatus[]>>;
@@ -17,7 +17,7 @@ interface GetVacationRequestStatusesProps {
 /**
  * Get vacation request statuses functional component
  *
- * @param props GetVacationRequestStatusesProps
+ * @param props component properties
  * @returns vacationRequestStatusesLoading
  */
 const GetVacationRequestStatuses = ({
@@ -25,7 +25,7 @@ const GetVacationRequestStatuses = ({
   vacationRequestStatuses,
   setVacationRequestStatuses,
   setLatestVacationRequestStatuses
-}: GetVacationRequestStatusesProps) => {
+}: Props) => {
   const { vacationRequestStatusApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [vacationRequestStatusesLoading, setVacationRequestStatusesLoading] = useState(true);

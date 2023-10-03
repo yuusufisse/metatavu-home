@@ -9,7 +9,7 @@ import { useSetAtom } from "jotai";
 /**
  * Component properties
  */
-interface DeleteVacationRequestStatusesProps {
+interface Props {
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
   selectedRowIds: GridRowId[] | undefined;
@@ -19,7 +19,7 @@ interface DeleteVacationRequestStatusesProps {
 /**
  * Delete vacation requests functional component
  *
- * @param props DeleteVacationRequestStatusesProps
+ * @param props component properties
  * @returns deleteVacationRequestStatuses
  */
 const DeleteVacationRequestStatuses = ({
@@ -27,7 +27,7 @@ const DeleteVacationRequestStatuses = ({
   setVacationRequestStatuses,
   selectedRowIds,
   rows
-}: DeleteVacationRequestStatusesProps) => {
+}: Props) => {
   const { vacationRequestStatusApi } = useApi();
   const setError = useSetAtom(errorAtom);
 

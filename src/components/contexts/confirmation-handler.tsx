@@ -14,7 +14,7 @@ interface Props {
 }
 
 /**
- * confirmation handler component
+ * Confirmation handler component
  *
  * @param props component properties
  */
@@ -24,8 +24,6 @@ const ConfirmationHandler = ({
   setConfirmation,
   deleteVacationsData
 }: Props) => {
-  // const [vacationRequests, setVacationRequests] = useState<[]>([]);
-
   /**
    * Handles confirmation message
    *

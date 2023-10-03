@@ -13,7 +13,7 @@ import { useAtomValue } from "jotai";
 /**
  * Component properties
  */
-interface VacationRequestsTableProps {
+interface Props {
   vacationRequests: VacationRequest[];
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
@@ -22,14 +22,14 @@ interface VacationRequestsTableProps {
 /**
  * Vacation requests table component
  *
- * @props VacationRequestsTableProps
+ * @param props component properties
  */
 const VacationRequestsTable = ({
   vacationRequests,
   vacationRequestStatuses,
   setVacationRequests,
   setVacationRequestStatuses
-}: VacationRequestsTableProps) => {
+}: Props) => {
   const containerRef = useRef(null);
   const [rows, setRows] = useState<DataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);

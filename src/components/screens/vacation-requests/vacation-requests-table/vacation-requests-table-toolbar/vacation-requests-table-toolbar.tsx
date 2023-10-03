@@ -15,7 +15,7 @@ import ConfirmationHandler from "../../../../contexts/confirmation-handler";
 /**
  * Component properties
  */
-interface TableToolbarProps {
+interface Props {
   vacationRequests: VacationRequest[];
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
   vacationRequestStatuses: VacationRequestStatus[];
@@ -29,7 +29,7 @@ interface TableToolbarProps {
 /**
  * Table toolbar component
  *
- * @param props TableToolbarProps
+ * @param props component properties
  */
 const TableToolbar = ({
   vacationRequests,
@@ -40,7 +40,7 @@ const TableToolbar = ({
   formOpen,
   selectedRowIds,
   rows
-}: TableToolbarProps) => {
+}: Props) => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const { deleteVacationRequests } = DeleteVacationRequests({
     vacationRequests: vacationRequests,

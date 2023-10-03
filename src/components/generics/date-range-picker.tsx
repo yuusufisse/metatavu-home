@@ -7,7 +7,7 @@ import { getTimeDifferenceInDays } from "../../utils/time-utils";
 /**
  * Component properties
  */
-interface DateRangePickerProps {
+interface Props {
   dateTimeNow: DateTime;
   setDates: (startDate: DateTime | undefined, endDate: DateTime | undefined, days: number) => void;
   initialStartDate?: DateTime;
@@ -18,12 +18,7 @@ interface DateRangePickerProps {
  *
  * @param props DateRangePickerProps
  */
-const DateRangePicker = ({
-  dateTimeNow,
-  setDates,
-  initialStartDate,
-  initialEndDate
-}: DateRangePickerProps) => {
+const DateRangePicker = ({ dateTimeNow, setDates, initialStartDate, initialEndDate }: Props) => {
   const [startDate, setStartDate] = useState<DateTime | undefined>(
     initialStartDate ? initialStartDate : dateTimeNow
   );

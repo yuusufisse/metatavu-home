@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction } from "react";
 /**
  * Component properties
  */
-interface CreateVacationRequestProps {
+interface Props {
   vacationRequests: VacationRequest[];
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
@@ -21,7 +21,7 @@ interface CreateVacationRequestProps {
 /**
  * Create vacation request functional component
  *
- * @param props CreateVacationRequestProps
+ * @param props component properties
  * @returns createVacationRequest
  */
 const CreateVacationRequest = ({
@@ -29,7 +29,7 @@ const CreateVacationRequest = ({
   setVacationRequestStatuses,
   vacationRequests,
   setVacationRequests
-}: CreateVacationRequestProps) => {
+}: Props) => {
   const { vacationRequestsApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);

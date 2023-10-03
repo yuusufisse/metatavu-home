@@ -13,19 +13,19 @@ import { Dispatch, SetStateAction } from "react";
 /**
  * Component properties
  */
-interface CreateVacationRequestStatusProps {
+interface Props {
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
 }
 /**
  * Create vacation request status
  *
- * @param props CreateVacationRequestStatusProps
+ * @param props component properties
  */
 const CreateVacationRequestStatus = ({
   vacationRequestStatuses,
   setVacationRequestStatuses
-}: CreateVacationRequestStatusProps) => {
+}: Props) => {
   const { vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);

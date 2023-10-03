@@ -6,9 +6,9 @@ import { SetStateAction } from "jotai";
 import { DateTime } from "luxon";
 
 /**
- * Component props
+ * Component properties
  */
-interface getVacationDataFromRowProps {
+interface Props {
   rows: DataGridRow[];
   selectedRowIds: GridRowId[];
   vacationRequests: VacationRequest[];
@@ -19,6 +19,8 @@ interface getVacationDataFromRowProps {
 }
 /**
  * Get vacation data from row functional component
+ *
+ * @param props component properties
  */
 export const getVacationDataFromRow = ({
   rows,
@@ -28,7 +30,7 @@ export const getVacationDataFromRow = ({
   setSelectedVacationRequestId,
   vacationRequests,
   setVacationData
-}: getVacationDataFromRowProps) => {
+}: Props) => {
   const selectedVacationRow = rows.find((row) => row.id === selectedRowIds[0]);
 
   if (selectedVacationRow) {

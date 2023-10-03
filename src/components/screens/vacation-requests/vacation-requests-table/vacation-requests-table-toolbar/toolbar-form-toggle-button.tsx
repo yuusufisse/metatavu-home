@@ -6,7 +6,7 @@ import { Button, Typography } from "@mui/material";
 /**
  * Component properties
  */
-interface FormToggleButtonProps {
+interface Props {
   children?: ReactNode;
   buttonVariant?: "text" | "contained" | "outlined";
   titleVariant?: Variant;
@@ -19,7 +19,7 @@ interface FormToggleButtonProps {
 /**
  * Generic Toggle Button component
  *
- * @param props FormToggleButtonProps
+ * @param props component properties
  */
 const FormToggleButton = ({
   children,
@@ -29,7 +29,7 @@ const FormToggleButton = ({
   title,
   titleVariant,
   buttonVariant
-}: FormToggleButtonProps) => {
+}: Props) => {
   return (
     <Button
       variant={buttonVariant ? buttonVariant : "contained"}

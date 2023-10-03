@@ -9,7 +9,7 @@ import { DataGridRow } from "../../../types";
 /**
  * Component properties
  */
-interface DeleteVacationRequestsProps {
+interface Props {
   vacationRequests: VacationRequest[];
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
@@ -20,7 +20,7 @@ interface DeleteVacationRequestsProps {
 /**
  * Delete vacation requests functional component
  *
- * @param props DeleteVacationRequestsProps
+ * @param props component properties
  * @returns deleteVacationRequests
  */
 const DeleteVacationRequests = ({
@@ -29,7 +29,7 @@ const DeleteVacationRequests = ({
   vacationRequestStatuses,
   selectedRowIds,
   rows
-}: DeleteVacationRequestsProps) => {
+}: Props) => {
   const { vacationRequestsApi } = useApi();
   const setError = useSetAtom(errorAtom);
 

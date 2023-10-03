@@ -4,16 +4,16 @@ import { Typography } from "@mui/material";
 import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
 
 /**
- * Component props
+ * Component properties
  */
-interface ToolbarTitleProps {
+interface Props {
   toolbarFormMode: ToolbarFormModes;
 }
 
 /**
  * Toolbar title component
  */
-const ToolbarTitle = ({ toolbarFormMode }: ToolbarTitleProps) => {
+const ToolbarTitle = ({ toolbarFormMode }: Props) => {
   const [title, setTitle] = useState<string>("My vacation requests");
 
   useEffect(() => {

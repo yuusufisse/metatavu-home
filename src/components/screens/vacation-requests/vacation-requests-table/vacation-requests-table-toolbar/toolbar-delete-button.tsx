@@ -6,15 +6,15 @@ import { Dispatch } from "react";
 /**
  * Component properties
  */
-interface ToolbarDeleteButtonProps {
+interface Props {
   setConfirmation: Dispatch<SetStateAction<string | undefined>>;
 }
 /**
  * Delete Button component
  *
- * @param props ToolbarDeleteButtonProps
+ * @param props component properties
  */
-const ToolbarDeleteButton = ({ setConfirmation }: ToolbarDeleteButtonProps) => {
+const ToolbarDeleteButton = ({ setConfirmation }: Props) => {
   return (
     <Button
       variant="contained"

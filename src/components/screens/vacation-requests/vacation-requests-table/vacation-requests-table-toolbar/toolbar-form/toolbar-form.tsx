@@ -17,7 +17,7 @@ import { determineToolbarFormMode } from "../../../../../../utils/toolbar-utils"
 /**
  * Component properties
  */
-interface TableFormProps {
+interface Props {
   formOpen: boolean;
   setFormOpen: Dispatch<SetStateAction<boolean>>;
   vacationRequests: VacationRequest[];
@@ -32,7 +32,7 @@ interface TableFormProps {
 /**
  * Table form component
  *
- * @param props TableFormProps
+ * @param props component properties
  */
 const TableForm = ({
   formOpen,
@@ -45,7 +45,7 @@ const TableForm = ({
   rows,
   toolbarFormMode,
   setToolbarFormMode
-}: TableFormProps) => {
+}: Props) => {
   const dateTimeNow = DateTime.now();
   const [initialStartDate, setInitialStartDate] = useState<DateTime | undefined>(dateTimeNow);
   const [initialEndDate, setInitialEndDate] = useState<DateTime | undefined>(dateTimeNow);

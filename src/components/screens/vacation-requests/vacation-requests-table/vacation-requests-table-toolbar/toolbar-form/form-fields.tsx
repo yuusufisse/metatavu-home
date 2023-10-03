@@ -18,7 +18,7 @@ import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
 /**
  * Component properties
  */
-interface FormFieldsProps {
+interface Props {
   vacationData: VacationData;
   setVacationData: Dispatch<SetStateAction<VacationData>>;
   dateTimeNow: DateTime;
@@ -29,7 +29,7 @@ interface FormFieldsProps {
 /**
  * FormFields
  *
- * @param props FormFieldsProps
+ * @param props component properties
  */
 const FormFields = ({
   vacationData,
@@ -37,7 +37,7 @@ const FormFields = ({
   dateTimeNow,
   initialEndDate,
   initialStartDate
-}: FormFieldsProps) => {
+}: Props) => {
   /**
    * Set dates to vacationData
    *
