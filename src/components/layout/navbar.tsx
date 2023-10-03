@@ -15,22 +15,31 @@ import { useAtomValue } from "jotai";
 import Logo from "../../../resources/img/Metatavu-icon.svg";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
-//import NavItems from "./navitems";
+//import NavItems from "./navitems";  // Unused currently but ready to be used
 
 /**
- * NavBar component // Unused currently but ready to be used
+ * NavBar component
  */
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  /**
+   * Handles opening user menu
+   */
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  /**
+   * Handles closing user menu
+   */
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
+  /**
+   * Handles logging out
+   */
   const handleClickLogOut = () => {
     auth?.logout();
   };
@@ -41,12 +50,11 @@ const NavBar = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Link to="/">
-              {" "}
               {/* Remove when showing navitems */}
               <Button sx={{ marginLeft: -1, height: 48 }}>
                 <img
                   src={Logo}
-                  alt="Metatavu logo"
+                  alt={strings.header.logoAlt}
                   style={{ height: 40, filter: "invert(100%)" }}
                 />
               </Button>

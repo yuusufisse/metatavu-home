@@ -17,7 +17,8 @@
     ],
     "changeLanguage": "Vaihda kieltä",
     "openSettings": "Asetukset",
-    "openUserMenu": "Käyttäjävalikko"
+    "openUserMenu": "Käyttäjävalikko",
+    "logoAlt": "Metatavu logo"
   },
   "localization": {
     "en": "EN",

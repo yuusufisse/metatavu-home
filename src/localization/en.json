@@ -17,7 +17,8 @@
     ],
     "changeLanguage": "Change language",
     "openSettings": "Open settings",
-    "openUserMenu": "Open user menu"
+    "openUserMenu": "Open user menu",
+    "logoAlt": "Metatavu logo"
   },
   "localization": {
     "en": "EN",

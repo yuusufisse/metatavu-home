@@ -22,6 +22,7 @@ export interface Localized extends LocalizedStringsMethods {
     changeLanguage: string;
     openSettings: string;
     openUserMenu: string;
+    logoAlt: string;
   };
   /**
    * Translations related to place holders

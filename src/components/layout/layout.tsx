@@ -8,11 +8,9 @@ import NavBar from "./navbar";
 const Layout = () => {
   return (
     <>
-      {/* HEADER START */}
       <Container>
         <NavBar />
       </Container>
-      {/* HEADER END *** CONTENT START */}
       <Container sx={{ marginTop: 4 }}>
         <Outlet />
       </Container>

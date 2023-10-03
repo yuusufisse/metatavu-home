@@ -11,7 +11,7 @@ import strings from "../../localization/strings";
  * Navigation Items component
  */
 const NavItems = () => {
-  const [currentPage, setCurrentPage] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState("");
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -34,7 +34,7 @@ const NavItems = () => {
     <>
       <Link to="/">
         <Button sx={{ marginLeft: -1, height: 48 }} onClick={() => setCurrentPage("Home")}>
-          <img src={Logo} alt="Metatavu logo" style={{ height: 40, filter: "invert(100%)" }} />
+          <img src={Logo} alt={strings.header.logoAlt} style={{ height: 40, filter: "invert(100%)" }} />
         </Button>
       </Link>
       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
