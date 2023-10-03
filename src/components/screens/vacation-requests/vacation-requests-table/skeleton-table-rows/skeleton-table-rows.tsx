@@ -1,5 +1,7 @@
-import { Box, Grid, Skeleton } from "@mui/material";
-import { rowItems } from "./skeleton-table-row-items";
+import { Box, Grid } from "@mui/material";
+import { columns } from "../vacation-requests-table-columns";
+import SkeletonTableRowCheckbox from "./skeleton-table-row-checkbox";
+import SkeletonTableItem from "./skeleton-table-row-item";
 
 /**
  * Skeleton table rows component
@@ -16,18 +18,17 @@ const SkeletonTableRows = () => {
             }}
           >
             <Grid container alignItems="center">
-              {rowItems.map((rowItem, idx) => {
-                return (
-                  <Skeleton
-                    variant={rowItem.variant as "rounded" | "text" | "rectangular" | "circular"}
-                    key={`skeleton-row-${idx}`}
-                    sx={{
-                      height: rowItem.height,
-                      width: rowItem.width,
-                      margin: rowItem.margin
-                    }}
-                  />
-                );
+              {columns.map((column, idx) => {
+                if (idx === 0) {
+                  return (
+                    <>
+                      <SkeletonTableRowCheckbox idx={idx} />
+                      <SkeletonTableItem idx={idx} column={column} />
+                    </>
+                  );
+                } else {
+                  return <SkeletonTableItem idx={idx} column={column} />;
+                }
               })}
             </Grid>
           </Box>
