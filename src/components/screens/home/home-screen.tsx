@@ -15,7 +15,7 @@ const HomeScreen = () => {
   const { personsApi } = useApi();
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // no loading indicator yet except a little skeleton in the balance card
+  const [_isLoading, setIsLoading] = useState<boolean>(true); // no loading indicator yet except a little skeleton in the balance card
 
   /**
    * Initialize logged in person's time data.
