@@ -12,7 +12,6 @@ import strings from "../../localization/strings";
  */
 const NavItems = () => {
   const [currentPage, setCurrentPage] = useState<string>("");
-
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   const pageRoutes = ["/", "/timebank", "/vacations", "/oncall", "/admin"]; //this is not very elegant currently but works for now
