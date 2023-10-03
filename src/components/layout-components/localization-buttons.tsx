@@ -27,7 +27,7 @@ const LanguageButtons = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 
 /**
- * LocalizationButtons component
+ * LocalizationButton component
  */
 const LocalizationButton = () => {
   const [selected, setSelected] = useState(false);

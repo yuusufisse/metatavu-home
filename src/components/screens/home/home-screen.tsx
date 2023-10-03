@@ -15,13 +15,11 @@ const HomeScreen = () => {
   const { personsApi } = useApi();
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const setError = useSetAtom(errorAtom);
-  const [_isLoading, setIsLoading] = useState<boolean>(true); // no loading indicator yet except a little skeleton in the balance card
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setIsLoading(true);
     const fetchedPersons = await personsApi.listPersons({ active: true });
     const loggedInPerson = fetchedPersons.filter((person) => person.keycloakId === userProfile?.id);
 
@@ -37,7 +35,6 @@ const HomeScreen = () => {
     } else {
       setError("Your account does not have any time bank entries.");
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {

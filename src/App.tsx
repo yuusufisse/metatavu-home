@@ -23,21 +23,8 @@ const App = () => {
         {
           path: "/",
           element: <HomeScreen />,
-          errorElement: <ErrorScreen />,
-        },
-        // for future use
-        // {
-        //   path: "/timebank",
-        // },
-        // {
-        //   path: "/vacations",
-        // },
-        // {
-        //   path: "/oncall",
-        // },
-        // {
-        //   path: "/admin",
-        // }
+          errorElement: <ErrorScreen />
+        }
       ]
     }
   ]);

@@ -14,33 +14,26 @@ interface Props {
 /**
  * Component for displaying user's balance
  */
-const BalanceCard = ({ personTotalTime }: Props) => {
-  return (
-    <>
-      <Card>
-        <CardContent>
-          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
-
-          <Grid container>
-            <Grid item xs={1}>
-              <ScheduleIcon />
-            </Grid>
-            <Grid item xs={11}>
-              {personTotalTime ? (
-                <Typography>
-                  {personTotalTime
-                    ? `   ${getHoursAndMinutes(Number(personTotalTime?.balance))}`
-                    : "..."}
-                </Typography>
-              ) : (
-                <Skeleton />
-              )}
-            </Grid>
+const BalanceCard = ({ personTotalTime }: Props) => (
+  <>
+    <Card>
+      <CardContent>
+        <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
+        <Grid container>
+          <Grid item xs={1}>
+            <ScheduleIcon />
           </Grid>
-        </CardContent>
-      </Card>
-    </>
-  );
-};
+          <Grid item xs={11}>
+            {personTotalTime ? (
+              <Typography>` ${getHoursAndMinutes(Number(personTotalTime?.balance))}`</Typography>
+            ) : (
+              <Skeleton />
+            )}
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
+  </>
+);
 
 export default BalanceCard;
