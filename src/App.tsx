@@ -26,6 +26,7 @@ const App = () => {
           element: <HomeScreen />,
           errorElement: <ErrorScreen />,
         },
+        // for future use
         // {
         //   path: "/timebank",
         // },

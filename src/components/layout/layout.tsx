@@ -10,7 +10,7 @@ const Layout = () => {
     <>
       {/* HEADER START */}
       <Container>
-        <NavBar/>
+        <NavBar />
       </Container>
       {/* HEADER END *** CONTENT START */}
       <Container sx={{ marginTop: 4 }}>

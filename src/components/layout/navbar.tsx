@@ -18,11 +18,11 @@ import { Button } from "@mui/material";
 //import NavItems from "./navitems";
 
 /**
- * NavBar component
+ * NavBar component // Unused currently but ready to be used
  */
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null); 
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -40,7 +40,9 @@ const NavBar = () => {
       <AppBar position="relative">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link to="/"> {/* Remove when showing navitems */}
+            <Link to="/">
+              {" "}
+              {/* Remove when showing navitems */}
               <Button sx={{ marginLeft: -1, height: 48 }}>
                 <img
                   src={Logo}

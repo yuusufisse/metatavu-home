@@ -1,4 +1,3 @@
-
 import { Grid } from "@mui/material";
 import BalanceCard from "./balance-card";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -16,7 +15,7 @@ const HomeScreen = () => {
   const { personsApi } = useApi();
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // no loading indicator yet except a little skeleton in the balance card
 
   /**
    * Initialize logged in person's time data.
@@ -46,15 +45,15 @@ const HomeScreen = () => {
   }, [authAtom]);
 
   return (
-      <Grid container>
-          <Grid item xs={12} md={4}>
-              <BalanceCard personTotalTime={personTotalTime}/>
-          </Grid>
-          <Grid item xs={12} md={8}>
-              {/* TODO: MORE CARDS */}
-          </Grid>
+    <Grid container>
+      <Grid item xs={12} md={4}>
+        <BalanceCard personTotalTime={personTotalTime} />
       </Grid>
+      <Grid item xs={12} md={8}>
+        {/* TODO: MORE CARDS */}
+      </Grid>
+    </Grid>
   );
-}
+};
 
 export default HomeScreen;

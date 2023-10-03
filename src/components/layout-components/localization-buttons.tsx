@@ -43,7 +43,7 @@ const LocalizationButton = () => {
   };
 
   useEffect(() => {
-    setLanguage(availableLanguages[selected?1:0] as Language);
+    setLanguage(availableLanguages[selected ? 1 : 0] as Language);
   }, [selected]);
 
   return (
@@ -54,11 +54,11 @@ const LocalizationButton = () => {
       aria-label="localization"
     >
       <Tooltip title={strings.header.changeLanguage}>
-        <ToggleButton 
-          value={language} 
+        <ToggleButton
+          value={language}
           selected={selected}
           onChange={() => {
-            setSelected(!selected)
+            setSelected(!selected);
           }}
         >
           {language}

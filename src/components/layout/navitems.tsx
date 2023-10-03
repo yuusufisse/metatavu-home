@@ -7,11 +7,15 @@ import { MouseEvent, useState } from "react";
 import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import strings from "../../localization/strings";
 
+/**
+ * Navigation Items component
+ */
 const NavItems = () => {
   const [currentPage, setCurrentPage] = useState<string>("");
-  const pageRoutes = ["/", "/timebank", "/vacations", "/oncall", "/admin"];
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
+  const pageRoutes = ["/", "/timebank", "/vacations", "/oncall", "/admin"]; //this is not very elegant currently but works for now
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -34,6 +38,7 @@ const NavItems = () => {
         </Button>
       </Link>
       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+        {/* MOBILE MENU */}
         <IconButton
           size="large"
           aria-label="mobile menu"
@@ -77,6 +82,7 @@ const NavItems = () => {
           {currentPage}
         </Typography>
       </Box>
+      {/* DESKTOP MENU */}
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
         {strings.header.pages.slice(1).map((page, index) => (
           <Link
