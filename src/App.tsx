@@ -11,7 +11,6 @@ import Layout from "./components/layout/layout";
 
 /**
  * Application component
- *
  */
 const App = () => {
   useAtomValue(languageAtom);
