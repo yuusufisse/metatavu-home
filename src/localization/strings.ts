@@ -44,6 +44,12 @@ export interface Localized extends LocalizedStringsMethods {
     balance: string;
     yourBalanceIs: string;
   };
+  /**
+   * Translations related to errors
+   */
+  errors:{
+    fetchFailedGeneral: string;
+  }
 }
 
 /**

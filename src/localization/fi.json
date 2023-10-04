@@ -27,5 +27,8 @@
   "timebank": {
     "balance": "Saldo",
     "yourBalanceIs": "Saldosi on"
+  },
+  "errors": {
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui"
   }
 }
