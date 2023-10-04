@@ -62,13 +62,11 @@ const ConfirmationHandler = ({
         cancelButtonText={"No"}
         title={"Are you sure?"}
       >
-        <DialogContent id="confirmation-dialog-description">
           {confirmation && (
             <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
               {confirmation}
             </Typography>
           )}
-        </DialogContent>
         <Divider />
       </GenericDialog>
     </>
