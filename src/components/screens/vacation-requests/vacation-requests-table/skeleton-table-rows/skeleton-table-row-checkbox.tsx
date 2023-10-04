@@ -6,7 +6,7 @@ interface CheckboxSkeletonProps {
 const SkeletonTableRowCheckbox = ({ idx }: CheckboxSkeletonProps) => (
   <Skeleton
     variant={"rounded"}
-    key={`skeleton-row-${idx}`}
+    key={`skeleton-row-checkbox${idx}`}
     sx={{
       height: "20px",
       width: "20px",

@@ -17,19 +17,16 @@ const SkeletonTableRows = () => {
               borderBottom: "1px solid lightgrey"
             }}
           >
-            <Grid container alignItems="center">
-              {columns.map((column, idx) => {
-                if (idx === 0) {
-                  return (
-                    <>
-                      <SkeletonTableRowCheckbox idx={idx} />
-                      <SkeletonTableItem idx={idx} column={column} />
-                    </>
-                  );
-                } else {
-                  return <SkeletonTableItem idx={idx} column={column} />;
-                }
-              })}
+            <Grid container alignItems="center" key={`skeleton-row-grid-container${idx}`}>
+              {columns.map((column, idx) => (
+                <Box
+                  key={`skeleton-row-grid-item-box${idx}`}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  {idx === 0 ? <SkeletonTableRowCheckbox idx={idx} /> : null}
+                  <SkeletonTableItem idx={idx} column={column} />
+                </Box>
+              ))}
             </Grid>
           </Box>
         );

@@ -11,7 +11,7 @@ const SkeletonTableItem = ({ idx, column }: SkeletonTableItemProps) => {
   return (
     <Skeleton
       variant={"text"}
-      key={`skeleton-row-${idx}`}
+      key={`skeleton-text${idx}`}
       sx={{
         height: "20px",
         width: `${column.width ? column.width - marginRight : column.width}px`,
