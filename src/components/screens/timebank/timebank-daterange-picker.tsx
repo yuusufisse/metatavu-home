@@ -2,23 +2,19 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DailyEntry } from "../../../generated/client";
+import { Range } from "../timebank/timebank-content";
 
 interface Props {
   dailyEntries: DailyEntry[];
   setSelectedEntries: Dispatch<SetStateAction<DailyEntry[] | undefined>>;
-  disableNullEntries: (e: DateTime) => boolean;
-}
-
-interface Range {
-  start: DateTime | null;
-  end: DateTime | null;
+  disableNullEntries: (e: DateTime, range?: Range) => boolean;
 }
 
 const DateRangePicker = (props: Props) => {
   const { setSelectedEntries, dailyEntries, disableNullEntries } = props;
 
   const [range, setRange] = useState<Range>({
-    start: DateTime.now(),
+    start: DateTime.now().minus({ days: 1 }),
     end: DateTime.now()
   });
 
@@ -48,6 +44,14 @@ const DateRangePicker = (props: Props) => {
     }
   }, [range]);
 
+  useEffect(() => {
+    setRange({
+      ...range,
+      start: DateTime.fromJSDate(dailyEntries[0].date).minus({ days: 7 }),
+      end: DateTime.fromJSDate(dailyEntries[0].date)
+    });
+  }, []);
+
   return (
     <>
       <DatePicker
@@ -58,10 +62,10 @@ const DateRangePicker = (props: Props) => {
         label={"Start"}
         disableFuture
         onChange={(dateTime) => setRange({ ...range, start: dateTime })}
-        value={DateTime.fromJSDate(dailyEntries[0].date)}
+        value={range.start}
         minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
-        shouldDisableDate={disableNullEntries}
+        shouldDisableDate={(day) => disableNullEntries(day, range)}
       />
       <DatePicker
         sx={{

@@ -36,6 +36,14 @@ interface Props {
   handleDailyEntryChange: (e: DateTime | null) => void;
 }
 
+/**
+ * Date range picker object.
+ */
+export interface Range {
+  start: DateTime | null;
+  end: DateTime | null;
+}
+
 const TimebankContent = (props: Props) => {
   const {
     personTotalTime,
@@ -53,11 +61,13 @@ const TimebankContent = (props: Props) => {
   });
 
   /**
-   * Disables the days from the DatePicker which have zero logged and expected hours.
-   * @param date
+   * Disables the days from the DatePicker which have zero logged and expected hours, commonly weekends.
+   * Also prevents selecting a start date that is later than end date in the date range picker.
+   * @param date DateTime object passed from the date picker
+   * @param range Optional Range object to compare start and end dates
    * @returns boolean value which controls the disabled dates
    */
-  const disableNullEntries = (date: DateTime): boolean => {
+  const disableNullEntries = (date: DateTime, range?: Range): boolean => {
     const nullEntries = dailyEntries?.filter(
       (item) =>
         item.logged === 0 &&
@@ -66,7 +76,7 @@ const TimebankContent = (props: Props) => {
     );
     return nullEntries?.length
       ? DateTime.fromJSDate(nullEntries[0].date).toISODate() === date.toISODate()
-      : false;
+      : String(range?.end?.minus({ days: 1 }).toISODate()) < String(date.toISODate()) || false;
   };
 
   /**
