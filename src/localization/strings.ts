@@ -9,6 +9,9 @@ export interface Localized extends LocalizedStringsMethods {
   /**
    * Translations related to generic words
    */
+  placeHolder: {
+    notYetImplemented: string;
+  },
   label: {
     currentLocaleLabel: string;
   };
@@ -22,7 +25,11 @@ export interface Localized extends LocalizedStringsMethods {
     timebank: string;
     vacations: string;
     onCall: string;
-    timebank: string;
+    admin: string;
+    changeLanguage: string;
+    openSettings: string;
+    openUserMenu: string;
+    logoAlt: string;
   };
   /**
    * Translations related to errors
@@ -39,12 +46,6 @@ export interface Localized extends LocalizedStringsMethods {
     logoAlt: string;
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
-  };
-  /**
-   * Translations related to place holders
-   */
-  placeHolder: {
-    notYetImplemented: string;
   };
   /**
    * Translations related to localization
@@ -90,7 +91,6 @@ export interface Localized extends LocalizedStringsMethods {
     year: string;
     allTime: string;
   };
-
 }
 
 /**

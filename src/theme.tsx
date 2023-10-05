@@ -1,15 +1,7 @@
-import { Theme, ToggleButtonGroup, createTheme, styled } from "@mui/material";
+import { Theme, createTheme } from "@mui/material";
 import NunitoSans from "../resources/fonts/NunitoSans.ttf";
 
 export const theme: Theme = createTheme({
-  palette: {
-    primary: {
-      main: "#222"
-    },
-    secondary: {
-      main: "#f78da7"
-    }
-  },
   typography: {
     fontFamily: "Nunito Sans",
     fontWeightRegular: 400,

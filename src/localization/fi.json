@@ -9,21 +9,27 @@
     "hello": "Hei",
     "logout": "Kirjaudu ulos",
     "home": "Koti",
-    "timebank": "Aikapankki",
+    "timebank": "Timebank",
     "vacations": "Lomat",
     "onCall": "Päivystys",
     "admin": "Ylläpito",
     "changeLanguage": "Vaihda kieltä",
     "openSettings": "Asetukset",
     "openUserMenu": "Käyttäjävalikko",
-    "logoAlt": "Metatavu logo",
-    "timebank": "Aikapankki"
+    "logoAlt": "Metatavu logo"
   },
   "error": {
     "totalTimeFetch": "Yhteenvetotietojen haku epäonnistui",
     "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
-    "dailyEntriesNotFound": "Aikakirjauksia ei löydetty"
+    "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
+    "admin":"A",
+    "changeLanguage":"A",
+    "openSettings":"A",
+    "openUserMenu":"A",
+    "logoAlt":"A",
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   },
   "localization": {
     "en": "EN",
@@ -59,9 +65,5 @@
     "month": "Kuukausi",
     "year": "Vuosi",
     "allTime": "Koko ajalta"
-  },
-  "errors": {
-    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
-    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   }
 }

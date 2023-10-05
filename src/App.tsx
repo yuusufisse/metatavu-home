@@ -11,6 +11,7 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import strings from "./localization/strings";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
+import ErrorScreen from "./components/screens/error-screen";
 
 /**
  * Application component
@@ -44,11 +45,9 @@ const App = () => {
                 dateAdapter={AdapterLuxon}
                 adapterLocale={strings.localization.time}
               >
-                <CssBaseline>
-              <RouterProvider router={router} />
+                <RouterProvider router={router} />
               </LocalizationProvider>
-              </CssBaseline>
-          </AuthenticationProvider>
+            </AuthenticationProvider>
           </ErrorHandler>
         </CssBaseline>
       </ThemeProvider>
