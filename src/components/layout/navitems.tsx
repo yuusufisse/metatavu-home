@@ -15,14 +15,23 @@ const NavItems = () => {
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
+  /**
+   * Handles opening navigation menu
+   */
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
+  /**
+   * Handles closing navigation menu
+   */
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
+  /**
+   * Handles navigation menu item click
+   */
   const handleNavItemClick = (event: MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLLinkElement;
     setCurrentPage(target.innerText);
