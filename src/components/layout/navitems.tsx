@@ -32,7 +32,11 @@ const NavItems = () => {
     <>
       <Link to="/">
         <Button sx={{ marginLeft: -1, height: 48 }}>
-          <img src={Logo} alt={strings.header.logoAlt} style={{ height: 40, filter: "invert(100%)" }} />
+          <img
+            src={Logo}
+            alt={strings.header.logoAlt}
+            style={{ height: 40, filter: "invert(100%)" }}
+          />
         </Button>
       </Link>
       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -65,14 +69,14 @@ const NavItems = () => {
             display: { xs: "block", md: "none" }
           }}
         >
-            <MenuItem
-              component={Link}
-              to={'/'} 
-              key={`${strings.header.timebank}mobile`}
-              onClick={handleNavItemClick}
-            >
-              {strings.header.home}
-            </MenuItem>
+          <MenuItem
+            component={Link}
+            to={"/"}
+            key={`${strings.header.timebank}mobile`}
+            onClick={handleNavItemClick}
+          >
+            {strings.header.home}
+          </MenuItem>
         </Menu>
         <Typography variant="button" marginTop={1.5}>
           {currentPage}
@@ -80,14 +84,14 @@ const NavItems = () => {
       </Box>
       {/* DESKTOP MENU */}
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-          <Link
-            key={strings.header.timebank}
-            to={'/'}
-            style={{ margin: 2, display: "block" }}
-            onClick={handleNavItemClick}
-          >
-            <Button>{strings.header.home}</Button>
-          </Link>
+        <Link
+          key={strings.header.timebank}
+          to={"/"}
+          style={{ margin: 2, display: "block" }}
+          onClick={handleNavItemClick}
+        >
+          <Button>{strings.header.home}</Button>
+        </Link>
       </Box>
     </>
   );
