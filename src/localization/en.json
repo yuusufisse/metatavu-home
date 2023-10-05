@@ -9,8 +9,14 @@
     "hello": "Hi",
     "logout": "Log out",
     "home": "Home",
+    "timebank": "Timebank",
+    "vacations": "Vacations",
+    "onCall": "On Call",
     "admin": "Administration",
-    "onCall": "On Call"
+    "changeLanguage": "Change language",
+    "openSettings": "Open settings",
+    "openUserMenu": "Open user menu",
+    "logoAlt": "Metatavu logo"
   },
   "localization": {
     "en": "EN",
@@ -19,5 +25,9 @@
   "timebank": {
     "balance": "Balance",
     "yourBalanceIs": "Your balance is"
+  },
+  "errors": {
+    "fetchFailedGeneral": "There was an error fetching data",
+    "fetchFailedNoEntriesGeneral": "No time entries found"
   }
 }
