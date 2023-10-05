@@ -3,8 +3,6 @@ import strings from "../../localization/strings";
 import { ToggleButton, ToggleButtonGroup, Tooltip, styled } from "@mui/material";
 import { languageAtom } from "../../atoms/languageAtom";
 import { Language } from "../../types";
-import { useEffect, useState } from "react";
-
 /**
  * Styled toggle button group component for language switching
  */
@@ -30,13 +28,16 @@ export const LanguageButtons = styled(ToggleButtonGroup)(({ theme }) => ({
  * LocalizationButton component
  */
 const LocalizationButton = () => {
-  const [selected, setSelected] = useState(false);
   const [language, setLanguage] = useAtom(languageAtom);
-  const availableLanguages = strings.getAvailableLanguages();
 
-  useEffect(() => {
-    setLanguage(availableLanguages[selected ? 1 : 0] as Language);
-  }, [selected]);
+  /**
+   * Handles localization change
+   * @param locale locale to change to
+   */
+  const handleLocaleChange = (locale: string) => {
+    const newLocale = locale === "en" ? "fi" : "en";
+    setLanguage(newLocale as Language);
+  };
 
   return (
     <LanguageButtons
@@ -47,10 +48,7 @@ const LocalizationButton = () => {
       <Tooltip title={strings.header.changeLanguage}>
         <ToggleButton
           value={language}
-          selected={selected}
-          onChange={() => {
-            setSelected(!selected);
-          }}
+          onChange={() => handleLocaleChange(language)}
         >
           {language}
         </ToggleButton>
