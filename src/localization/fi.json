@@ -9,8 +9,14 @@
     "hello": "Hei",
     "logout": "Kirjaudu ulos",
     "home": "Koti",
-    "admin": "Ylläpito",
+    "timebank": "Aikapankki",
+    "vacations": "Lomat",
     "onCall": "Päivystys",
+    "admin": "Ylläpito",
+    "changeLanguage": "Vaihda kieltä",
+    "openSettings": "Asetukset",
+    "openUserMenu": "Käyttäjävalikko",
+    "logoAlt": "Metatavu logo",
     "timebank": "Aikapankki"
   },
   "error": {
@@ -53,5 +59,9 @@
     "month": "Kuukausi",
     "year": "Vuosi",
     "allTime": "Koko ajalta"
+  },
+  "errors": {
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   }
 }

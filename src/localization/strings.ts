@@ -19,7 +19,8 @@ export interface Localized extends LocalizedStringsMethods {
     hello: string;
     logout: string;
     home: string;
-    admin: string;
+    timebank: string;
+    vacations: string;
     onCall: string;
     timebank: string;
   };
@@ -31,6 +32,13 @@ export interface Localized extends LocalizedStringsMethods {
     totalTimeNotFound: string;
     dailyEntriesFetch: string;
     dailyEntriesNotFound: string;
+    admin: string;
+    changeLanguage: string;
+    openSettings: string;
+    openUserMenu: string;
+    logoAlt: string;
+    fetchFailedGeneral: string;
+    fetchFailedNoEntriesGeneral: string;
   };
   /**
    * Translations related to place holders
@@ -82,6 +90,7 @@ export interface Localized extends LocalizedStringsMethods {
     year: string;
     allTime: string;
   };
+
 }
 
 /**
