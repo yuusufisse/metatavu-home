@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { errorAtom } from "../../../atoms/error";
 import { PersonTotalTime } from "../../../generated/client";
+import strings from "../../../localization/strings";
 
 /**
  * Home screen component
@@ -30,10 +31,10 @@ const HomeScreen = () => {
         });
         setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
-        setError(`${"Person fetch has failed."}, ${error}`);
+        setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
       }
     } else {
-      setError("Your account does not have any time bank entries.");
+      setError(strings.errors.fetchFailedNoEntriesGeneral);
     }
   };
 

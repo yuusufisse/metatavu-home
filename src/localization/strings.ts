@@ -49,6 +49,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   errors:{
     fetchFailedGeneral: string;
+    fetchFailedNoEntriesGeneral: string;
   }
 }
 

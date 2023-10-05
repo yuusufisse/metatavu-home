@@ -23,6 +23,7 @@
     "yourBalanceIs": "Your balance is"
   },
   "errors": {
-    "fetchFailedGeneral": "There was an error fetching data"
+    "fetchFailedGeneral": "There was an error fetching data",
+    "fetchFailedNoEntriesGeneral": "No time entries found"
   }
 }

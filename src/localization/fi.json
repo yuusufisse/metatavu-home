@@ -29,6 +29,7 @@
     "yourBalanceIs": "Saldosi on"
   },
   "errors": {
-    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui"
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   }
 }

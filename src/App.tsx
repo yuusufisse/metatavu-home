@@ -1,7 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import ErrorScreen from "./components/screens/error-screen";
 import AuthenticationProvider from "./components/providers/authentication-provider";
-import ErrorHandler from "./components/contexts/error-handler";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { useAtomValue } from "jotai";
@@ -23,7 +21,6 @@ const App = () => {
         {
           path: "/",
           element: <HomeScreen />,
-          errorElement: <ErrorScreen />
         }
       ]
     }
@@ -32,13 +29,11 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <ErrorHandler>
           <AuthenticationProvider>
             <CssBaseline>
               <RouterProvider router={router} />
             </CssBaseline>
           </AuthenticationProvider>
-        </ErrorHandler>
       </ThemeProvider>
     </div>
   );
