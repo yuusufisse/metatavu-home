@@ -1,6 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthenticationProvider from "./components/providers/authentication-provider";
-import ErrorHandler from "./components/contexts/error-handler";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests/vacation-requests-screen";
@@ -9,8 +8,9 @@ import { languageAtom } from "./atoms/languageAtom";
 import HomeScreen from "./components/screens/home/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
-import Layout from "./components/layout/layout";
 import ErrorScreen from "./components/screens/error-screen";
+import Layout from "./components/layout/layout";
+import ErrorHandler from "./components/contexts/error-handler";
 
 /**
  * Application component
@@ -44,7 +44,9 @@ const App = () => {
           <ErrorHandler>
             <AuthenticationProvider>
               <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
-                <RouterProvider router={router} />
+                <CssBaseline>
+                  <RouterProvider router={router} />
+                </CssBaseline>
               </LocalizationProvider>
             </AuthenticationProvider>
           </ErrorHandler>
