@@ -47,7 +47,7 @@ const BalanceCard = ({ personTotalTime }: Props) => {
                 <Alert severity="error">{strings.errors.fetchFailedGeneral}</Alert>
               </Grid>
             ) : (
-              <Grid xs={12}>
+              <Grid item xs={12}>
                 <Skeleton sx={{height:48}}/>
               </Grid>
             )}
