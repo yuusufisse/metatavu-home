@@ -6,6 +6,7 @@ import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
 import HomeScreen from "./components/screens/home/home-screen";
 import Layout from "./components/layout/layout";
+import ErrorHandler from "./components/contexts/error-handler";
 
 /**
  * Application component
@@ -20,7 +21,7 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <HomeScreen />,
+          element: <HomeScreen />
         }
       ]
     }
@@ -29,11 +30,13 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
+        <ErrorHandler>
           <AuthenticationProvider>
             <CssBaseline>
               <RouterProvider router={router} />
             </CssBaseline>
           </AuthenticationProvider>
+        </ErrorHandler>
       </ThemeProvider>
     </div>
   );
