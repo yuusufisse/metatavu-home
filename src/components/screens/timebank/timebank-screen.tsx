@@ -8,6 +8,7 @@ import { personAtom } from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
 import TimebankContent from "./timebank-content";
 import { DateTime } from "luxon";
+import strings from "../../../localization/strings";
 
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
@@ -15,8 +16,7 @@ const TimebankScreen = () => {
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const person = useAtomValue(personAtom);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [personTotalTimeLoading, setPersonTotalTimeLoading] = useState(true);
+  const [personTotalTimeLoading, setPersonTotalTimeLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
@@ -35,10 +35,10 @@ const TimebankScreen = () => {
         });
         setPersonTotalTime(fetchedPersonTotalTime[0]);
       } catch (error) {
-        setError(`${"Person fetch has failed."}, ${error}`);
+        setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
     } else {
-      setError("Your account does not have any time bank entries.");
+      setError(strings.error.totalTimeNotFound);
     }
     setPersonTotalTimeLoading(false);
   };
@@ -56,10 +56,10 @@ const TimebankScreen = () => {
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(fetchedDailyEntries[0]);
       } catch (error) {
-        setError(`${"Person fetch has failed."}, ${error}`);
+        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
     } else {
-      setError("No daily entries found.");
+      setError(strings.error.dailyEntriesNotFound);
     }
   };
 
@@ -101,11 +101,7 @@ const TimebankScreen = () => {
     getPersonDailyEntries();
   }, [person]);
 
-  useEffect(() => {
-    if (personTotalTime && dailyEntries) setInitialLoading(false);
-  }, [personTotalTime, dailyEntries]);
-
-  if (initialLoading)
+  if (!personDailyEntry && !dailyEntries && !personTotalTime)
     return (
       <Grid
         sx={{
@@ -120,34 +116,21 @@ const TimebankScreen = () => {
         <CircularProgress />
       </Grid>
     );
-  else
+  else if (personDailyEntry && dailyEntries && personTotalTime)
     return (
-      <Grid
-        sx={{
-          borderRadius: "15px",
-          backgroundColor: "#f2f2f2",
-          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-          p: 3
-        }}
-      >
-        <>
-          {personDailyEntry && dailyEntries && personTotalTime ? (
-            <TimebankContent
-              personTotalTimeLoading={personTotalTimeLoading}
-              setPersonTotalTimeLoading={setPersonTotalTimeLoading}
-              userProfile={userProfile}
-              handleDailyEntryChange={handleDailyEntryChange}
-              handleBalanceViewChange={handleBalanceViewChange}
-              personDailyEntry={personDailyEntry}
-              dailyEntries={dailyEntries}
-              personTotalTime={personTotalTime}
-              timespanSelector={timespanSelector}
-            />
-          ) : (
-            setError("Could not find time entries")
-          )}
-        </>
-      </Grid>
+      <>
+        <TimebankContent
+          personTotalTimeLoading={personTotalTimeLoading}
+          setPersonTotalTimeLoading={setPersonTotalTimeLoading}
+          userProfile={userProfile}
+          handleDailyEntryChange={handleDailyEntryChange}
+          handleBalanceViewChange={handleBalanceViewChange}
+          personDailyEntry={personDailyEntry}
+          dailyEntries={dailyEntries}
+          personTotalTime={personTotalTime}
+          timespanSelector={timespanSelector}
+        />
+      </>
     );
 };
 

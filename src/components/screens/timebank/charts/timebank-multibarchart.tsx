@@ -44,7 +44,7 @@ const TimebankMultiBarChart = (props: Props) => {
               type="number"
               axisLine={false}
               tickFormatter={(value) => getHours(value as number)}
-              domain={[0, (dataMax: number) => dataMax * 1.1]}
+              domain={[0, (dataMax: number) => dataMax]}
             />
             <XAxis type="category" dataKey="name" />
             <Tooltip content={renderCustomizedTooltipBarChart} />

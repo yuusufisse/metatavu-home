@@ -13,6 +13,12 @@
     "onCall": "On Call",
     "timebank": "Timebank"
   },
+   "error": {
+    "totalTimeFetch": "Retrieving total time data has failed",
+    "totalTimeNotFound": "Could not find total time data",
+    "dailyEntriesFetch": "Retrieving daily entries has failed",
+    "dailyEntriesNotFound": "Could not find daily entries"
+  },
   "localization": {
     "en": "EN",
     "fi": "FI",

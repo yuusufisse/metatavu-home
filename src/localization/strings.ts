@@ -24,6 +24,15 @@ export interface Localized extends LocalizedStringsMethods {
     timebank: string;
   };
   /**
+   * Translations related to errors
+   */
+  error: {
+    totalTimeFetch: string;
+    totalTimeNotFound: string;
+    dailyEntriesFetch: string;
+    dailyEntriesNotFound: string;
+  };
+  /**
    * Translations related to place holders
    */
   placeHolder: {

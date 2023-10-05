@@ -36,13 +36,7 @@ const TimebankOverviewChart = (props: Props) => {
           <YAxis type="category" dataKey="name" />
           <Tooltip content={renderCustomizedTooltipBarChart} />
           <Legend />
-
-          {[data[0], data[1]].flatMap((item: any, idx: number) => {
-            console.log(data);
-            console.log(Object.keys(item));
-          })}
-
-          {/* <Bar
+          <Bar
             dataKey="billableProject"
             name={strings.timebank.billableProject}
             barSize={60}
@@ -69,7 +63,7 @@ const TimebankOverviewChart = (props: Props) => {
             barSize={60}
             stackId="a"
             fill={theme.palette.info.main}
-          /> */}
+          />
         </BarChart>
       </ResponsiveContainer>
     </>

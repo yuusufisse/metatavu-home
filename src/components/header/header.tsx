@@ -47,40 +47,40 @@ const Header = () => {
   }, [person]);
 
   return (
-      <Container sx={{ fontFamily: "Nunito Sans" }}>
-        <Grid
-          container
-          sx={{
-            borderRadius: "15px",
-            backgroundColor: "#f2f2f2",
-            boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-            p: 3
-          }}
-        >
-          <Grid item xs={6} md={10}>
-            <BalanceCard personTotalTime={personTotalTime} />
-          </Grid>
-          <Grid item xs={6} md={2}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <LocalizationButtons />
-            </Box>
-          </Grid>
+    <Container sx={{ fontFamily: "Nunito Sans" }}>
+      <Grid
+        container
+        sx={{
+          borderRadius: "15px",
+          backgroundColor: "#f2f2f2",
+          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+          p: 3
+        }}
+      >
+        <Grid item xs={6} md={10}>
+          <BalanceCard personTotalTime={personTotalTime} />
         </Grid>
-        <br />
-        <Grid
-          container
-          sx={{
-            borderRadius: "15px",
-            backgroundColor: "#f2f2f2",
-            boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-            p: 0
-          }}
-        >
-          <HomeNav auth={auth} />
+        <Grid item xs={6} md={2}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <LocalizationButtons />
+          </Box>
         </Grid>
-        <br/>
-        <Outlet/>
-      </Container>
+      </Grid>
+      <br />
+      <Grid
+        container
+        sx={{
+          borderRadius: "15px",
+          backgroundColor: "#f2f2f2",
+          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+          p: 0
+        }}
+      >
+        <HomeNav auth={auth} />
+      </Grid>
+      <br />
+      <Outlet />
+    </Container>
   );
 };
 

@@ -74,7 +74,7 @@ const DateRangePicker = (props: Props) => {
         }}
         label={"End"}
         disableFuture
-        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
+        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
         value={DateTime.fromJSDate(dailyEntries[0].date)}
         minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
         maxDate={DateTime.fromJSDate(dailyEntries[0].date)}

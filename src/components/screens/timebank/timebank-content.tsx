@@ -9,7 +9,8 @@ import {
   Checkbox,
   ListItemText,
   CircularProgress,
-  Typography
+  Typography,
+  Grid
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
@@ -65,7 +66,7 @@ const TimebankContent = (props: Props) => {
    * Also prevents selecting a start date that is later than end date in the date range picker.
    * @param date DateTime object passed from the date picker
    * @param range Optional Range object to compare start and end dates
-   * @returns boolean value which controls the disabled dates
+   * @returns boolean value which controls the disabled dates. 
    */
   const disableNullEntries = (date: DateTime, range?: Range): boolean => {
     const nullEntries = dailyEntries?.filter(
@@ -167,89 +168,147 @@ const TimebankContent = (props: Props) => {
 
   return (
     <>
-      <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
-        {strings.timebank.barChartDescription}
-      </Typography>
+      <Grid
+        sx={{
+          borderRadius: "15px",
+          backgroundColor: "#f2f2f2",
+          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+          p: 3
+        }}
+      >
+        <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
+          {strings.timebank.barChartDescription}
+        </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Select
-          sx={{
-            width: "50%",
-            marginRight: "1%",
-            textAlign: "center"
-          }}
-          value={timespanSelector}
-          onChange={handleBalanceViewChange}
-        >
-          <MenuItem value={"Week"}>{strings.timeExpressions.week}</MenuItem>
-          <MenuItem value={"Month"}>{strings.timeExpressions.month}</MenuItem>
-          <MenuItem value={"All"}>{strings.timeExpressions.allTime}</MenuItem>
-        </Select>
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Select
+            sx={{
+              width: "50%",
+              marginRight: "1%",
+              textAlign: "center"
+            }}
+            value={timespanSelector}
+            onChange={handleBalanceViewChange}
+          >
+            <MenuItem value={"Week"}>{strings.timeExpressions.week}</MenuItem>
+            <MenuItem value={"Month"}>{strings.timeExpressions.month}</MenuItem>
+            <MenuItem value={"All"}>{strings.timeExpressions.allTime}</MenuItem>
+          </Select>
+        </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
-        {renderOverViewChart()}
-      </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
+          {renderOverViewChart()}
+        </Box>
+      </Grid>
+      <br />
+      <Grid
+        sx={{
+          borderRadius: "15px",
+          backgroundColor: "#f2f2f2",
+          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
+          p: 3
+        }}
+      >
+        <Typography variant="h5" sx={{ textAlign: "center", mb: "1%" }}>
+          {strings.timebank.pieChartDescription}
+        </Typography>
 
-      <Typography variant="h5" sx={{ textAlign: "center", mb: "1%" }}>
-        {strings.timebank.pieChartDescription}
-      </Typography>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+          {renderDatePickers()}
+          <FormControlLabel
+            sx={{ display: "inline" }}
+            label="By range"
+            control={
+              <Checkbox
+                defaultChecked={byRange.dailyEntries}
+                onClick={() =>
+                  setByRange({ ...byRange, dailyEntries: byRange.dailyEntries ? false : true })
+                }
+              />
+            }
+          />
+        </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-        {renderDatePickers()}
-        <FormControlLabel
-          sx={{ display: "inline" }}
-          label="By range"
-          control={
-            <Checkbox
-              defaultChecked={byRange.dailyEntries}
-              onClick={() =>
-                setByRange({ ...byRange, dailyEntries: byRange.dailyEntries ? false : true })
-              }
-            />
-          }
-        />
-      </Box>
-
-      <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
-        {renderDailyEntryOrRangeChart()}
-        <List dense sx={{ marginLeft: "5%" }}>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.logged}
-              secondary={getHoursAndMinutes(Number(personDailyEntry.logged))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              sx={{ color: theme.palette.success.dark }}
-              primary={strings.timebank.billableProject}
-              secondary={getHoursAndMinutes(Number(personDailyEntry.billableProjectTime))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              sx={{ color: theme.palette.success.light }}
-              primary={strings.timebank.nonBillableProject}
-              secondary={getHoursAndMinutes(Number(personDailyEntry.nonBillableProjectTime))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              sx={{ color: theme.palette.warning.main }}
-              primary={strings.timebank.internal}
-              secondary={getHoursAndMinutes(Number(personDailyEntry.internalTime))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              sx={{ color: theme.palette.info.main }}
-              primary={strings.timebank.expected}
-              secondary={getHoursAndMinutes(Number(personDailyEntry.expected))}
-            />
-          </ListItem>
-        </List>
-      </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
+          {renderDailyEntryOrRangeChart()}
+          <List dense sx={{ marginLeft: "5%" }}>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.logged}
+                secondary={
+                  byRange.dailyEntries
+                    ? getHoursAndMinutes(
+                        Number(selectedEntries?.reduce((prev, next) => prev + next.logged, 0))
+                      )
+                    : getHoursAndMinutes(Number(personDailyEntry.logged))
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                sx={{ color: theme.palette.success.dark }}
+                primary={strings.timebank.billableProject}
+                secondary={
+                  byRange.dailyEntries
+                    ? getHoursAndMinutes(
+                        Number(
+                          selectedEntries?.reduce(
+                            (prev, next) => prev + next.billableProjectTime,
+                            0
+                          )
+                        )
+                      )
+                    : getHoursAndMinutes(Number(personDailyEntry.billableProjectTime))
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                sx={{ color: theme.palette.success.light }}
+                primary={strings.timebank.nonBillableProject}
+                secondary={
+                  byRange.dailyEntries
+                    ? getHoursAndMinutes(
+                        Number(
+                          selectedEntries?.reduce(
+                            (prev, next) => prev + next.nonBillableProjectTime,
+                            0
+                          )
+                        )
+                      )
+                    : getHoursAndMinutes(Number(personDailyEntry.nonBillableProjectTime))
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                sx={{ color: theme.palette.warning.main }}
+                primary={strings.timebank.internal}
+                secondary={
+                  byRange.dailyEntries
+                    ? getHoursAndMinutes(
+                        Number(selectedEntries?.reduce((prev, next) => prev + next.internalTime, 0))
+                      )
+                    : getHoursAndMinutes(Number(personDailyEntry.internalTime))
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                sx={{ color: theme.palette.info.main }}
+                primary={strings.timebank.expected}
+                secondary={
+                  byRange.dailyEntries
+                    ? getHoursAndMinutes(
+                        Number(selectedEntries?.reduce((prev, next) => prev + next.expected, 0))
+                      )
+                    : getHoursAndMinutes(Number(personDailyEntry.expected))
+                }
+              />
+            </ListItem>
+          </List>
+        </Box>
+      </Grid>
     </>
   );
 };
