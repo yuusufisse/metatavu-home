@@ -63,24 +63,3 @@ export const theme: Theme = createTheme({
     borderRadius: 15
   }
 });
-
-/**
- * Styled toggle button group component for language switching
- */
-export const LanguageButtons = styled(ToggleButtonGroup)(({ theme }) => ({
-  "& .MuiToggleButtonGroup-grouped": {
-    margin: theme.spacing(1),
-    border: 0,
-    width: 48,
-    height: 48,
-    "&.Mui-disabled": {
-      border: 0
-    },
-    "&:not(:first-of-type)": {
-      borderRadius: "50%"
-    },
-    "&:first-of-type": {
-      borderRadius: "50%"
-    }
-  }
-}));
