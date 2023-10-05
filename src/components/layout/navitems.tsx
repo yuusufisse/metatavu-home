@@ -31,7 +31,7 @@ const NavItems = () => {
   return (
     <>
       <Link to="/">
-        <Button sx={{ marginLeft: -1, height: 48 }} onClick={() => setCurrentPage("Home")}>
+        <Button sx={{ marginLeft: -1, height: 48 }}>
           <img src={Logo} alt={strings.header.logoAlt} style={{ height: 40, filter: "invert(100%)" }} />
         </Button>
       </Link>

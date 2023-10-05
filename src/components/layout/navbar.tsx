@@ -13,7 +13,6 @@ import strings from "../../localization/strings";
 import { authAtom } from "../../atoms/auth";
 import { useAtomValue } from "jotai";
 import NavItems from "./navitems";
-//import NavItems from "./navitems";  // Unused currently but ready to be used
 
 /**
  * NavBar component
@@ -49,14 +48,13 @@ const NavBar = () => {
           <Toolbar disableGutters>
             <NavItems />
             <LocalizationButtons />
-            <Box sx={{ flexGrow: 0 }}>
+            <Box>
               <Tooltip title={strings.header.openUserMenu}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="" />
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: "45px" }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
