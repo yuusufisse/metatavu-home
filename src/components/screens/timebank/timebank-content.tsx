@@ -10,7 +10,7 @@ import {
   ListItemText,
   CircularProgress,
   Typography,
-  Grid
+  Card
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
@@ -66,7 +66,7 @@ const TimebankContent = (props: Props) => {
    * Also prevents selecting a start date that is later than end date in the date range picker.
    * @param date DateTime object passed from the date picker
    * @param range Optional Range object to compare start and end dates
-   * @returns boolean value which controls the disabled dates. 
+   * @returns boolean value which controls the disabled dates.
    */
   const disableNullEntries = (date: DateTime, range?: Range): boolean => {
     const nullEntries = dailyEntries?.filter(
@@ -168,14 +168,7 @@ const TimebankContent = (props: Props) => {
 
   return (
     <>
-      <Grid
-        sx={{
-          borderRadius: "15px",
-          backgroundColor: "#f2f2f2",
-          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-          p: 3
-        }}
-      >
+      <Card sx={{ p: 3 }}>
         <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
           {strings.timebank.barChartDescription}
         </Typography>
@@ -199,16 +192,9 @@ const TimebankContent = (props: Props) => {
         <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
           {renderOverViewChart()}
         </Box>
-      </Grid>
+      </Card>
       <br />
-      <Grid
-        sx={{
-          borderRadius: "15px",
-          backgroundColor: "#f2f2f2",
-          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-          p: 3
-        }}
-      >
+      <Card sx={{ p: 3 }}>
         <Typography variant="h5" sx={{ textAlign: "center", mb: "1%" }}>
           {strings.timebank.pieChartDescription}
         </Typography>
@@ -308,7 +294,7 @@ const TimebankContent = (props: Props) => {
             </ListItem>
           </List>
         </Box>
-      </Grid>
+      </Card>
     </>
   );
 };

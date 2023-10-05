@@ -6,14 +6,15 @@ import { errorAtom } from "../../../atoms/error";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
-import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { PersonTotalTime } from "../../../generated/client";
+import { personAtom } from "../../../atoms/person";
+import { Link } from "react-router-dom";
 
 /**
  * Component for displaying user's balance
  */
 const BalanceCard = () => {
-  const userProfile = useAtomValue(userProfileAtom);
+  const person = useAtomValue(personAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,24 +25,21 @@ const BalanceCard = () => {
    */
   const getPersons = async () => {
     setIsLoading(true);
-    const fetchedPersons = await personsApi.listPersons({ active: true });
-    const loggedInPerson = fetchedPersons.filter((person) => person.keycloakId === userProfile?.id);
-
     try {
       const fetchedPerson = await personsApi.listPersonTotalTime({
-        personId: loggedInPerson[0].id
+        personId: Number(person?.id)
       });
       setPersonTotalTime(fetchedPerson[0]);
     } catch (error) {
-      setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
+      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
     }
 
     setIsLoading(false);
   };
 
   useEffect(() => {
-    getPersons();
-  }, [authAtom]);
+    if (person) getPersons();
+  }, [person]);
 
   /**
    * Renders person's total time
@@ -50,33 +48,29 @@ const BalanceCard = () => {
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
     if (!personTotalTime) {
-      return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>
+      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
 
-    return (
-      <Typography>
-        {getHoursAndMinutes(personTotalTime.balance)}
-      </Typography>
-    )
-  }
+    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+  };
 
   return (
     <>
-      <Card>
-        <CardContent>
-          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
-          <Grid container>
-            <Grid item xs={1}>
-              <ScheduleIcon />
+      <Link to={"/timebank"} style={{ textDecoration: "none" }}>
+        <Card>
+          <CardContent>
+            <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
+            <Grid container>
+              <Grid item xs={1}>
+                <ScheduleIcon />
+              </Grid>
+              <Grid item xs={11}>
+                {isLoading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+              </Grid>
             </Grid>
-            <Grid item xs={11}>
-              {isLoading
-                ? <Skeleton />
-                : renderPersonTotalTime(personTotalTime)}
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Link>
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
-import { Grid, CircularProgress, SelectChangeEvent } from "@mui/material";
+import { CircularProgress, SelectChangeEvent, Card } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
@@ -103,18 +103,9 @@ const TimebankScreen = () => {
 
   if (!personDailyEntry && !dailyEntries && !personTotalTime)
     return (
-      <Grid
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          borderRadius: "15px",
-          backgroundColor: "#f2f2f2",
-          boxShadow: "5px 5px 5px 0 rgba(50,50,50,0.1)",
-          p: 3
-        }}
-      >
-        <CircularProgress />
-      </Grid>
+      <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
+        <CircularProgress sx={{ scale: "150%" }} />
+      </Card>
     );
   else if (personDailyEntry && dailyEntries && personTotalTime)
     return (
