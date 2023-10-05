@@ -18,7 +18,11 @@ export interface Localized extends LocalizedStringsMethods {
   header: {
     hello: string;
     logout: string;
-    pages: string[];
+    home: string;
+    timebank: string;
+    vacations: string;
+    onCall: string;
+    admin: string;
     changeLanguage: string;
     openSettings: string;
     openUserMenu: string;
@@ -47,10 +51,10 @@ export interface Localized extends LocalizedStringsMethods {
   /**
    * Translations related to errors
    */
-  errors:{
+  errors: {
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
-  }
+  };
 }
 
 /**

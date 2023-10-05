@@ -8,7 +8,11 @@
   "header": {
     "hello": "Hi",
     "logout": "Log out",
-    "pages": ["Home", "Timebank", "Vacations", "On Call", "Administration"],
+    "home": "Home",
+    "timebank": "Timebank",
+    "vacations": "Vacations",
+    "onCall": "On Call",
+    "admin": "Administration",
     "changeLanguage": "Change language",
     "openSettings": "Open settings",
     "openUserMenu": "Open user menu",

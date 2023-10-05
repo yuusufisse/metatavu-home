@@ -12,9 +12,7 @@ import LocalizationButtons from "../layout-components/localization-buttons";
 import strings from "../../localization/strings";
 import { authAtom } from "../../atoms/auth";
 import { useAtomValue } from "jotai";
-import Logo from "../../../resources/img/Metatavu-icon.svg";
-import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
+import NavItems from "./navitems";
 //import NavItems from "./navitems";  // Unused currently but ready to be used
 
 /**
@@ -49,18 +47,7 @@ const NavBar = () => {
       <AppBar position="relative">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link to="/">
-              {/* Remove when showing navitems */}
-              <Button sx={{ marginLeft: -1, height: 48 }}>
-                <img
-                  src={Logo}
-                  alt={strings.header.logoAlt}
-                  style={{ height: 40, filter: "invert(100%)" }}
-                />
-              </Button>
-            </Link>
-            <Box sx={{ flexGrow: 1 }} /> {/* Remove when showing navitems */}
-            {/* <NavItems /> */}
+            <NavItems />
             <LocalizationButtons />
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title={strings.header.openUserMenu}>

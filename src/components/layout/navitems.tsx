@@ -15,8 +15,6 @@ const NavItems = () => {
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
-  const pageRoutes = ["/", "/timebank", "/vacations", "/oncall", "/admin"]; //this is not very elegant currently but works for now
-
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -67,16 +65,14 @@ const NavItems = () => {
             display: { xs: "block", md: "none" }
           }}
         >
-          {strings.header.pages.slice(1).map((page, index) => (
             <MenuItem
               component={Link}
-              to={pageRoutes.slice(1)[index]}
-              key={strings.header.pages[index]}
+              to={'/'} 
+              key={`${strings.header.timebank}mobile`}
               onClick={handleNavItemClick}
             >
-              {page}
+              {strings.header.home}
             </MenuItem>
-          ))}
         </Menu>
         <Typography variant="button" marginTop={1.5}>
           {currentPage}
@@ -84,16 +80,14 @@ const NavItems = () => {
       </Box>
       {/* DESKTOP MENU */}
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-        {strings.header.pages.slice(1).map((page, index) => (
           <Link
-            key={page}
-            to={pageRoutes.slice(1)[index]}
+            key={strings.header.timebank}
+            to={'/'}
             style={{ margin: 2, display: "block" }}
             onClick={handleNavItemClick}
           >
-            <Button>{page}</Button>
+            <Button>{strings.header.home}</Button>
           </Link>
-        ))}
       </Box>
     </>
   );
