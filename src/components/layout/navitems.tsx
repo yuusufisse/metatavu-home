@@ -12,7 +12,6 @@ import strings from "../../localization/strings";
  */
 const NavItems = () => {
   const [currentPage, setCurrentPage] = useState("");
-
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   /**

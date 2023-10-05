@@ -32,6 +32,7 @@ const LocalizationButton = () => {
 
   /**
    * Handles localization change
+   * 
    * @param locale locale to change to
    */
   const handleLocaleChange = (locale: string) => {

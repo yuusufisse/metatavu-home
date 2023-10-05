@@ -22,6 +22,8 @@ const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   /**
    * Handles opening user menu
+   *
+   * @param event mouse event
    */
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -51,7 +53,7 @@ const NavBar = () => {
             <Box>
               <Tooltip title={strings.header.openUserMenu}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="" />
+                  <Avatar />
                 </IconButton>
               </Tooltip>
               <Menu
