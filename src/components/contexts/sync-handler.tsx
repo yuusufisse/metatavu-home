@@ -52,6 +52,7 @@ const SyncHandler = ({
       >
         <DatePicker
           label="Sync from"
+          maxDate={DateTime.now()}
           value={syncStartDate}
           onChange={(newValue: DateTime | null) => newValue && setSyncStartDate(newValue)}
         />
