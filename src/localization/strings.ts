@@ -19,8 +19,14 @@ export interface Localized extends LocalizedStringsMethods {
     hello: string;
     logout: string;
     home: string;
-    admin: string;
+    timebank: string;
+    vacations: string;
     onCall: string;
+    admin: string;
+    changeLanguage: string;
+    openSettings: string;
+    openUserMenu: string;
+    logoAlt: string;
   };
   /**
    * Translations related to place holders
@@ -41,6 +47,13 @@ export interface Localized extends LocalizedStringsMethods {
   timebank: {
     balance: string;
     yourBalanceIs: string;
+  };
+  /**
+   * Translations related to errors
+   */
+  errors: {
+    fetchFailedGeneral: string;
+    fetchFailedNoEntriesGeneral: string;
   };
 }
 
