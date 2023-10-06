@@ -31,7 +31,7 @@ const TimebankScreen = () => {
       try {
         const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
           personId: person?.id,
-          timespan: timespan
+          timespan: timespan || Timespan.WEEK
         });
         setPersonTotalTime(fetchedPersonTotalTime[0]);
       } catch (error) {
