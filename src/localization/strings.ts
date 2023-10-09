@@ -55,6 +55,21 @@ export interface Localized extends LocalizedStringsMethods {
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
   };
+  /**
+   * Translations related to confirmation handler
+   */
+  confirmationHandler: {
+    confirmButtonText: string;
+    cancelButtonText: string;
+    title: string;
+  };
+  /**
+   * Translations related to error handler
+   */
+  errorHandler: {
+    cancelButtonText: string;
+    title: string;
+  };
 }
 
 /**

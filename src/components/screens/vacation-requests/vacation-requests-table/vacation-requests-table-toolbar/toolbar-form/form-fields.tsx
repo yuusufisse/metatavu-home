@@ -63,6 +63,7 @@ const FormFields = ({
     <FormControl sx={{ width: "100%" }}>
       <FormLabel>Vacation Type</FormLabel>
       <Select
+        required
         name="type"
         value={String(vacationData.type)}
         onChange={(event: SelectChangeEvent<string>) => {

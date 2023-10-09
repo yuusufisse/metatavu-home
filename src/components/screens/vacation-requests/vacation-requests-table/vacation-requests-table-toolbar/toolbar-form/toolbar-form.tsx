@@ -1,15 +1,9 @@
-import { Box, Divider, Grid } from "@mui/material";
-import {
-  VacationRequest,
-  VacationRequestStatus,
-  VacationType
-} from "../../../../../../generated/client";
+import { Box, Grid } from "@mui/material";
+import { VacationRequest, VacationType } from "../../../../../../generated/client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../../../types";
-import CreateVacationRequest from "../../../create-vacation-request";
 import { GridRowId } from "@mui/x-data-grid";
-import UpdateVacationRequest from "../../../update-vacation-request";
 import FormFields from "./form-fields";
 import { getVacationDataFromRow } from "./get-vacation-data-from-row";
 import { determineToolbarFormMode } from "../../../../../../utils/toolbar-utils";
@@ -21,9 +15,12 @@ interface Props {
   formOpen: boolean;
   setFormOpen: Dispatch<SetStateAction<boolean>>;
   vacationRequests: VacationRequest[];
-  vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
-  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  updateVacationRequest: (
+    vacationData: VacationData,
+    vacationRequestId: string | undefined
+  ) => Promise<void>;
+  createVacationRequest: (vacationData: VacationData) => Promise<void>;
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[] | undefined;
   toolbarFormMode: ToolbarFormModes;
@@ -38,10 +35,9 @@ interface Props {
 const TableForm = ({
   formOpen,
   setFormOpen,
-  vacationRequestStatuses,
-  setVacationRequestStatuses,
   vacationRequests,
-  setVacationRequests,
+  createVacationRequest,
+  updateVacationRequest,
   selectedRowIds,
   rows,
   toolbarFormMode,
@@ -60,16 +56,6 @@ const TableForm = ({
   const [selectedVacationRequestId, setSelectedVacationRequestId] = useState<string | undefined>(
     undefined
   );
-  const { createVacationRequest } = CreateVacationRequest({
-    vacationRequests: vacationRequests,
-    vacationRequestStatuses: vacationRequestStatuses,
-    setVacationRequestStatuses: setVacationRequestStatuses,
-    setVacationRequests: setVacationRequests
-  });
-  const { updateVacationRequest } = UpdateVacationRequest({
-    vacationRequests: vacationRequests,
-    setVacationRequests: setVacationRequests
-  });
 
   /**
    * Reset vacation data
@@ -132,28 +118,25 @@ const TableForm = ({
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Divider />
-      <Box sx={{ padding: "10px", width: "100%" }}>
-        <Grid container>
-          <Grid item xs={12}>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                handleFormSubmit();
-              }}
-            >
-              <FormFields
-                dateTimeNow={dateTimeNow}
-                initialEndDate={initialEndDate}
-                initialStartDate={initialStartDate}
-                setVacationData={setVacationData}
-                vacationData={vacationData}
-              />
-            </form>
-          </Grid>
+    <Box sx={{ padding: "10px", width: "100%" }}>
+      <Grid container>
+        <Grid item xs={12}>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleFormSubmit();
+            }}
+          >
+            <FormFields
+              dateTimeNow={dateTimeNow}
+              initialEndDate={initialEndDate}
+              initialStartDate={initialStartDate}
+              setVacationData={setVacationData}
+              vacationData={vacationData}
+            />
+          </form>
         </Grid>
-      </Box>
+      </Grid>
     </Box>
   );
 };

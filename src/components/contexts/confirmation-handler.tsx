@@ -1,7 +1,7 @@
-import { DialogContent, Divider, Typography } from "@mui/material";
-import { Dispatch, ReactNode, useMemo } from "react";
+import { Divider, Typography } from "@mui/material";
+import { ReactNode } from "react";
 import GenericDialog from "../generics/generic-dialog";
-import { SetStateAction } from "jotai";
+import strings from "../../localization/strings";
 
 /**
  * Component properties
@@ -9,7 +9,7 @@ import { SetStateAction } from "jotai";
 interface Props {
   children: ReactNode;
   confirmation: string | undefined;
-  setConfirmation: Dispatch<SetStateAction<string | undefined>>;
+  setConfirmation: (confirmation: string | undefined) => void;
   deleteVacationsData: () => void;
 }
 
@@ -25,25 +25,6 @@ const ConfirmationHandler = ({
   deleteVacationsData
 }: Props) => {
   /**
-   * Handles confirmation message
-   *
-   * @param message confirmation message
-   */
-  const handleConfirmation = async (message: string) => {
-    setConfirmation(message);
-  };
-
-  /**
-   * Memoized context value
-   */
-  useMemo(
-    () => ({
-      setConfirmation: handleConfirmation
-    }),
-    [confirmation]
-  );
-
-  /**
    * Component render
    */
   return (
@@ -58,15 +39,15 @@ const ConfirmationHandler = ({
           setConfirmation(undefined);
           deleteVacationsData();
         }}
-        confirmButtonText={"Yes"}
-        cancelButtonText={"No"}
-        title={"Are you sure?"}
+        confirmButtonText={strings.confirmationHandler.confirmButtonText}
+        cancelButtonText={strings.confirmationHandler.cancelButtonText}
+        title={strings.confirmationHandler.title}
       >
-          {confirmation && (
-            <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
-              {confirmation}
-            </Typography>
-          )}
+        {confirmation && (
+          <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
+            {confirmation}
+          </Typography>
+        )}
         <Divider />
       </GenericDialog>
     </>

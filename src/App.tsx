@@ -8,7 +8,6 @@ import { languageAtom } from "./atoms/languageAtom";
 import HomeScreen from "./components/screens/home/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
-import ErrorScreen from "./components/screens/error-screen";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 
@@ -25,13 +24,11 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <HomeScreen />,
-          errorElement: <ErrorScreen />
+          element: <HomeScreen />
         },
         {
           path: "/vacations",
-          element: <VacationRequestsScreen />,
-          errorElement: <ErrorScreen />
+          element: <VacationRequestsScreen />
         }
       ]
     }
@@ -40,17 +37,15 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <CssBaseline>
-          <ErrorHandler>
-            <AuthenticationProvider>
-              <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
-                <CssBaseline>
-                  <RouterProvider router={router} />
-                </CssBaseline>
-              </LocalizationProvider>
-            </AuthenticationProvider>
-          </ErrorHandler>
-        </CssBaseline>
+        <ErrorHandler>
+          <AuthenticationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
+              <CssBaseline>
+                <RouterProvider router={router} />
+              </CssBaseline>
+            </LocalizationProvider>
+          </AuthenticationProvider>
+        </ErrorHandler>
       </ThemeProvider>
     </div>
   );

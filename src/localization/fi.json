@@ -29,5 +29,14 @@
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  },
+  "confirmationHandler": {
+    "confirmButtonText": "Kyllä",
+    "cancelButtonText": "En",
+    "title": "Oletko varma?"
+  },
+  "errorHandler": {
+    "cancelButtonText": "Sulje",
+    "title": "Tapahtui virhe"
   }
 }

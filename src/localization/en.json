@@ -29,5 +29,14 @@
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
     "fetchFailedNoEntriesGeneral": "No time entries found"
+  },
+  "confirmationHandler": {
+    "confirmButtonText": "Yes",
+    "cancelButtonText": "No",
+    "title": "Are you sure?"
+  },
+  "errorHandler": {
+    "cancelButtonText": "Close",
+    "title": "An error has occurred"
   }
 }

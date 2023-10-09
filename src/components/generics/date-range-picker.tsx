@@ -19,12 +19,10 @@ interface Props {
  * @param props DateRangePickerProps
  */
 const DateRangePicker = ({ dateTimeNow, setDates, initialStartDate, initialEndDate }: Props) => {
-  const [startDate, setStartDate] = useState<DateTime | undefined>(
+  const [startDate, setStartDate] = useState<DateTime>(
     initialStartDate ? initialStartDate : dateTimeNow
   );
-  const [endDate, setEndDate] = useState<DateTime | undefined>(
-    initialEndDate ? initialEndDate : dateTimeNow
-  );
+  const [endDate, setEndDate] = useState<DateTime>(initialEndDate ? initialEndDate : dateTimeNow);
 
   /**
    * Set startDate and endDate on initial dates changing
