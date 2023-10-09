@@ -46,10 +46,11 @@ const DateRangePicker = ({ dateTimeNow, setDates, initialStartDate, initialEndDa
    * @returns startDate, endDate, days
    */
   const handleDateChange = (startDate: DateTime | undefined, endDate: DateTime | undefined) => {
-    if (startDate && endDate) {
-      if (startDate > endDate) {
-        setEndDate(startDate);
-      } else setEndDate(endDate);
+    if (startDate) {
+      setStartDate(startDate);
+    }
+    if (endDate) {
+      setEndDate(endDate);
     }
     let days = getTimeDifferenceInDays(startDate, endDate);
     if ((days && days < 1) || !days) {
@@ -73,7 +74,9 @@ const DateRangePicker = ({ dateTimeNow, setDates, initialStartDate, initialEndDa
         label="Start Date"
         value={startDate}
         minDate={dateTimeNow}
-        onChange={(newValue: DateTime | null) => newValue && handleDateChange(newValue, endDate)}
+        onChange={(newValue: DateTime | null) =>
+          newValue && handleDateChange(newValue, newValue > endDate ? newValue : endDate)
+        }
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
