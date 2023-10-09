@@ -1,11 +1,11 @@
-import { DataGrid, GridRowSelectionModel } from "@mui/x-data-grid";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { DataGrid, GridRowId, GridRowSelectionModel } from "@mui/x-data-grid";
+import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
 import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
-import { DataGridRow } from "../../../../types";
+import { DataGridRow, VacationData } from "../../../../types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
 import { languageAtom } from "../../../../atoms/languageAtom";
 import { useAtomValue } from "jotai";
@@ -18,6 +18,15 @@ interface Props {
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  deleteVacationRequests: (
+    selectedRowIds: GridRowId[] | undefined,
+    rows: DataGridRow[]
+  ) => Promise<void>;
+  createVacationRequest: (vacationData: VacationData) => Promise<void>;
+  updateVacationRequest: (
+    vacationData: VacationData,
+    vacationRequestId: string | undefined
+  ) => Promise<void>;
 }
 
 /**
@@ -29,7 +38,10 @@ const VacationRequestsTable = ({
   vacationRequests,
   vacationRequestStatuses,
   setVacationRequests,
-  setVacationRequestStatuses
+  setVacationRequestStatuses,
+  deleteVacationRequests,
+  createVacationRequest,
+  updateVacationRequest
 }: Props) => {
   const containerRef = useRef(null);
   const [rows, setRows] = useState<DataGridRow[]>([]);
@@ -41,7 +53,7 @@ const VacationRequestsTable = ({
   /**
    * Set data grid rows
    */
-  useEffect(() => {
+  useMemo(() => {
     if (vacationRequests.length) {
       const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
       if (createdRows) {
@@ -58,34 +70,35 @@ const VacationRequestsTable = ({
       }}
       ref={containerRef}
     >
-      <>
-        <TableToolbar
-          vacationRequests={vacationRequests}
-          setVacationRequests={setVacationRequests}
-          setVacationRequestStatuses={setVacationRequestStatuses}
-          vacationRequestStatuses={vacationRequestStatuses}
-          setFormOpen={setFormOpen}
-          formOpen={formOpen}
-          selectedRowIds={selectedRowIds}
-          rows={rows}
-        />
-        <DataGrid
-          autoPageSize
-          sx={{ height: "100%" }}
-          onRowSelectionModelChange={(index: GridRowSelectionModel) => {
-            setSelectedRowIds(index);
-          }}
-          rows={rows}
-          columns={columns}
-          checkboxSelection
-          rowSelectionModel={selectedRowIds}
-          isRowSelectable={() => (formOpen ? false : true)}
-          slots={{
-            loadingOverlay: SkeletonTableRows
-          }}
-          loading={rows.length ? false : true}
-        />
-      </>
+      <TableToolbar
+        vacationRequests={vacationRequests}
+        setVacationRequests={setVacationRequests}
+        setVacationRequestStatuses={setVacationRequestStatuses}
+        vacationRequestStatuses={vacationRequestStatuses}
+        deleteVacationRequests={deleteVacationRequests}
+        createVacationRequest={createVacationRequest}
+        updateVacationRequest={updateVacationRequest}
+        setFormOpen={setFormOpen}
+        formOpen={formOpen}
+        selectedRowIds={selectedRowIds}
+        rows={rows}
+      />
+      <DataGrid
+        autoPageSize
+        sx={{ height: "100%" }}
+        onRowSelectionModelChange={(index: GridRowSelectionModel) => {
+          setSelectedRowIds(index);
+        }}
+        rows={rows}
+        columns={columns}
+        checkboxSelection
+        rowSelectionModel={selectedRowIds}
+        isRowSelectable={() => (formOpen ? false : true)}
+        slots={{
+          loadingOverlay: SkeletonTableRows
+        }}
+        loading={rows.length ? false : true}
+      />
     </Box>
   );
 };

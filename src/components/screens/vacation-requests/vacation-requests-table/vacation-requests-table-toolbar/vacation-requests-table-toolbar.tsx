@@ -1,12 +1,10 @@
 import { Add, Cancel, Edit } from "@mui/icons-material";
 import { Box, Collapse, Grid, styled } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DeleteVacationRequests from "../../delete-vacation-requests";
 import ToolbarForm from "./toolbar-form/toolbar-form";
-import DeleteVacationRequestStatuses from "../../delete-vacation-request-statuses";
 import { VacationRequest, VacationRequestStatus } from "../../../../../generated/client";
 import { GridRowId } from "@mui/x-data-grid";
-import { DataGridRow, ToolbarFormModes } from "../../../../../types";
+import { DataGridRow, ToolbarFormModes, VacationData } from "../../../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import ToolbarTitle from "./toolbar-title";
 import FormToggleButton from "./toolbar-form-toggle-button";
@@ -20,6 +18,15 @@ interface Props {
   setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
   vacationRequestStatuses: VacationRequestStatus[];
   setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
+  deleteVacationRequests: (
+    selectedRowIds: GridRowId[] | undefined,
+    rows: DataGridRow[]
+  ) => Promise<void>;
+  createVacationRequest: (vacationData: VacationData) => Promise<void>;
+  updateVacationRequest: (
+    vacationData: VacationData,
+    vacationRequestId: string | undefined
+  ) => Promise<void>;
   setFormOpen: Dispatch<SetStateAction<boolean>>;
   formOpen: boolean;
   selectedRowIds: GridRowId[] | undefined;
@@ -34,27 +41,15 @@ interface Props {
 const TableToolbar = ({
   vacationRequests,
   setVacationRequests,
-  vacationRequestStatuses,
-  setVacationRequestStatuses,
+  deleteVacationRequests,
+  createVacationRequest,
+  updateVacationRequest,
   setFormOpen,
   formOpen,
   selectedRowIds,
   rows
 }: Props) => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
-  const { deleteVacationRequests } = DeleteVacationRequests({
-    vacationRequests: vacationRequests,
-    setVacationRequests: setVacationRequests,
-    vacationRequestStatuses: vacationRequestStatuses,
-    selectedRowIds: selectedRowIds,
-    rows: rows
-  });
-  const { deleteVacationRequestStatuses } = DeleteVacationRequestStatuses({
-    setVacationRequestStatuses: setVacationRequestStatuses,
-    vacationRequestStatuses: vacationRequestStatuses,
-    selectedRowIds: selectedRowIds,
-    rows: rows
-  });
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
   const [confirmation, setConfirmation] = useState<string | undefined>(undefined);
 
@@ -73,8 +68,7 @@ const TableToolbar = ({
    * Delete vacation requests and statuses
    */
   const deleteVacationsData = async () => {
-    await deleteVacationRequestStatuses();
-    await deleteVacationRequests();
+    await deleteVacationRequests(selectedRowIds, rows);
   };
 
   /**
@@ -93,13 +87,7 @@ const TableToolbar = ({
   });
 
   return (
-    <Box
-      sx={{
-        border: "1px solid lightgrey",
-        borderBottom: "0px",
-        margin: "0"
-      }}
-    >
+    <Box>
       <ConfirmationHandler
         confirmation={confirmation}
         setConfirmation={setConfirmation}
@@ -152,8 +140,8 @@ const TableToolbar = ({
             vacationRequests={vacationRequests}
             setVacationRequests={setVacationRequests}
             setFormOpen={setFormOpen}
-            setVacationRequestStatuses={setVacationRequestStatuses}
-            vacationRequestStatuses={vacationRequestStatuses}
+            createVacationRequest={createVacationRequest}
+            updateVacationRequest={updateVacationRequest}
             selectedRowIds={selectedRowIds}
             rows={rows}
             toolbarFormMode={toolbarFormMode}
