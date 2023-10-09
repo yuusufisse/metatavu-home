@@ -1,14 +1,25 @@
 import { Container } from "@mui/material";
-import { useState } from "react";
-import GetVacationRequests from "./get-vacation-requests";
-import GetVacationRequestStatuses from "./get-vacation-request-statuses";
+import { useEffect, useState } from "react";
 import VacationRequestsTable from "./vacation-requests-table/vacation-requests-table";
-import { VacationRequest, VacationRequestStatus } from "../../../generated/client";
+import {
+  VacationRequest,
+  VacationRequestStatus,
+  VacationRequestStatuses
+} from "../../../generated/client";
+import { useApi } from "../../../hooks/use-api";
+import { useAtomValue, useSetAtom } from "jotai";
+import { userProfileAtom } from "../../../atoms/auth";
+import { errorAtom } from "../../../atoms/error";
+import { GridRowId } from "@mui/x-data-grid";
+import { DataGridRow, VacationData } from "../../../types";
 
 /**
  * Vacation requests screen
  */
 const VacationRequestsScreen = () => {
+  const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
+  const userProfile = useAtomValue(userProfileAtom);
+  const setError = useSetAtom(errorAtom);
   const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
   const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
     []
@@ -16,15 +27,320 @@ const VacationRequestsScreen = () => {
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useState<
     VacationRequestStatus[]
   >([]);
-  GetVacationRequests({
-    setVacationRequests: setVacationRequests
-  });
-  GetVacationRequestStatuses({
-    vacationRequests: vacationRequests,
-    vacationRequestStatuses: vacationRequestStatuses,
-    setVacationRequestStatuses: setVacationRequestStatuses,
-    setLatestVacationRequestStatuses: setLatestVacationRequestStatuses
-  });
+
+  /**
+   * Fetch vacations when userProfile exists
+   */
+  useEffect(() => {
+    fetchVacationsRequests();
+  }, [userProfile]);
+
+  /**
+   * Filter vacation requests when vacation request statuses exist
+   */
+  useEffect(() => {
+    if (vacationRequestStatuses) {
+      filterLatestVacationRequestStatuses();
+    }
+  }, [vacationRequestStatuses]);
+
+  /**
+   * Fetch vacation requests statuses
+   */
+  useEffect(() => {
+    if (vacationRequests) {
+      fetchVacationRequestStatuses();
+    }
+  }, [vacationRequests]);
+
+  /**
+   * Fetch vacation request statuses using the API
+   */
+  const fetchVacationRequestStatuses = async () => {
+    if (vacationRequests) {
+      try {
+        const vacationRequestStatuses: VacationRequestStatus[] = [];
+
+        await Promise.all(
+          vacationRequests.map(async (vacationRequest) => {
+            let createdStatuses: VacationRequestStatus[] = [];
+            if (vacationRequest.id) {
+              createdStatuses = await vacationRequestStatusApi.listVacationRequestStatuses({
+                id: vacationRequest.id
+              });
+            }
+            createdStatuses.forEach((createdStatus) => {
+              vacationRequestStatuses.push(createdStatus);
+            });
+          })
+        );
+        setVacationRequestStatuses(vacationRequestStatuses);
+      } catch (error) {
+        setError(`${"Fetching vacation request statuses failed."}, ${error}`);
+      }
+    }
+  };
+
+  /**
+   * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
+   */
+  const filterLatestVacationRequestStatuses = async () => {
+    if (vacationRequests) {
+      const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
+
+      vacationRequests.forEach((vacationRequest) => {
+        const selectedVacationRequestStatuses: VacationRequestStatus[] = [];
+
+        vacationRequestStatuses.forEach((vacationRequestStatus) => {
+          if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
+            selectedVacationRequestStatuses.push(vacationRequestStatus);
+          }
+        });
+
+        if (selectedVacationRequestStatuses.length > 0) {
+          const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
+            if (a.updatedAt && b.updatedAt) {
+              return a.updatedAt > b.updatedAt ? a : b;
+            } else if (a.updatedAt) {
+              return a;
+            } else {
+              return b;
+            }
+          });
+          selectedLatestVacationRequestStatuses.push(latestStatus);
+        }
+      });
+      setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
+    }
+  };
+
+  /**
+   * Fetch vacation requests
+   */
+  const fetchVacationsRequests = async () => {
+    try {
+      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
+        personId: userProfile?.id
+      });
+      if (setVacationRequests) {
+        setVacationRequests(fetchedVacationRequests);
+      }
+    } catch (error) {
+      setError(`${"Vacation requests fetch has failed."}, ${error}`);
+    }
+  };
+
+  /**
+   * Delete selected vacation requests from vacation requests statuses
+   */
+  const deleteVacationRequestStatusRows = (
+    selectedRowIds: GridRowId[] | undefined,
+    rows: DataGridRow[]
+  ) => {
+    if (rows.length && vacationRequestStatuses && selectedRowIds) {
+      let tempVacationRequestStatuses: VacationRequestStatus[] = [];
+      selectedRowIds.forEach((selectedRowId) => {
+        tempVacationRequestStatuses = vacationRequestStatuses.filter(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId !== selectedRowId
+        );
+      });
+      setVacationRequestStatuses(tempVacationRequestStatuses);
+    }
+  };
+
+  /**
+   * Delete vacation request statuses
+   */
+  const deleteVacationRequestStatuses = async (
+    selectedRowIds: GridRowId[] | undefined,
+    rows: DataGridRow[]
+  ) => {
+    if (vacationRequestStatuses.length && selectedRowIds) {
+      await Promise.all(
+        selectedRowIds.map(async (selectedRowId): Promise<void> => {
+          try {
+            const foundVacationRequestStatus = vacationRequestStatuses.find(
+              (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+            );
+            if (foundVacationRequestStatus?.id) {
+              await vacationRequestStatusApi.deleteVacationRequestStatus({
+                id: foundVacationRequestStatus.id,
+                statusId: foundVacationRequestStatus.id
+              });
+            }
+            deleteVacationRequestStatusRows(selectedRowIds, rows);
+          } catch (error) {
+            setError(`${"Deleting vacation request statuses has failed"}, ${error}`);
+          }
+        })
+      );
+    }
+  };
+
+  /**
+   * Delete vacation requests from data grid rows
+   */
+  const deleteVacationRequestRows = (
+    selectedRowIds: GridRowId[] | undefined,
+    rows: DataGridRow[]
+  ) => {
+    if (rows.length && vacationRequests && vacationRequestStatuses && selectedRowIds) {
+      let tempVacationRequests: VacationRequest[] = vacationRequests;
+
+      selectedRowIds.forEach((selectedRow) => {
+        rows.forEach((row) => {
+          if (row.id === selectedRow) {
+            tempVacationRequests = tempVacationRequests.filter(
+              (vacationRequest) => vacationRequest.id !== row.id
+            );
+          }
+        });
+      });
+      setVacationRequests(tempVacationRequests);
+    }
+  };
+
+  /**
+   * Delete vacation requests
+   */
+  const deleteVacationRequests = async (
+    selectedRowIds: GridRowId[] | undefined,
+    rows: DataGridRow[]
+  ) => {
+    if (vacationRequests && selectedRowIds) {
+      await Promise.all(
+        selectedRowIds.map(async (selectedRow) => {
+          try {
+            await deleteVacationRequestStatuses(selectedRowIds, rows);
+            await vacationRequestsApi.deleteVacationRequest({
+              id: String(selectedRow)
+            });
+            deleteVacationRequestRows(selectedRowIds, rows);
+          } catch (error) {
+            setError(`${"Deleting vacation request has failed."}, ${error}`);
+          }
+        })
+      );
+    }
+  };
+
+  /**
+   * Create a vacation request status
+   *
+   * @param createdRequest created vacation request
+   */
+  const createVacationRequestStatus = async (createdRequest: VacationRequest) => {
+    if (!userProfile || !userProfile.id) return;
+
+    try {
+      if (createdRequest.id) {
+        const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
+          id: createdRequest.id,
+          vacationRequestStatus: {
+            vacationRequestId: createdRequest.id,
+            status: VacationRequestStatuses.PENDING,
+            message: createdRequest.message,
+            createdAt: new Date(),
+            createdBy: userProfile.id,
+            updatedAt: new Date(),
+            updatedBy: userProfile.id
+          }
+        });
+
+        setVacationRequestStatuses([createdStatus, ...vacationRequestStatuses]);
+      }
+    } catch (error) {
+      setError(`${"Creating vacation request status has failed."}, ${error}`);
+    }
+  };
+
+  /**
+   * Create a vacation request
+   *
+   * @param vacationData vacation data, data for vacation request
+   */
+  const createVacationRequest = async (vacationData: VacationData) => {
+    if (!userProfile || !userProfile.id) return;
+
+    try {
+      if (
+        vacationData.startDate &&
+        vacationData.endDate &&
+        vacationData.type &&
+        vacationData.message &&
+        vacationData.days
+      ) {
+        const createdRequest = await vacationRequestsApi.createVacationRequest({
+          vacationRequest: {
+            personId: userProfile.id,
+            createdBy: userProfile.id,
+            startDate: vacationData.startDate?.toJSDate(),
+            endDate: vacationData.endDate?.toJSDate(),
+            type: vacationData.type,
+            message: vacationData.message,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            days: vacationData.days
+          }
+        });
+
+        createVacationRequestStatus(createdRequest);
+        setVacationRequests([createdRequest, ...vacationRequests]);
+      }
+    } catch (error) {
+      setError(`${"Creating vacation request has failed."}, ${error}`);
+    }
+  };
+
+  /**
+   * Create a vacation request
+   *
+   * @param vacationData vacation data, data for vacation request
+   */
+  const updateVacationRequest = async (
+    vacationData: VacationData,
+    vacationRequestId: string | undefined
+  ) => {
+    if (!userProfile || !userProfile.id) return;
+
+    try {
+      const vacationRequest = vacationRequests.find(
+        (vacationRequest) => vacationRequest.id === vacationRequestId
+      );
+      if (
+        vacationRequest &&
+        vacationRequestId &&
+        vacationData.startDate &&
+        vacationData.endDate &&
+        vacationData.type &&
+        vacationData.message &&
+        vacationData.days
+      ) {
+        const updatedRequest = await vacationRequestsApi.updateVacationRequest({
+          id: vacationRequestId,
+          vacationRequest: {
+            ...vacationRequest,
+            startDate: vacationData.startDate.toJSDate(),
+            endDate: vacationData.endDate.toJSDate(),
+            type: vacationData.type,
+            message: vacationData.message,
+            updatedAt: new Date(),
+            days: vacationData.days
+          }
+        });
+        const tempVacationRequests = vacationRequests.map((vacationRequest) => {
+          if (vacationRequest.id === updatedRequest.id) {
+            return updatedRequest;
+          } else {
+            return vacationRequest;
+          }
+        });
+        setVacationRequests(tempVacationRequests);
+      }
+    } catch (error) {
+      setError(`${"Updating vacation request has failed."}, ${error}`);
+    }
+  };
 
   return (
     <Container>
@@ -33,6 +349,9 @@ const VacationRequestsScreen = () => {
         vacationRequestStatuses={latestVacationRequestStatuses}
         setVacationRequests={setVacationRequests}
         setVacationRequestStatuses={setVacationRequestStatuses}
+        deleteVacationRequests={deleteVacationRequests}
+        createVacationRequest={createVacationRequest}
+        updateVacationRequest={updateVacationRequest}
       />
     </Container>
   );
