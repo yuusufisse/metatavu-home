@@ -5,22 +5,14 @@ import {
   dailyEntryToChart,
   renderCustomizedTooltipPieChart
 } from "../../../../utils/chart-utils";
-import { DailyEntry } from "../../../../generated/client";
 import { Typography } from "@mui/material";
-
 import { theme } from "../../../../theme";
-
 import strings from "../../../../localization/strings";
+import { personDailyEntryAtom } from "../../../../atoms/person";
+import { useAtomValue } from "jotai";
 
-/**
- * Component properties.
- */
-interface Props {
-  personDailyEntry: DailyEntry;
-}
-
-const TimebankPieChart = (props: Props) => {
-  const { personDailyEntry } = props;
+const TimebankPieChart = () => {
+  const personDailyEntry = useAtomValue(personDailyEntryAtom);
 
   const COLORS = [
     theme.palette.success.dark,
@@ -30,7 +22,7 @@ const TimebankPieChart = (props: Props) => {
 
   return (
     <ResponsiveContainer width={"75%"} height={200}>
-      {personDailyEntry.logged ? (
+      {personDailyEntry?.logged ? (
         <PieChart>
           <Pie
             data={dailyEntryToChart(personDailyEntry)}

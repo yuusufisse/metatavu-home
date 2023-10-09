@@ -1,6 +1,7 @@
 import { atom } from "jotai";
-import { Person, PersonTotalTime } from "../generated/client";
+import { DailyEntry, Person, PersonTotalTime } from "../generated/client";
 
-export const personAtom = atom<Person | undefined>(undefined);
-export const personsAtom = atom<Person[] | undefined>(undefined);
+export const personsAtom = atom<Person[]>([]);
 export const personTotalTimeAtom = atom<PersonTotalTime | undefined>(undefined);
+export const personDailyEntryAtom = atom<DailyEntry | undefined>(undefined);
+export const dailyEntriesAtom = atom<DailyEntry[]>([]);

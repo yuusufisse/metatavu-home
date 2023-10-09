@@ -1,43 +1,54 @@
 import { useEffect, useState } from "react";
-import { DailyEntry, PersonTotalTime, Timespan } from "../../../generated/client";
+import { Person, Timespan } from "../../../generated/client";
 import { CircularProgress, SelectChangeEvent, Card } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
-import { personAtom } from "../../../atoms/person";
+import {
+  dailyEntriesAtom,
+  personDailyEntryAtom,
+  personTotalTimeAtom,
+  personsAtom
+} from "../../../atoms/person";
 import { useApi } from "../../../hooks/use-api";
 import TimebankContent from "./timebank-content";
 import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
+import config from "../../../app/config";
 
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const [timespanSelector, setTimespanSelector] = useState("Week");
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
-  const person = useAtomValue(personAtom);
+  const persons = useAtomValue(personsAtom);
   const [personTotalTimeLoading, setPersonTotalTimeLoading] = useState(false);
-  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
-  const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntry>();
-  const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
+  const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
+  const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
 
   /**
    * Fetches the person's total time to display data such as balance.
    * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
    */
   const getPersonTotalTime = async (timespan?: Timespan): Promise<void> => {
-    setPersonTotalTimeLoading(true);
-    if (person) {
-      try {
-        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-          personId: person?.id,
-          timespan: timespan
-        });
-        setPersonTotalTime(fetchedPersonTotalTime[0]);
-      } catch (error) {
-        setError(`${strings.error.totalTimeFetch}, ${error}`);
+    if (!personTotalTime || timespan) {
+      setPersonTotalTimeLoading(true);
+      if (persons.length) {
+        try {
+          const loggedInPerson = persons.filter(
+            (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
+          )[0];
+          const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+            personId: loggedInPerson?.id,
+            timespan: timespan
+          });
+          setPersonTotalTime(fetchedPersonTotalTime[0]);
+        } catch (error) {
+          setError(`${strings.error.totalTimeFetch}, ${error}`);
+        }
+        setPersonTotalTimeLoading(false);
       }
-      setPersonTotalTimeLoading(false);
     }
   };
 
@@ -45,10 +56,13 @@ const TimebankScreen = () => {
    * Fetches the person's daily entries.
    */
   const getPersonDailyEntries = async (): Promise<void> => {
-    if (person) {
+    if (persons.length) {
       try {
+        const loggedInPerson = persons.filter(
+          (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
+        )[0];
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: person?.id
+          personId: loggedInPerson?.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(fetchedDailyEntries[0]);
@@ -95,7 +109,7 @@ const TimebankScreen = () => {
   useEffect(() => {
     getPersonTotalTime();
     getPersonDailyEntries();
-  }, [person]);
+  }, [persons]);
 
   if (personTotalTimeLoading || !personDailyEntry || !dailyEntries || !personTotalTime)
     return (
@@ -112,9 +126,6 @@ const TimebankScreen = () => {
           userProfile={userProfile}
           handleDailyEntryChange={handleDailyEntryChange}
           handleBalanceViewChange={handleBalanceViewChange}
-          personDailyEntry={personDailyEntry}
-          dailyEntries={dailyEntries}
-          personTotalTime={personTotalTime}
           timespanSelector={timespanSelector}
         />
       </>

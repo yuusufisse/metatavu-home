@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
-import { DailyEntry, PersonTotalTime } from "../../../generated/client";
+import { DailyEntry } from "../../../generated/client";
 import TimebankPieChart from "./charts/timebank-piechart";
 import TimebankOverviewChart from "./charts/timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -24,14 +24,13 @@ import TimebankMultiBarChart from "./charts/timebank-multibarchart";
 import DateRangePicker from "./timebank-daterange-picker";
 import { Dispatch, SetStateAction, useState } from "react";
 import { theme } from "../../../theme";
+import { useAtomValue } from "jotai";
+import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../../atoms/person";
 
 interface Props {
   personTotalTimeLoading: boolean;
   setPersonTotalTimeLoading: Dispatch<SetStateAction<boolean>>;
   userProfile: KeycloakProfile | undefined;
-  personTotalTime: PersonTotalTime;
-  personDailyEntry: DailyEntry;
-  dailyEntries: DailyEntry[];
   timespanSelector: string;
   handleBalanceViewChange: (e: SelectChangeEvent) => void;
   handleDailyEntryChange: (e: DateTime | null) => void;
@@ -47,12 +46,9 @@ export interface Range {
 
 const TimebankContent = (props: Props) => {
   const {
-    personTotalTime,
-    personDailyEntry,
     timespanSelector,
     handleBalanceViewChange,
     handleDailyEntryChange,
-    dailyEntries,
     personTotalTimeLoading
   } = props;
 
@@ -60,6 +56,9 @@ const TimebankContent = (props: Props) => {
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
+  const personTotalTime = useAtomValue(personTotalTimeAtom);
+  const personDailyEntry = useAtomValue(personDailyEntryAtom);
+  const dailyEntries = useAtomValue(dailyEntriesAtom);
 
   /**
    * Disables the days from the DatePicker which have zero logged and expected hours, commonly weekends.
@@ -88,7 +87,7 @@ const TimebankContent = (props: Props) => {
     else
       return (
         <>
-          <TimebankOverviewChart personTotalTime={personTotalTime} />
+          <TimebankOverviewChart />
           <List dense sx={{ marginLeft: "5%" }}>
             <ListItem>
               <ListItemText
@@ -131,7 +130,7 @@ const TimebankContent = (props: Props) => {
   const renderDailyEntryOrRangeChart = () => {
     if (byRange.dailyEntries) {
       return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
-    } else return <TimebankPieChart personDailyEntry={personDailyEntry} />;
+    } else return <TimebankPieChart />;
   };
 
   /**
@@ -139,30 +138,32 @@ const TimebankContent = (props: Props) => {
    * @returns JSX.Element consisting of either chart component
    */
   const renderDatePickers = () => {
-    if (byRange.dailyEntries) {
-      return (
-        <DateRangePicker
-          dailyEntries={dailyEntries}
-          setSelectedEntries={setSelectedEntries}
-          disableNullEntries={disableNullEntries}
-        />
-      );
-    } else {
-      return (
-        <DatePicker
-          sx={{
-            width: "40%",
-            marginRight: "1%"
-          }}
-          label={strings.timebank.selectEntry}
-          disableFuture
-          onChange={handleDailyEntryChange}
-          value={DateTime.fromJSDate(dailyEntries[0].date)}
-          minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
-          maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
-          shouldDisableDate={disableNullEntries}
-        />
-      );
+    if (dailyEntries) {
+      if (byRange.dailyEntries) {
+        return (
+          <DateRangePicker
+            dailyEntries={dailyEntries}
+            setSelectedEntries={setSelectedEntries}
+            disableNullEntries={disableNullEntries}
+          />
+        );
+      } else {
+        return (
+          <DatePicker
+            sx={{
+              width: "40%",
+              marginRight: "1%"
+            }}
+            label={strings.timebank.selectEntry}
+            disableFuture
+            onChange={handleDailyEntryChange}
+            value={DateTime.fromJSDate(dailyEntries[0].date)}
+            minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
+            maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
+            shouldDisableDate={disableNullEntries}
+          />
+        );
+      }
     }
   };
 
@@ -226,7 +227,7 @@ const TimebankContent = (props: Props) => {
                     ? getHoursAndMinutes(
                         Number(selectedEntries?.reduce((prev, next) => prev + next.logged, 0))
                       )
-                    : getHoursAndMinutes(Number(personDailyEntry.logged))
+                    : getHoursAndMinutes(Number(personDailyEntry?.logged))
                 }
               />
             </ListItem>
@@ -244,7 +245,7 @@ const TimebankContent = (props: Props) => {
                           )
                         )
                       )
-                    : getHoursAndMinutes(Number(personDailyEntry.billableProjectTime))
+                    : getHoursAndMinutes(Number(personDailyEntry?.billableProjectTime))
                 }
               />
             </ListItem>
@@ -262,7 +263,7 @@ const TimebankContent = (props: Props) => {
                           )
                         )
                       )
-                    : getHoursAndMinutes(Number(personDailyEntry.nonBillableProjectTime))
+                    : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))
                 }
               />
             </ListItem>
@@ -275,7 +276,7 @@ const TimebankContent = (props: Props) => {
                     ? getHoursAndMinutes(
                         Number(selectedEntries?.reduce((prev, next) => prev + next.internalTime, 0))
                       )
-                    : getHoursAndMinutes(Number(personDailyEntry.internalTime))
+                    : getHoursAndMinutes(Number(personDailyEntry?.internalTime))
                 }
               />
             </ListItem>
@@ -288,7 +289,7 @@ const TimebankContent = (props: Props) => {
                     ? getHoursAndMinutes(
                         Number(selectedEntries?.reduce((prev, next) => prev + next.expected, 0))
                       )
-                    : getHoursAndMinutes(Number(personDailyEntry.expected))
+                    : getHoursAndMinutes(Number(personDailyEntry?.expected))
                 }
               />
             </ListItem>

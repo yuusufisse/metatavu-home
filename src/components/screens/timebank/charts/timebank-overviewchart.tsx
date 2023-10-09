@@ -1,17 +1,15 @@
 import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
-import { PersonTotalTime } from "../../../../generated/client";
 import { renderCustomizedTooltipBarChart, totalTimeToChart } from "../../../../utils/chart-utils";
 import { theme } from "../../../../theme";
 import strings from "../../../../localization/strings";
 import { getHours } from "../../../../utils/time-utils";
+import { personTotalTimeAtom } from "../../../../atoms/person";
+import { useAtomValue } from "jotai";
+import { PersonTotalTime } from "../../../../generated/client";
 
-interface Props {
-  personTotalTime: PersonTotalTime;
-}
-
-const TimebankOverviewChart = (props: Props) => {
-  const { personTotalTime } = props;
-  const data = totalTimeToChart(personTotalTime);
+const TimebankOverviewChart = () => {
+  const personTotalTime = useAtomValue(personTotalTimeAtom);
+  const data = totalTimeToChart(personTotalTime as PersonTotalTime);
 
   return (
     <>

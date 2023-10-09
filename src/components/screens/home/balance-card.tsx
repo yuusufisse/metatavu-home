@@ -3,32 +3,38 @@ import { Grid, Typography, Card, CardContent, Skeleton } from "@mui/material";
 import strings from "../../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import { errorAtom } from "../../../atoms/error";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
-import { PersonTotalTime } from "../../../generated/client";
-import { personAtom } from "../../../atoms/person";
+import { Person, PersonTotalTime } from "../../../generated/client";
+import { personsAtom, personTotalTimeAtom } from "../../../atoms/person";
 import { Link } from "react-router-dom";
+import config from "../../../app/config";
+import { userProfileAtom } from "../../../atoms/auth";
 
 /**
  * Component for displaying user's balance
  */
 const BalanceCard = () => {
-  const person = useAtomValue(personAtom);
+  const persons = useAtomValue(personsAtom);
+  const userProfile = useAtomValue(userProfileAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [isLoading, setIsLoading] = useState(false);
-  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
+  const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
     setIsLoading(true);
-    if (person) {
+    if (persons.length) {
       try {
+        const loggedInPerson = persons.filter(
+          (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
+        )[0];
         const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: Number(person?.id)
+          personId: loggedInPerson?.id
         });
         setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
@@ -39,8 +45,8 @@ const BalanceCard = () => {
   };
 
   useEffect(() => {
-    getPersons();
-  }, [person]);
+    if (!personTotalTime) getPersons();
+  }, [persons]);
 
   /**
    * Renders person's total time
