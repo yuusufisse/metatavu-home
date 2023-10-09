@@ -6,6 +6,9 @@ import { errorAtom } from "../../atoms/error";
 import { useSetAtom } from "jotai";
 import SyncHandler from "../contexts/sync-handler";
 
+/**
+ * Sync button component
+ */
 const SyncButton = () => {
   const { synchronizeApi } = useApi();
   const setError = useSetAtom(errorAtom);
@@ -22,6 +25,9 @@ const SyncButton = () => {
     setSyncSuccess(undefined);
   };
 
+  /**
+   * Synchronize time-bank-api work-time balances
+   */
   const synchronize = async () => {
     setIsSyncing(true);
     try {
