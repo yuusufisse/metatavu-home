@@ -22,7 +22,7 @@ const TimebankScreen = () => {
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
 
   /**
-   * Fetches the person's total time and daily entries
+   * Fetches the person's total time to display data such as balance.
    * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
    */
   const getPersonTotalTime = async (timespan?: Timespan): Promise<void> => {
@@ -37,15 +37,12 @@ const TimebankScreen = () => {
       } catch (error) {
         setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
-    } else {
-      setError(strings.error.totalTimeNotFound);
+      setPersonTotalTimeLoading(false);
     }
-    setPersonTotalTimeLoading(false);
   };
 
   /**
-   * Fetches the person's total time and daily entries
-   * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
+   * Fetches the person's daily entries.
    */
   const getPersonDailyEntries = async (): Promise<void> => {
     if (person) {
@@ -58,8 +55,7 @@ const TimebankScreen = () => {
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
-    } else {
-      setError(strings.error.dailyEntriesNotFound);
+      setPersonTotalTimeLoading(false);
     }
   };
 
@@ -97,11 +93,11 @@ const TimebankScreen = () => {
   };
 
   useEffect(() => {
-    if (person) getPersonTotalTime();
+    getPersonTotalTime();
     getPersonDailyEntries();
   }, [person]);
 
-  if (!personDailyEntry && !dailyEntries && !personTotalTime)
+  if (personTotalTimeLoading || !personDailyEntry || !dailyEntries || !personTotalTime)
     return (
       <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ scale: "150%" }} />

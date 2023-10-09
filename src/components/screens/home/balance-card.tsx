@@ -25,20 +25,21 @@ const BalanceCard = () => {
    */
   const getPersons = async () => {
     setIsLoading(true);
-    try {
-      const fetchedPerson = await personsApi.listPersonTotalTime({
-        personId: Number(person?.id)
-      });
-      setPersonTotalTime(fetchedPerson[0]);
-    } catch (error) {
-      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+    if (person) {
+      try {
+        const fetchedPerson = await personsApi.listPersonTotalTime({
+          personId: Number(person?.id)
+        });
+        setPersonTotalTime(fetchedPerson[0]);
+      } catch (error) {
+        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+      }
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
-    if (person) getPersons();
+    getPersons();
   }, [person]);
 
   /**
@@ -50,12 +51,11 @@ const BalanceCard = () => {
     if (!personTotalTime) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
-
     return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
   };
 
-  return (
-    <>
+  if (isLoading) {
+    return (
       <Link to={"/timebank"} style={{ textDecoration: "none" }}>
         <Card>
           <CardContent>
@@ -65,13 +65,31 @@ const BalanceCard = () => {
                 <ScheduleIcon />
               </Grid>
               <Grid item xs={11}>
-                {isLoading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+                <Skeleton />
               </Grid>
             </Grid>
           </CardContent>
         </Card>
       </Link>
-    </>
+    );
+  }
+
+  return (
+    <Link to={"/timebank"} style={{ textDecoration: "none" }}>
+      <Card>
+        <CardContent>
+          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
+          <Grid container>
+            <Grid item xs={1}>
+              <ScheduleIcon />
+            </Grid>
+            <Grid item xs={11}>
+              {renderPersonTotalTime(personTotalTime)}
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
