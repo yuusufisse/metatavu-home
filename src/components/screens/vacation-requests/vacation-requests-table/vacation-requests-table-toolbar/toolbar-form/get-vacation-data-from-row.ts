@@ -13,8 +13,8 @@ interface Props {
   selectedRowIds: GridRowId[];
   vacationRequests: VacationRequest[];
   setSelectedVacationRequestId: Dispatch<SetStateAction<string | undefined>>;
-  setInitialStartDate: Dispatch<SetStateAction<DateTime | undefined>>;
-  setInitialEndDate: Dispatch<SetStateAction<DateTime | undefined>>;
+  setStartDate: Dispatch<SetStateAction<DateTime>>;
+  setEndDate: Dispatch<SetStateAction<DateTime>>;
   setVacationData: Dispatch<SetStateAction<VacationData>>;
 }
 
@@ -26,8 +26,8 @@ interface Props {
 export const getVacationDataFromRow = ({
   rows,
   selectedRowIds,
-  setInitialEndDate,
-  setInitialStartDate,
+  setEndDate,
+  setStartDate,
   setSelectedVacationRequestId,
   vacationRequests,
   setVacationData
@@ -52,8 +52,8 @@ export const getVacationDataFromRow = ({
         days: days
       });
       setSelectedVacationRequestId(selectedVacationRequest.id);
-      setInitialStartDate(startDate);
-      setInitialEndDate(endDate);
+      setStartDate(startDate);
+      setEndDate(endDate);
     }
   }
 };

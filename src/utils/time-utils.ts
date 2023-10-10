@@ -18,14 +18,16 @@ export const getHoursAndMinutes = (minutes: number): string => {
  * @param endDate end date
  * @returns days
  */
-export const getTimeDifferenceInDays = (
-  startDate: DateTime | null | undefined,
-  endDate: DateTime | null | undefined
-) => {
+export const getTimeDifferenceInDays = (startDate: DateTime, endDate: DateTime): number => {
   let days;
   if (startDate && endDate) {
     const diff = endDate.diff(startDate, ["days"]);
     days = Number(Math.round(diff.days));
+  }
+  if ((days && days < 1) || !days) {
+    days = 1;
+  } else {
+    days += 1;
   }
   return days;
 };

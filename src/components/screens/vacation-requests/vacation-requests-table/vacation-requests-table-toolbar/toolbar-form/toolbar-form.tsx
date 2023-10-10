@@ -44,8 +44,8 @@ const TableForm = ({
   setToolbarFormMode
 }: Props) => {
   const dateTimeNow = DateTime.now();
-  const [initialStartDate, setInitialStartDate] = useState<DateTime | undefined>(dateTimeNow);
-  const [initialEndDate, setInitialEndDate] = useState<DateTime | undefined>(dateTimeNow);
+  const [startDate, setStartDate] = useState<DateTime>(dateTimeNow);
+  const [endDate, setEndDate] = useState<DateTime>(dateTimeNow);
   const [vacationData, setVacationData] = useState<VacationData>({
     startDate: dateTimeNow,
     endDate: dateTimeNow,
@@ -68,8 +68,8 @@ const TableForm = ({
       message: "",
       days: 1
     });
-    setInitialStartDate(dateTimeNow);
-    setInitialEndDate(dateTimeNow);
+    setStartDate(dateTimeNow);
+    setEndDate(dateTimeNow);
   };
 
   /**
@@ -93,8 +93,8 @@ const TableForm = ({
         selectedRowIds: selectedRowIds,
         vacationRequests: vacationRequests,
         setSelectedVacationRequestId: setSelectedVacationRequestId,
-        setInitialStartDate: setInitialStartDate,
-        setInitialEndDate: setInitialEndDate,
+        setStartDate: setStartDate,
+        setEndDate: setEndDate,
         setVacationData: setVacationData
       });
     } else {
@@ -129,8 +129,10 @@ const TableForm = ({
           >
             <FormFields
               dateTimeNow={dateTimeNow}
-              initialEndDate={initialEndDate}
-              initialStartDate={initialStartDate}
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
               setVacationData={setVacationData}
               vacationData={vacationData}
             />

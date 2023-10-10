@@ -126,76 +126,55 @@ const VacationRequestsScreen = () => {
         setVacationRequests(fetchedVacationRequests);
       }
     } catch (error) {
-      setError(`${"Vacation requests fetch has failed."}, ${error}`);
+      setError(`${"Fetching vacation requests has failed."}, ${error}`);
     }
   };
 
   /**
-   * Delete selected vacation requests from vacation requests statuses
+   * Delete selected vacation requests status from rows
    */
-  const deleteVacationRequestStatusRows = (
-    selectedRowIds: GridRowId[] | undefined,
-    rows: DataGridRow[]
+  const deleteVacationRequestStatusRow = (
+    foundVacationRequestStatus: VacationRequestStatus | undefined
   ) => {
-    if (rows.length && vacationRequestStatuses && selectedRowIds) {
-      let tempVacationRequestStatuses: VacationRequestStatus[] = [];
-      selectedRowIds.forEach((selectedRowId) => {
-        tempVacationRequestStatuses = vacationRequestStatuses.filter(
-          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId !== selectedRowId
-        );
-      });
-      setVacationRequestStatuses(tempVacationRequestStatuses);
-    }
-  };
-
-  /**
-   * Delete vacation request statuses
-   */
-  const deleteVacationRequestStatuses = async (
-    selectedRowIds: GridRowId[] | undefined,
-    rows: DataGridRow[]
-  ) => {
-    if (vacationRequestStatuses.length && selectedRowIds) {
-      await Promise.all(
-        selectedRowIds.map(async (selectedRowId): Promise<void> => {
-          try {
-            const foundVacationRequestStatus = vacationRequestStatuses.find(
-              (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
-            );
-            if (foundVacationRequestStatus?.id) {
-              await vacationRequestStatusApi.deleteVacationRequestStatus({
-                id: foundVacationRequestStatus.id,
-                statusId: foundVacationRequestStatus.id
-              });
-            }
-            deleteVacationRequestStatusRows(selectedRowIds, rows);
-          } catch (error) {
-            setError(`${"Deleting vacation request statuses has failed"}, ${error}`);
-          }
-        })
+    if (foundVacationRequestStatus?.id) {
+      const filteredVacationRequestStatuses = vacationRequestStatuses.filter(
+        (vacationRequestStatus) => vacationRequestStatus.id === foundVacationRequestStatus.id
       );
+      setVacationRequestStatuses(filteredVacationRequestStatuses);
+    }
+  };
+
+  /**
+   * Delete vacation request status
+   */
+  const deleteVacationRequestStatus = async (selectedRow: GridRowId | undefined) => {
+    if (vacationRequestStatuses.length && selectedRow) {
+      try {
+        const foundVacationRequestStatus = vacationRequestStatuses.find(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRow
+        );
+        if (foundVacationRequestStatus?.id) {
+          await vacationRequestStatusApi.deleteVacationRequestStatus({
+            id: foundVacationRequestStatus.id,
+            statusId: foundVacationRequestStatus.id
+          });
+          deleteVacationRequestStatusRow(foundVacationRequestStatus);
+        }
+      } catch (error) {
+        setError(`${"Deleting vacation request status has failed"}, ${error}`);
+      }
     }
   };
 
   /**
    * Delete vacation requests from data grid rows
    */
-  const deleteVacationRequestRows = (
-    selectedRowIds: GridRowId[] | undefined,
-    rows: DataGridRow[]
-  ) => {
-    if (rows.length && vacationRequests && vacationRequestStatuses && selectedRowIds) {
+  const deleteVacationRequestRows = (selectedRowId: GridRowId | undefined) => {
+    if (vacationRequests && vacationRequestStatuses && selectedRowId) {
       let tempVacationRequests: VacationRequest[] = vacationRequests;
-
-      selectedRowIds.forEach((selectedRow) => {
-        rows.forEach((row) => {
-          if (row.id === selectedRow) {
-            tempVacationRequests = tempVacationRequests.filter(
-              (vacationRequest) => vacationRequest.id !== row.id
-            );
-          }
-        });
-      });
+      tempVacationRequests = tempVacationRequests.filter(
+        (vacationRequest) => vacationRequest.id !== selectedRowId
+      );
       setVacationRequests(tempVacationRequests);
     }
   };
@@ -203,19 +182,16 @@ const VacationRequestsScreen = () => {
   /**
    * Delete vacation requests
    */
-  const deleteVacationRequests = async (
-    selectedRowIds: GridRowId[] | undefined,
-    rows: DataGridRow[]
-  ) => {
+  const deleteVacationRequests = async (selectedRowIds: GridRowId[] | undefined) => {
     if (vacationRequests && selectedRowIds) {
       await Promise.all(
-        selectedRowIds.map(async (selectedRow) => {
+        selectedRowIds.map(async (selectedRowId) => {
           try {
-            await deleteVacationRequestStatuses(selectedRowIds, rows);
+            await deleteVacationRequestStatus(selectedRowId);
             await vacationRequestsApi.deleteVacationRequest({
-              id: String(selectedRow)
+              id: String(selectedRowId)
             });
-            deleteVacationRequestRows(selectedRowIds, rows);
+            deleteVacationRequestRows(selectedRowId);
           } catch (error) {
             setError(`${"Deleting vacation request has failed."}, ${error}`);
           }

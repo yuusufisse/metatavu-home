@@ -23,8 +23,10 @@ interface Props {
   vacationData: VacationData;
   setVacationData: Dispatch<SetStateAction<VacationData>>;
   dateTimeNow: DateTime;
-  initialStartDate: DateTime | undefined;
-  initialEndDate: DateTime | undefined;
+  startDate: DateTime;
+  endDate: DateTime;
+  setStartDate: Dispatch<SetStateAction<DateTime>>;
+  setEndDate: Dispatch<SetStateAction<DateTime>>;
 }
 
 /**
@@ -36,8 +38,10 @@ const FormFields = ({
   vacationData,
   setVacationData,
   dateTimeNow,
-  initialEndDate,
-  initialStartDate
+  endDate,
+  setEndDate,
+  setStartDate,
+  startDate
 }: Props) => {
   /**
    * Set dates to vacationData
@@ -63,7 +67,6 @@ const FormFields = ({
     <FormControl sx={{ width: "100%" }}>
       <FormLabel>Vacation Type</FormLabel>
       <Select
-        required
         name="type"
         value={String(vacationData.type)}
         onChange={(event: SelectChangeEvent<string>) => {
@@ -85,6 +88,8 @@ const FormFields = ({
 
       <FormLabel>Message</FormLabel>
       <TextField
+        required
+        error={!vacationData.message?.length}
         value={vacationData.message}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
           setVacationData({
@@ -99,12 +104,14 @@ const FormFields = ({
       <DateRangePicker
         dateTimeNow={dateTimeNow}
         setDates={setDates}
-        initialStartDate={initialStartDate}
-        initialEndDate={initialEndDate}
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
       />
 
       <Button
-        disabled={!hasAllPropsDefined(vacationData)}
+        disabled={!hasAllPropsDefined(vacationData) || !vacationData.message?.length}
         type="submit"
         variant="contained"
         size="large"
