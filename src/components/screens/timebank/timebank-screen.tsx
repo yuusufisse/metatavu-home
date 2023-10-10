@@ -16,6 +16,9 @@ import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
 import config from "../../../app/config";
 
+/**
+ * Time bank screen component containing functions and logic to run time bank features.
+ */
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const [timespanSelector, setTimespanSelector] = useState<Timespan>(Timespan.ALL_TIME);
@@ -28,9 +31,9 @@ const TimebankScreen = () => {
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
 
   /**
-   * Fetches the person's total time to display data such as balance.
-   * Function is called on initial load or timespan changes.
-   * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
+   * Gets the logged in person from the persons list atom and then gets that person's total time data.
+   * Function is called on initial load / persons list changes or timespan changes.
+   * @param timespan Optional Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time. Defaults to all time.
    */
   const getPersonTotalTime = async (timespan?: Timespan): Promise<void> => {
     if (!personTotalTime || timespan) {
@@ -55,7 +58,7 @@ const TimebankScreen = () => {
   };
 
   /**
-   * Fetches the person's daily entries.
+   * Gets the logged in person from persons list atom and then fetches the person's daily entries.
    */
   const getPersonDailyEntries = async (): Promise<void> => {
     if (persons.length) {
@@ -76,7 +79,7 @@ const TimebankScreen = () => {
   };
 
   /**
-   * Changes the displayed daily entry via the Date Picker.
+   * Changes the displayed daily entry in the pie chart via the Date Picker.
    * @param selectedDate selected date from DatePicker
    */
   const handleDailyEntryChange = (selectedDate: DateTime | null) => {

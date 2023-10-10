@@ -6,6 +6,9 @@ import strings from "../localization/strings";
 import { theme } from "../theme";
 import { getHoursAndMinutes } from "./time-utils";
 
+/**
+ * Interface for custom label used in the pie chart.
+ */
 export interface CustomLabel {
   value: number;
   name: string;
@@ -138,25 +141,25 @@ export const renderCustomizedTooltipBarChart = (props: TooltipProps<ValueType, N
       >
         {name}
       </Typography>
-      {billableProject !== undefined &&
+      {billableProject &&
         renderCustomizedTooltipRow(
           strings.timebank.billableProject,
           billableProject as number,
           theme.palette.success.main
         )}
-      {nonBillableProject !== undefined &&
+      {nonBillableProject &&
         renderCustomizedTooltipRow(
           strings.timebank.nonBillableProject,
           nonBillableProject as number,
           theme.palette.success.main
         )}
-      {internal !== undefined &&
+      {internal &&
         renderCustomizedTooltipRow(
           strings.timebank.internal,
           internal as number,
           theme.palette.warning.main
         )}
-      {expected !== undefined &&
+      {expected &&
         renderCustomizedTooltipRow(
           strings.timebank.expected,
           expected as number,

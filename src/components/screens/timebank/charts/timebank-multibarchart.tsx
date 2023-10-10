@@ -7,7 +7,7 @@ import { Typography } from "@mui/material";
 import { renderCustomizedTooltipBarChart } from "../../../../utils/chart-utils";
 
 interface Props {
-  selectedEntries: DailyEntry[] | undefined;
+  selectedEntries: DailyEntry[];
 }
 
 const TimebankMultiBarChart = (props: Props) => {

@@ -1,15 +1,18 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DailyEntry } from "../../../generated/client";
 import { Range } from "../timebank/timebank-content";
 
 interface Props {
   dailyEntries: DailyEntry[];
-  setSelectedEntries: Dispatch<SetStateAction<DailyEntry[] | undefined>>;
+  setSelectedEntries: (selectedEntries?: DailyEntry[]) => void;
   disableNullEntries: (e: DateTime, range?: Range) => boolean;
 }
 
+/**
+ * Date Range Picker component associated with multi bar chart.
+ */
 const DateRangePicker = (props: Props) => {
   const { setSelectedEntries, dailyEntries, disableNullEntries } = props;
 

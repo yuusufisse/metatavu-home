@@ -49,14 +49,14 @@ const BalanceCard = () => {
    */
   useEffect(() => {
     if (!personTotalTime || personTotalTime?.timePeriod?.split("-").length !== 5) getPersons();
-  }, [persons]);
+  }, [personTotalTime, persons]);
 
   /**
    * Renders person's total time
    *
    * @param personTotalTime PersonTotalTime
    */
-  const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
+  const renderPersonTotalTime = (personTotalTime: PersonTotalTime) => {
     if (!personTotalTime) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
@@ -93,7 +93,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {renderPersonTotalTime(personTotalTime)}
+              {personTotalTime ? renderPersonTotalTime(personTotalTime) : null}
             </Grid>
           </Grid>
         </CardContent>

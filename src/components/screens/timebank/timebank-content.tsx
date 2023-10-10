@@ -43,6 +43,9 @@ export interface Range {
   end: DateTime | null;
 }
 
+/**
+ * Component that contains the entirety of Timebank content, such as charts
+ */
 const TimebankContent = (props: Props) => {
   const { timespanSelector, getPersonTotalTime, handleDailyEntryChange, personTotalTimeLoading } =
     props;
@@ -75,7 +78,7 @@ const TimebankContent = (props: Props) => {
   };
 
   /**
-   *
+   * Renders overview chart and list item elements containing total time summaries
    */
   const renderOverViewChart = () => {
     if (personTotalTimeLoading) return <CircularProgress sx={{ margin: "auto", mt: "5%" }} />;
@@ -123,13 +126,13 @@ const TimebankContent = (props: Props) => {
    * @returns JSX.Element consisting of either chart component
    */
   const renderDailyEntryOrRangeChart = () => {
-    if (byRange.dailyEntries) {
+    if (byRange.dailyEntries && selectedEntries) {
       return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
     } else return <TimebankPieChart />;
   };
 
   /**
-   * Renders a daily entry pie chart or a bar chart of daily entries from a selected range.
+   * Renders date picker or range date picker associated with above charts.
    * @returns JSX.Element consisting of either chart component
    */
   const renderDatePickers = () => {
