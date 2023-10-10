@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Person, Timespan } from "../../../generated/client";
-import { CircularProgress, SelectChangeEvent, Card } from "@mui/material";
+import { CircularProgress, Card } from "@mui/material";
 import { userProfileAtom } from "../../../atoms/auth";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../../atoms/error";
@@ -18,7 +18,7 @@ import config from "../../../app/config";
 
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
-  const [timespanSelector, setTimespanSelector] = useState("Week");
+  const [timespanSelector, setTimespanSelector] = useState<Timespan>(Timespan.ALL_TIME);
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const persons = useAtomValue(personsAtom);
@@ -29,11 +29,13 @@ const TimebankScreen = () => {
 
   /**
    * Fetches the person's total time to display data such as balance.
+   * Function is called on initial load or timespan changes.
    * @param timespan Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time
    */
   const getPersonTotalTime = async (timespan?: Timespan): Promise<void> => {
     if (!personTotalTime || timespan) {
       setPersonTotalTimeLoading(true);
+      setTimespanSelector(timespan || Timespan.ALL_TIME);
       if (persons.length) {
         try {
           const loggedInPerson = persons.filter(
@@ -85,27 +87,6 @@ const TimebankScreen = () => {
     );
   };
 
-  /**
-   * Changes the displayed timespan of @PersonTotalTime results
-   * @param e Event value (string)
-   * @returns function call with the selected timespan
-   */
-  const handleBalanceViewChange = (e: SelectChangeEvent) => {
-    setTimespanSelector(e.target.value);
-    switch (e.target.value) {
-      case "Week":
-        return getPersonTotalTime(Timespan.WEEK);
-      case "Month":
-        return getPersonTotalTime(Timespan.MONTH);
-      case "Year":
-        return getPersonTotalTime(Timespan.YEAR);
-      case "All":
-        return getPersonTotalTime(Timespan.ALL_TIME);
-      default:
-        return getPersonTotalTime(Timespan.WEEK);
-    }
-  };
-
   useEffect(() => {
     getPersonTotalTime();
     getPersonDailyEntries();
@@ -125,7 +106,7 @@ const TimebankScreen = () => {
           setPersonTotalTimeLoading={setPersonTotalTimeLoading}
           userProfile={userProfile}
           handleDailyEntryChange={handleDailyEntryChange}
-          handleBalanceViewChange={handleBalanceViewChange}
+          getPersonTotalTime={getPersonTotalTime}
           timespanSelector={timespanSelector}
         />
       </>

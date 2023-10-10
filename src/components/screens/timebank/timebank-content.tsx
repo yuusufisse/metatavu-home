@@ -4,7 +4,6 @@ import {
   ListItem,
   Select,
   MenuItem,
-  SelectChangeEvent,
   FormControlLabel,
   Checkbox,
   ListItemText,
@@ -14,7 +13,7 @@ import {
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
-import { DailyEntry } from "../../../generated/client";
+import { DailyEntry, Timespan } from "../../../generated/client";
 import TimebankPieChart from "./charts/timebank-piechart";
 import TimebankOverviewChart from "./charts/timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -32,7 +31,7 @@ interface Props {
   setPersonTotalTimeLoading: Dispatch<SetStateAction<boolean>>;
   userProfile: KeycloakProfile | undefined;
   timespanSelector: string;
-  handleBalanceViewChange: (e: SelectChangeEvent) => void;
+  getPersonTotalTime: (e?: Timespan) => void;
   handleDailyEntryChange: (e: DateTime | null) => void;
 }
 
@@ -45,12 +44,8 @@ export interface Range {
 }
 
 const TimebankContent = (props: Props) => {
-  const {
-    timespanSelector,
-    handleBalanceViewChange,
-    handleDailyEntryChange,
-    personTotalTimeLoading
-  } = props;
+  const { timespanSelector, getPersonTotalTime, handleDailyEntryChange, personTotalTimeLoading } =
+    props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>();
   const [byRange, setByRange] = useState({
@@ -182,11 +177,11 @@ const TimebankContent = (props: Props) => {
               textAlign: "center"
             }}
             value={timespanSelector}
-            onChange={handleBalanceViewChange}
+            onChange={(e) => getPersonTotalTime(e.target.value as Timespan)}
           >
-            <MenuItem value={"Week"}>{strings.timeExpressions.week}</MenuItem>
-            <MenuItem value={"Month"}>{strings.timeExpressions.month}</MenuItem>
-            <MenuItem value={"All"}>{strings.timeExpressions.allTime}</MenuItem>
+            <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
+            <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
+            <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
           </Select>
         </Box>
 
