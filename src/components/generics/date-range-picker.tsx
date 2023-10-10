@@ -2,7 +2,8 @@ import { Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { Dispatch, SetStateAction } from "react";
-import { getTimeDifferenceInDays } from "../../utils/time-utils";
+import { getVacationDurationInDays } from "../../utils/time-utils";
+import strings from "../../localization/strings";
 
 /**
  * Component properties
@@ -40,7 +41,7 @@ const DateRangePicker = ({
     if (endDate) {
       setEndDate(endDate);
     }
-    setDates(startDate, endDate, getTimeDifferenceInDays(startDate, endDate));
+    setDates(startDate, endDate, getVacationDurationInDays(startDate, endDate));
   };
 
   return (
@@ -53,7 +54,7 @@ const DateRangePicker = ({
     >
       <DatePicker
         sx={{ width: "100%", padding: "0 5px 0 0" }}
-        label="Start Date"
+        label={strings.date.startDate}
         value={startDate}
         minDate={dateTimeNow}
         onChange={(newValue: DateTime | null) =>
@@ -62,7 +63,7 @@ const DateRangePicker = ({
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
-        label="End Date"
+        label={strings.date.endDate}
         value={endDate}
         minDate={startDate}
         onChange={(newValue: DateTime | null) => newValue && handleDateChange(startDate, newValue)}

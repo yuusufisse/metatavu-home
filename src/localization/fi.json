@@ -38,5 +38,9 @@
   "errorHandler": {
     "cancelButtonText": "Sulje",
     "title": "Tapahtui virhe"
+  },
+  "date": {
+    "startDate": "Alku pvm",
+    "endDate": "Loppu pvm"
   }
 }

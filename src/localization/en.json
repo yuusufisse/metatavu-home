@@ -38,5 +38,9 @@
   "errorHandler": {
     "cancelButtonText": "Close",
     "title": "An error has occurred"
+  },
+  "date": {
+    "startDate": "Start date",
+    "endDate": "End date"
   }
 }

@@ -70,6 +70,13 @@ export interface Localized extends LocalizedStringsMethods {
     cancelButtonText: string;
     title: string;
   };
+  /**
+   * Translations related to date
+   */
+  date: {
+    startDate: string;
+    endDate: string;
+  };
 }
 
 /**

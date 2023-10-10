@@ -11,7 +11,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../../atoms/auth";
 import { errorAtom } from "../../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
-import { DataGridRow, VacationData } from "../../../types";
+import { VacationData } from "../../../types";
 
 /**
  * Vacation requests screen
