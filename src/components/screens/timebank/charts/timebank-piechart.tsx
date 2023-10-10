@@ -1,4 +1,3 @@
-import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import {
   renderCustomizedLabel,
@@ -20,9 +19,17 @@ const TimebankPieChart = () => {
     theme.palette.warning.main
   ];
 
-  return (
-    <ResponsiveContainer width={"75%"} height={200}>
-      {personDailyEntry?.logged ? (
+  if (personDailyEntry && !personDailyEntry.logged)
+    return (
+      <ResponsiveContainer width={"75%"} height={200}>
+        <Typography sx={{ textAlign: "center", marginTop: "12%" }}>
+          {strings.timebank.noData}
+        </Typography>
+      </ResponsiveContainer>
+    );
+  else if (personDailyEntry)
+    return (
+      <ResponsiveContainer width={"75%"} height={200}>
         <PieChart>
           <Pie
             data={dailyEntryToChart(personDailyEntry)}
@@ -41,13 +48,8 @@ const TimebankPieChart = () => {
           </Pie>
           <Tooltip content={renderCustomizedTooltipPieChart} />
         </PieChart>
-      ) : (
-        <Typography sx={{ textAlign: "center", marginTop: "12%" }}>
-          {strings.timebank.noData}
-        </Typography>
-      )}
-    </ResponsiveContainer>
-  );
+      </ResponsiveContainer>
+    );
 };
 
 export default TimebankPieChart;

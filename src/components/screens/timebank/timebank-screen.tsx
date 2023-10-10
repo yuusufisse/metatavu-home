@@ -45,7 +45,7 @@ const TimebankScreen = () => {
             (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
           )[0];
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id,
+            personId: loggedInPerson.id,
             timespan: timespan
           });
           setPersonTotalTime(fetchedPersonTotalTime[0]);
@@ -67,7 +67,7 @@ const TimebankScreen = () => {
           (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
         )[0];
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson?.id
+          personId: loggedInPerson.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(fetchedDailyEntries[0]);
@@ -84,7 +84,7 @@ const TimebankScreen = () => {
    */
   const handleDailyEntryChange = (selectedDate: DateTime | null) => {
     setPersonDailyEntry(
-      dailyEntries?.filter(
+      dailyEntries.filter(
         (item) => DateTime.fromJSDate(item.date).toISODate() === selectedDate?.toISODate()
       )[0]
     );

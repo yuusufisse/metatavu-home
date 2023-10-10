@@ -48,7 +48,7 @@ const BalanceCard = () => {
    * Get persontotaltime if it doesn't exist, or if it exists but the atom is set to other than "all time"
    */
   useEffect(() => {
-    if (!personTotalTime || personTotalTime?.timePeriod?.split("-").length !== 5) getPersons();
+    if (!personTotalTime || personTotalTime.timePeriod?.split("-").length !== 5) getPersons();
   }, [personTotalTime, persons]);
 
   /**

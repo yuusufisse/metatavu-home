@@ -28,7 +28,7 @@ const DateRangePicker = (props: Props) => {
    */
   useEffect(() => {
     if (range.start && range.end) {
-      const selectedDays = range?.end.diff(range.start, "days").toObject();
+      const selectedDays = range.end.diff(range.start, "days").toObject();
       const result = [];
 
       for (let i = 0; selectedDays.days && i <= selectedDays.days; i++) {

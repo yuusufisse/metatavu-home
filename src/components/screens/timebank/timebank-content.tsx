@@ -66,13 +66,13 @@ const TimebankContent = (props: Props) => {
    * @returns boolean value which controls the disabled dates.
    */
   const disableNullEntries = (date: DateTime, range?: Range): boolean => {
-    const nullEntries = dailyEntries?.filter(
+    const nullEntries = dailyEntries.filter(
       (item) =>
         item.logged === 0 &&
         item.expected === 0 &&
         DateTime.fromJSDate(item.date).toISODate() === date.toISODate()
     );
-    return nullEntries?.length
+    return nullEntries.length
       ? DateTime.fromJSDate(nullEntries[0].date).toISODate() === date.toISODate()
       : String(range?.end?.minus({ days: 1 }).toISODate()) < String(date.toISODate()) || false;
   };
@@ -82,7 +82,7 @@ const TimebankContent = (props: Props) => {
    */
   const renderOverViewChart = () => {
     if (personTotalTimeLoading) return <CircularProgress sx={{ margin: "auto", mt: "5%" }} />;
-    else
+    else if (personTotalTime)
       return (
         <>
           <TimebankOverviewChart />
@@ -90,30 +90,30 @@ const TimebankContent = (props: Props) => {
             <ListItem>
               <ListItemText
                 primary={strings.timebank.timeperiod}
-                secondary={formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
+                secondary={formatTimePeriod(personTotalTime.timePeriod?.split(","))}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 sx={{
-                  color: getHoursAndMinutes(Number(personTotalTime?.balance)).startsWith("-")
+                  color: getHoursAndMinutes(Number(personTotalTime.balance)).startsWith("-")
                     ? theme.palette.error.main
                     : theme.palette.success.main
                 }}
                 primary={strings.timebank.balance}
-                secondary={getHoursAndMinutes(Number(personTotalTime?.balance))}
+                secondary={getHoursAndMinutes(Number(personTotalTime.balance))}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary={strings.timebank.logged}
-                secondary={getHoursAndMinutes(Number(personTotalTime?.logged))}
+                secondary={getHoursAndMinutes(Number(personTotalTime.logged))}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary={strings.timebank.expected}
-                secondary={getHoursAndMinutes(Number(personTotalTime?.expected))}
+                secondary={getHoursAndMinutes(Number(personTotalTime.expected))}
               />
             </ListItem>
           </List>
@@ -221,9 +221,9 @@ const TimebankContent = (props: Props) => {
               <ListItemText
                 primary={strings.timebank.logged}
                 secondary={
-                  byRange.dailyEntries
+                  byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
-                        Number(selectedEntries?.reduce((prev, next) => prev + next.logged, 0))
+                        Number(selectedEntries.reduce((prev, next) => prev + next.logged, 0))
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.logged))
                 }
@@ -234,10 +234,10 @@ const TimebankContent = (props: Props) => {
                 sx={{ color: theme.palette.success.dark }}
                 primary={strings.timebank.billableProject}
                 secondary={
-                  byRange.dailyEntries
+                  byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
                         Number(
-                          selectedEntries?.reduce(
+                          selectedEntries.reduce(
                             (prev, next) => prev + next.billableProjectTime,
                             0
                           )
@@ -252,10 +252,10 @@ const TimebankContent = (props: Props) => {
                 sx={{ color: theme.palette.success.light }}
                 primary={strings.timebank.nonBillableProject}
                 secondary={
-                  byRange.dailyEntries
+                  byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
                         Number(
-                          selectedEntries?.reduce(
+                          selectedEntries.reduce(
                             (prev, next) => prev + next.nonBillableProjectTime,
                             0
                           )
@@ -270,9 +270,9 @@ const TimebankContent = (props: Props) => {
                 sx={{ color: theme.palette.warning.main }}
                 primary={strings.timebank.internal}
                 secondary={
-                  byRange.dailyEntries
+                  byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
-                        Number(selectedEntries?.reduce((prev, next) => prev + next.internalTime, 0))
+                        Number(selectedEntries.reduce((prev, next) => prev + next.internalTime, 0))
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.internalTime))
                 }
@@ -283,9 +283,9 @@ const TimebankContent = (props: Props) => {
                 sx={{ color: theme.palette.info.main }}
                 primary={strings.timebank.expected}
                 secondary={
-                  byRange.dailyEntries
+                  byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
-                        Number(selectedEntries?.reduce((prev, next) => prev + next.expected, 0))
+                        Number(selectedEntries.reduce((prev, next) => prev + next.expected, 0))
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.expected))
                 }
