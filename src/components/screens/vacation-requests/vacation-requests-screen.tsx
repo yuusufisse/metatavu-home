@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import VacationRequestsTable from "./vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
@@ -7,11 +7,13 @@ import {
   VacationRequestStatuses
 } from "../../../generated/client";
 import { useApi } from "../../../hooks/use-api";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../../atoms/auth";
 import { errorAtom } from "../../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../../types";
+import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
+import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
 
 /**
  * Vacation requests screen
@@ -20,13 +22,10 @@ const VacationRequestsScreen = () => {
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
-    []
+  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
+  const [vacationRequestStatuses, setVacationRequestStatuses] = useAtom(
+    vacationRequestStatusesAtom
   );
-  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useState<
-    VacationRequestStatus[]
-  >([]);
 
   /**
    * Fetch vacations when userProfile exists
@@ -110,7 +109,7 @@ const VacationRequestsScreen = () => {
           selectedLatestVacationRequestStatuses.push(latestStatus);
         }
       });
-      setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
+      setVacationRequestStatuses(selectedLatestVacationRequestStatuses);
     }
   };
 
@@ -321,10 +320,6 @@ const VacationRequestsScreen = () => {
   return (
     <Container>
       <VacationRequestsTable
-        vacationRequests={vacationRequests}
-        vacationRequestStatuses={latestVacationRequestStatuses}
-        setVacationRequests={setVacationRequests}
-        setVacationRequestStatuses={setVacationRequestStatuses}
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}

@@ -1,23 +1,20 @@
 import { DataGrid, GridRowId, GridRowSelectionModel } from "@mui/x-data-grid";
-import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { columns } from "./vacation-requests-table-columns";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
-import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
 import { DataGridRow, VacationData } from "../../../../types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
 import { languageAtom } from "../../../../atoms/languageAtom";
 import { useAtomValue } from "jotai";
+import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
+import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
 
 /**
  * Component properties
  */
 interface Props {
-  vacationRequests: VacationRequest[];
-  vacationRequestStatuses: VacationRequestStatus[];
-  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
-  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
   deleteVacationRequests: (
     selectedRowIds: GridRowId[] | undefined,
     rows: DataGridRow[]
@@ -35,14 +32,12 @@ interface Props {
  * @param props component properties
  */
 const VacationRequestsTable = ({
-  vacationRequests,
-  vacationRequestStatuses,
-  setVacationRequests,
-  setVacationRequestStatuses,
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest
 }: Props) => {
+  const vacationRequests = useAtomValue(vacationRequestsAtom);
+  const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
   const containerRef = useRef(null);
   const [rows, setRows] = useState<DataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);
@@ -71,10 +66,6 @@ const VacationRequestsTable = ({
       ref={containerRef}
     >
       <TableToolbar
-        vacationRequests={vacationRequests}
-        setVacationRequests={setVacationRequests}
-        setVacationRequestStatuses={setVacationRequestStatuses}
-        vacationRequestStatuses={vacationRequestStatuses}
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}

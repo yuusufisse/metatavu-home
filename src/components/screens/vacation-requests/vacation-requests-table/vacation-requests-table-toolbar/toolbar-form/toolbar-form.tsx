@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { VacationRequest, VacationType } from "../../../../../../generated/client";
+import { VacationType } from "../../../../../../generated/client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../../../types";
@@ -7,6 +7,8 @@ import { GridRowId } from "@mui/x-data-grid";
 import FormFields from "./form-fields";
 import { getVacationDataFromRow } from "./get-vacation-data-from-row";
 import { determineToolbarFormMode } from "../../../../../../utils/toolbar-utils";
+import { useAtomValue } from "jotai";
+import { vacationRequestsAtom } from "../../../../../../atoms/vacationRequests";
 
 /**
  * Component properties
@@ -14,8 +16,6 @@ import { determineToolbarFormMode } from "../../../../../../utils/toolbar-utils"
 interface Props {
   formOpen: boolean;
   setFormOpen: Dispatch<SetStateAction<boolean>>;
-  vacationRequests: VacationRequest[];
-  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
   updateVacationRequest: (
     vacationData: VacationData,
     vacationRequestId: string | undefined
@@ -35,7 +35,6 @@ interface Props {
 const TableForm = ({
   formOpen,
   setFormOpen,
-  vacationRequests,
   createVacationRequest,
   updateVacationRequest,
   selectedRowIds,
@@ -56,7 +55,7 @@ const TableForm = ({
   const [selectedVacationRequestId, setSelectedVacationRequestId] = useState<string | undefined>(
     undefined
   );
-
+  const vacationRequests = useAtomValue(vacationRequestsAtom);
   /**
    * Reset vacation data
    */
@@ -89,9 +88,9 @@ const TableForm = ({
   useEffect(() => {
     if (toolbarFormMode === ToolbarFormModes.EDIT && selectedRowIds?.length && rows?.length) {
       getVacationDataFromRow({
+        vacationRequests: vacationRequests,
         rows: rows,
         selectedRowIds: selectedRowIds,
-        vacationRequests: vacationRequests,
         setSelectedVacationRequestId: setSelectedVacationRequestId,
         setStartDate: setStartDate,
         setEndDate: setEndDate,
