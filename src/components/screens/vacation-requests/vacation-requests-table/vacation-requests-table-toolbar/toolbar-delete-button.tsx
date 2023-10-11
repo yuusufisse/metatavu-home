@@ -6,7 +6,7 @@ import strings from "../../../../../localization/strings";
  * Component properties
  */
 interface Props {
-  setConfirmation: (confirmation: string | undefined) => void;
+  setConfirmation: (confirmation: string) => void;
 }
 /**
  * Delete Button component

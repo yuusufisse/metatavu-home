@@ -8,8 +8,8 @@ import strings from "../../localization/strings";
  */
 interface Props {
   children: ReactNode;
-  confirmation: string | undefined;
-  setConfirmation: (confirmation: string | undefined) => void;
+  confirmation: string;
+  setConfirmation: (confirmation: string) => void;
   deleteVacationsData: () => void;
 }
 
@@ -31,12 +31,12 @@ const ConfirmationHandler = ({
     <>
       {children}
       <GenericDialog
-        open={confirmation !== undefined}
+        open={confirmation !== ""}
         error={false}
-        onClose={() => setConfirmation(undefined)}
-        onCancel={() => setConfirmation(undefined)}
+        onClose={() => setConfirmation("")}
+        onCancel={() => setConfirmation("")}
         onConfirm={() => {
-          setConfirmation(undefined);
+          setConfirmation("");
           deleteVacationsData();
         }}
         confirmButtonText={strings.confirmationHandler.confirmButtonText}

@@ -1,14 +1,14 @@
 import { Variant } from "@mui/material/styles/createTypography";
 import { ComponentType, ReactNode } from "react";
 import { ButtonIconProps } from "../../../../../types";
-import { Button, Typography } from "@mui/material";
+import { Button, ButtonOwnProps, Typography } from "@mui/material";
 
 /**
  * Component properties
  */
 interface Props {
   children?: ReactNode;
-  buttonVariant?: "text" | "contained" | "outlined";
+  buttonVariant?: ButtonOwnProps["variant"];
   titleVariant?: Variant;
   value: boolean;
   setValue: (value: boolean) => void;

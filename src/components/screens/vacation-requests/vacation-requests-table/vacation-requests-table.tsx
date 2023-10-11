@@ -15,10 +15,7 @@ import VacationRequestsTableColumns from "./vacation-requests-table-columns";
  * Component properties
  */
 interface Props {
-  deleteVacationRequests: (
-    selectedRowIds: GridRowId[] | undefined,
-    rows: DataGridRow[]
-  ) => Promise<void>;
+  deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (
     vacationData: VacationData,

@@ -21,8 +21,8 @@ interface Props {
     vacationRequestId: string | undefined
   ) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
-  selectedRowIds: GridRowId[] | undefined;
-  rows: DataGridRow[] | undefined;
+  selectedRowIds: GridRowId[];
+  rows: DataGridRow[];
   toolbarFormMode: ToolbarFormModes;
   setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
 }
@@ -52,10 +52,9 @@ const TableForm = ({
     message: "",
     days: 1
   });
-  const [selectedVacationRequestId, setSelectedVacationRequestId] = useState<string | undefined>(
-    undefined
-  );
+  const [selectedVacationRequestId, setSelectedVacationRequestId] = useState("");
   const vacationRequests = useAtomValue(vacationRequestsAtom);
+
   /**
    * Reset vacation data
    */

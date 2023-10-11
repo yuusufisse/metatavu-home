@@ -1,23 +1,20 @@
 import { Add, Cancel, Edit } from "@mui/icons-material";
-import { Box, Collapse, Grid, styled } from "@mui/material";
+import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import { GridRowId } from "@mui/x-data-grid";
 import { DataGridRow, ToolbarFormModes, VacationData } from "../../../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
-import ToolbarTitle from "./toolbar-title";
 import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../../../contexts/confirmation-handler";
 import strings from "../../../../../localization/strings";
+import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
 
 /**
  * Component properties
  */
 interface Props {
-  deleteVacationRequests: (
-    selectedRowIds: GridRowId[] | undefined,
-    rows: DataGridRow[]
-  ) => Promise<void>;
+  deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (
     vacationData: VacationData,
@@ -25,7 +22,7 @@ interface Props {
   ) => Promise<void>;
   setFormOpen: (formOpen: boolean) => void;
   formOpen: boolean;
-  selectedRowIds: GridRowId[] | undefined;
+  selectedRowIds: GridRowId[];
   rows: DataGridRow[];
 }
 /**
@@ -44,7 +41,7 @@ const TableToolbar = ({
 }: Props) => {
   const [toolbarOpen, setToolbarOpen] = useState<boolean>(false);
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
-  const [confirmation, setConfirmation] = useState<string | undefined>(undefined);
+  const [confirmation, setConfirmation] = useState("");
 
   /**
    * Set toolbar open
@@ -78,6 +75,27 @@ const TableToolbar = ({
     alignContent: "space-around",
     alignItems: "center"
   });
+
+  /**
+   * Component properties
+   */
+  interface Props {
+    toolbarFormMode: ToolbarFormModes;
+  }
+
+  /**
+   * Toolbar title component
+   */
+  const ToolbarTitle = ({ toolbarFormMode }: Props) => {
+    const [title, setTitle] = useState(strings.tableToolbar.myRequests);
+
+    useEffect(() => {
+      if (toolbarFormMode) {
+        setTitle(getToolbarTitle(toolbarFormMode));
+      }
+    }, [toolbarFormMode]);
+    return <Typography variant="h5">{title}</Typography>;
+  };
 
   return (
     <Box>

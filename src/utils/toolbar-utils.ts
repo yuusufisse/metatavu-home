@@ -6,7 +6,7 @@ import strings from "../localization/strings";
  * DetermineToolbarFormMode properties
  */
 interface DetermineToolbarFormModeProps {
-  selectedRowIds: GridRowId[] | undefined;
+  selectedRowIds: GridRowId[];
   formOpen: boolean;
   setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
 }

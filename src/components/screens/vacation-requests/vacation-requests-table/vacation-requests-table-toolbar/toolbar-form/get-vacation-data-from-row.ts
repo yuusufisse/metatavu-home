@@ -10,7 +10,7 @@ interface Props {
   rows: DataGridRow[];
   selectedRowIds: GridRowId[];
   vacationRequests: VacationRequest[];
-  setSelectedVacationRequestId: (selectedVacationRequestId: string | undefined) => void;
+  setSelectedVacationRequestId: (selectedVacationRequestId: string) => void;
   setStartDate: (startDate: DateTime) => void;
   setEndDate: (endDate: DateTime) => void;
   setVacationData: (vacationData: VacationData) => void;
@@ -49,7 +49,9 @@ export const getVacationDataFromRow = ({
         endDate: endDate,
         days: days
       });
-      setSelectedVacationRequestId(selectedVacationRequest.id);
+      if (selectedVacationRequest?.id) {
+        setSelectedVacationRequestId(selectedVacationRequest.id);
+      }
       setStartDate(startDate);
       setEndDate(endDate);
     }
