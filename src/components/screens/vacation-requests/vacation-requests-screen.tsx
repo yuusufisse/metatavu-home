@@ -29,6 +29,31 @@ const VacationRequestsScreen = () => {
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
 
   /**
+   * Fetch vacations when userProfile exists
+   */
+  useEffect(() => {
+    fetchVacationsRequests();
+  }, [userProfile]);
+
+  /**
+   * Filter vacation requests when vacation request statuses exist
+   */
+  useEffect(() => {
+    if (vacationRequestStatuses) {
+      filterLatestVacationRequestStatuses();
+    }
+  }, [vacationRequestStatuses]);
+
+  /**
+   * Fetch vacation requests statuses
+   */
+  useEffect(() => {
+    if (vacationRequests) {
+      fetchVacationRequestStatuses();
+    }
+  }, [vacationRequests]);
+
+  /**
    * Fetch vacation request statuses using the API
    */
   const fetchVacationRequestStatuses = async () => {
@@ -290,31 +315,6 @@ const VacationRequestsScreen = () => {
       setError(`${"Updating vacation request has failed."}, ${error}`);
     }
   };
-
-  /**
-   * Fetch vacations when userProfile exists
-   */
-  useEffect(() => {
-    fetchVacationsRequests();
-  }, [userProfile]);
-
-  /**
-   * Filter vacation requests when vacation request statuses exist
-   */
-  useEffect(() => {
-    if (vacationRequestStatuses) {
-      filterLatestVacationRequestStatuses();
-    }
-  }, [vacationRequestStatuses]);
-
-  /**
-   * Fetch vacation requests statuses
-   */
-  useEffect(() => {
-    if (vacationRequests) {
-      fetchVacationRequestStatuses();
-    }
-  }, [vacationRequests]);
 
   return (
     <Container>
