@@ -2,6 +2,7 @@ import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { SetStateAction } from "jotai";
 import { Dispatch } from "react";
+import strings from "../../../../../localization/strings";
 
 /**
  * Component properties
@@ -26,7 +27,7 @@ const ToolbarDeleteButton = ({ setConfirmation }: Props) => {
       }}
     >
       <Delete />
-      <Typography variant="h6">&nbsp;Delete</Typography>
+      <Typography variant="h6">&nbsp;{strings.tableToolbar.delete}</Typography>
     </Button>
   );
 };

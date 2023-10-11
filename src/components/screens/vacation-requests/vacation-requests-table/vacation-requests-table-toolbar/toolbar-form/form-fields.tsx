@@ -15,6 +15,7 @@ import { VacationData } from "../../../../../../types";
 import { SetStateAction } from "jotai";
 import { DateTime } from "luxon";
 import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
+import strings from "../../../../../../localization/strings";
 
 /**
  * Component properties
@@ -65,7 +66,7 @@ const FormFields = ({
 
   return (
     <FormControl sx={{ width: "100%" }}>
-      <FormLabel>Vacation Type</FormLabel>
+      <FormLabel>{strings.vacationRequest.type}</FormLabel>
       <Select
         name="type"
         value={String(vacationData.type)}
@@ -86,7 +87,7 @@ const FormFields = ({
         })}
       </Select>
 
-      <FormLabel>Message</FormLabel>
+      <FormLabel>{strings.vacationRequest.message}</FormLabel>
       <TextField
         required
         error={!vacationData.message?.length}
@@ -100,7 +101,7 @@ const FormFields = ({
         sx={{ marginBottom: "5px" }}
       />
 
-      <FormLabel sx={{ marginBottom: "5px" }}>Duration</FormLabel>
+      <FormLabel sx={{ marginBottom: "5px" }}>{strings.vacationRequest.days}</FormLabel>
       <DateRangePicker
         dateTimeNow={dateTimeNow}
         setDates={setDates}
@@ -117,7 +118,7 @@ const FormFields = ({
         size="large"
         sx={{ marginTop: "10px" }}
       >
-        Submit
+        {strings.form.submit}
       </Button>
     </FormControl>
   );

@@ -44,6 +44,28 @@
     "endDate": "Loppu",
     "type": "Lomatyyppi",
     "message": "Viesti",
-    "days": "Päivät"
+    "days": "Päivät",
+    "status": "Tila",
+    "updatedAt": "Päivitetty"
+  },
+  "vacationRequestError": {
+    "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
+    "fetchStatusError": "Lomahakemustilojen hakeminen epäonnistui",
+    "createRequestError": "Lomahakemuksen luominen epäonnistui",
+    "createStatusError": "Lomahakemukstilan luominen epäonnistui",
+    "deleteRequestError": "Lomahakemuksen poistaminen epäonnistui",
+    "deleteStatusError": "Lomahakemustilojen poistaminen epäonnistui",
+    "updateRequestError": "Lomahakemuksen päivittäminen epäonnistui",
+    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui"
+  },
+  "form": {
+    "submit": "Lähetä"
+  },
+  "tableToolbar": {
+    "delete": "Poista",
+    "myRequests": "Minun lomahakemukset",
+    "edit": "Muokkaa",
+    "cancel": "Peruuta",
+    "create": "Hae lomaa"
   }
 }

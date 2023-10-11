@@ -44,6 +44,28 @@
     "endDate": "End Date",
     "type": "Vacation Type",
     "message": "Message",
-    "days": "Days"
+    "days": "Days",
+    "status": "Status",
+    "updatedAt": "Updated At"
+  },
+  "vacationRequestError": {
+    "fetchRequestError": "Fetching vacation requests has failed",
+    "fetchStatusError": "Fetching vacation request statuses has failed",
+    "createRequestError": "Creating vacation request has failed",
+    "createStatusError": "Creating vacation request status has failed ",
+    "deleteRequestError": "Deleting vacation requests has failed",
+    "deleteStatusError": "Deleting vacation request statuses has failed",
+    "updateRequestError": "Updating vacation request has failed",
+    "updateStatusError": "Updating vacation request status has failed"
+  },
+  "form": {
+    "submit": "Submit"
+  },
+  "tableToolbar": {
+    "delete": "Delete",
+    "myRequests": "My vacation requests",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "create": "Request vacation"
   }
 }

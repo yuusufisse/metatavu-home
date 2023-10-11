@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ToolbarFormModes } from "../../../../../types";
 import { Typography } from "@mui/material";
 import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
+import strings from "../../../../../localization/strings";
 
 /**
  * Component properties
@@ -14,7 +15,7 @@ interface Props {
  * Toolbar title component
  */
 const ToolbarTitle = ({ toolbarFormMode }: Props) => {
-  const [title, setTitle] = useState<string>("My vacation requests");
+  const [title, setTitle] = useState<string>(strings.tableToolbar.myRequests);
 
   useEffect(() => {
     if (toolbarFormMode) {

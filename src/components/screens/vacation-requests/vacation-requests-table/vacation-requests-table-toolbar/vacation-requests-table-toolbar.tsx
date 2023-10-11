@@ -8,6 +8,7 @@ import ToolbarDeleteButton from "./toolbar-delete-button";
 import ToolbarTitle from "./toolbar-title";
 import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../../../contexts/confirmation-handler";
+import strings from "../../../../../localization/strings";
 
 /**
  * Component properties
@@ -93,7 +94,7 @@ const TableToolbar = ({
             {selectedRowIds?.length === 1 ? (
               <ToolbarGridItem item xs={6}>
                 <FormToggleButton
-                  title="Edit"
+                  title={strings.tableToolbar.edit}
                   ButtonIcon={Edit}
                   value={formOpen}
                   setValue={setFormOpen}
@@ -109,7 +110,7 @@ const TableToolbar = ({
             <ToolbarGridItem item xs={6}>
               {formOpen ? (
                 <FormToggleButton
-                  title="Cancel"
+                  title={strings.tableToolbar.cancel}
                   ButtonIcon={Cancel}
                   value={formOpen}
                   setValue={setFormOpen}
@@ -119,7 +120,7 @@ const TableToolbar = ({
                 <FormToggleButton
                   value={formOpen}
                   setValue={setFormOpen}
-                  title="Create"
+                  title={strings.tableToolbar.create}
                   ButtonIcon={Add}
                 />
               )}

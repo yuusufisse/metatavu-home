@@ -14,6 +14,7 @@ import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../../types";
 import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
 import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
+import strings from "../../../localization/strings";
 
 /**
  * Vacation requests screen
@@ -76,7 +77,7 @@ const VacationRequestsScreen = () => {
         );
         setVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
-        setError(`${"Fetching vacation request statuses failed."}, ${error}`);
+        setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
     }
   };
@@ -124,7 +125,7 @@ const VacationRequestsScreen = () => {
       });
       setVacationRequests(fetchedVacationRequests);
     } catch (error) {
-      setError(`${"Fetching vacation requests has failed."}, ${error}`);
+      setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
     }
   };
 
@@ -159,7 +160,7 @@ const VacationRequestsScreen = () => {
           deleteVacationRequestStatusRow(foundVacationRequestStatus);
         }
       } catch (error) {
-        setError(`${"Deleting vacation request status has failed"}, ${error}`);
+        setError(`${strings.vacationRequestError.deleteStatusError}, ${error}`);
       }
     }
   };
@@ -191,7 +192,7 @@ const VacationRequestsScreen = () => {
             });
             deleteVacationRequestRows(selectedRowId);
           } catch (error) {
-            setError(`${"Deleting vacation request has failed."}, ${error}`);
+            setError(`${strings.vacationRequestError.deleteRequestError}, ${error}`);
           }
         })
       );
@@ -224,7 +225,7 @@ const VacationRequestsScreen = () => {
         setVacationRequestStatuses([createdStatus, ...vacationRequestStatuses]);
       }
     } catch (error) {
-      setError(`${"Creating vacation request status has failed."}, ${error}`);
+      setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
   };
 
@@ -262,7 +263,7 @@ const VacationRequestsScreen = () => {
         setVacationRequests([createdRequest, ...vacationRequests]);
       }
     } catch (error) {
-      setError(`${"Creating vacation request has failed."}, ${error}`);
+      setError(`${strings.vacationRequestError.createRequestError}, ${error}`);
     }
   };
 
@@ -312,7 +313,7 @@ const VacationRequestsScreen = () => {
         setVacationRequests(tempVacationRequests);
       }
     } catch (error) {
-      setError(`${"Updating vacation request has failed."}, ${error}`);
+      setError(`${strings.vacationRequestError.updateRequestError}, ${error}`);
     }
   };
 

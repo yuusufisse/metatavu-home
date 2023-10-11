@@ -79,6 +79,28 @@ export interface Localized extends LocalizedStringsMethods {
     type: string;
     message: string;
     days: string;
+    status: string;
+    updatedAt: string;
+  };
+  vacationRequestError: {
+    fetchRequestError: string;
+    fetchStatusError: string;
+    createRequestError: string;
+    createStatusError: string;
+    deleteRequestError: string;
+    deleteStatusError: string;
+    updateRequestError: string;
+    updateStatusError: string;
+  };
+  form: {
+    submit: string;
+  };
+  tableToolbar: {
+    delete: string;
+    myRequests: string;
+    edit: string;
+    cancel: string;
+    create: string;
   };
 }
 
