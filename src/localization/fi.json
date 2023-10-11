@@ -33,7 +33,8 @@
   "confirmationHandler": {
     "confirmButtonText": "Kyllä",
     "cancelButtonText": "En",
-    "title": "Oletko varma?"
+    "title": "Oletko varma?",
+    "message": "Poista valitut lomahakemukset?"
   },
   "errorHandler": {
     "cancelButtonText": "Sulje",

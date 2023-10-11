@@ -62,6 +62,7 @@ export interface Localized extends LocalizedStringsMethods {
     confirmButtonText: string;
     cancelButtonText: string;
     title: string;
+    message: string;
   };
   /**
    * Translations related to error handler

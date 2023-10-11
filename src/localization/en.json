@@ -33,7 +33,8 @@
   "confirmationHandler": {
     "confirmButtonText": "Yes",
     "cancelButtonText": "No",
-    "title": "Are you sure?"
+    "title": "Are you sure?",
+    "message": "Delete selected vacation request(s)?"
   },
   "errorHandler": {
     "cancelButtonText": "Close",

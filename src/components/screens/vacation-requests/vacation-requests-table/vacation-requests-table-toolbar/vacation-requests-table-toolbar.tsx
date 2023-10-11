@@ -1,6 +1,6 @@
 import { Add, Cancel, Edit } from "@mui/icons-material";
 import { Box, Collapse, Grid, styled } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import { GridRowId } from "@mui/x-data-grid";
 import { DataGridRow, ToolbarFormModes, VacationData } from "../../../../../types";
@@ -23,7 +23,7 @@ interface Props {
     vacationData: VacationData,
     vacationRequestId: string | undefined
   ) => Promise<void>;
-  setFormOpen: Dispatch<SetStateAction<boolean>>;
+  setFormOpen: (formOpen: boolean) => void;
   formOpen: boolean;
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[];

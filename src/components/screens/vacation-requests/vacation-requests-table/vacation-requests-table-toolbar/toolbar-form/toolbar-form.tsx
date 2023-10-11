@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import { VacationType } from "../../../../../../generated/client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
@@ -15,7 +15,7 @@ import { vacationRequestsAtom } from "../../../../../../atoms/vacationRequests";
  */
 interface Props {
   formOpen: boolean;
-  setFormOpen: Dispatch<SetStateAction<boolean>>;
+  setFormOpen: (formOpen: boolean) => void;
   updateVacationRequest: (
     vacationData: VacationData,
     vacationRequestId: string | undefined
@@ -24,7 +24,7 @@ interface Props {
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[] | undefined;
   toolbarFormMode: ToolbarFormModes;
-  setToolbarFormMode: Dispatch<SetStateAction<ToolbarFormModes>>;
+  setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
 }
 
 /**

@@ -1,14 +1,12 @@
 import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
-import { SetStateAction } from "jotai";
-import { Dispatch } from "react";
 import strings from "../../../../../localization/strings";
 
 /**
  * Component properties
  */
 interface Props {
-  setConfirmation: Dispatch<SetStateAction<string | undefined>>;
+  setConfirmation: (confirmation: string | undefined) => void;
 }
 /**
  * Delete Button component
@@ -23,7 +21,7 @@ const ToolbarDeleteButton = ({ setConfirmation }: Props) => {
         width: "100%"
       }}
       onClick={() => {
-        setConfirmation("Delete the selected Vacation Request(s)?");
+        setConfirmation(strings.confirmationHandler.message);
       }}
     >
       <Delete />

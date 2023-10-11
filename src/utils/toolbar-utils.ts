@@ -1,6 +1,4 @@
 import { GridRowId } from "@mui/x-data-grid";
-import { SetStateAction } from "jotai";
-import { Dispatch } from "react";
 import { ToolbarFormModes } from "../types";
 import strings from "../localization/strings";
 
@@ -10,7 +8,7 @@ import strings from "../localization/strings";
 interface DetermineToolbarFormModeProps {
   selectedRowIds: GridRowId[] | undefined;
   formOpen: boolean;
-  setToolbarFormMode: Dispatch<SetStateAction<ToolbarFormModes>>;
+  setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
 }
 
 /**

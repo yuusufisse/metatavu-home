@@ -1,8 +1,6 @@
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationRequest } from "../../../../../../generated/client";
 import { DataGridRow, VacationData } from "../../../../../../types";
-import { Dispatch } from "react";
-import { SetStateAction } from "jotai";
 import { DateTime } from "luxon";
 
 /**
@@ -12,10 +10,10 @@ interface Props {
   rows: DataGridRow[];
   selectedRowIds: GridRowId[];
   vacationRequests: VacationRequest[];
-  setSelectedVacationRequestId: Dispatch<SetStateAction<string | undefined>>;
-  setStartDate: Dispatch<SetStateAction<DateTime>>;
-  setEndDate: Dispatch<SetStateAction<DateTime>>;
-  setVacationData: Dispatch<SetStateAction<VacationData>>;
+  setSelectedVacationRequestId: (selectedVacationRequestId: string | undefined) => void;
+  setStartDate: (startDate: DateTime) => void;
+  setEndDate: (endDate: DateTime) => void;
+  setVacationData: (vacationData: VacationData) => void;
 }
 
 /**

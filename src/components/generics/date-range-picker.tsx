@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import { Dispatch, SetStateAction } from "react";
 import { getVacationDurationInDays } from "../../utils/time-utils";
 import strings from "../../localization/strings";
 
@@ -13,8 +12,8 @@ interface Props {
   setDates: (startDate: DateTime | undefined, endDate: DateTime | undefined, days: number) => void;
   startDate: DateTime;
   endDate: DateTime;
-  setStartDate: Dispatch<SetStateAction<DateTime>>;
-  setEndDate: Dispatch<SetStateAction<DateTime>>;
+  setStartDate: (startDate: DateTime) => void;
+  setEndDate: (endDate: DateTime) => void;
 }
 /**
  * Date range picker component

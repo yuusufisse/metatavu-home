@@ -1,9 +1,18 @@
 import { Skeleton } from "@mui/material";
 
-interface CheckboxSkeletonProps {
+/**
+ * Component properties
+ */
+interface Props {
   idx: number;
 }
-const SkeletonTableRowCheckbox = ({ idx }: CheckboxSkeletonProps) => (
+
+/**
+ * Skeleton table row checkbox component
+ *
+ * @param props
+ */
+const SkeletonTableRowCheckbox = ({ idx }: Props) => (
   <Skeleton
     variant={"rounded"}
     key={`skeleton-row-checkbox${idx}`}

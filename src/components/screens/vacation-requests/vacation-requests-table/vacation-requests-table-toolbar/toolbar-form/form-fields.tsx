@@ -9,10 +9,9 @@ import {
 } from "@mui/material";
 import getVacationTypeByString from "../../../../../../utils/vacation-type-utils";
 import { VacationType } from "../../../../../../generated/client";
-import { ChangeEvent, Dispatch } from "react";
+import { ChangeEvent } from "react";
 import DateRangePicker from "../../../../../generics/date-range-picker";
 import { VacationData } from "../../../../../../types";
-import { SetStateAction } from "jotai";
 import { DateTime } from "luxon";
 import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
 import strings from "../../../../../../localization/strings";
@@ -22,12 +21,12 @@ import strings from "../../../../../../localization/strings";
  */
 interface Props {
   vacationData: VacationData;
-  setVacationData: Dispatch<SetStateAction<VacationData>>;
+  setVacationData: (vacationDate: VacationData) => void;
   dateTimeNow: DateTime;
   startDate: DateTime;
   endDate: DateTime;
-  setStartDate: Dispatch<SetStateAction<DateTime>>;
-  setEndDate: Dispatch<SetStateAction<DateTime>>;
+  setStartDate: (startDate: DateTime) => void;
+  setEndDate: (endDate: DateTime) => void;
 }
 
 /**

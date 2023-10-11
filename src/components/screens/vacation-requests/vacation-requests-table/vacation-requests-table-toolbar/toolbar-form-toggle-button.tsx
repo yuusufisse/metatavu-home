@@ -1,5 +1,5 @@
 import { Variant } from "@mui/material/styles/createTypography";
-import { ComponentType, Dispatch, ReactNode, SetStateAction } from "react";
+import { ComponentType, ReactNode } from "react";
 import { ButtonIconProps } from "../../../../../types";
 import { Button, Typography } from "@mui/material";
 
@@ -11,7 +11,7 @@ interface Props {
   buttonVariant?: "text" | "contained" | "outlined";
   titleVariant?: Variant;
   value: boolean;
-  setValue: Dispatch<SetStateAction<boolean>>;
+  setValue: (value: boolean) => void;
   ButtonIcon?: ComponentType<ButtonIconProps>;
   title?: string;
 }

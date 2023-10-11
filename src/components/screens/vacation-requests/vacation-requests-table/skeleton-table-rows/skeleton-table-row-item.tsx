@@ -1,12 +1,20 @@
 import { Skeleton } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 
-interface SkeletonTableItemProps {
+/**
+ * Component properties
+ */
+interface Props {
   idx: number;
   column: GridColDef;
 }
 
-const SkeletonTableItem = ({ idx, column }: SkeletonTableItemProps) => {
+/**
+ * Skeleton table item component
+ *
+ * @param props
+ */
+const SkeletonTableItem = ({ idx, column }: Props) => {
   const marginRight = 20;
   return (
     <Skeleton
