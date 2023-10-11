@@ -98,6 +98,8 @@ export interface Localized extends LocalizedStringsMethods {
   tableToolbar: {
     delete: string;
     myRequests: string;
+    createRequests: string;
+    editRequests: string;
     edit: string;
     cancel: string;
     create: string;

@@ -64,6 +64,8 @@
   "tableToolbar": {
     "delete": "Poista",
     "myRequests": "Minun lomahakemukset",
+    "createRequests": "Uusi lomahakemus",
+    "editRequests": "Muokkaa lomahakemusta",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "create": "Hae lomaa"

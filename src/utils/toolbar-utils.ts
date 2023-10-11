@@ -2,6 +2,7 @@ import { GridRowId } from "@mui/x-data-grid";
 import { SetStateAction } from "jotai";
 import { Dispatch } from "react";
 import { ToolbarFormModes } from "../types";
+import strings from "../localization/strings";
 
 /**
  * DetermineToolbarFormMode properties
@@ -47,13 +48,13 @@ export const getToolbarTitle = (toolbarFormMode: ToolbarFormModes): string => {
   let title = "";
   switch (true) {
     case toolbarFormMode === ToolbarFormModes.CREATE:
-      title = "Create a new vacation request";
+      title = strings.tableToolbar.createRequests;
       break;
     case toolbarFormMode === ToolbarFormModes.EDIT:
-      title = "Edit a vacation request";
+      title = strings.tableToolbar.editRequests;
       break;
     default:
-      title = "My vacation requests";
+      title = strings.tableToolbar.myRequests;
       break;
   }
   return title;
