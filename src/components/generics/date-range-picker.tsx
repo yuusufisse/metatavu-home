@@ -54,7 +54,7 @@ const DateRangePicker = ({
     >
       <DatePicker
         sx={{ width: "100%", padding: "0 5px 0 0" }}
-        label={strings.date.startDate}
+        label={strings.vacationRequest.startDate}
         value={startDate}
         minDate={dateTimeNow}
         onChange={(newValue: DateTime | null) =>
@@ -63,7 +63,7 @@ const DateRangePicker = ({
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
-        label={strings.date.endDate}
+        label={strings.vacationRequest.endDate}
         value={endDate}
         minDate={startDate}
         onChange={(newValue: DateTime | null) => newValue && handleDateChange(startDate, newValue)}

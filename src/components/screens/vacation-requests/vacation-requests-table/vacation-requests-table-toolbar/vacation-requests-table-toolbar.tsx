@@ -2,7 +2,6 @@ import { Add, Cancel, Edit } from "@mui/icons-material";
 import { Box, Collapse, Grid, styled } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
-import { VacationRequest, VacationRequestStatus } from "../../../../../generated/client";
 import { GridRowId } from "@mui/x-data-grid";
 import { DataGridRow, ToolbarFormModes, VacationData } from "../../../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
@@ -14,10 +13,6 @@ import ConfirmationHandler from "../../../../contexts/confirmation-handler";
  * Component properties
  */
 interface Props {
-  vacationRequests: VacationRequest[];
-  setVacationRequests: Dispatch<SetStateAction<VacationRequest[]>>;
-  vacationRequestStatuses: VacationRequestStatus[];
-  setVacationRequestStatuses: Dispatch<SetStateAction<VacationRequestStatus[]>>;
   deleteVacationRequests: (
     selectedRowIds: GridRowId[] | undefined,
     rows: DataGridRow[]
@@ -32,15 +27,12 @@ interface Props {
   selectedRowIds: GridRowId[] | undefined;
   rows: DataGridRow[];
 }
-
 /**
  * Table toolbar component
  *
  * @param props component properties
  */
 const TableToolbar = ({
-  vacationRequests,
-  setVacationRequests,
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
@@ -137,8 +129,6 @@ const TableToolbar = ({
         <Collapse in={formOpen}>
           <ToolbarForm
             formOpen={formOpen}
-            vacationRequests={vacationRequests}
-            setVacationRequests={setVacationRequests}
             setFormOpen={setFormOpen}
             createVacationRequest={createVacationRequest}
             updateVacationRequest={updateVacationRequest}

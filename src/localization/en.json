@@ -39,8 +39,11 @@
     "cancelButtonText": "Close",
     "title": "An error has occurred"
   },
-  "date": {
-    "startDate": "Start date",
-    "endDate": "End date"
+  "vacationRequest": {
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "type": "Vacation Type",
+    "message": "Message",
+    "days": "Days"
   }
 }

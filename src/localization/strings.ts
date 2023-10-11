@@ -71,11 +71,14 @@ export interface Localized extends LocalizedStringsMethods {
     title: string;
   };
   /**
-   * Translations related to date
+   * Translations related to vacation request
    */
-  date: {
+  vacationRequest: {
     startDate: string;
     endDate: string;
+    type: string;
+    message: string;
+    days: string;
   };
 }
 

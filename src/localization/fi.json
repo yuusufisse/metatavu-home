@@ -39,8 +39,11 @@
     "cancelButtonText": "Sulje",
     "title": "Tapahtui virhe"
   },
-  "date": {
-    "startDate": "Alku pvm",
-    "endDate": "Loppu pvm"
+  "vacationRequest": {
+    "startDate": "Alku",
+    "endDate": "Loppu",
+    "type": "Lomatyyppi",
+    "message": "Viesti",
+    "days": "Päivät"
   }
 }

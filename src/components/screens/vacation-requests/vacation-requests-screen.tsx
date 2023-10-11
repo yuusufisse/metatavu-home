@@ -7,11 +7,13 @@ import {
   VacationRequestStatuses
 } from "../../../generated/client";
 import { useApi } from "../../../hooks/use-api";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../../atoms/auth";
 import { errorAtom } from "../../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../../types";
+import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
+import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
 
 /**
  * Vacation requests screen
@@ -20,38 +22,11 @@ const VacationRequestsScreen = () => {
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
+  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
   const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
     []
   );
-  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useState<
-    VacationRequestStatus[]
-  >([]);
-
-  /**
-   * Fetch vacations when userProfile exists
-   */
-  useEffect(() => {
-    fetchVacationsRequests();
-  }, [userProfile]);
-
-  /**
-   * Filter vacation requests when vacation request statuses exist
-   */
-  useEffect(() => {
-    if (vacationRequestStatuses) {
-      filterLatestVacationRequestStatuses();
-    }
-  }, [vacationRequestStatuses]);
-
-  /**
-   * Fetch vacation requests statuses
-   */
-  useEffect(() => {
-    if (vacationRequests) {
-      fetchVacationRequestStatuses();
-    }
-  }, [vacationRequests]);
+  const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
 
   /**
    * Fetch vacation request statuses using the API
@@ -122,9 +97,7 @@ const VacationRequestsScreen = () => {
       const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
         personId: userProfile?.id
       });
-      if (setVacationRequests) {
-        setVacationRequests(fetchedVacationRequests);
-      }
+      setVacationRequests(fetchedVacationRequests);
     } catch (error) {
       setError(`${"Fetching vacation requests has failed."}, ${error}`);
     }
@@ -318,13 +291,34 @@ const VacationRequestsScreen = () => {
     }
   };
 
+  /**
+   * Fetch vacations when userProfile exists
+   */
+  useEffect(() => {
+    fetchVacationsRequests();
+  }, [userProfile]);
+
+  /**
+   * Filter vacation requests when vacation request statuses exist
+   */
+  useEffect(() => {
+    if (vacationRequestStatuses) {
+      filterLatestVacationRequestStatuses();
+    }
+  }, [vacationRequestStatuses]);
+
+  /**
+   * Fetch vacation requests statuses
+   */
+  useEffect(() => {
+    if (vacationRequests) {
+      fetchVacationRequestStatuses();
+    }
+  }, [vacationRequests]);
+
   return (
     <Container>
       <VacationRequestsTable
-        vacationRequests={vacationRequests}
-        vacationRequestStatuses={latestVacationRequestStatuses}
-        setVacationRequests={setVacationRequests}
-        setVacationRequestStatuses={setVacationRequestStatuses}
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
