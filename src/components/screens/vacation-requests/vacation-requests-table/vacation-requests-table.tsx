@@ -1,7 +1,6 @@
 import { DataGrid, GridRowId, GridRowSelectionModel } from "@mui/x-data-grid";
 import { useMemo, useRef, useState } from "react";
 import { Box } from "@mui/material";
-import { columns } from "./vacation-requests-table-columns";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
 import { DataGridRow, VacationData } from "../../../../types";
@@ -10,6 +9,7 @@ import { languageAtom } from "../../../../atoms/languageAtom";
 import { useAtomValue } from "jotai";
 import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
 import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
+import VacationRequestsTableColumns from "./vacation-requests-table-columns";
 
 /**
  * Component properties
@@ -44,6 +44,7 @@ const VacationRequestsTable = ({
   const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
   const { createDataGridRows } = VacationRequestsTableRows();
   const language = useAtomValue(languageAtom);
+  const { columns } = VacationRequestsTableColumns();
 
   /**
    * Set data grid rows

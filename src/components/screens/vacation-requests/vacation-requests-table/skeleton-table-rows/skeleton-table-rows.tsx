@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { columns } from "../vacation-requests-table-columns";
+import VacationRequestsTableColumns from "../vacation-requests-table-columns";
 import SkeletonTableRowCheckbox from "./skeleton-table-row-checkbox";
 import SkeletonTableItem from "./skeleton-table-row-item";
 
@@ -7,6 +7,7 @@ import SkeletonTableItem from "./skeleton-table-row-item";
  * Skeleton table rows component
  */
 const SkeletonTableRows = () => {
+  const { columns } = VacationRequestsTableColumns();
   return (
     <>
       {[...Array(11)].map((_item, idx) => {
