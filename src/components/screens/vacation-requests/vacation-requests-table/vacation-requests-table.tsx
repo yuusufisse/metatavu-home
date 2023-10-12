@@ -56,13 +56,7 @@ const VacationRequestsTable = ({
   }, [vacationRequests, vacationRequestStatuses, formOpen, language]);
 
   return (
-    <Box
-      sx={{
-        height: "631px",
-        width: "100%"
-      }}
-      ref={containerRef}
-    >
+    <Box ref={containerRef}>
       <TableToolbar
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
@@ -73,8 +67,7 @@ const VacationRequestsTable = ({
         rows={rows}
       />
       <DataGrid
-        autoPageSize
-        sx={{ height: "100%" }}
+        autoHeight
         onRowSelectionModelChange={(index: GridRowSelectionModel) => {
           setSelectedRowIds(index);
         }}
@@ -83,10 +76,15 @@ const VacationRequestsTable = ({
         checkboxSelection
         rowSelectionModel={selectedRowIds}
         isRowSelectable={() => (formOpen ? false : true)}
+        initialState={{
+          ...SkeletonTableRows,
+          pagination: { paginationModel: { pageSize: 10 } }
+        }}
         slots={{
           loadingOverlay: SkeletonTableRows
         }}
         loading={rows.length ? false : true}
+        pageSizeOptions={[10, 25, 50]}
       />
     </Box>
   );

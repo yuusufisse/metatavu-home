@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Card } from "@mui/material";
 import { useEffect, useState } from "react";
 import VacationRequestsTable from "./vacation-requests-table/vacation-requests-table";
 import {
@@ -318,13 +318,13 @@ const VacationRequestsScreen = () => {
   };
 
   return (
-    <Container>
+    <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100" }}>
       <VacationRequestsTable
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
       />
-    </Container>
+    </Card>
   );
 };
 
