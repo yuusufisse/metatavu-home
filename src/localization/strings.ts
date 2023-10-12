@@ -82,6 +82,15 @@ export interface Localized extends LocalizedStringsMethods {
     days: string;
     status: string;
     updatedAt: string;
+    pending: string;
+    approved: string;
+    declined: string;
+    vacation: string;
+    maternityPaternityLeave: string;
+    unpaidTimeOff: string;
+    sickness: string;
+    personalDays: string;
+    childSickness: string;
   };
   vacationRequestError: {
     fetchRequestError: string;

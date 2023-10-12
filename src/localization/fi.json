@@ -47,7 +47,17 @@
     "message": "Viesti",
     "days": "Päivät",
     "status": "Tila",
-    "updatedAt": "Päivitetty"
+    "updatedAt": "Päivitetty",
+    "pending": "Odottaa",
+    "approved": "Hyväksytty",
+    "declined": "Hylätty",
+    "vacation": "Loma",
+    "maternityPaternityLeave": "Äitiys/vanhempainvapaa",
+    "unpaidTimeOff": "Palkaton vapaa",
+    "sickness": "Sairaus",
+    "personalDays": "Henkilökohtainen vapaa",
+    "childSickness": "Lapsen sairaus",
+    "surplusBalance": "Ylimääräinen loma"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",

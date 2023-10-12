@@ -47,7 +47,17 @@
     "message": "Message",
     "days": "Days",
     "status": "Status",
-    "updatedAt": "Updated At"
+    "updatedAt": "Updated At",
+    "pending": "Pending",
+    "approved": "Approved",
+    "declined": "Declined",
+    "vacation": "Vacation",
+    "maternityPaternityLeave": "Maternity/Paternity leave",
+    "unpaidTimeOff": "Unpaid time off",
+    "sickness": "Sickness",
+    "personalDays": "Personal day",
+    "childSickness": "Child sickness",
+    "surplusBalance": "Surplus balance"
   },
   "vacationRequestError": {
     "fetchRequestError": "Fetching vacation requests has failed",
