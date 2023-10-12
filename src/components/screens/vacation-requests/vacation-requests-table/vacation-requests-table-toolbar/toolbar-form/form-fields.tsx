@@ -15,6 +15,7 @@ import { VacationData } from "../../../../../../types";
 import { DateTime } from "luxon";
 import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
 import strings from "../../../../../../localization/strings";
+import LocalizationUtils from "../../../../../../utils/localization-utils";
 
 /**
  * Component properties
@@ -80,7 +81,7 @@ const FormFields = ({
         {(Object.keys(VacationType) as Array<keyof typeof VacationType>).map((vacationType) => {
           return (
             <MenuItem key={vacationType} value={vacationType}>
-              {vacationType}
+              {LocalizationUtils.getLocalizedVacationRequestType(vacationType)}
             </MenuItem>
           );
         })}

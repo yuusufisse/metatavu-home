@@ -4,6 +4,7 @@ import { languageAtom } from "../../../../atoms/languageAtom";
 import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
 import { useAtomValue } from "jotai";
 import LocalizationUtils from "../../../../utils/localization-utils";
+import strings from "../../../../localization/strings";
 
 /**
  * Vacation requests table rows functional component
@@ -31,8 +32,8 @@ function VacationRequestsTableRows() {
         .toLocaleString(),
       endDate: DateTime.fromJSDate(vacationRequest.endDate).setLocale(language).toLocaleString(),
       days: vacationRequest.days,
-      message: "No message",
-      status: "No Status"
+      message: strings.vacationRequest.noMessage,
+      status: strings.vacationRequest.noStatus
     };
 
     return row;
