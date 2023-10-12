@@ -67,7 +67,8 @@ const VacationRequestsTable = ({
         rows={rows}
       />
       <DataGrid
-        autoHeight
+        sx={{ height: "700px" }}
+        autoPageSize
         onRowSelectionModelChange={(index: GridRowSelectionModel) => {
           setSelectedRowIds(index);
         }}
@@ -76,15 +77,10 @@ const VacationRequestsTable = ({
         checkboxSelection
         rowSelectionModel={selectedRowIds}
         isRowSelectable={() => (formOpen ? false : true)}
-        initialState={{
-          ...SkeletonTableRows,
-          pagination: { paginationModel: { pageSize: 10 } }
-        }}
         slots={{
           loadingOverlay: SkeletonTableRows
         }}
         loading={rows.length ? false : true}
-        pageSizeOptions={[5, 10, 25, 50, 100]}
       />
     </Box>
   );
