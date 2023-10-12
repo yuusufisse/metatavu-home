@@ -136,32 +136,30 @@ const TimebankContent = (props: Props) => {
    * @returns JSX.Element consisting of either chart component
    */
   const renderDatePickers = () => {
-    if (dailyEntries) {
-      if (byRange.dailyEntries) {
-        return (
-          <DateRangePicker
-            dailyEntries={dailyEntries}
-            setSelectedEntries={setSelectedEntries}
-            disableNullEntries={disableNullEntries}
-          />
-        );
-      } else {
-        return (
-          <DatePicker
-            sx={{
-              width: "40%",
-              marginRight: "1%"
-            }}
-            label={strings.timebank.selectEntry}
-            disableFuture
-            onChange={handleDailyEntryChange}
-            value={DateTime.fromJSDate(dailyEntries[0].date)}
-            minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
-            maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
-            shouldDisableDate={disableNullEntries}
-          />
-        );
-      }
+    if (dailyEntries && byRange.dailyEntries) {
+      return (
+        <DateRangePicker
+          dailyEntries={dailyEntries}
+          setSelectedEntries={setSelectedEntries}
+          disableNullEntries={disableNullEntries}
+        />
+      );
+    } else if (dailyEntries) {
+      return (
+        <DatePicker
+          sx={{
+            width: "40%",
+            marginRight: "1%"
+          }}
+          label={strings.timebank.selectEntry}
+          disableFuture
+          onChange={handleDailyEntryChange}
+          value={DateTime.fromJSDate(dailyEntries[0].date)}
+          minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
+          maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
+          shouldDisableDate={disableNullEntries}
+        />
+      );
     }
   };
 
@@ -237,10 +235,7 @@ const TimebankContent = (props: Props) => {
                   byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
                         Number(
-                          selectedEntries.reduce(
-                            (prev, next) => prev + next.billableProjectTime,
-                            0
-                          )
+                          selectedEntries.reduce((prev, next) => prev + next.billableProjectTime, 0)
                         )
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.billableProjectTime))
