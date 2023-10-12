@@ -25,7 +25,7 @@ export type Language = "fi" | "en";
  */
 export interface DataGridRow {
   id: string | undefined;
-  type: VacationType;
+  type: VacationType | string;
   updatedAt: string;
   startDate: string;
   endDate: string;
