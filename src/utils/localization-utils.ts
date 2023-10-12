@@ -21,22 +21,13 @@ export default class LocalizationUtils {
    *
    * @param vacationType vacationType
    */
-  public static getLocalizedVacationRequestType = (vacationType: VacationType) => {
-    switch (vacationType) {
-      case VacationType.VACATION:
-        return strings.vacationRequest.vacation;
-      case VacationType.PERSONAL_DAYS:
-        return strings.vacationRequest.personalDays;
-      case VacationType.UNPAID_TIME_OFF:
-        return strings.vacationRequest.unpaidTimeOff;
-      case VacationType.MATERNITY_PATERNITY:
-        return strings.vacationRequest.maternityPaternityLeave;
-      case VacationType.SICKNESS:
-        return strings.vacationRequest.sickness;
-      case VacationType.CHILD_SICKNESS:
-        return strings.vacationRequest.childSickness;
-      default:
-        return strings.vacationRequest.vacation;
-    }
-  };
+  public static getLocalizedVacationRequestType = (vacationType: VacationType) =>
+    ({
+      [VacationType.VACATION]: strings.vacationRequest.vacation,
+      [VacationType.PERSONAL_DAYS]: strings.vacationRequest.personalDays,
+      [VacationType.UNPAID_TIME_OFF]: strings.vacationRequest.unpaidTimeOff,
+      [VacationType.MATERNITY_PATERNITY]: strings.vacationRequest.maternityPaternityLeave,
+      [VacationType.SICKNESS]: strings.vacationRequest.sickness,
+      [VacationType.CHILD_SICKNESS]: strings.vacationRequest.childSickness
+    })[vacationType];
 }
