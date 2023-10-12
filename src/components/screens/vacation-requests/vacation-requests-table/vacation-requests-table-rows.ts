@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { languageAtom } from "../../../../atoms/languageAtom";
 import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
 import { useAtomValue } from "jotai";
+import LocalizationUtils from "../../../../utils/localization-utils";
 
 /**
  * Vacation requests table rows functional component
@@ -21,7 +22,7 @@ function VacationRequestsTableRows() {
   const createDataGridRow = (vacationRequest: VacationRequest): DataGridRow => {
     const row: DataGridRow = {
       id: vacationRequest.id,
-      type: vacationRequest.type,
+      type: LocalizationUtils.getLocalizedVacationRequestType(vacationRequest.type),
       updatedAt: DateTime.fromJSDate(vacationRequest.updatedAt)
         .setLocale(language)
         .toLocaleString(),
@@ -52,7 +53,9 @@ function VacationRequestsTableRows() {
 
         vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
-            row.status = vacationRequestStatus.status;
+            row.status = LocalizationUtils.getLocalizedVacationRequestStatus(
+              vacationRequestStatus.status
+            );
           }
           if (vacationRequest.message.length) {
             row.message = vacationRequest.message;
