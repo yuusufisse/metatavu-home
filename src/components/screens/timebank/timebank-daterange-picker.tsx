@@ -47,6 +47,9 @@ const DateRangePicker = (props: Props) => {
     }
   }, [range]);
 
+  /**
+   * Sets past week from the newest entry as range on component mount.
+   */
   useEffect(() => {
     setRange({
       ...range,
