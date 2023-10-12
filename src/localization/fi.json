@@ -57,7 +57,9 @@
     "sickness": "Sairaus",
     "personalDays": "Henkilökohtainen vapaa",
     "childSickness": "Lapsen sairaus",
-    "surplusBalance": "Ylimääräinen loma"
+    "surplusBalance": "Ylimääräinen loma",
+    "noMessage": "Ei viestiä",
+    "noStatus": "Ei tilaa"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",

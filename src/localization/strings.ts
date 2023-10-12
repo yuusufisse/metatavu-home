@@ -91,6 +91,8 @@ export interface Localized extends LocalizedStringsMethods {
     sickness: string;
     personalDays: string;
     childSickness: string;
+    noMessage: string;
+    noStatus: string;
   };
   vacationRequestError: {
     fetchRequestError: string;

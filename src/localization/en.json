@@ -57,7 +57,9 @@
     "sickness": "Sickness",
     "personalDays": "Personal day",
     "childSickness": "Child sickness",
-    "surplusBalance": "Surplus balance"
+    "surplusBalance": "Surplus balance",
+    "noMessage": "No message",
+    "noStatus": "No status"
   },
   "vacationRequestError": {
     "fetchRequestError": "Fetching vacation requests has failed",
