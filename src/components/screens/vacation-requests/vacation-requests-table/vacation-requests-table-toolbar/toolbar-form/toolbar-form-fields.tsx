@@ -32,11 +32,11 @@ interface Props {
 }
 
 /**
- * FormFields
+ * Toolbar form fields component
  *
  * @param props component properties
  */
-const FormFields = ({
+const ToolbarFormFields = ({
   vacationData,
   setVacationData,
   dateTimeNow,
@@ -126,4 +126,4 @@ const FormFields = ({
   );
 };
 
-export default FormFields;
+export default ToolbarFormFields;
