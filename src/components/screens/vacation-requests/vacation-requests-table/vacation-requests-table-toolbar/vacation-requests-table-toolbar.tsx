@@ -9,6 +9,8 @@ import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../../../contexts/confirmation-handler";
 import strings from "../../../../../localization/strings";
 import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
+import { VacationRequestStatuses } from "../../../../../generated/client";
+import UpdateStatusButton from "./toolbar-update-status-button";
 
 /**
  * Component properties
@@ -19,6 +21,10 @@ interface Props {
   updateVacationRequest: (
     vacationData: VacationData,
     vacationRequestId: string | undefined
+  ) => Promise<void>;
+  updateVacationRequestStatuses: (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
   ) => Promise<void>;
   setFormOpen: (formOpen: boolean) => void;
   formOpen: boolean;
@@ -34,6 +40,7 @@ const TableToolbar = ({
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
+  updateVacationRequestStatuses,
   setFormOpen,
   formOpen,
   selectedRowIds,
@@ -79,14 +86,16 @@ const TableToolbar = ({
   /**
    * Component properties
    */
-  interface Props {
+  interface ToolbarTitleProps {
     toolbarFormMode: ToolbarFormModes;
   }
 
   /**
    * Toolbar title component
+   *
+   * @param props component properties
    */
-  const ToolbarTitle = ({ toolbarFormMode }: Props) => {
+  const ToolbarTitle = ({ toolbarFormMode }: ToolbarTitleProps) => {
     const [title, setTitle] = useState(strings.tableToolbar.myRequests);
 
     useEffect(() => {
@@ -106,11 +115,11 @@ const TableToolbar = ({
       >
         {toolbarOpen && !formOpen && selectedRowIds?.length ? (
           <ToolbarGridContainer container>
-            <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
+            <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 3 : 6}>
               <ToolbarDeleteButton setConfirmation={setConfirmation} />
             </ToolbarGridItem>
             {selectedRowIds?.length === 1 ? (
-              <ToolbarGridItem item xs={6}>
+              <ToolbarGridItem item xs={3}>
                 <FormToggleButton
                   title={strings.tableToolbar.edit}
                   ButtonIcon={Edit}
@@ -119,6 +128,20 @@ const TableToolbar = ({
                 />
               </ToolbarGridItem>
             ) : null}
+            <ToolbarGridItem item xs={3}>
+              <UpdateStatusButton
+                updateVacationRequestStatuses={updateVacationRequestStatuses}
+                approval={true}
+                selectedRowIds={selectedRowIds}
+              />
+            </ToolbarGridItem>
+            <ToolbarGridItem item xs={3}>
+              <UpdateStatusButton
+                updateVacationRequestStatuses={updateVacationRequestStatuses}
+                approval={false}
+                selectedRowIds={selectedRowIds}
+              />
+            </ToolbarGridItem>
           </ToolbarGridContainer>
         ) : (
           <ToolbarGridContainer container>
