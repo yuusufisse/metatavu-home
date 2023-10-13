@@ -130,20 +130,6 @@ const VacationRequestsScreen = () => {
   };
 
   /**
-   * Delete selected vacation requests status from rows
-   */
-  const deleteVacationRequestStatusRow = (
-    foundVacationRequestStatus: VacationRequestStatus | undefined
-  ) => {
-    if (foundVacationRequestStatus?.id) {
-      const filteredVacationRequestStatuses = vacationRequestStatuses.filter(
-        (vacationRequestStatus) => vacationRequestStatus.id === foundVacationRequestStatus.id
-      );
-      setVacationRequestStatuses(filteredVacationRequestStatuses);
-    }
-  };
-
-  /**
    * Delete vacation request status
    */
   const deleteVacationRequestStatus = async (selectedRow: GridRowId | undefined) => {
@@ -157,7 +143,10 @@ const VacationRequestsScreen = () => {
             id: foundVacationRequestStatus.id,
             statusId: foundVacationRequestStatus.id
           });
-          deleteVacationRequestStatusRow(foundVacationRequestStatus);
+          const filteredVacationRequestStatuses = vacationRequestStatuses.filter(
+            (vacationRequestStatus) => vacationRequestStatus.id === foundVacationRequestStatus.id
+          );
+          setVacationRequestStatuses(filteredVacationRequestStatuses);
         }
       } catch (error) {
         setError(`${strings.vacationRequestError.deleteStatusError}, ${error}`);
@@ -166,23 +155,11 @@ const VacationRequestsScreen = () => {
   };
 
   /**
-   * Delete vacation requests from data grid rows
-   */
-  const deleteVacationRequestRows = (selectedRowId: GridRowId | undefined) => {
-    if (vacationRequests && vacationRequestStatuses && selectedRowId) {
-      let tempVacationRequests: VacationRequest[] = vacationRequests;
-      tempVacationRequests = tempVacationRequests.filter(
-        (vacationRequest) => vacationRequest.id !== selectedRowId
-      );
-      setVacationRequests(tempVacationRequests);
-    }
-  };
-
-  /**
    * Delete vacation requests
    */
   const deleteVacationRequests = async (selectedRowIds: GridRowId[] | undefined) => {
     if (vacationRequests && selectedRowIds) {
+      let newVacationRequests: VacationRequest[] = vacationRequests;
       await Promise.all(
         selectedRowIds.map(async (selectedRowId) => {
           try {
@@ -190,12 +167,15 @@ const VacationRequestsScreen = () => {
             await vacationRequestsApi.deleteVacationRequest({
               id: String(selectedRowId)
             });
-            deleteVacationRequestRows(selectedRowId);
+            newVacationRequests = newVacationRequests.filter(
+              (vacationRequest) => vacationRequest.id !== selectedRowId
+            );
           } catch (error) {
             setError(`${strings.vacationRequestError.deleteRequestError}, ${error}`);
           }
         })
       );
+      setVacationRequests(newVacationRequests);
     }
   };
 
@@ -268,9 +248,10 @@ const VacationRequestsScreen = () => {
   };
 
   /**
-   * Create a vacation request
+   * Update a vacation request
    *
-   * @param vacationData vacation data, data for vacation request
+   * @param vacationData vacation request data
+   * @param vacationRequestId vacation request id
    */
   const updateVacationRequest = async (
     vacationData: VacationData,
@@ -317,12 +298,63 @@ const VacationRequestsScreen = () => {
     }
   };
 
+  /**
+   * Update a vacation request status
+   *
+   * @param newStatus vacation data, data for vacation request
+   * @param vacationRequestStatusId vacation request status id
+   */
+  const updateVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    if (!userProfile || !userProfile.id) return;
+
+    if (selectedRowIds && newStatus) {
+      const updatedStatuses: VacationRequestStatus[] = [];
+      await Promise.all(
+        selectedRowIds.map(async (selectedRowId) => {
+          const vacationRequestStatus = vacationRequestStatuses.find(
+            (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+          );
+          try {
+            if (vacationRequestStatus?.id) {
+              const updatedStatus = await vacationRequestStatusApi.updateVacationRequestStatus({
+                id: vacationRequestStatus.id,
+                statusId: vacationRequestStatus.id,
+                vacationRequestStatus: {
+                  ...vacationRequestStatus,
+                  status: newStatus
+                }
+              });
+              updatedStatuses.push(updatedStatus);
+            }
+          } catch (error) {
+            setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
+          }
+        })
+      );
+      const newVacationRequestStatuses = vacationRequestStatuses.map((vacationRequestStatus) => {
+        const foundUpdatedStatus = updatedStatuses.find(
+          (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
+        );
+        if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
+          return foundUpdatedStatus;
+        } else {
+          return vacationRequestStatus;
+        }
+      });
+      setVacationRequestStatuses(newVacationRequestStatuses);
+    }
+  };
+
   return (
     <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100" }}>
       <VacationRequestsTable
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
+        updateVacationRequestStatuses={updateVacationRequestStatuses}
       />
     </Card>
   );
