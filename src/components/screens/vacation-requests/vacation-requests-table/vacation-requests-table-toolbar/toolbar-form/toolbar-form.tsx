@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
-import FormFields from "./form-fields";
 import { getVacationDataFromRow } from "./get-vacation-data-from-row";
 import { determineToolbarFormMode } from "../../../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import { vacationRequestsAtom } from "../../../../../../atoms/vacationRequests";
+import ToolbarFormFields from "./toolbar-form-fields";
 
 /**
  * Component properties
@@ -28,11 +28,11 @@ interface Props {
 }
 
 /**
- * Table form component
+ * Toolbar form component
  *
  * @param props component properties
  */
-const TableForm = ({
+const ToolbarForm = ({
   formOpen,
   setFormOpen,
   createVacationRequest,
@@ -125,7 +125,7 @@ const TableForm = ({
               handleFormSubmit();
             }}
           >
-            <FormFields
+            <ToolbarFormFields
               dateTimeNow={dateTimeNow}
               startDate={startDate}
               endDate={endDate}
@@ -142,4 +142,4 @@ const TableForm = ({
   );
 };
 
-export default TableForm;
+export default ToolbarForm;
