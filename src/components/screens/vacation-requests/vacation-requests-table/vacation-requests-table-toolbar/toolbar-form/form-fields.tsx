@@ -11,7 +11,7 @@ import getVacationTypeByString from "../../../../../../utils/vacation-type-utils
 import { VacationType } from "../../../../../../generated/client";
 import { ChangeEvent } from "react";
 import DateRangePicker from "../../../../../generics/date-range-picker";
-import { VacationData } from "../../../../../../types";
+import { ToolbarFormModes, VacationData } from "../../../../../../types";
 import { DateTime } from "luxon";
 import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
 import strings from "../../../../../../localization/strings";
@@ -28,6 +28,7 @@ interface Props {
   endDate: DateTime;
   setStartDate: (startDate: DateTime) => void;
   setEndDate: (endDate: DateTime) => void;
+  toolbarFormMode: ToolbarFormModes;
 }
 
 /**
@@ -42,7 +43,8 @@ const FormFields = ({
   endDate,
   setEndDate,
   setStartDate,
-  startDate
+  startDate,
+  toolbarFormMode
 }: Props) => {
   /**
    * Set dates to vacationData
@@ -118,7 +120,7 @@ const FormFields = ({
         size="large"
         sx={{ marginTop: "10px" }}
       >
-        {strings.form.submit}
+        {toolbarFormMode === ToolbarFormModes.CREATE ? strings.form.submit : strings.form.update}
       </Button>
     </FormControl>
   );

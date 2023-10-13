@@ -72,7 +72,8 @@
     "updateStatusError": "Updating vacation request status has failed"
   },
   "form": {
-    "submit": "Submit"
+    "submit": "Submit",
+    "update": "Update"
   },
   "tableToolbar": {
     "delete": "Delete",

@@ -72,7 +72,8 @@
     "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui"
   },
   "form": {
-    "submit": "Lähetä"
+    "submit": "Lähetä",
+    "update": "Päivitä"
   },
   "tableToolbar": {
     "delete": "Poista",

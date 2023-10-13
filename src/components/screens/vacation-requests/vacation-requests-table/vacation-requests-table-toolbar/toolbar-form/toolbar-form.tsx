@@ -133,6 +133,7 @@ const TableForm = ({
               setEndDate={setEndDate}
               setVacationData={setVacationData}
               vacationData={vacationData}
+              toolbarFormMode={toolbarFormMode}
             />
           </form>
         </Grid>
