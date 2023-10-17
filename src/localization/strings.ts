@@ -11,7 +11,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   placeHolder: {
     notYetImplemented: string;
-  },
+  };
   label: {
     currentLocaleLabel: string;
   };
@@ -73,6 +73,7 @@ export interface Localized extends LocalizedStringsMethods {
     latestEntry: string;
     barChartDescription: string;
     pieChartDescription: string;
+    byrange: string;
   };
   /**
    * General time-related expressions

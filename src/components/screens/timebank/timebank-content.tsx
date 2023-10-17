@@ -200,7 +200,7 @@ const TimebankContent = (props: Props) => {
           {renderDatePickers()}
           <FormControlLabel
             sx={{ display: "inline" }}
-            label="By range"
+            label={strings.timebank.byrange}
             control={
               <Checkbox
                 defaultChecked={byRange.dailyEntries}

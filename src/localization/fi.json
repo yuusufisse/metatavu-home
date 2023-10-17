@@ -23,11 +23,11 @@
     "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
-    "admin":"A",
-    "changeLanguage":"A",
-    "openSettings":"A",
-    "openUserMenu":"A",
-    "logoAlt":"A",
+    "admin": "A",
+    "changeLanguage": "A",
+    "openSettings": "A",
+    "openUserMenu": "A",
+    "logoAlt": "A",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   },
@@ -50,7 +50,8 @@
     "selectEntry": "Valitse aikakirjaus",
     "latestEntry": "Viimeisin aikakirjaus",
     "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
-    "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli"
+    "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
+    "byrange": "Aikavälin mukaan"
   },
   "timeExpressions": {
     "monday": "Maanantai",
