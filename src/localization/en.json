@@ -23,11 +23,11 @@
     "totalTimeNotFound": "Could not find total time data",
     "dailyEntriesFetch": "Retrieving daily entries has failed",
     "dailyEntriesNotFound": "Could not find daily entries",
-    "admin": "A",
-    "changeLanguage": "A",
-    "openSettings": "A",
-    "openUserMenu": "A",
-    "logoAlt": "A",
+    "admin": "Administration",
+    "changeLanguage": "Change language",
+    "openSettings": "Open settings",
+    "openUserMenu": "Open user menu",
+    "logoAlt": "Metatavu logo",
     "fetchFailedGeneral": "There was an error fetching data",
     "fetchFailedNoEntriesGeneral": "No time entries found"
   },
@@ -65,6 +65,8 @@
     "week": "Week",
     "month": "Month",
     "year": "Year",
-    "allTime": "All time"
+    "allTime": "All time",
+    "startDate": "Start date",
+    "endDate": "End date"
   }
 }

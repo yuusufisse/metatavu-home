@@ -2,31 +2,44 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import { DailyEntry } from "../../../generated/client";
-import { Range } from "../timebank/timebank-content";
+import strings from "../../../localization/strings";
 
+/**
+ * Component properties
+ */
 interface Props {
   dailyEntries: DailyEntry[];
-  setSelectedEntries: (selectedEntries?: DailyEntry[]) => void;
-  disableNullEntries: (e: DateTime, range?: Range) => boolean;
+  setSelectedEntries: (selectedEntries: DailyEntry[]) => void;
+  today: DateTime;
+}
+
+/**
+ * Date range picker object.
+ */
+export interface Range {
+  start: DateTime | null;
+  end: DateTime | null;
 }
 
 /**
  * Date Range Picker component associated with multi bar chart.
+ *
+ * @param props Component properties
+ * @returns Two date pickers enabling the selection of date range.
  */
 const DateRangePicker = (props: Props) => {
-  const { setSelectedEntries, dailyEntries, disableNullEntries } = props;
+  const { setSelectedEntries, dailyEntries, today } = props;
 
   const [range, setRange] = useState<Range>({
-    start: DateTime.now().minus({ days: 1 }),
-    end: DateTime.now()
+    start: today.minus({ days: 7 }),
+    end: today
   });
 
   /**
-   * useEffect that triggers on DatePicker range changes.
    * Runs a for-loop that goes through the selected days, then sets entries from those days into a state to be displayed in the multi bar chart.
-   * Filters null-entries, commonly weekends.
+   * Filters null entries, commonly weekends.
    */
-  useEffect(() => {
+  const getDateRangeEntries = () => {
     if (range.start && range.end) {
       const selectedDays = range.end.diff(range.start, "days").toObject();
       const result = [];
@@ -43,20 +56,13 @@ const DateRangePicker = (props: Props) => {
           })[0]
         );
       }
-      setSelectedEntries(result.filter((item) => item !== undefined));
+      setSelectedEntries(result.filter((item) => item));
     }
-  }, [range]);
+  };
 
-  /**
-   * Sets past week from the newest entry as range on component mount.
-   */
   useEffect(() => {
-    setRange({
-      ...range,
-      start: DateTime.fromJSDate(dailyEntries[0].date).minus({ days: 7 }),
-      end: DateTime.fromJSDate(dailyEntries[0].date)
-    });
-  }, []);
+    getDateRangeEntries();
+  }, [range]);
 
   return (
     <>
@@ -65,26 +71,20 @@ const DateRangePicker = (props: Props) => {
           width: "24%",
           mx: "1%"
         }}
-        label={"Start"}
-        disableFuture
+        label={strings.timeExpressions.startDate}
         onChange={(dateTime) => setRange({ ...range, start: dateTime })}
         value={range.start}
-        minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
-        maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
-        shouldDisableDate={(day) => disableNullEntries(day, range)}
+        maxDate={range.end?.minus({ days: 1 })}
       />
       <DatePicker
         sx={{
           width: "24%",
           mx: "1%"
         }}
-        label={"End"}
-        disableFuture
-        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
-        value={DateTime.fromJSDate(dailyEntries[0].date)}
-        minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
-        maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
-        shouldDisableDate={disableNullEntries}
+        label={strings.timeExpressions.endDate}
+        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
+        value={range.end}
+        minDate={range.start?.plus({ days: 1 })}
       />
     </>
   );

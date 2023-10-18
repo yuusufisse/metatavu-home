@@ -6,10 +6,16 @@ import { getHours } from "../../../../utils/time-utils";
 import { Typography } from "@mui/material";
 import { renderCustomizedTooltipBarChart } from "../../../../utils/chart-utils";
 
+/**
+ * Component properties
+ */
 interface Props {
   selectedEntries: DailyEntry[];
 }
 
+/**
+ * Timebank multiple bar chart component representing data from a selected range
+ */
 const TimebankMultiBarChart = (props: Props) => {
   const { selectedEntries } = props;
   const chartData = selectedEntries.map((entry) => {
@@ -33,59 +39,58 @@ const TimebankMultiBarChart = (props: Props) => {
         </Typography>
       </ResponsiveContainer>
     );
-  else
-    return (
-      <ResponsiveContainer width="75%" height={400}>
-        <BarChart
-          data={chartData}
-          layout="horizontal"
-          barGap={10}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5
-          }}
-        >
-          <YAxis
-            type="number"
-            axisLine={false}
-            tickFormatter={(value) => getHours(value as number)}
-            domain={[0, (dataMax: number) => dataMax]}
-          />
-          <XAxis type="category" dataKey="name" />
-          <Tooltip content={renderCustomizedTooltipBarChart} />
-          <Legend />
-          <Bar
-            dataKey="billableProject"
-            name={strings.timebank.billableProject}
-            barSize={60}
-            stackId="a"
-            fill={theme.palette.success.dark}
-          />
-          <Bar
-            dataKey="nonBillableProject"
-            name={strings.timebank.nonBillableProject}
-            barSize={60}
-            stackId="a"
-            fill={theme.palette.success.light}
-          />
-          <Bar
-            dataKey="internal"
-            name={strings.timebank.internal}
-            barSize={60}
-            stackId="a"
-            fill={theme.palette.warning.main}
-          />
-          <Bar
-            dataKey="expected"
-            name={strings.timebank.expected}
-            barSize={60}
-            fill={theme.palette.info.main}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    );
+  return (
+    <ResponsiveContainer width="75%" height={400}>
+      <BarChart
+        data={chartData}
+        layout="horizontal"
+        barGap={10}
+        margin={{
+          top: 20,
+          right: 30,
+          left: 20,
+          bottom: 5
+        }}
+      >
+        <YAxis
+          type="number"
+          axisLine={false}
+          tickFormatter={(value) => getHours(value as number)}
+          domain={[0, (dataMax: number) => dataMax]}
+        />
+        <XAxis type="category" dataKey="name" />
+        <Tooltip content={renderCustomizedTooltipBarChart} />
+        <Legend />
+        <Bar
+          dataKey="billableProject"
+          name={strings.timebank.billableProject}
+          barSize={60}
+          stackId="stackedBar"
+          fill={theme.palette.success.dark}
+        />
+        <Bar
+          dataKey="nonBillableProject"
+          name={strings.timebank.nonBillableProject}
+          barSize={60}
+          stackId="stackedBar"
+          fill={theme.palette.success.light}
+        />
+        <Bar
+          dataKey="internal"
+          name={strings.timebank.internal}
+          barSize={60}
+          stackId="stackedBar"
+          fill={theme.palette.warning.main}
+        />
+        <Bar
+          dataKey="expected"
+          name={strings.timebank.expected}
+          barSize={60}
+          fill={theme.palette.info.main}
+        />
+      </BarChart>
+    </ResponsiveContainer>
+  );
 };
 
 export default TimebankMultiBarChart;

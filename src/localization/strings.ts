@@ -91,6 +91,8 @@ export interface Localized extends LocalizedStringsMethods {
     month: string;
     year: string;
     allTime: string;
+    startDate: string;
+    endDate: string;
   };
 }
 

@@ -23,11 +23,11 @@
     "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
-    "admin": "A",
-    "changeLanguage": "A",
-    "openSettings": "A",
-    "openUserMenu": "A",
-    "logoAlt": "A",
+    "admin": "Ylläpito",
+    "changeLanguage": "Vaihda kieltä",
+    "openSettings": "Asetukset",
+    "openUserMenu": "Käyttäjävalikko",
+    "logoAlt": "Metatavu logo",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   },
@@ -65,6 +65,8 @@
     "week": "Viikko",
     "month": "Kuukausi",
     "year": "Vuosi",
-    "allTime": "Koko ajalta"
+    "allTime": "Koko ajalta",
+    "startDate": "Alkupäivämäärä",
+    "endDate": "Loppupäivämäärä"
   }
 }

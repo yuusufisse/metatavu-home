@@ -10,6 +10,10 @@ import strings from "../../../../localization/strings";
 import { personDailyEntryAtom } from "../../../../atoms/person";
 import { useAtomValue } from "jotai";
 
+/**
+ * Time bank pie chart component
+ * @returns A pie chart containing daily entry logged time breakdown
+ */
 const TimebankPieChart = () => {
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
 
@@ -19,7 +23,7 @@ const TimebankPieChart = () => {
     theme.palette.warning.main
   ];
 
-  if (personDailyEntry && !personDailyEntry.logged)
+  if (!personDailyEntry?.logged) {
     return (
       <ResponsiveContainer width={"75%"} height={200}>
         <Typography sx={{ textAlign: "center", marginTop: "12%" }}>
@@ -27,29 +31,29 @@ const TimebankPieChart = () => {
         </Typography>
       </ResponsiveContainer>
     );
-  else if (personDailyEntry)
-    return (
-      <ResponsiveContainer width={"75%"} height={200}>
-        <PieChart>
-          <Pie
-            data={dailyEntryToChart(personDailyEntry)}
-            dataKey="dataKey"
-            cx="50%"
-            cy="50%"
-            outerRadius={50}
-            label={renderCustomizedLabel}
-          >
-            {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
-              <>
-                <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                <Tooltip content={renderCustomizedTooltipPieChart} />
-              </>
-            ))}
-          </Pie>
-          <Tooltip content={renderCustomizedTooltipPieChart} />
-        </PieChart>
-      </ResponsiveContainer>
-    );
+  }
+  return (
+    <ResponsiveContainer width={"75%"} height={200}>
+      <PieChart>
+        <Pie
+          data={dailyEntryToChart(personDailyEntry)}
+          dataKey="dataKey"
+          cx="50%"
+          cy="50%"
+          outerRadius={50}
+          label={renderCustomizedLabel}
+        >
+          {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
+            <>
+              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              <Tooltip content={renderCustomizedTooltipPieChart} />
+            </>
+          ))}
+        </Pie>
+        <Tooltip content={renderCustomizedTooltipPieChart} />
+      </PieChart>
+    </ResponsiveContainer>
+  );
 };
 
 export default TimebankPieChart;

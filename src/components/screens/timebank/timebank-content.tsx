@@ -7,7 +7,6 @@ import {
   FormControlLabel,
   Checkbox,
   ListItemText,
-  CircularProgress,
   Typography,
   Card
 } from "@mui/material";
@@ -21,130 +20,120 @@ import { DateTime } from "luxon";
 import strings from "../../../localization/strings";
 import TimebankMultiBarChart from "./charts/timebank-multibarchart";
 import DateRangePicker from "./timebank-daterange-picker";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { theme } from "../../../theme";
 import { useAtomValue } from "jotai";
 import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../../atoms/person";
 
 interface Props {
-  personTotalTimeLoading: boolean;
-  setPersonTotalTimeLoading: Dispatch<SetStateAction<boolean>>;
   userProfile: KeycloakProfile | undefined;
-  timespanSelector: string;
-  getPersonTotalTime: (e?: Timespan) => void;
-  handleDailyEntryChange: (e: DateTime | null) => void;
-}
-
-/**
- * Date range picker object.
- */
-export interface Range {
-  start: DateTime | null;
-  end: DateTime | null;
+  timespanSelector: Timespan;
+  getPersonTotalTime: (timespan?: Timespan) => void;
+  handleDailyEntryChange: (selectedDate: DateTime | null) => void;
 }
 
 /**
  * Component that contains the entirety of Timebank content, such as charts
  */
 const TimebankContent = (props: Props) => {
-  const { timespanSelector, getPersonTotalTime, handleDailyEntryChange, personTotalTimeLoading } =
-    props;
+  const { timespanSelector, getPersonTotalTime, handleDailyEntryChange } = props;
 
-  const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>();
+  const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
   const personTotalTime = useAtomValue(personTotalTimeAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
+  const today =
+    DateTime.fromJSDate(
+      dailyEntries.filter(
+        (item) => DateTime.fromJSDate(item.date).toISODate() === DateTime.now().toISODate()
+      )[0].date
+    ) || DateTime.fromJSDate(dailyEntries[0].date); // Default value is a filtered array for today's date or the first array element if it doesn't exist, which could be a vacation in the future.
 
   /**
-   * Disables the days from the DatePicker which have zero logged and expected hours, commonly weekends.
-   * Also prevents selecting a start date that is later than end date in the date range picker.
+   * Allows only logged dates or with expected hours to be selected in the date time picker.
+   *
    * @param date DateTime object passed from the date picker
-   * @param range Optional Range object to compare start and end dates
    * @returns boolean value which controls the disabled dates.
    */
-  const disableNullEntries = (date: DateTime, range?: Range): boolean => {
-    const nullEntries = dailyEntries.filter(
+  const disableNullEntries = (date: DateTime): boolean => {
+    const loggedDates = dailyEntries.filter(
       (item) =>
-        item.logged === 0 &&
-        item.expected === 0 &&
+        item.logged &&
+        item.expected &&
         DateTime.fromJSDate(item.date).toISODate() === date.toISODate()
-    );
-    return nullEntries.length
-      ? DateTime.fromJSDate(nullEntries[0].date).toISODate() === date.toISODate()
-      : String(range?.end?.minus({ days: 1 }).toISODate()) < String(date.toISODate()) || false;
+    )[0];
+
+    return loggedDates
+      ? !(DateTime.fromJSDate(loggedDates.date).toISODate() === date.toISODate())
+      : true;
   };
 
   /**
    * Renders overview chart and list item elements containing total time summaries
    */
   const renderOverViewChart = () => {
-    if (personTotalTimeLoading) return <CircularProgress sx={{ margin: "auto", mt: "5%" }} />;
-    else if (personTotalTime)
-      return (
-        <>
-          <TimebankOverviewChart />
-          <List dense sx={{ marginLeft: "5%" }}>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.timeperiod}
-                secondary={formatTimePeriod(personTotalTime.timePeriod?.split(","))}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                sx={{
-                  color: getHoursAndMinutes(Number(personTotalTime.balance)).startsWith("-")
-                    ? theme.palette.error.main
-                    : theme.palette.success.main
-                }}
-                primary={strings.timebank.balance}
-                secondary={getHoursAndMinutes(Number(personTotalTime.balance))}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.logged}
-                secondary={getHoursAndMinutes(Number(personTotalTime.logged))}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.expected}
-                secondary={getHoursAndMinutes(Number(personTotalTime.expected))}
-              />
-            </ListItem>
-          </List>
-        </>
-      );
+    if (!personTotalTime) return null;
+    return (
+      <>
+        <TimebankOverviewChart />
+        <List dense sx={{ marginLeft: "5%" }}>
+          <ListItem>
+            <ListItemText
+              primary={strings.timebank.timeperiod}
+              secondary={formatTimePeriod(personTotalTime.timePeriod?.split(","))}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              sx={{
+                color: getHoursAndMinutes(Number(personTotalTime.balance)).startsWith("-")
+                  ? theme.palette.error.main
+                  : theme.palette.success.main
+              }}
+              primary={strings.timebank.balance}
+              secondary={getHoursAndMinutes(Number(personTotalTime.balance))}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={strings.timebank.logged}
+              secondary={getHoursAndMinutes(Number(personTotalTime.logged))}
+            />
+          </ListItem>
+
+          <ListItem>
+            <ListItemText
+              primary={strings.timebank.expected}
+              secondary={getHoursAndMinutes(Number(personTotalTime.expected))}
+            />
+          </ListItem>
+        </List>
+      </>
+    );
   };
 
   /**
    * Renders a daily entry pie chart or a bar chart of daily entries from a selected range.
+   *
    * @returns JSX.Element consisting of either chart component
    */
   const renderDailyEntryOrRangeChart = () => {
     if (byRange.dailyEntries && selectedEntries) {
       return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
-    } else return <TimebankPieChart />;
+    }
+    return <TimebankPieChart />;
   };
 
   /**
    * Renders date picker or range date picker associated with above charts.
-   * @returns JSX.Element consisting of either chart component
+   
+  * @returns JSX.Element consisting of either chart component
    */
   const renderDatePickers = () => {
-    if (dailyEntries && byRange.dailyEntries) {
-      return (
-        <DateRangePicker
-          dailyEntries={dailyEntries}
-          setSelectedEntries={setSelectedEntries}
-          disableNullEntries={disableNullEntries}
-        />
-      );
-    } else if (dailyEntries) {
+    if (dailyEntries && !byRange.dailyEntries) {
       return (
         <DatePicker
           sx={{
@@ -152,15 +141,21 @@ const TimebankContent = (props: Props) => {
             marginRight: "1%"
           }}
           label={strings.timebank.selectEntry}
-          disableFuture
           onChange={handleDailyEntryChange}
-          value={DateTime.fromJSDate(dailyEntries[0].date)}
+          value={today}
           minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
           maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
           shouldDisableDate={disableNullEntries}
         />
       );
     }
+    return (
+      <DateRangePicker
+        dailyEntries={dailyEntries}
+        setSelectedEntries={setSelectedEntries}
+        today={today}
+      />
+    );
   };
 
   return (
@@ -169,7 +164,6 @@ const TimebankContent = (props: Props) => {
         <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
           {strings.timebank.barChartDescription}
         </Typography>
-
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Select
             sx={{
@@ -185,7 +179,6 @@ const TimebankContent = (props: Props) => {
             <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
           </Select>
         </Box>
-
         <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
           {renderOverViewChart()}
         </Box>
@@ -195,7 +188,6 @@ const TimebankContent = (props: Props) => {
         <Typography variant="h5" sx={{ textAlign: "center", mb: "1%" }}>
           {strings.timebank.pieChartDescription}
         </Typography>
-
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
           {renderDatePickers()}
           <FormControlLabel
@@ -203,7 +195,7 @@ const TimebankContent = (props: Props) => {
             label={strings.timebank.byrange}
             control={
               <Checkbox
-                defaultChecked={byRange.dailyEntries}
+                checked={byRange.dailyEntries}
                 onClick={() =>
                   setByRange({ ...byRange, dailyEntries: byRange.dailyEntries ? false : true })
                 }
@@ -211,7 +203,6 @@ const TimebankContent = (props: Props) => {
             }
           />
         </Box>
-
         <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
           {renderDailyEntryOrRangeChart()}
           <List dense sx={{ marginLeft: "5%" }}>

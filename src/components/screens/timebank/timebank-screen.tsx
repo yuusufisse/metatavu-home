@@ -17,7 +17,7 @@ import strings from "../../../localization/strings";
 import config from "../../../app/config";
 
 /**
- * Time bank screen component containing functions and logic to run time bank features.
+ * Time bank screen component.
  */
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
@@ -25,34 +25,37 @@ const TimebankScreen = () => {
   const setError = useSetAtom(errorAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const persons = useAtomValue(personsAtom);
-  const [personTotalTimeLoading, setPersonTotalTimeLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
 
+  console.log(dailyEntries);
+
   /**
-   * Gets the logged in person from the persons list atom and then gets that person's total time data.
-   * Function is called on initial load / persons list changes or timespan changes.
-   * @param timespan Optional Timespan string which controls whether @PersonTotalTime results are condensed into weeks, months, years or all time. Defaults to all time.
+   * Gets person's total time data.
+   *
+   * @param timespan enum
    */
-  const getPersonTotalTime = async (timespan?: Timespan): Promise<void> => {
+  const getPersonTotalTime = async (timespan?: Timespan) => {
     if (!personTotalTime || timespan) {
-      setPersonTotalTimeLoading(true);
+      setLoading(true);
       setTimespanSelector(timespan || Timespan.ALL_TIME);
       if (persons.length) {
         try {
           const loggedInPerson = persons.filter(
-            (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
+            (person: Person) => person.keycloakId === userProfile?.id
           )[0];
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson.id,
-            timespan: timespan
+            personId: config?.person?.id || loggedInPerson.id,
+            timespan: timespan,
+            before: new Date()
           });
           setPersonTotalTime(fetchedPersonTotalTime[0]);
         } catch (error) {
           setError(`${strings.error.totalTimeFetch}, ${error}`);
         }
-        setPersonTotalTimeLoading(false);
+        setLoading(false);
       }
     }
   };
@@ -60,26 +63,30 @@ const TimebankScreen = () => {
   /**
    * Gets the logged in person from persons list atom and then fetches the person's daily entries.
    */
-  const getPersonDailyEntries = async (): Promise<void> => {
-    if (persons.length) {
-      try {
-        const loggedInPerson = persons.filter(
-          (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
-        )[0];
-        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson.id
-        });
-        setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(fetchedDailyEntries[0]);
-      } catch (error) {
-        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
-      }
-      setPersonTotalTimeLoading(false);
+  const getPersonDailyEntries = async () => {
+    if (!persons.length) return null;
+    try {
+      const loggedInPerson = persons.filter(
+        (person: Person) => person.keycloakId === userProfile?.id
+      )[0];
+      const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+        personId: config.person.id || loggedInPerson.id
+      });
+      setDailyEntries(fetchedDailyEntries);
+      setPersonDailyEntry(
+        fetchedDailyEntries.filter(
+          (item) => DateTime.fromJSDate(item.date).toISODate() === DateTime.now().toISODate()
+        )[0] || fetchedDailyEntries[0]
+      );
+    } catch (error) {
+      setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
    * Changes the displayed daily entry in the pie chart via the Date Picker.
+   *
    * @param selectedDate selected date from DatePicker
    */
   const handleDailyEntryChange = (selectedDate: DateTime | null) => {
@@ -95,7 +102,7 @@ const TimebankScreen = () => {
     getPersonDailyEntries();
   }, [persons]);
 
-  if (personTotalTimeLoading || !personDailyEntry || !dailyEntries || !personTotalTime)
+  if (loading || !personDailyEntry || !dailyEntries || !personTotalTime)
     return (
       <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ scale: "150%" }} />
@@ -105,8 +112,6 @@ const TimebankScreen = () => {
     return (
       <>
         <TimebankContent
-          personTotalTimeLoading={personTotalTimeLoading}
-          setPersonTotalTimeLoading={setPersonTotalTimeLoading}
           userProfile={userProfile}
           handleDailyEntryChange={handleDailyEntryChange}
           getPersonTotalTime={getPersonTotalTime}

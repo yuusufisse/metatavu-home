@@ -9,8 +9,8 @@ import { useApi } from "../../../hooks/use-api";
 import { Person, PersonTotalTime } from "../../../generated/client";
 import { personsAtom, personTotalTimeAtom } from "../../../atoms/person";
 import { Link } from "react-router-dom";
-import config from "../../../app/config";
 import { userProfileAtom } from "../../../atoms/auth";
+import config from "../../../app/config";
 
 /**
  * Component for displaying user's balance
@@ -31,10 +31,10 @@ const BalanceCard = () => {
     if (persons.length) {
       try {
         const loggedInPerson = persons.filter(
-          (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
+          (person: Person) => person.keycloakId === userProfile?.id
         )[0];
         const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: loggedInPerson?.id
+          personId: config.person.id || loggedInPerson?.id
         });
         setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
