@@ -9,8 +9,19 @@ import {
   VacationRequestStatusApi
 } from "../generated/client";
 
+/**
+ * Generic type that accepts parameters within the @ConfigurationParameters interface
+ */
 type ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
 
+/**
+ * Creates a new ConfigConstructor instance with params required to access the API
+ * 
+ * @param ConfigConstructor ConfigConstructor class instance
+ * @param basePath API base URL
+ * @param accessToken Access token for request
+ * @returns ConfigConstructor instance set up with params
+ */
 const getConfigurationFactory =
   <T>(ConfigConstructor: ConfigConstructor<T>, basePath: string, accessToken?: string) =>
   () => {
@@ -20,6 +31,12 @@ const getConfigurationFactory =
     });
   };
 
+  /**
+   * API client with request functions to several endpoints 
+   * 
+   * @param accessToken Access token required for authentication
+   * @returns Configured API request functions
+   */
 export const getApiClient = (accessToken?: string) => {
   const getConfiguration = getConfigurationFactory(Configuration, config.api.baseUrl, accessToken);
 

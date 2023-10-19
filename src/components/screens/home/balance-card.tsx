@@ -16,27 +16,28 @@ const BalanceCard = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setIsLoading(true);
+    setLoading(true);
     const fetchedPersons = await personsApi.listPersons({ active: true });
-    const loggedInPerson = fetchedPersons.filter((person) => person.keycloakId === userProfile?.id);
+    const loggedInPerson = fetchedPersons.find((person) => person.keycloakId === "06cf177e-5e75-470f-af9f-e19cd80d353c");
 
-    try {
-      const fetchedPerson = await personsApi.listPersonTotalTime({
-        personId: loggedInPerson[0].id
-      });
-      setPersonTotalTime(fetchedPerson[0]);
-    } catch (error) {
-      setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
-    }
+    if (loggedInPerson)
+      try {
+        const fetchedPerson = await personsApi.listPersonTotalTime({
+          personId: loggedInPerson.id
+        });
+        setPersonTotalTime(fetchedPerson[0]);
+      } catch (error) {
+        setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
+      }
 
-    setIsLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -50,15 +51,11 @@ const BalanceCard = () => {
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
     if (!personTotalTime) {
-      return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>
+      return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>;
     }
 
-    return (
-      <Typography>
-        {getHoursAndMinutes(personTotalTime.balance)}
-      </Typography>
-    )
-  }
+    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+  };
 
   return (
     <>
@@ -70,9 +67,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {isLoading
-                ? <Skeleton />
-                : renderPersonTotalTime(personTotalTime)}
+              {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>
