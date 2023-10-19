@@ -45,12 +45,11 @@ const TimebankContent = (props: Props) => {
   const personTotalTime = useAtomValue(personTotalTimeAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
-  const today =
-    DateTime.fromJSDate(
-      dailyEntries.filter(
-        (item) => DateTime.fromJSDate(item.date).toISODate() === DateTime.now().toISODate()
-      )[0].date
-    ) || DateTime.fromJSDate(dailyEntries[0].date); // Default value is a filtered array for today's date or the first array element if it doesn't exist, which could be a vacation in the future.
+  const today = DateTime.fromJSDate(
+    dailyEntries.filter((item) => item.date.getMonth() <= new Date().getMonth())[0].date
+  );
+
+  // Default value is a filtered array for today's date or the first array element if, which could be a vacation in the future.
 
   /**
    * Allows only logged dates or with expected hours to be selected in the date time picker.
@@ -103,7 +102,6 @@ const TimebankContent = (props: Props) => {
               secondary={getHoursAndMinutes(Number(personTotalTime.logged))}
             />
           </ListItem>
-
           <ListItem>
             <ListItemText
               primary={strings.timebank.expected}
@@ -195,7 +193,7 @@ const TimebankContent = (props: Props) => {
             label={strings.timebank.byrange}
             control={
               <Checkbox
-                checked={byRange.dailyEntries}
+                defaultChecked={byRange.dailyEntries}
                 onClick={() =>
                   setByRange({ ...byRange, dailyEntries: byRange.dailyEntries ? false : true })
                 }

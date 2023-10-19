@@ -55,7 +55,6 @@ const TimebankScreen = () => {
         } catch (error) {
           setError(`${strings.error.totalTimeFetch}, ${error}`);
         }
-        setLoading(false);
       }
     }
   };
@@ -74,14 +73,11 @@ const TimebankScreen = () => {
       });
       setDailyEntries(fetchedDailyEntries);
       setPersonDailyEntry(
-        fetchedDailyEntries.filter(
-          (item) => DateTime.fromJSDate(item.date).toISODate() === DateTime.now().toISODate()
-        )[0] || fetchedDailyEntries[0]
+        fetchedDailyEntries.filter((item) => item.date.getMonth() <= new Date().getMonth())[0]
       );
     } catch (error) {
       setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
-    setLoading(false);
   };
 
   /**
@@ -98,27 +94,29 @@ const TimebankScreen = () => {
   };
 
   useEffect(() => {
+    if (!personDailyEntry || !dailyEntries.length || !personTotalTime) setLoading(true);
+    else setLoading(false);
+  }, [personDailyEntry, dailyEntries, personTotalTime]);
+
+  useEffect(() => {
     getPersonTotalTime();
     getPersonDailyEntries();
   }, [persons]);
 
-  if (loading || !personDailyEntry || !dailyEntries || !personTotalTime)
+  if (loading)
     return (
       <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ scale: "150%" }} />
       </Card>
     );
-  else if (personDailyEntry && dailyEntries && personTotalTime)
-    return (
-      <>
-        <TimebankContent
-          userProfile={userProfile}
-          handleDailyEntryChange={handleDailyEntryChange}
-          getPersonTotalTime={getPersonTotalTime}
-          timespanSelector={timespanSelector}
-        />
-      </>
-    );
+  return (
+    <TimebankContent
+      userProfile={userProfile}
+      handleDailyEntryChange={handleDailyEntryChange}
+      getPersonTotalTime={getPersonTotalTime}
+      timespanSelector={timespanSelector}
+    />
+  );
 };
 
 export default TimebankScreen;
