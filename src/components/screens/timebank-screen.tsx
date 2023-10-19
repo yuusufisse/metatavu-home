@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { Person, Timespan } from "../../../generated/client";
+import { Person, Timespan } from "../../generated/client";
 import { CircularProgress, Card } from "@mui/material";
-import { userProfileAtom } from "../../../atoms/auth";
+import { userProfileAtom } from "../../atoms/auth";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { errorAtom } from "../../../atoms/error";
+import { errorAtom } from "../../atoms/error";
 import {
   dailyEntriesAtom,
   personDailyEntryAtom,
   personTotalTimeAtom,
   personsAtom
-} from "../../../atoms/person";
-import { useApi } from "../../../hooks/use-api";
-import TimebankContent from "./timebank-content";
+} from "../../atoms/person";
+import { useApi } from "../../hooks/use-api";
+import TimebankContent from "../timebank/timebank-content";
 import { DateTime } from "luxon";
-import strings from "../../../localization/strings";
-import config from "../../../app/config";
+import strings from "../../localization/strings";
+import config from "../../app/config";
 
 /**
  * Time bank screen component.
@@ -30,7 +30,10 @@ const TimebankScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
 
-  console.log(dailyEntries);
+  useEffect(() => {
+    getPersonTotalTime();
+    getPersonDailyEntries();
+  }, [persons]);
 
   /**
    * Gets person's total time data.
@@ -38,8 +41,8 @@ const TimebankScreen = () => {
    * @param timespan enum
    */
   const getPersonTotalTime = async (timespan?: Timespan) => {
+    setLoading(true);
     if (!personTotalTime || timespan) {
-      setLoading(true);
       setTimespanSelector(timespan || Timespan.ALL_TIME);
       if (persons.length) {
         try {
@@ -57,6 +60,7 @@ const TimebankScreen = () => {
         }
       }
     }
+    setLoading(false);
   };
 
   /**
@@ -93,17 +97,8 @@ const TimebankScreen = () => {
     );
   };
 
-  useEffect(() => {
-    if (!personDailyEntry || !dailyEntries.length || !personTotalTime) setLoading(true);
-    else setLoading(false);
-  }, [personDailyEntry, dailyEntries, personTotalTime]);
+  if (!personDailyEntry || !dailyEntries.length || !personTotalTime)
 
-  useEffect(() => {
-    getPersonTotalTime();
-    getPersonDailyEntries();
-  }, [persons]);
-
-  if (loading)
     return (
       <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ scale: "150%" }} />
@@ -115,6 +110,7 @@ const TimebankScreen = () => {
       handleDailyEntryChange={handleDailyEntryChange}
       getPersonTotalTime={getPersonTotalTime}
       timespanSelector={timespanSelector}
+      loading={loading}
     />
   );
 };

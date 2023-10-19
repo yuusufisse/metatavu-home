@@ -1,11 +1,12 @@
 import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
-import { renderCustomizedTooltipBarChart, totalTimeToChart } from "../../../../utils/chart-utils";
-import { theme } from "../../../../theme";
-import strings from "../../../../localization/strings";
-import { getHours } from "../../../../utils/time-utils";
-import { personTotalTimeAtom } from "../../../../atoms/person";
+import { renderCustomizedTooltipBarChart, totalTimeToChart } from "../../utils/chart-utils";
+import { theme } from "../../theme";
+import strings from "../../localization/strings";
+import { getHours } from "../../utils/time-utils";
+import { personTotalTimeAtom } from "../../atoms/person";
 import { useAtomValue } from "jotai";
-import { PersonTotalTime } from "../../../../generated/client";
+import { PersonTotalTime } from "../../generated/client";
+import { Worktime } from "../../types";
 
 /**
  * Time bank overview chart component
@@ -38,28 +39,28 @@ const TimebankOverviewChart = () => {
         <Tooltip content={renderCustomizedTooltipBarChart} />
         <Legend />
         <Bar
-          dataKey="billableProject"
+          dataKey={Worktime.Billable}
           name={strings.timebank.billableProject}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.success.dark}
         />
         <Bar
-          dataKey="nonBillableProject"
+          dataKey={Worktime.NonBillable}
           name={strings.timebank.nonBillableProject}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.success.light}
         />
         <Bar
-          dataKey="internal"
+          dataKey={Worktime.Internal}
           name={strings.timebank.internal}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.warning.main}
         />
         <Bar
-          dataKey="expected"
+          dataKey={Worktime.Expected}
           name={strings.timebank.expected}
           barSize={60}
           stackId="stackedBar"

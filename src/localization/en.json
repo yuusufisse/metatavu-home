@@ -19,15 +19,12 @@
     "logoAlt": "Metatavu logo"
   },
   "error": {
+    "oops": "Oops!",
+    "generic": "Unexpected error has occurred",
     "totalTimeFetch": "Retrieving total time data has failed",
     "totalTimeNotFound": "Could not find total time data",
     "dailyEntriesFetch": "Retrieving daily entries has failed",
     "dailyEntriesNotFound": "Could not find daily entries",
-    "admin": "Administration",
-    "changeLanguage": "Change language",
-    "openSettings": "Open settings",
-    "openUserMenu": "Open user menu",
-    "logoAlt": "Metatavu logo",
     "fetchFailedGeneral": "There was an error fetching data",
     "fetchFailedNoEntriesGeneral": "No time entries found"
   },

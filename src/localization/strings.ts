@@ -35,15 +35,12 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to errors
    */
   error: {
+    oops: string;
+    generic: string;
     totalTimeFetch: string;
     totalTimeNotFound: string;
     dailyEntriesFetch: string;
     dailyEntriesNotFound: string;
-    admin: string;
-    changeLanguage: string;
-    openSettings: string;
-    openUserMenu: string;
-    logoAlt: string;
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
   };

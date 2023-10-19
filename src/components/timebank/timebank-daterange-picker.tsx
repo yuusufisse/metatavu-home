@@ -1,8 +1,9 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import { DailyEntry } from "../../../generated/client";
-import strings from "../../../localization/strings";
+import { DailyEntry } from "../../generated/client";
+import { Range } from "../../types"
+import strings from "../../localization/strings";
 
 /**
  * Component properties
@@ -11,14 +12,6 @@ interface Props {
   dailyEntries: DailyEntry[];
   setSelectedEntries: (selectedEntries: DailyEntry[]) => void;
   today: DateTime;
-}
-
-/**
- * Date range picker object.
- */
-export interface Range {
-  start: DateTime | null;
-  end: DateTime | null;
 }
 
 /**
@@ -35,6 +28,10 @@ const DateRangePicker = (props: Props) => {
     end: today
   });
 
+  useEffect(() => {
+    getDateRangeEntries();
+  }, [range]);
+
   /**
    * Runs a for-loop that goes through the selected days, then sets entries from those days into a state to be displayed in the multi bar chart.
    * Filters null entries, commonly weekends.
@@ -48,8 +45,8 @@ const DateRangePicker = (props: Props) => {
         result.push(
           dailyEntries.filter((item) => {
             return (
-              item.logged !== 0 &&
-              item.expected !== 0 &&
+              item.logged &&
+              item.expected &&
               DateTime.fromJSDate(item.date).toISODate() ===
                 range.start?.plus({ days: i }).toISODate()
             );
@@ -59,10 +56,6 @@ const DateRangePicker = (props: Props) => {
       setSelectedEntries(result.filter((item) => item));
     }
   };
-
-  useEffect(() => {
-    getDateRangeEntries();
-  }, [range]);
 
   return (
     <>

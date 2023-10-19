@@ -5,14 +5,8 @@ import { DailyEntry, PersonTotalTime } from "../generated/client";
 import strings from "../localization/strings";
 import { theme } from "../theme";
 import { getHoursAndMinutes } from "./time-utils";
+import { CustomLabel } from "../types";
 
-/**
- * Interface for custom label used in the pie chart.
- */
-export interface CustomLabel {
-  value: number;
-  name: string;
-}
 
 /**
  * Reformats inputted daily entry to be presented in the pie chart

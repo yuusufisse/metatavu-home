@@ -19,15 +19,12 @@
     "logoAlt": "Metatavu logo"
   },
   "error": {
+    "oops": "Hups!",
+    "generic": "Odottamaton virhe havaittu",
     "totalTimeFetch": "Yhteenvetotietojen haku epäonnistui",
     "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
-    "admin": "Ylläpito",
-    "changeLanguage": "Vaihda kieltä",
-    "openSettings": "Asetukset",
-    "openUserMenu": "Käyttäjävalikko",
-    "logoAlt": "Metatavu logo",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   },

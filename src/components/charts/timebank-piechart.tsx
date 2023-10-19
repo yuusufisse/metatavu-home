@@ -3,25 +3,19 @@ import {
   renderCustomizedLabel,
   dailyEntryToChart,
   renderCustomizedTooltipPieChart
-} from "../../../../utils/chart-utils";
+} from "../../utils/chart-utils";
 import { Typography } from "@mui/material";
-import { theme } from "../../../../theme";
-import strings from "../../../../localization/strings";
-import { personDailyEntryAtom } from "../../../../atoms/person";
+import strings from "../../localization/strings";
+import { personDailyEntryAtom } from "../../atoms/person";
 import { useAtomValue } from "jotai";
+import { COLORS } from "../constants";
 
 /**
  * Time bank pie chart component
- * @returns A pie chart containing daily entry logged time breakdown
+ * @returns A pie chart containing logged time breakdown of the daily entry
  */
 const TimebankPieChart = () => {
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
-
-  const COLORS = [
-    theme.palette.success.dark,
-    theme.palette.success.light,
-    theme.palette.warning.main
-  ];
 
   if (!personDailyEntry?.logged) {
     return (

@@ -8,35 +8,37 @@ import {
   Checkbox,
   ListItemText,
   Typography,
-  Card
+  Card,
+  CircularProgress
 } from "@mui/material";
-import { formatTimePeriod, getHoursAndMinutes } from "../../../utils/time-utils";
+import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
-import { DailyEntry, Timespan } from "../../../generated/client";
-import TimebankPieChart from "./charts/timebank-piechart";
-import TimebankOverviewChart from "./charts/timebank-overviewchart";
+import { DailyEntry, Timespan } from "../../generated/client";
+import TimebankPieChart from "../charts/timebank-piechart";
+import TimebankOverviewChart from "../charts/timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import strings from "../../../localization/strings";
-import TimebankMultiBarChart from "./charts/timebank-multibarchart";
+import strings from "../../localization/strings";
+import TimebankMultiBarChart from "../charts/timebank-multibarchart";
 import DateRangePicker from "./timebank-daterange-picker";
 import { useState } from "react";
-import { theme } from "../../../theme";
+import { theme } from "../../theme";
 import { useAtomValue } from "jotai";
-import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../../atoms/person";
+import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../atoms/person";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
   timespanSelector: Timespan;
   getPersonTotalTime: (timespan?: Timespan) => void;
   handleDailyEntryChange: (selectedDate: DateTime | null) => void;
+  loading: boolean;
 }
 
 /**
  * Component that contains the entirety of Timebank content, such as charts
  */
 const TimebankContent = (props: Props) => {
-  const { timespanSelector, getPersonTotalTime, handleDailyEntryChange } = props;
+  const { timespanSelector, getPersonTotalTime, handleDailyEntryChange, loading } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
   const [byRange, setByRange] = useState({
@@ -48,8 +50,6 @@ const TimebankContent = (props: Props) => {
   const today = DateTime.fromJSDate(
     dailyEntries.filter((item) => item.date.getMonth() <= new Date().getMonth())[0].date
   );
-
-  // Default value is a filtered array for today's date or the first array element if, which could be a vacation in the future.
 
   /**
    * Allows only logged dates or with expected hours to be selected in the date time picker.
@@ -74,6 +74,7 @@ const TimebankContent = (props: Props) => {
    * Renders overview chart and list item elements containing total time summaries
    */
   const renderOverViewChart = () => {
+    if (loading) return <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />;
     if (!personTotalTime) return null;
     return (
       <>
@@ -193,7 +194,7 @@ const TimebankContent = (props: Props) => {
             label={strings.timebank.byrange}
             control={
               <Checkbox
-                defaultChecked={byRange.dailyEntries}
+                checked={byRange.dailyEntries}
                 onClick={() =>
                   setByRange({ ...byRange, dailyEntries: byRange.dailyEntries ? false : true })
                 }
@@ -240,11 +241,7 @@ const TimebankContent = (props: Props) => {
                     ? getHoursAndMinutes(
                         Number(
                           selectedEntries.reduce(
-                            (prev, next) => prev + next.nonBillableProjectTime,
-                            0
-                          )
-                        )
-                      )
+                            (prev, next) => prev + next.nonBillableProjectTime, 0)))
                     : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))
                 }
               />

@@ -1,16 +1,16 @@
-import { getHoursAndMinutes } from "../../../utils/time-utils";
+import { getHoursAndMinutes } from "../../utils/time-utils";
 import { Grid, Typography, Card, CardContent, Skeleton } from "@mui/material";
-import strings from "../../../localization/strings";
+import strings from "../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
-import { errorAtom } from "../../../atoms/error";
+import { errorAtom } from "../../atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { useApi } from "../../../hooks/use-api";
-import { Person, PersonTotalTime } from "../../../generated/client";
-import { personsAtom, personTotalTimeAtom } from "../../../atoms/person";
+import { useApi } from "../../hooks/use-api";
+import { Person, PersonTotalTime } from "../../generated/client";
+import { personsAtom, personTotalTimeAtom } from "../../atoms/person";
 import { Link } from "react-router-dom";
-import { userProfileAtom } from "../../../atoms/auth";
-import config from "../../../app/config";
+import { userProfileAtom } from "../../atoms/auth";
+import config from "../../app/config";
 
 /**
  * Component for displaying user's balance
@@ -22,6 +22,13 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [isLoading, setIsLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+
+    /**
+   * Get person total time if it doesn't exist, or if it exists but the atom is set to other than "all time".
+   */
+    useEffect(() => {
+      if (!personTotalTime || personTotalTime.timePeriod?.split("-").length !== 5) getPersons();
+    }, [personTotalTime, persons]);
 
   /**
    * Initialize logged in person's time data.
@@ -43,13 +50,6 @@ const BalanceCard = () => {
       setIsLoading(false);
     }
   };
-
-  /**
-   * Get persontotaltime if it doesn't exist, or if it exists but the atom is set to other than "all time"
-   */
-  useEffect(() => {
-    if (!personTotalTime || personTotalTime.timePeriod?.split("-").length !== 5) getPersons();
-  }, [personTotalTime, persons]);
 
   /**
    * Renders person's total time
