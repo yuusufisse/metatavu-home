@@ -25,6 +25,7 @@ import { useState } from "react";
 import { theme } from "../../theme";
 import { useAtomValue } from "jotai";
 import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../atoms/person";
+import TimebankOverviewRangeChart from "../charts/timebank-overviewrangechart";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -39,15 +40,11 @@ interface Props {
  * Component that contains the entirety of Timebank content, such as charts
  */
 const TimebankContent = (props: Props) => {
-  const {
-    timespanSelector,
-    setTimespanSelector,
-    handleDailyEntryChange,
-    loading
-  } = props;
+  const { timespanSelector, setTimespanSelector, handleDailyEntryChange, loading } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
   const [byRange, setByRange] = useState({
+    overview: false,
     dailyEntries: false
   });
   const personTotalTime = useAtomValue(personTotalTimeAtom);
@@ -56,6 +53,8 @@ const TimebankContent = (props: Props) => {
   const todayOrEarlier = DateTime.fromJSDate(
     dailyEntries.filter((item) => item.date <= new Date())[0].date
   );
+
+  console.log(personTotalTime);
 
   /**
    * Allows only logged dates or with expected hours to be selected in the date time picker.
@@ -78,7 +77,7 @@ const TimebankContent = (props: Props) => {
   /**
    * Renders overview chart and list item elements containing total time summaries
    */
-  const renderOverViewChart = () => {
+  const renderOverviewOrRangeChart = () => {
     if (loading) {
       return <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />;
     }
@@ -86,7 +85,12 @@ const TimebankContent = (props: Props) => {
 
     return (
       <>
-        <TimebankOverviewChart />
+        {byRange.overview ? (
+          <TimebankOverviewRangeChart selectedEntries={selectedEntries} />
+        ) : (
+          <TimebankOverviewChart />
+        )}
+
         <List dense sx={{ marginLeft: "5%" }}>
           <ListItem>
             <ListItemText
@@ -131,6 +135,7 @@ const TimebankContent = (props: Props) => {
     if (byRange.dailyEntries && selectedEntries) {
       return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
     }
+
     return <TimebankPieChart />;
   };
 
@@ -188,9 +193,21 @@ const TimebankContent = (props: Props) => {
             <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
             <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
           </Select>
+          <FormControlLabel
+            sx={{ display: "inline" }}
+            label={strings.timebank.byrange}
+            control={
+              <Checkbox
+                checked={byRange.overview}
+                onClick={() =>
+                  setByRange({ ...byRange, overview: byRange.overview ? false : true })
+                }
+              />
+            }
+          />
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
-          {renderOverViewChart()}
+          {renderOverviewOrRangeChart()}
         </Box>
       </Card>
       <br />

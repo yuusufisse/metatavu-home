@@ -6,6 +6,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import {
   dailyEntriesAtom,
+  employmentYearsAtom,
   personDailyEntryAtom,
   personTotalTimeAtom,
   personsAtom
@@ -29,10 +30,12 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
+  const [employmentYears, setEmploymentYears] = useAtom(employmentYearsAtom);
 
   useEffect(() => {
     getPersonTotalTime();
-  }, [persons,timespanSelector]);
+    getEmploymentYears();
+  }, [persons, timespanSelector]);
 
   useEffect(() => {
     getPersonDailyEntries();
@@ -45,21 +48,21 @@ const TimebankScreen = () => {
    */
   const getPersonTotalTime = async () => {
     setLoading(true);
-      if (persons.length) {
-        try {
-          const loggedInPerson = persons.filter(
-            (person: Person) => person.keycloakId === userProfile?.id
-          )[0];
-          const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id,
-            timespan: timespanSelector || Timespan.ALL_TIME,
-            before: new Date()
-          });
-          setPersonTotalTime(fetchedPersonTotalTime[0]);
-        } catch (error) {
-          setError(`${strings.error.totalTimeFetch}, ${error}`);
-        }
+    if (persons.length) {
+      try {
+        const loggedInPerson = persons.filter(
+          (person: Person) => person.keycloakId === userProfile?.id
+        )[0];
+        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+          personId: loggedInPerson?.id || config.person.id,
+          timespan: timespanSelector || Timespan.ALL_TIME,
+          before: new Date()
+        });
+        setPersonTotalTime(fetchedPersonTotalTime[0]);
+      } catch (error) {
+        setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
+    }
     setLoading(false);
   };
 
@@ -81,6 +84,19 @@ const TimebankScreen = () => {
     } catch (error) {
       setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
+  };
+
+  /**
+   * Gets the person's employment start and current years
+   */
+  const getEmploymentYears = () => {
+    if (personTotalTime && timespanSelector === Timespan.ALL_TIME) {
+      setEmploymentYears([
+        String(personTotalTime.timePeriod?.split(",")[0].substring(0, 4)),
+        String(personTotalTime.timePeriod?.split(",")[1].substring(0, 4))
+      ]);
+    }
+    console.log(employmentYears);
   };
 
   /**
