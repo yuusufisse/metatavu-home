@@ -1,4 +1,4 @@
-import { cleanEnv, str, url } from "envalid";
+import { cleanEnv, num, str, url } from "envalid";
 
 interface Config {
   auth: {
@@ -9,13 +9,17 @@ interface Config {
   api: {
     baseUrl: string;
   };
+  person: {
+    id: number;
+  };
 }
 
 const env = cleanEnv(import.meta.env, {
   VITE_KEYCLOAK_URL: url(),
   VITE_KEYCLOAK_REALM: str(),
   VITE_KEYCLOAK_CLIENT_ID: str(),
-  VITE_API_BASE_URL: url()
+  VITE_API_BASE_URL: url(),
+  VITE_PERSON_ID: num({ default: undefined })
 });
 
 const config: Config = {
@@ -26,6 +30,9 @@ const config: Config = {
   },
   api: {
     baseUrl: env.VITE_API_BASE_URL
+  },
+  person: {
+    id: env.VITE_PERSON_ID
   }
 };
 

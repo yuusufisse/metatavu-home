@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { PersonTotalTime } from "../../../generated/client";
+import config from "../../../app/config";
 
 /**
  * Component for displaying user's balance
@@ -25,12 +26,12 @@ const BalanceCard = () => {
   const getPersons = async () => {
     setLoading(true);
     const fetchedPersons = await personsApi.listPersons({ active: true });
-    const loggedInPerson = fetchedPersons.find((person) => person.keycloakId === "06cf177e-5e75-470f-af9f-e19cd80d353c");
+    const loggedInPerson = fetchedPersons.find((person) => person.keycloakId === userProfile?.id);
 
-    if (loggedInPerson)
+    if (loggedInPerson || config.person.id)
       try {
         const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: loggedInPerson.id
+          personId: loggedInPerson?.id || config.person.id
         });
         setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
