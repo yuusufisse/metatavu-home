@@ -31,16 +31,13 @@ const DateRangePicker = ({
   /**
    * Handle date change and calculate days
    *
-   * @returns startDate, endDate, days
+   * @param props startDate, endDate, days
    */
   const handleDateChange = (startDate: DateTime, endDate: DateTime) => {
-    if (startDate) {
-      setStartDate(startDate);
-    }
-    if (endDate) {
-      setEndDate(endDate);
-    }
-    setDates(startDate, endDate, getVacationDurationInDays(startDate, endDate));
+    const updatedEndDate = startDate > endDate ? startDate : endDate;
+    setStartDate(startDate);
+    setEndDate(updatedEndDate);
+    setDates(startDate, updatedEndDate, getVacationDurationInDays(startDate, updatedEndDate));
   };
 
   return (
@@ -56,9 +53,7 @@ const DateRangePicker = ({
         label={strings.vacationRequest.startDate}
         value={startDate}
         minDate={dateTimeNow}
-        onChange={(newValue: DateTime | null) =>
-          newValue && handleDateChange(newValue, newValue > endDate ? newValue : endDate)
-        }
+        onChange={(newValue: DateTime | null) => newValue && handleDateChange(newValue, endDate)}
       />
       <DatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}

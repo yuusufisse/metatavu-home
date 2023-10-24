@@ -6,14 +6,14 @@ import strings from "../../../../../localization/strings";
  * Component properties
  */
 interface Props {
-  setConfirmation: (confirmation: string) => void;
+  setConfirmationHandlerOpen: (confirmation: boolean) => void;
 }
 /**
  * Delete Button component
  *
  * @param props component properties
  */
-const ToolbarDeleteButton = ({ setConfirmation }: Props) => {
+const ToolbarDeleteButton = ({ setConfirmationHandlerOpen }: Props) => {
   return (
     <Button
       variant="contained"
@@ -21,7 +21,7 @@ const ToolbarDeleteButton = ({ setConfirmation }: Props) => {
         width: "100%"
       }}
       onClick={() => {
-        setConfirmation(strings.confirmationHandler.message);
+        setConfirmationHandlerOpen(true);
       }}
     >
       <Delete />

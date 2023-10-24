@@ -29,29 +29,16 @@ const VacationRequestsScreen = () => {
   );
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
 
-  /**
-   * Fetch vacations when userProfile exists
-   */
   useEffect(() => {
     fetchVacationsRequests();
   }, [userProfile]);
 
-  /**
-   * Filter vacation requests when vacation request statuses exist
-   */
   useEffect(() => {
-    if (vacationRequestStatuses) {
-      filterLatestVacationRequestStatuses();
-    }
+    filterLatestVacationRequestStatuses();
   }, [vacationRequestStatuses]);
 
-  /**
-   * Fetch vacation requests statuses
-   */
   useEffect(() => {
-    if (vacationRequests) {
-      fetchVacationRequestStatuses();
-    }
+    fetchVacationRequestStatuses();
   }, [vacationRequests]);
 
   /**
@@ -86,7 +73,7 @@ const VacationRequestsScreen = () => {
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests) {
+    if (vacationRequests && vacationRequestStatuses) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -131,6 +118,8 @@ const VacationRequestsScreen = () => {
 
   /**
    * Delete vacation request status
+   *
+   * @param selectedRow selected row
    */
   const deleteVacationRequestStatus = async (selectedRow: GridRowId | undefined) => {
     if (vacationRequestStatuses.length && selectedRow) {
@@ -354,7 +343,6 @@ const VacationRequestsScreen = () => {
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
-        updateVacationRequestStatuses={updateVacationRequestStatuses}
       />
     </Card>
   );

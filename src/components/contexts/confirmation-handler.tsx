@@ -1,5 +1,4 @@
 import { Divider, Typography } from "@mui/material";
-import { ReactNode } from "react";
 import GenericDialog from "../generics/generic-dialog";
 import strings from "../../localization/strings";
 
@@ -7,9 +6,8 @@ import strings from "../../localization/strings";
  * Component properties
  */
 interface Props {
-  children: ReactNode;
-  confirmation: string;
-  setConfirmation: (confirmation: string) => void;
+  open: boolean;
+  setOpen: (confirmation: boolean) => void;
   deleteVacationsData: () => void;
 }
 
@@ -18,34 +16,25 @@ interface Props {
  *
  * @param props component properties
  */
-const ConfirmationHandler = ({
-  children,
-  confirmation,
-  setConfirmation,
-  deleteVacationsData
-}: Props) => {
-  /**
-   * Component render
-   */
+const ConfirmationHandler = ({ open, setOpen, deleteVacationsData }: Props) => {
   return (
     <>
-      {children}
       <GenericDialog
-        open={confirmation !== ""}
+        open={open}
         error={false}
-        onClose={() => setConfirmation("")}
-        onCancel={() => setConfirmation("")}
+        onClose={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
         onConfirm={() => {
-          setConfirmation("");
+          setOpen(false);
           deleteVacationsData();
         }}
         confirmButtonText={strings.confirmationHandler.confirmButtonText}
         cancelButtonText={strings.confirmationHandler.cancelButtonText}
         title={strings.confirmationHandler.title}
       >
-        {confirmation && (
+        {open && (
           <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
-            {confirmation}
+            {strings.confirmationHandler.message}
           </Typography>
         )}
         <Divider />

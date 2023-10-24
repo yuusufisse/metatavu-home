@@ -10,7 +10,6 @@ import { useAtomValue } from "jotai";
 import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
 import { vacationRequestStatusesAtom } from "../../../../atoms/vacationRequestStatuses";
 import VacationRequestsTableColumns from "./vacation-requests-table-columns";
-import { VacationRequestStatuses } from "../../../../generated/client";
 
 /**
  * Component properties
@@ -22,10 +21,6 @@ interface Props {
     vacationData: VacationData,
     vacationRequestId: string | undefined
   ) => Promise<void>;
-  updateVacationRequestStatuses: (
-    newStatus: VacationRequestStatuses,
-    selectedRowIds: GridRowId[]
-  ) => Promise<void>;
 }
 
 /**
@@ -36,8 +31,7 @@ interface Props {
 const VacationRequestsTable = ({
   deleteVacationRequests,
   createVacationRequest,
-  updateVacationRequest,
-  updateVacationRequestStatuses
+  updateVacationRequest
 }: Props) => {
   const vacationRequests = useAtomValue(vacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
@@ -67,7 +61,6 @@ const VacationRequestsTable = ({
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
-        updateVacationRequestStatuses={updateVacationRequestStatuses}
         setFormOpen={setFormOpen}
         formOpen={formOpen}
         selectedRowIds={selectedRowIds}
