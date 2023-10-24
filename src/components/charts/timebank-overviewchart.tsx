@@ -5,16 +5,15 @@ import strings from "../../localization/strings";
 import { getHours } from "../../utils/time-utils";
 import { personTotalTimeAtom } from "../../atoms/person";
 import { useAtomValue } from "jotai";
-import { PersonTotalTime } from "../../generated/client";
 import { Worktime } from "../../types";
 
 /**
  * Time bank overview chart component
- * @returns Bar chart with time entry data of the week, month or all time
  */
 const TimebankOverviewChart = () => {
-  const personTotalTime = useAtomValue(personTotalTimeAtom);
-  const chartData = totalTimeToChart(personTotalTime as PersonTotalTime);
+  // rome-ignore lint/style/noNonNullAssertion: personTotalTime is validated in the parent component with conditional return
+  const personTotalTime = useAtomValue(personTotalTimeAtom)!;
+  const chartData = totalTimeToChart(personTotalTime);
 
   return (
     <ResponsiveContainer width="75%" height={250}>

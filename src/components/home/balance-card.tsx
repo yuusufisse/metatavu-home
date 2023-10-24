@@ -20,34 +20,34 @@ const BalanceCard = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
 
-    /**
-   * Get person total time if it doesn't exist, or if it exists but the atom is set to other than "all time".
+  /**
+   * Get person total time if it is undefined or set to "all time"
    */
-    useEffect(() => {
-      if (!personTotalTime || personTotalTime.timePeriod?.split("-").length !== 5) getPersons();
-    }, [personTotalTime, persons]);
+  useEffect(() => {
+    if (!personTotalTime || personTotalTime.timePeriod?.split("-").length !== 5) getPersons();
+  }, [personTotalTime, persons]);
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setIsLoading(true);
+    setLoading(true);
     if (persons.length) {
       try {
         const loggedInPerson = persons.filter(
           (person: Person) => person.keycloakId === userProfile?.id
         )[0];
         const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: config.person.id || loggedInPerson?.id
+          personId: loggedInPerson?.id || config.person.id
         });
         setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
         setError(`${strings.error.fetchFailedGeneral}, ${error}`);
       }
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -60,10 +60,11 @@ const BalanceCard = () => {
     if (!personTotalTime) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
+
     return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <Link to={"/timebank"} style={{ textDecoration: "none" }}>
         <Card>

@@ -1,3 +1,4 @@
+import { Duration } from "luxon";
 import strings from "../localization/strings";
 
 /**
@@ -6,23 +7,21 @@ import strings from "../localization/strings";
  * @param minutes value in minutes
  * @returns inputted minute value in X h Y min format as string
  */
-export const getHoursAndMinutes = (minutes: number): string => {
-  return `${Math.trunc(minutes / 60)} h ${
-    (minutes % 60) * (String(minutes).startsWith("-") ? -1 : 1)
-  } min`;
-};
+export const getHoursAndMinutes = (minutes: number) =>
+  Duration.fromObject({ minutes: minutes }).toFormat("h 'h' mm 'min'");
+
 /**
  * Converts inputted minutes into full hours
  *
  * @param minutes value in minutes
  * @returns inputted minute value in X h
  */
-export const getHours = (minutes: number): string => {
-  return `${Math.trunc(minutes / 60)} h`;
-};
+export const getHours = (minutes: number) =>
+  Duration.fromObject({ minutes: minutes }).toFormat("h 'h'");
+
 /**
  * Formats inputted time period from @PersonTotalTime
- * @param timespan time period from @PersonTotalTime
+ * @param timespan time period
  * @returns formatted timespan in the following formats (DD.MM.YYYY – DD.MM.YYYY), (YYYY/WW), (YYYY/MM)
  */
 export const formatTimePeriod = (timespan: string[] | undefined) => {

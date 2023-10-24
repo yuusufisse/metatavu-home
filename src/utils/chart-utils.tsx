@@ -7,20 +7,17 @@ import { theme } from "../theme";
 import { getHoursAndMinutes } from "./time-utils";
 import { CustomLabel } from "../types";
 
-
 /**
  * Reformats inputted daily entry to be presented in the pie chart
  *
  * @param dailyEntry
  * @returns an array of elements each representing a section in the pie chart
  */
-export const dailyEntryToChart = (dailyEntry: DailyEntry) => {
-  return [
-    { name: strings.timebank.billableProject, dataKey: dailyEntry.billableProjectTime },
-    { name: strings.timebank.nonBillableProject, dataKey: dailyEntry.nonBillableProjectTime },
-    { name: strings.timebank.internal, dataKey: dailyEntry.internalTime }
-  ];
-};
+export const dailyEntryToChart = (dailyEntry: DailyEntry) => [
+  { name: strings.timebank.billableProject, dataKey: dailyEntry.billableProjectTime },
+  { name: strings.timebank.nonBillableProject, dataKey: dailyEntry.nonBillableProjectTime },
+  { name: strings.timebank.internal, dataKey: dailyEntry.internalTime }
+];
 
 /**
  * Reformats inputted person total time object to be presented in the bar chart
@@ -87,6 +84,26 @@ export const renderCustomizedTooltipPieChart = (props: TooltipProps<ValueType, N
 };
 
 /**
+ * Renders MUI typography element inside the tooltip
+ *
+ * @param name Data name
+ * @param time Data value, time in minutes
+ * @param color Font color of the line
+ * @returns MUI Typography line inside the tooltip containing data name and value.
+ */
+const renderCustomizedTooltipRow = (name: string, time: number, color: string) => (
+  <Typography
+    variant="h6"
+    style={{
+      color: color,
+      padding: theme.spacing(1)
+    }}
+  >
+    {`${name}: ${getHoursAndMinutes(time)}`}
+  </Typography>
+);
+
+/**
  * Renders a customized tooltip when hovering over the chart. Bar chart version.
  *
  * @param props props, such as chart values, passed from the parent (chart)
@@ -100,26 +117,6 @@ export const renderCustomizedTooltipBarChart = (props: TooltipProps<ValueType, N
   }
 
   const { billableProject, nonBillableProject, internal, expected, name } = payload[0].payload;
-
-  /**
-   * Renders MUI typography element inside the tooltip
-   *
-   * @param name Data name
-   * @param time Data value, time in minutes
-   * @param color Font color of the line
-   * @returns MUI Typography line inside the tooltip containing data name and value.
-   */
-  const renderCustomizedTooltipRow = (name: string, time: number, color: string) => (
-    <Typography
-      variant="h6"
-      style={{
-        color: color,
-        padding: theme.spacing(1)
-      }}
-    >
-      {`${name}: ${getHoursAndMinutes(time)}`}
-    </Typography>
-  );
 
   return (
     <Box

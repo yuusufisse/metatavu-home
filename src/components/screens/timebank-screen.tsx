@@ -32,6 +32,9 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     getPersonTotalTime();
+  }, [persons,timespanSelector]);
+
+  useEffect(() => {
     getPersonDailyEntries();
   }, [persons]);
 
@@ -40,18 +43,16 @@ const TimebankScreen = () => {
    *
    * @param timespan enum
    */
-  const getPersonTotalTime = async (timespan?: Timespan) => {
+  const getPersonTotalTime = async () => {
     setLoading(true);
-    if (!personTotalTime || timespan) {
-      setTimespanSelector(timespan || Timespan.ALL_TIME);
       if (persons.length) {
         try {
           const loggedInPerson = persons.filter(
             (person: Person) => person.keycloakId === userProfile?.id
           )[0];
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: config?.person?.id || loggedInPerson.id,
-            timespan: timespan,
+            personId: loggedInPerson?.id || config.person.id,
+            timespan: timespanSelector || Timespan.ALL_TIME,
             before: new Date()
           });
           setPersonTotalTime(fetchedPersonTotalTime[0]);
@@ -59,26 +60,24 @@ const TimebankScreen = () => {
           setError(`${strings.error.totalTimeFetch}, ${error}`);
         }
       }
-    }
     setLoading(false);
   };
 
   /**
-   * Gets the logged in person from persons list atom and then fetches the person's daily entries.
+   * Gets the logged in person's daily entries.
    */
   const getPersonDailyEntries = async () => {
     if (!persons.length) return null;
+
     try {
       const loggedInPerson = persons.filter(
         (person: Person) => person.keycloakId === userProfile?.id
       )[0];
       const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-        personId: config.person.id || loggedInPerson.id
+        personId: loggedInPerson?.id || config.person.id
       });
       setDailyEntries(fetchedDailyEntries);
-      setPersonDailyEntry(
-        fetchedDailyEntries.filter((item) => item.date.getMonth() <= new Date().getMonth())[0]
-      );
+      setPersonDailyEntry(fetchedDailyEntries.find((item) => item.date <= new Date())); // Gets today's entry or earlier
     } catch (error) {
       setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
@@ -89,27 +88,30 @@ const TimebankScreen = () => {
    *
    * @param selectedDate selected date from DatePicker
    */
-  const handleDailyEntryChange = (selectedDate: DateTime | null) => {
-    setPersonDailyEntry(
-      dailyEntries.filter(
-        (item) => DateTime.fromJSDate(item.date).toISODate() === selectedDate?.toISODate()
-      )[0]
-    );
+  const handleDailyEntryChange = (selectedDate: DateTime) => {
+    if (selectedDate)
+      setPersonDailyEntry(
+        dailyEntries.find(
+          (item) => DateTime.fromJSDate(item.date).toISODate() === selectedDate?.toISODate()
+        )
+      );
   };
 
-  if (!personDailyEntry || !dailyEntries.length || !personTotalTime)
-
+  if (!personDailyEntry || !dailyEntries.length || !personTotalTime) {
     return (
       <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ scale: "150%" }} />
       </Card>
     );
+  }
+
   return (
     <TimebankContent
       userProfile={userProfile}
       handleDailyEntryChange={handleDailyEntryChange}
       getPersonTotalTime={getPersonTotalTime}
       timespanSelector={timespanSelector}
+      setTimespanSelector={setTimespanSelector}
       loading={loading}
     />
   );

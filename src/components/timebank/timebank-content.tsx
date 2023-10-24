@@ -29,8 +29,9 @@ import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../
 interface Props {
   userProfile: KeycloakProfile | undefined;
   timespanSelector: Timespan;
+  setTimespanSelector: (timespan: Timespan) => void;
   getPersonTotalTime: (timespan?: Timespan) => void;
-  handleDailyEntryChange: (selectedDate: DateTime | null) => void;
+  handleDailyEntryChange: (selectedDate: DateTime) => void;
   loading: boolean;
 }
 
@@ -38,7 +39,12 @@ interface Props {
  * Component that contains the entirety of Timebank content, such as charts
  */
 const TimebankContent = (props: Props) => {
-  const { timespanSelector, getPersonTotalTime, handleDailyEntryChange, loading } = props;
+  const {
+    timespanSelector,
+    setTimespanSelector,
+    handleDailyEntryChange,
+    loading
+  } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
   const [byRange, setByRange] = useState({
@@ -47,23 +53,22 @@ const TimebankContent = (props: Props) => {
   const personTotalTime = useAtomValue(personTotalTimeAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
-  const today = DateTime.fromJSDate(
-    dailyEntries.filter((item) => item.date.getMonth() <= new Date().getMonth())[0].date
+  const todayOrEarlier = DateTime.fromJSDate(
+    dailyEntries.filter((item) => item.date <= new Date())[0].date
   );
 
   /**
    * Allows only logged dates or with expected hours to be selected in the date time picker.
    *
    * @param date DateTime object passed from the date picker
-   * @returns boolean value which controls the disabled dates.
    */
-  const disableNullEntries = (date: DateTime): boolean => {
-    const loggedDates = dailyEntries.filter(
+  const disableNullEntries = (date: DateTime) => {
+    const loggedDates = dailyEntries.find(
       (item) =>
         item.logged &&
         item.expected &&
         DateTime.fromJSDate(item.date).toISODate() === date.toISODate()
-    )[0];
+    );
 
     return loggedDates
       ? !(DateTime.fromJSDate(loggedDates.date).toISODate() === date.toISODate())
@@ -74,8 +79,11 @@ const TimebankContent = (props: Props) => {
    * Renders overview chart and list item elements containing total time summaries
    */
   const renderOverViewChart = () => {
-    if (loading) return <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />;
+    if (loading) {
+      return <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />;
+    }
     if (!personTotalTime) return null;
+
     return (
       <>
         <TimebankOverviewChart />
@@ -140,19 +148,20 @@ const TimebankContent = (props: Props) => {
             marginRight: "1%"
           }}
           label={strings.timebank.selectEntry}
-          onChange={handleDailyEntryChange}
-          value={today}
+          onChange={(value) => (value ? handleDailyEntryChange(value) : null)}
+          value={todayOrEarlier}
           minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
           maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
           shouldDisableDate={disableNullEntries}
         />
       );
     }
+
     return (
       <DateRangePicker
         dailyEntries={dailyEntries}
         setSelectedEntries={setSelectedEntries}
-        today={today}
+        today={todayOrEarlier}
       />
     );
   };
@@ -171,7 +180,9 @@ const TimebankContent = (props: Props) => {
               textAlign: "center"
             }}
             value={timespanSelector}
-            onChange={(e) => getPersonTotalTime(e.target.value as Timespan)}
+            onChange={(e) => {
+              setTimespanSelector(e.target.value as Timespan);
+            }}
           >
             <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
             <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
@@ -241,7 +252,11 @@ const TimebankContent = (props: Props) => {
                     ? getHoursAndMinutes(
                         Number(
                           selectedEntries.reduce(
-                            (prev, next) => prev + next.nonBillableProjectTime, 0)))
+                            (prev, next) => prev + next.nonBillableProjectTime,
+                            0
+                          )
+                        )
+                      )
                     : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))
                 }
               />

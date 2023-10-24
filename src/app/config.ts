@@ -19,7 +19,7 @@ const env = cleanEnv(import.meta.env, {
   VITE_KEYCLOAK_REALM: str(),
   VITE_KEYCLOAK_CLIENT_ID: str(),
   VITE_API_BASE_URL: url(),
-  VITE_PERSON_ID: num()
+  VITE_PERSON_ID: num({default:undefined})
 });
 
 const config: Config = {

@@ -32,7 +32,7 @@ const TimebankMultiBarChart = (props: Props) => {
     };
   });
 
-  if (!selectedEntries.length)
+  if (!chartData)
     return (
       <ResponsiveContainer width="75%" height={400}>
         <Typography sx={{ textAlign: "center", marginTop: "12%" }}>
@@ -40,6 +40,7 @@ const TimebankMultiBarChart = (props: Props) => {
         </Typography>
       </ResponsiveContainer>
     );
+    
   return (
     <ResponsiveContainer width="75%" height={400}>
       <BarChart
