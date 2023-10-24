@@ -9,7 +9,7 @@
     "hello": "Hei",
     "logout": "Kirjaudu ulos",
     "home": "Koti",
-    "timebank": "Aikapankki",
+    "timebank": "Timebank",
     "vacations": "Lomat",
     "onCall": "Päivystys",
     "admin": "Ylläpito",
@@ -18,16 +18,52 @@
     "openUserMenu": "Käyttäjävalikko",
     "logoAlt": "Metatavu logo"
   },
+  "error": {
+    "oops": "Hups!",
+    "generic": "Odottamaton virhe havaittu",
+    "totalTimeFetch": "Yhteenvetotietojen haku epäonnistui",
+    "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
+    "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
+    "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  },
   "localization": {
     "en": "EN",
-    "fi": "FI"
+    "fi": "FI",
+    "time": "fi-FI"
   },
   "timebank": {
     "balance": "Saldo",
-    "yourBalanceIs": "Saldosi on"
+    "yourBalanceIs": "Saldosi on",
+    "logged": "Kirjattu",
+    "expected": "Odotettu",
+    "billableProject": "Laskutettava",
+    "nonBillableProject": "Ei laskutettava",
+    "internal": "Sisäinen",
+    "billableHours": "Minimilaskutusaste",
+    "timeperiod": "Aikaväli",
+    "noData": "Ei kirjattua dataa",
+    "selectEntry": "Valitse aikakirjaus",
+    "latestEntry": "Viimeisin aikakirjaus",
+    "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
+    "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
+    "byrange": "Aikavälin mukaan"
   },
-  "errors": {
-    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
-    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  "timeExpressions": {
+    "monday": "Maanantai",
+    "tuesday": "Tiistai",
+    "wednesday": "Keskiviikko",
+    "thursday": "Torstai",
+    "friday": "Perjantai",
+    "saturday": "Lauantai",
+    "sunday": "Sunnuntai",
+    "day": "Päivä",
+    "week": "Viikko",
+    "month": "Kuukausi",
+    "year": "Vuosi",
+    "allTime": "Koko ajalta",
+    "startDate": "Alkupäivämäärä",
+    "endDate": "Loppupäivämäärä"
   }
 }
