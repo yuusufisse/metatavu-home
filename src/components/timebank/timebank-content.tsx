@@ -26,6 +26,7 @@ import { theme } from "../../theme";
 import { useAtomValue } from "jotai";
 import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../atoms/person";
 import TimebankOverviewRangeChart from "../charts/timebank-overviewrangechart";
+import OverviewRangePicker from "./timebank-overview-picker";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -86,7 +87,14 @@ const TimebankContent = (props: Props) => {
     return (
       <>
         {byRange.overview ? (
-          <TimebankOverviewRangeChart selectedEntries={selectedEntries} />
+          <>
+            <OverviewRangePicker
+              dailyEntries={dailyEntries}
+              setSelectedEntries={setSelectedEntries}
+              today={todayOrEarlier}
+            />
+            <TimebankOverviewRangeChart selectedEntries={selectedEntries} />
+          </>
         ) : (
           <TimebankOverviewChart />
         )}

@@ -17,7 +17,7 @@ interface Props {
 /**
  * Date Range Picker component
  */
-const DateRangePicker = (props: Props) => {
+const OverviewRangePicker = (props: Props) => {
   const { setSelectedEntries, dailyEntries, today } = props;
 
   const [range, setRange] = useState<Range>({
@@ -26,14 +26,14 @@ const DateRangePicker = (props: Props) => {
   });
 
   useEffect(() => {
-    getDateRangeEntries();
+    getOverviewRange();
   }, [range]);
 
   /**
    * Gets daily entries within time range
    * Filters null entries, commonly weekends.
    */
-  const getDateRangeEntries = () => {
+  const getOverviewRange = () => {
     if (range.start && range.end) {
       const selectedDays = range.end.diff(range.start, "days").toObject();
       const result = [];
@@ -61,6 +61,7 @@ const DateRangePicker = (props: Props) => {
           mx: "1%"
         }}
         label={strings.timeExpressions.startDate}
+        views={["year", "month"]}
         onChange={(dateTime) => setRange({ ...range, start: dateTime })}
         value={range.start}
         maxDate={range.end?.minus({ days: 1 })}
@@ -71,6 +72,7 @@ const DateRangePicker = (props: Props) => {
           mx: "1%"
         }}
         label={strings.timeExpressions.endDate}
+        views={["year", "month"]}
         onChange={(dateTime) => setRange({ ...range, end: dateTime })}
         value={range.end}
         minDate={range.start?.plus({ days: 1 })}
@@ -79,4 +81,4 @@ const DateRangePicker = (props: Props) => {
   );
 };
 
-export default DateRangePicker;
+export default OverviewRangePicker;
