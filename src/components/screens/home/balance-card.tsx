@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { PersonTotalTime } from "../../../generated/client";
+import config from "../../../app/config";
 
 /**
  * Component for displaying user's balance
@@ -16,27 +17,28 @@ const BalanceCard = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setIsLoading(true);
+    setLoading(true);
     const fetchedPersons = await personsApi.listPersons({ active: true });
-    const loggedInPerson = fetchedPersons.filter((person) => person.keycloakId === userProfile?.id);
+    const loggedInPerson = fetchedPersons.find((person) => person.keycloakId === userProfile?.id);
 
-    try {
-      const fetchedPerson = await personsApi.listPersonTotalTime({
-        personId: loggedInPerson[0].id
-      });
-      setPersonTotalTime(fetchedPerson[0]);
-    } catch (error) {
-      setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
-    }
+    if (loggedInPerson || config.person.id)
+      try {
+        const fetchedPerson = await personsApi.listPersonTotalTime({
+          personId: loggedInPerson?.id || config.person.id
+        });
+        setPersonTotalTime(fetchedPerson[0]);
+      } catch (error) {
+        setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
+      }
 
-    setIsLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -51,8 +53,11 @@ const BalanceCard = () => {
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
     if (!personTotalTime) {
       return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>;
+      return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>;
     }
 
+    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+  };
     return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
   };
 
@@ -66,7 +71,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {isLoading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+              {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>
