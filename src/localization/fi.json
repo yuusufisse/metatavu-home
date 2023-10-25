@@ -83,5 +83,8 @@
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "create": "Hae lomaa"
+  },
+  "dataGrid": {
+    "noRows": "Ei rivejä"
   }
 }

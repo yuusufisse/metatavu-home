@@ -53,11 +53,7 @@ const ToolbarFormFields = ({
    * @param endDate
    * @param days
    */
-  const setDates = (
-    startDate: DateTime | undefined,
-    endDate: DateTime | undefined,
-    days: number
-  ) => {
+  const setDates = (startDate: DateTime, endDate: DateTime, days: number) => {
     setVacationData({
       ...vacationData,
       startDate: startDate,
@@ -73,10 +69,13 @@ const ToolbarFormFields = ({
         name="type"
         value={String(vacationData.type)}
         onChange={(event: SelectChangeEvent<string>) => {
-          setVacationData({
-            ...vacationData,
-            type: getVacationTypeByString(event.target.value)
-          });
+          const vacationType = getVacationTypeByString(event.target.value);
+          if (vacationType) {
+            setVacationData({
+              ...vacationData,
+              type: vacationType
+            });
+          }
         }}
         sx={{ marginBottom: "5px", width: "100%" }}
       >

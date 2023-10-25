@@ -37,7 +37,7 @@ export const getVacationDataFromRow = ({
       (vacationRequest) => vacationRequest.id === selectedVacationRow.id
     );
 
-    if (selectedVacationRequest) {
+    if (selectedVacationRequest?.id) {
       const startDate = DateTime.fromJSDate(selectedVacationRequest.startDate);
       const endDate = DateTime.fromJSDate(selectedVacationRequest.endDate);
       const days = selectedVacationRequest.days;
@@ -49,9 +49,7 @@ export const getVacationDataFromRow = ({
         endDate: endDate,
         days: days
       });
-      if (selectedVacationRequest?.id) {
-        setSelectedVacationRequestId(selectedVacationRequest.id);
-      }
+      setSelectedVacationRequestId(selectedVacationRequest.id);
       setStartDate(startDate);
       setEndDate(endDate);
     }

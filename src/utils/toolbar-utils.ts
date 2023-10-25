@@ -42,18 +42,9 @@ export const determineToolbarFormMode = ({
  * @param toolbarFormMode toolbar form mode
  * @returns title as string
  */
-export const getToolbarTitle = (toolbarFormMode: ToolbarFormModes): string => {
-  let title = "";
-  switch (true) {
-    case toolbarFormMode === ToolbarFormModes.CREATE:
-      title = strings.tableToolbar.createRequests;
-      break;
-    case toolbarFormMode === ToolbarFormModes.EDIT:
-      title = strings.tableToolbar.editRequests;
-      break;
-    default:
-      title = strings.tableToolbar.myRequests;
-      break;
-  }
-  return title;
-};
+export const getToolbarTitle = (toolbarFormMode: ToolbarFormModes) =>
+  ({
+    [ToolbarFormModes.CREATE]: strings.tableToolbar.createRequests,
+    [ToolbarFormModes.EDIT]: strings.tableToolbar.editRequests,
+    [ToolbarFormModes.NONE]: strings.tableToolbar.myRequests
+  })[toolbarFormMode];

@@ -16,10 +16,7 @@ import ToolbarFormFields from "./toolbar-form-fields";
 interface Props {
   formOpen: boolean;
   setFormOpen: (formOpen: boolean) => void;
-  updateVacationRequest: (
-    vacationData: VacationData,
-    vacationRequestId: string | undefined
-  ) => Promise<void>;
+  updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   selectedRowIds: GridRowId[];
   rows: DataGridRow[];
@@ -45,13 +42,14 @@ const ToolbarForm = ({
   const dateTimeNow = DateTime.now();
   const [startDate, setStartDate] = useState<DateTime>(dateTimeNow);
   const [endDate, setEndDate] = useState<DateTime>(dateTimeNow);
-  const [vacationData, setVacationData] = useState<VacationData>({
+  const defaultVacationData = {
+    type: VacationType.VACATION,
     startDate: dateTimeNow,
     endDate: dateTimeNow,
-    type: VacationType.VACATION,
     message: "",
     days: 1
-  });
+  };
+  const [vacationData, setVacationData] = useState<VacationData>(defaultVacationData);
   const [selectedVacationRequestId, setSelectedVacationRequestId] = useState("");
   const vacationRequests = useAtomValue(vacationRequestsAtom);
 
@@ -59,13 +57,7 @@ const ToolbarForm = ({
    * Reset vacation data
    */
   const resetVacationData = () => {
-    setVacationData({
-      type: VacationType.VACATION,
-      startDate: dateTimeNow,
-      endDate: dateTimeNow,
-      message: "",
-      days: 1
-    });
+    setVacationData(defaultVacationData);
     setStartDate(dateTimeNow);
     setEndDate(dateTimeNow);
   };

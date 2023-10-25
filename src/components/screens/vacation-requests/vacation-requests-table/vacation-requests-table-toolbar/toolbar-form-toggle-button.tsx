@@ -29,24 +29,20 @@ const FormToggleButton = ({
   title,
   titleVariant,
   buttonVariant
-}: Props) => {
-  return (
-    <Button
-      variant={buttonVariant ? buttonVariant : "contained"}
-      onClick={() => {
-        setValue(!value);
-      }}
-      sx={{
-        width: "100%"
-      }}
-    >
-      {ButtonIcon ? <ButtonIcon /> : null}
-      {title ? (
-        <Typography variant={titleVariant ? titleVariant : "h6"}>&nbsp;{title}</Typography>
-      ) : null}
-      {children}
-    </Button>
-  );
-};
+}: Props) => (
+  <Button
+    variant={buttonVariant ? buttonVariant : "contained"}
+    onClick={() => {
+      setValue(!value);
+    }}
+    sx={{
+      width: "100%"
+    }}
+  >
+    {ButtonIcon && <ButtonIcon />}
+    {title && <Typography variant={titleVariant ? titleVariant : "h6"}>&nbsp;{title}</Typography>}
+    {children}
+  </Button>
+);
 
 export default FormToggleButton;

@@ -4,13 +4,28 @@ import SkeletonTableRowCheckbox from "./skeleton-table-row-checkbox";
 import SkeletonTableItem from "./skeleton-table-row-item";
 
 /**
+ * Component props
+ */
+interface Props {
+  dataGridHeight: number;
+  dataGridRowHeight: number;
+  dataGridColumnHeaderHeight: number;
+}
+
+/**
  * Skeleton table rows component
  */
-const SkeletonTableRows = () => {
-  const { columns } = VacationRequestsTableColumns();
+const SkeletonTableRows = ({
+  dataGridHeight,
+  dataGridRowHeight,
+  dataGridColumnHeaderHeight
+}: Props) => {
+  const columns = VacationRequestsTableColumns();
+  const rowCount = Math.floor(dataGridHeight - dataGridColumnHeaderHeight / dataGridRowHeight);
+
   return (
     <>
-      {[...Array(11)].map((_item, idx) => {
+      {[...Array(rowCount)].map((_item, idx) => {
         return (
           <Box
             key={`skeleton-row-container${idx}`}

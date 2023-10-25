@@ -8,26 +8,25 @@ import strings from "../../../../../localization/strings";
 interface Props {
   setConfirmationHandlerOpen: (confirmation: boolean) => void;
 }
+
 /**
  * Delete Button component
  *
  * @param props component properties
  */
-const ToolbarDeleteButton = ({ setConfirmationHandlerOpen }: Props) => {
-  return (
-    <Button
-      variant="contained"
-      sx={{
-        width: "100%"
-      }}
-      onClick={() => {
-        setConfirmationHandlerOpen(true);
-      }}
-    >
-      <Delete />
-      <Typography variant="h6">&nbsp;{strings.tableToolbar.delete}</Typography>
-    </Button>
-  );
-};
+const ToolbarDeleteButton = ({ setConfirmationHandlerOpen }: Props) => (
+  <Button
+    variant="contained"
+    sx={{
+      width: "100%"
+    }}
+    onClick={() => {
+      setConfirmationHandlerOpen(true);
+    }}
+  >
+    <Delete />
+    <Typography variant="h6">&nbsp;{strings.tableToolbar.delete}</Typography>
+  </Button>
+);
 
 export default ToolbarDeleteButton;

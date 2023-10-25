@@ -9,7 +9,7 @@ import strings from "../../localization/strings";
  */
 interface Props {
   dateTimeNow: DateTime;
-  setDates: (startDate: DateTime | undefined, endDate: DateTime | undefined, days: number) => void;
+  setDates: (startDate: DateTime, endDate: DateTime, days: number) => void;
   startDate: DateTime;
   endDate: DateTime;
   setStartDate: (startDate: DateTime) => void;

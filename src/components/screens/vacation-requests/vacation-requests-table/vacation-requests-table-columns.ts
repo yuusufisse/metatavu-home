@@ -1,7 +1,27 @@
 import { GridColDef } from "@mui/x-data-grid";
 import strings from "../../../../localization/strings";
+import { DateTime } from "luxon";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "../../../../atoms/languageAtom";
 
 const VacationRequestsTableColumns = () => {
+  const language = useAtomValue(languageAtom);
+
+  /**
+   * Format date
+   *
+   * @param date datetime object
+   * @returns formatted date time
+   */
+  function formatDate(date: DateTime, dateWithTime?: boolean) {
+    if (!date) {
+      return "";
+    }
+    return date
+      .setLocale(language)
+      .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
+  }
+
   /**
    * Define columns for data grid
    */
@@ -15,18 +35,21 @@ const VacationRequestsTableColumns = () => {
     {
       field: "updatedAt",
       headerName: strings.vacationRequest.updatedAt,
-      width: 150,
+      renderCell: (params) => formatDate(params.row?.updatedAt, true),
+      width: 180,
       editable: false
     },
     {
       field: "startDate",
       headerName: strings.vacationRequest.startDate,
+      renderCell: (params) => formatDate(params.row?.startDate),
       width: 150,
       editable: false
     },
     {
       field: "endDate",
       headerName: strings.vacationRequest.endDate,
+      renderCell: (params) => formatDate(params.row?.endDate),
       width: 150,
       editable: false
     },
@@ -49,7 +72,7 @@ const VacationRequestsTableColumns = () => {
       editable: false
     }
   ];
-  return { columns };
+  return columns;
 };
 
 export default VacationRequestsTableColumns;

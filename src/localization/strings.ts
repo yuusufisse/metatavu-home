@@ -117,6 +117,9 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     create: string;
   };
+  dataGrid: {
+    noRows: string;
+  };
 }
 
 /**

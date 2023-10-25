@@ -16,10 +16,7 @@ import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
 interface Props {
   deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
-  updateVacationRequest: (
-    vacationData: VacationData,
-    vacationRequestId: string | undefined
-  ) => Promise<void>;
+  updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   setFormOpen: (formOpen: boolean) => void;
   formOpen: boolean;
   selectedRowIds: GridRowId[];
@@ -42,10 +39,14 @@ const TableToolbar = ({
   const [toolbarOpen, setToolbarOpen] = useState(false);
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
   const [confirmationHandlerOpen, setConfirmationHandlerOpen] = useState(false);
+  const [title, setTitle] = useState(strings.tableToolbar.myRequests);
 
-  /**
-   * Set toolbar open
-   */
+  useEffect(() => {
+    if (toolbarFormMode) {
+      setTitle(getToolbarTitle(toolbarFormMode));
+    }
+  }, [toolbarFormMode]);
+
   useEffect(() => {
     if (selectedRowIds) {
       setToolbarOpen(true);
@@ -76,29 +77,6 @@ const TableToolbar = ({
     alignItems: "center"
   });
 
-  /**
-   * Component properties
-   */
-  interface ToolbarTitleProps {
-    toolbarFormMode: ToolbarFormModes;
-  }
-
-  /**
-   * Toolbar title component
-   *
-   * @param props component properties
-   */
-  const ToolbarTitle = ({ toolbarFormMode }: ToolbarTitleProps) => {
-    const [title, setTitle] = useState(strings.tableToolbar.myRequests);
-
-    useEffect(() => {
-      if (toolbarFormMode) {
-        setTitle(getToolbarTitle(toolbarFormMode));
-      }
-    }, [toolbarFormMode]);
-    return <Typography variant="h5">{title}</Typography>;
-  };
-
   return (
     <Box>
       <ConfirmationHandler
@@ -121,26 +99,11 @@ const TableToolbar = ({
               />
             </ToolbarGridItem>
           ) : null}
-          {/* TODO: Render these buttons conditionally in admin mode */}
-          {/* <ToolbarGridItem item xs={3}>
-              <UpdateStatusButton
-                updateVacationRequestStatuses={updateVacationRequestStatuses}
-                approval={true}
-                selectedRowIds={selectedRowIds}
-              />
-            </ToolbarGridItem>
-            <ToolbarGridItem item xs={3}>
-              <UpdateStatusButton
-                updateVacationRequestStatuses={updateVacationRequestStatuses}
-                approval={false}
-                selectedRowIds={selectedRowIds}
-              />
-            </ToolbarGridItem> */}
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>
           <ToolbarGridItem item xs={6}>
-            <ToolbarTitle toolbarFormMode={toolbarFormMode} />
+            <Typography variant="h5">{title}</Typography>
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>
             {formOpen ? (

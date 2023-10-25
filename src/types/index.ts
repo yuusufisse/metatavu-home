@@ -26,9 +26,9 @@ export type Language = "fi" | "en-GB";
 export interface DataGridRow {
   id: string | undefined;
   type: VacationType | string;
-  updatedAt: string;
-  startDate: string;
-  endDate: string;
+  updatedAt: string | DateTime;
+  startDate: string | DateTime;
+  endDate: string | DateTime;
   days: number;
   message: string | undefined;
   status: string;
@@ -58,9 +58,9 @@ export interface SkeletonTableRow {
  * Type describing data for vacation request
  */
 export interface VacationData {
-  startDate: DateTime | undefined;
-  endDate: DateTime | undefined;
-  type: VacationType | undefined;
-  message: string | undefined;
-  days: number | undefined;
+  startDate: DateTime;
+  endDate: DateTime;
+  type: VacationType;
+  message: string;
+  days: number;
 }

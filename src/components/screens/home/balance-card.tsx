@@ -50,15 +50,11 @@ const BalanceCard = () => {
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
     if (!personTotalTime) {
-      return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>
+      return <Typography>{strings.errors.fetchFailedNoEntriesGeneral}</Typography>;
     }
 
-    return (
-      <Typography>
-        {getHoursAndMinutes(personTotalTime.balance)}
-      </Typography>
-    )
-  }
+    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+  };
 
   return (
     <>
@@ -70,9 +66,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {isLoading
-                ? <Skeleton />
-                : renderPersonTotalTime(personTotalTime)}
+              {isLoading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>
