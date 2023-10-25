@@ -18,7 +18,7 @@ export type ButtonIconProps = {};
 /**
  * Type describing available languages
  */
-export type Language = "fi" | "en-GB";
+export type Language = "fi" | "en-gb";
 
 /**
  * Type describing row for data grid table

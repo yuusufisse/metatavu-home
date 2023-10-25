@@ -32,26 +32,19 @@ const LocalizationButton = () => {
 
   /**
    * Handles localization change
-   * 
+   *
    * @param locale locale to change to
    */
   const handleLocaleChange = (locale: string) => {
-    const newLocale = locale === "en" ? "fi" : "en";
+    const newLocale: Language = locale === "en-gb" ? "fi" : "en-gb";
     setLanguage(newLocale as Language);
   };
 
   return (
-    <LanguageButtons
-      value={language}
-      exclusive
-      aria-label="localization"
-    >
+    <LanguageButtons value={language} exclusive aria-label="localization">
       <Tooltip title={strings.header.changeLanguage}>
-        <ToggleButton
-          value={language}
-          onChange={() => handleLocaleChange(language)}
-        >
-          {language}
+        <ToggleButton value={language} onChange={() => handleLocaleChange(language)}>
+          {language === "fi" ? "FI" : "EN"}
         </ToggleButton>
       </Tooltip>
     </LanguageButtons>

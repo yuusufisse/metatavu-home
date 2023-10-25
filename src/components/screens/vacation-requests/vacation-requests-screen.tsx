@@ -123,8 +123,8 @@ const VacationRequestsScreen = () => {
    *
    * @param selectedRow selected row
    */
-  const deleteVacationRequestStatus = async (selectedRow: GridRowId | undefined) => {
-    if (vacationRequestStatuses.length && selectedRow) {
+  const deleteVacationRequestStatus = async (selectedRow: GridRowId) => {
+    if (vacationRequestStatuses.length) {
       try {
         const foundVacationRequestStatus = vacationRequestStatuses.find(
           (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRow
@@ -150,8 +150,8 @@ const VacationRequestsScreen = () => {
    *
    * @param selectedRowIds selected row ids
    */
-  const deleteVacationRequests = async (selectedRowIds: GridRowId[] | undefined) => {
-    if (vacationRequests && selectedRowIds) {
+  const deleteVacationRequests = async (selectedRowIds: GridRowId[]) => {
+    if (vacationRequests) {
       let updatedVacationRequests: VacationRequest[] = [];
       await Promise.all(
         selectedRowIds.map(async (selectedRowId) => {
