@@ -5,7 +5,7 @@ import LocalizationUtils from "../../../../utils/localization-utils";
 import strings from "../../../../localization/strings";
 
 /**
- * Vacation requests table rows functional component
+ * Vacation requests table rows component
  *
  */
 const VacationRequestsTableRows = () => {

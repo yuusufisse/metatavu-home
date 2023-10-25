@@ -43,7 +43,7 @@ const VacationRequestsScreen = () => {
   }, [vacationRequests]);
 
   /**
-   * Fetch vacation request statuses using the API
+   * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
     if (vacationRequests) {
@@ -86,7 +86,7 @@ const VacationRequestsScreen = () => {
           }
         });
 
-        if (selectedVacationRequestStatuses.length > 0) {
+        if (selectedVacationRequestStatuses.length) {
           const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
@@ -205,7 +205,7 @@ const VacationRequestsScreen = () => {
   /**
    * Create a vacation request
    *
-   * @param vacationData vacation data, data for vacation request
+   * @param vacationData vacation data
    */
   const createVacationRequest = async (vacationData: VacationData) => {
     if (!userProfile || !userProfile.id) return;
