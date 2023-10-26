@@ -91,6 +91,7 @@ const TimebankContent = (props: Props) => {
             <OverviewRangePicker totalTime={totalTime} selectedTotalEntries={selectedTotalEntries} setSelectedTotalEntries={setSelectedTotalEntries} today={todayOrEarlier}/>
             <TimebankOverviewRangeChart selectedTotalEntries={selectedTotalEntries} />
           </Box>
+
         ) : (
           <TimebankOverviewChart />
         )}

@@ -27,14 +27,14 @@ const OverviewRangePicker = (props: Props) => {
   });
 
   useEffect(() => {
-    getDateRangeEntries();
+    getOverviewRange();
   }, [range]);
 
   /**
    * Gets daily entries within time range
    * Filters null entries, commonly weekends.
    */
-  const getDateRangeEntries = () => {
+  const getOverviewRange = () => {
     if (range.start && range.end) {
       const selectedRange = range.end.diff(range.start, "months").toObject();
       const result = [];
