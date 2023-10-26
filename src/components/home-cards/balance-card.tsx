@@ -1,14 +1,14 @@
-import { getHoursAndMinutes } from "../../../utils/time-utils";
+import { getHoursAndMinutes } from "../../utils/time-utils";
 import { Grid, Typography, Card, CardContent, Skeleton } from "@mui/material";
-import strings from "../../../localization/strings";
+import strings from "../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
-import { errorAtom } from "../../../atoms/error";
+import { errorAtom } from "../../atoms/error";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { useApi } from "../../../hooks/use-api";
-import { authAtom, userProfileAtom } from "../../../atoms/auth";
-import { PersonTotalTime } from "../../../generated/client";
-import config from "../../../app/config";
+import { useApi } from "../../hooks/use-api";
+import { authAtom, userProfileAtom } from "../../atoms/auth";
+import { PersonTotalTime } from "../../generated/client";
+import config from "../../app/config";
 
 /**
  * Component for displaying user's balance

@@ -1,5 +1,5 @@
 import { Grid, Card, CardContent } from "@mui/material";
-import strings from "../../../localization/strings";
+import strings from "../../localization/strings";
 import { List } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 

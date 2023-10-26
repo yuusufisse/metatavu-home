@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
-import BalanceCard from "./balance-card";
-import VacationsCard from "./vacations-card";
+import BalanceCard from "../../home-cards/balance-card";
+import VacationsCard from "../../home-cards/vacations-card";
 
 /**
  * Home screen component
