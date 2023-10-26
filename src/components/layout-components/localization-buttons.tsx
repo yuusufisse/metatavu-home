@@ -44,7 +44,7 @@ const LocalizationButton = () => {
     <LanguageButtons value={language} exclusive aria-label="localization">
       <Tooltip title={strings.header.changeLanguage}>
         <ToggleButton value={language} onChange={() => handleLocaleChange(language)}>
-          {language === "fi" ? "FI" : "EN"}
+          {language === "fi" ? strings.localization.fi : strings.localization.en}
         </ToggleButton>
       </Tooltip>
     </LanguageButtons>
