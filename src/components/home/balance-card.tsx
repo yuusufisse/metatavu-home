@@ -6,8 +6,8 @@ import { errorAtom } from "../../atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
-import { Person, PersonTotalTime } from "../../generated/client";
-import { personsAtom, personTotalTimeAtom } from "../../atoms/person";
+import { Person, PersonTotalTime, Timespan } from "../../generated/client";
+import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/person";
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
@@ -18,6 +18,7 @@ import config from "../../app/config";
 const BalanceCard = () => {
   const persons = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
+  const [timespan, setTimespan] = useAtom(timespanAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
@@ -27,25 +28,30 @@ const BalanceCard = () => {
    * Get person total time if it is undefined or set to "all time"
    */
   useEffect(() => {
-    if (!personTotalTime || personTotalTime.timePeriod?.split("-").length !== 5) getPersons();
-  }, [personTotalTime, persons]);
+    if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
+      setTimespan(Timespan.ALL_TIME);
+      getPersons();
+    }
+  }, []);
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setLoading(true);
     if (persons.length) {
-      try {
-        const loggedInPerson = persons.filter(
-          (person: Person) => person.keycloakId === userProfile?.id
-        )[0];
-        const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: loggedInPerson?.id || config.person.id
-        });
-        setPersonTotalTime(fetchedPerson[0]);
-      } catch (error) {
-        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+      setLoading(true);
+      const loggedInPerson = persons.find(
+        (person: Person) => person.keycloakId === userProfile?.id
+      );
+      if (loggedInPerson || config.person.id) {
+        try {
+          const fetchedPerson = await personsApi.listPersonTotalTime({
+            personId: loggedInPerson?.id || config.person.id
+          });
+          setPersonTotalTime(fetchedPerson[0]);
+        } catch (error) {
+          setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+        }
       }
       setLoading(false);
     }
@@ -56,12 +62,12 @@ const BalanceCard = () => {
    *
    * @param personTotalTime PersonTotalTime
    */
-  const renderPersonTotalTime = (personTotalTime: PersonTotalTime) => {
-    if (!personTotalTime) {
-      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
+  const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
+    if (personTotalTime) {
+      return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
     }
 
-    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+    return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
   };
 
   if (loading) {
@@ -94,7 +100,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {personTotalTime ? renderPersonTotalTime(personTotalTime) : null}
+              {renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>

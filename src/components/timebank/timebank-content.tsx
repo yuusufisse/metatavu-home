@@ -12,7 +12,6 @@ import {
   CircularProgress
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
-import type { KeycloakProfile } from "keycloak-js";
 import { DailyEntry, Timespan } from "../../generated/client";
 import TimebankPieChart from "../charts/timebank-piechart";
 import TimebankOverviewChart from "../charts/timebank-overviewchart";
@@ -23,34 +22,31 @@ import TimebankMultiBarChart from "../charts/timebank-multibarchart";
 import DateRangePicker from "./timebank-daterange-picker";
 import { useState } from "react";
 import { theme } from "../../theme";
-import { useAtomValue } from "jotai";
-import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../atoms/person";
+import { useAtom, useAtomValue } from "jotai";
+import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom, timespanAtom } from "../../atoms/person";
 
+/**
+ * Component properties
+ */
 interface Props {
-  userProfile: KeycloakProfile | undefined;
-  timespanSelector: Timespan;
-  setTimespanSelector: (timespan: Timespan) => void;
-  getPersonTotalTime: (timespan?: Timespan) => void;
   handleDailyEntryChange: (selectedDate: DateTime) => void;
   loading: boolean;
 }
 
 /**
  * Component that contains the entirety of Timebank content, such as charts
+ *
+ * @param props Component properties
  */
 const TimebankContent = (props: Props) => {
-  const {
-    timespanSelector,
-    setTimespanSelector,
-    handleDailyEntryChange,
-    loading
-  } = props;
+  const { handleDailyEntryChange, loading } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
   const personTotalTime = useAtomValue(personTotalTimeAtom);
+  const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
   const todayOrEarlier = DateTime.fromJSDate(
@@ -136,8 +132,8 @@ const TimebankContent = (props: Props) => {
 
   /**
    * Renders date picker or range date picker associated with above charts.
-   
-  * @returns JSX.Element consisting of either chart component
+   *
+   * @returns JSX.Element consisting of either date picker component.
    */
   const renderDatePickers = () => {
     if (dailyEntries && !byRange.dailyEntries) {
@@ -179,9 +175,9 @@ const TimebankContent = (props: Props) => {
               marginRight: "1%",
               textAlign: "center"
             }}
-            value={timespanSelector}
+            value={timespan}
             onChange={(e) => {
-              setTimespanSelector(e.target.value as Timespan);
+              setTimespan(e.target.value as Timespan);
             }}
           >
             <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
@@ -251,10 +247,7 @@ const TimebankContent = (props: Props) => {
                   byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
                         Number(
-                          selectedEntries.reduce(
-                            (prev, next) => prev + next.nonBillableProjectTime,
-                            0
-                          )
+                          selectedEntries.reduce((prev, next) => prev + next.nonBillableProjectTime, 0)
                         )
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))

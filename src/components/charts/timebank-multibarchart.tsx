@@ -16,23 +16,23 @@ interface Props {
 
 /**
  * Timebank multiple bar chart component representing data from a selected range
+ *
+ * @param props component properties
  */
 const TimebankMultiBarChart = (props: Props) => {
   const { selectedEntries } = props;
-  const chartData = selectedEntries.map((entry) => {
-    return {
-      name: entry.date.toLocaleDateString(strings.localization.time, {
-        day: "numeric",
-        month: "numeric"
-      }),
-      internal: entry.internalTime,
-      billableProject: entry.billableProjectTime,
-      nonBillableProject: entry.nonBillableProjectTime,
-      expected: entry.expected
-    };
-  });
+  const chartData = selectedEntries.map((entry) => ({
+    name: entry.date.toLocaleDateString(strings.localization.time, {
+      day: "numeric",
+      month: "numeric"
+    }),
+    internal: entry.internalTime,
+    billableProject: entry.billableProjectTime,
+    nonBillableProject: entry.nonBillableProjectTime,
+    expected: entry.expected
+  }));
 
-  if (!chartData)
+  if (!chartData) {
     return (
       <ResponsiveContainer width="75%" height={400}>
         <Typography sx={{ textAlign: "center", marginTop: "12%" }}>
@@ -40,7 +40,8 @@ const TimebankMultiBarChart = (props: Props) => {
         </Typography>
       </ResponsiveContainer>
     );
-    
+  }
+
   return (
     <ResponsiveContainer width="75%" height={400}>
       <BarChart

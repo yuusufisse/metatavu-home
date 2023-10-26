@@ -7,8 +7,11 @@ import strings from "../localization/strings";
  * @param minutes value in minutes
  * @returns inputted minute value in X h Y min format as string
  */
-export const getHoursAndMinutes = (minutes: number) =>
-  Duration.fromObject({ minutes: minutes }).toFormat("h 'h' mm 'min'");
+export const getHoursAndMinutes = (minutes: number) => {
+  if (minutes < 0) {
+    return `-${Duration.fromObject({ minutes: minutes }).negate().toFormat("h 'h' m 'min'")}`;
+  } else return Duration.fromObject({ minutes: minutes }).toFormat("h 'h' m 'min'");
+};
 
 /**
  * Converts inputted minutes into full hours
@@ -21,6 +24,7 @@ export const getHours = (minutes: number) =>
 
 /**
  * Formats inputted time period from @PersonTotalTime
+ *
  * @param timespan time period
  * @returns formatted timespan in the following formats (DD.MM.YYYY – DD.MM.YYYY), (YYYY/WW), (YYYY/MM)
  */
