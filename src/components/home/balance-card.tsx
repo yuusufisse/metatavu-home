@@ -63,30 +63,12 @@ const BalanceCard = () => {
    * @param personTotalTime PersonTotalTime
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
-    if (personTotalTime) {
-      return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+    if (!personTotalTime) {
+      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
 
-    return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
+    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
   };
-
-  if (loading) {
-    return (
-        <Card>
-          <CardContent>
-            <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
-            <Grid container>
-              <Grid item xs={1}>
-                <ScheduleIcon />
-              </Grid>
-              <Grid item xs={11}>
-                <Skeleton />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-    );
-  }
 
   return (
     <Link to={"/timebank"} style={{ textDecoration: "none" }}>
@@ -98,7 +80,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {renderPersonTotalTime(personTotalTime)}
+              {(loading) ? <Skeleton /> :renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>
