@@ -1,5 +1,5 @@
 import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
-import { DailyEntry } from "../../generated/client";
+import { DailyEntry, PersonTotalTime } from "../../generated/client";
 import { theme } from "../../theme";
 import strings from "../../localization/strings";
 import { getHours } from "../../utils/time-utils";
@@ -11,26 +11,24 @@ import { Worktime } from "../../types";
  * Component properties
  */
 interface Props {
-  selectedEntries: DailyEntry[];
+  selectedTotalEntries: PersonTotalTime[];
 }
 
 /**
  * Timebank multiple bar chart component representing data from a selected range
  */
 const TimebankOverviewRangeChart = (props: Props) => {
-  const { selectedEntries } = props;
-  const chartData = selectedEntries.map((entry) => {
+  const { selectedTotalEntries } = props;
+  const chartData = selectedTotalEntries.map((entry) => {
     return {
-      name: entry.date.toLocaleDateString(strings.localization.time, {
-        day: "numeric",
-        month: "numeric"
-      }),
+      name: entry.timePeriod,
       internal: entry.internalTime,
       billableProject: entry.billableProjectTime,
       nonBillableProject: entry.nonBillableProjectTime,
       expected: entry.expected
     };
   });
+  
 
   if (!chartData)
     return (

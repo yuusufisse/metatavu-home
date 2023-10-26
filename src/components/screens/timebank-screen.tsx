@@ -9,7 +9,8 @@ import {
   employmentYearsAtom,
   personDailyEntryAtom,
   personTotalTimeAtom,
-  personsAtom
+  personsAtom,
+  totalTimeAtom
 } from "../../atoms/person";
 import { useApi } from "../../hooks/use-api";
 import TimebankContent from "../timebank/timebank-content";
@@ -29,6 +30,7 @@ const TimebankScreen = () => {
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
+  const setTotalTime = useSetAtom(totalTimeAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
   const [employmentYears, setEmploymentYears] = useAtom(employmentYearsAtom);
 
@@ -58,6 +60,7 @@ const TimebankScreen = () => {
           timespan: timespanSelector || Timespan.ALL_TIME,
           before: new Date()
         });
+        setTotalTime(fetchedPersonTotalTime)
         setPersonTotalTime(fetchedPersonTotalTime[0]);
       } catch (error) {
         setError(`${strings.error.totalTimeFetch}, ${error}`);

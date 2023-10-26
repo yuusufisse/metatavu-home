@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
 import type { KeycloakProfile } from "keycloak-js";
-import { DailyEntry, Timespan } from "../../generated/client";
+import { DailyEntry, PersonTotalTime, Timespan } from "../../generated/client";
 import TimebankPieChart from "../charts/timebank-piechart";
 import TimebankOverviewChart from "../charts/timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -24,8 +24,9 @@ import DateRangePicker from "./timebank-daterange-picker";
 import { useState } from "react";
 import { theme } from "../../theme";
 import { useAtomValue } from "jotai";
-import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom } from "../../atoms/person";
+import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom, totalTimeAtom } from "../../atoms/person";
 import TimebankOverviewRangeChart from "../charts/timebank-overviewrangechart";
+import OverviewRangePicker from "./timebank-overview-picker";
 
 interface Props {
   userProfile: KeycloakProfile | undefined;
@@ -43,6 +44,7 @@ const TimebankContent = (props: Props) => {
   const { timespanSelector, setTimespanSelector, handleDailyEntryChange, loading } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
+  const [selectedTotalEntries, setSelectedTotalEntries] = useState<PersonTotalTime[]>([]);
   const [byRange, setByRange] = useState({
     overview: false,
     dailyEntries: false
@@ -50,11 +52,10 @@ const TimebankContent = (props: Props) => {
   const personTotalTime = useAtomValue(personTotalTimeAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
+  const totalTime = useAtomValue(totalTimeAtom);
   const todayOrEarlier = DateTime.fromJSDate(
     dailyEntries.filter((item) => item.date <= new Date())[0].date
   );
-
-  console.log(personTotalTime);
 
   /**
    * Allows only logged dates or with expected hours to be selected in the date time picker.
@@ -86,7 +87,10 @@ const TimebankContent = (props: Props) => {
     return (
       <>
         {byRange.overview ? (
-          <TimebankOverviewRangeChart selectedEntries={selectedEntries} />
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <OverviewRangePicker totalTime={totalTime} selectedTotalEntries={selectedTotalEntries} setSelectedTotalEntries={setSelectedTotalEntries} today={todayOrEarlier}/>
+            <TimebankOverviewRangeChart selectedTotalEntries={selectedTotalEntries} />
+          </Box>
         ) : (
           <TimebankOverviewChart />
         )}
