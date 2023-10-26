@@ -12,7 +12,7 @@ interface Props {
 /**
  * Skeleton table item component
  *
- * @param props
+ * @param props component properties
  */
 const SkeletonTableItem = ({ idx, column }: Props) => {
   const marginRight = 20;
