@@ -10,7 +10,7 @@ interface Props {
 /**
  * Skeleton table row checkbox component
  *
- * @param props
+ * @param props component properties
  */
 const SkeletonTableRowCheckbox = ({ idx }: Props) => (
   <Skeleton

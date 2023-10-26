@@ -94,6 +94,9 @@ export interface Localized extends LocalizedStringsMethods {
     noMessage: string;
     noStatus: string;
   };
+  /**
+   * Translations related to vacation requests errors
+   */
   vacationRequestError: {
     fetchRequestError: string;
     fetchStatusError: string;
@@ -104,10 +107,16 @@ export interface Localized extends LocalizedStringsMethods {
     updateRequestError: string;
     updateStatusError: string;
   };
+  /**
+   * Translations related to form
+   */
   form: {
     submit: string;
     update: string;
   };
+  /**
+   * Translation related to table toolbar
+   */
   tableToolbar: {
     delete: string;
     myRequests: string;
@@ -117,6 +126,9 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     create: string;
   };
+  /**
+   * Translations related to data grid
+   */
   dataGrid: {
     noRows: string;
   };
