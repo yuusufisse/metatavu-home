@@ -50,7 +50,7 @@ const TimebankContent = (props: Props) => {
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
   const todayOrEarlier = DateTime.fromJSDate(
-    dailyEntries.filter((item) => item.date <= new Date())[0].date
+    dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
   );
 
   /**
@@ -93,24 +93,24 @@ const TimebankContent = (props: Props) => {
           <ListItem>
             <ListItemText
               sx={{
-                color: getHoursAndMinutes(Number(personTotalTime.balance)).startsWith("-")
+                color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
                   ? theme.palette.error.main
                   : theme.palette.success.main
               }}
               primary={strings.timebank.balance}
-              secondary={getHoursAndMinutes(Number(personTotalTime.balance))}
+              secondary={getHoursAndMinutes(personTotalTime.balance)}
             />
           </ListItem>
           <ListItem>
             <ListItemText
               primary={strings.timebank.logged}
-              secondary={getHoursAndMinutes(Number(personTotalTime.logged))}
+              secondary={getHoursAndMinutes(personTotalTime.logged)}
             />
           </ListItem>
           <ListItem>
             <ListItemText
               primary={strings.timebank.expected}
-              secondary={getHoursAndMinutes(Number(personTotalTime.expected))}
+              secondary={getHoursAndMinutes(personTotalTime.expected)}
             />
           </ListItem>
         </List>

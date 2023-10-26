@@ -32,7 +32,7 @@ const BalanceCard = () => {
       setTimespan(Timespan.ALL_TIME);
       getPersons();
     }
-  }, []);
+  }, [persons, timespan]);
 
   /**
    * Initialize logged in person's time data.
@@ -72,7 +72,6 @@ const BalanceCard = () => {
 
   if (loading) {
     return (
-      <Link to={"/timebank"} style={{ textDecoration: "none" }}>
         <Card>
           <CardContent>
             <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
@@ -86,7 +85,6 @@ const BalanceCard = () => {
             </Grid>
           </CardContent>
         </Card>
-      </Link>
     );
   }
 

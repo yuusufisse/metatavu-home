@@ -77,7 +77,7 @@ const TimebankScreen = () => {
           personId: loggedInPerson?.id || config.person.id
         });
         setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(fetchedDailyEntries.find((item) => item.date <= new Date())); // Gets today's entry or earlier
+        setPersonDailyEntry(fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)); // Gets today's entry or earlier
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
@@ -102,7 +102,7 @@ const TimebankScreen = () => {
   if (!personDailyEntry || !dailyEntries.length || !personTotalTime) {
     return (
       <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
-        <CircularProgress sx={{ scale: "150%" }} />
+        {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
       </Card>
     );
   }
