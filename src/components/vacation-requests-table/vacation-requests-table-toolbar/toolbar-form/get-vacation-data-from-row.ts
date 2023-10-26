@@ -1,6 +1,6 @@
 import { GridRowId } from "@mui/x-data-grid";
-import { VacationRequest } from "../../../../../../generated/client";
-import { DataGridRow, VacationData } from "../../../../../../types";
+import { VacationRequest } from "../../../../generated/client";
+import { DataGridRow, VacationData } from "../../../../types";
 import { DateTime } from "luxon";
 
 /**

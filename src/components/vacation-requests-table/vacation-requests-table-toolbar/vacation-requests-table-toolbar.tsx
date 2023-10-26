@@ -3,12 +3,12 @@ import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import { GridRowId } from "@mui/x-data-grid";
-import { DataGridRow, ToolbarFormModes, VacationData } from "../../../../../types";
+import { DataGridRow, ToolbarFormModes, VacationData } from "../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import FormToggleButton from "./toolbar-form-toggle-button";
-import ConfirmationHandler from "../../../../contexts/confirmation-handler";
-import strings from "../../../../../localization/strings";
-import { getToolbarTitle } from "../../../../../utils/toolbar-utils";
+import ConfirmationHandler from "../../contexts/confirmation-handler";
+import strings from "../../../localization/strings";
+import { getToolbarTitle } from "../../../utils/toolbar-utils";
 
 /**
  * Component properties

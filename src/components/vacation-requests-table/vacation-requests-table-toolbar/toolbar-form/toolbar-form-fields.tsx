@@ -7,15 +7,15 @@ import {
   SelectChangeEvent,
   TextField
 } from "@mui/material";
-import getVacationTypeByString from "../../../../../../utils/vacation-type-utils";
-import { VacationType } from "../../../../../../generated/client";
+import getVacationTypeByString from "../../../../utils/vacation-type-utils";
+import { VacationType } from "../../../../generated/client";
 import { ChangeEvent } from "react";
-import DateRangePicker from "../../../../../generics/date-range-picker";
-import { ToolbarFormModes, VacationData } from "../../../../../../types";
+import DateRangePicker from "../../../generics/date-range-picker";
+import { ToolbarFormModes, VacationData } from "../../../../types";
 import { DateTime } from "luxon";
-import { hasAllPropsDefined } from "../../../../../../utils/check-utils";
-import strings from "../../../../../../localization/strings";
-import LocalizationUtils from "../../../../../../utils/localization-utils";
+import { hasAllPropsDefined } from "../../../../utils/check-utils";
+import strings from "../../../../localization/strings";
+import LocalizationUtils from "../../../../utils/localization-utils";
 
 /**
  * Component properties

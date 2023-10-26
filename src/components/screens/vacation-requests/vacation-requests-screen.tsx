@@ -1,6 +1,6 @@
 import { Card } from "@mui/material";
 import { useEffect, useState } from "react";
-import VacationRequestsTable from "./vacation-requests-table/vacation-requests-table";
+import VacationRequestsTable from "../../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
   VacationRequestStatus,

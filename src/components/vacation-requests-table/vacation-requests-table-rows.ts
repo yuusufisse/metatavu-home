@@ -1,8 +1,8 @@
-import { DataGridRow } from "../../../../types";
+import { DataGridRow } from "../../types";
 import { DateTime } from "luxon";
-import { VacationRequest, VacationRequestStatus } from "../../../../generated/client";
-import LocalizationUtils from "../../../../utils/localization-utils";
-import strings from "../../../../localization/strings";
+import { VacationRequest, VacationRequestStatus } from "../../generated/client";
+import LocalizationUtils from "../../utils/localization-utils";
+import strings from "../../localization/strings";
 
 /**
  * Vacation requests table rows component
