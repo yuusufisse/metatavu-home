@@ -1,14 +1,14 @@
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 
 /**
- * Converts inputted minutes into hours and minutes
- * @param minutes value in minutes
- * @returns inputted minute value in X h Y min format as string
+ * Converts minutes into hours and minutes
+ * @param minutes minutes
+ * @returns formatted hours and minutes
  */
-export const getHoursAndMinutes = (minutes: number): string => {
-  return `${Math.trunc(minutes / 60)} h ${
-    (minutes % 60) * (String(minutes).startsWith("-") ? -1 : 1)
-  } min`;
+export const getHoursAndMinutes = (minutes: number) => {
+  if (minutes < 0) {
+    return `-${Duration.fromObject({ minutes: minutes }).negate().toFormat("h 'h' m 'min'")}`;
+  } else return Duration.fromObject({ minutes: minutes }).toFormat("h 'h' m 'min'");
 };
 
 /**
