@@ -20,7 +20,7 @@ interface Props {
   deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
-  isLoading: boolean;
+  loading: boolean;
 }
 
 /**
@@ -32,7 +32,7 @@ const VacationRequestsTable = ({
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
-  isLoading
+  loading
 }: Props) => {
   const vacationRequests = useAtomValue(vacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
@@ -51,7 +51,7 @@ const VacationRequestsTable = ({
    * Set data grid rows
    */
   useMemo(() => {
-    if (vacationRequests.length) {
+    if (vacationRequests.length && vacationRequestStatuses.length) {
       const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
       if (createdRows) {
         setRows(createdRows);
@@ -98,6 +98,7 @@ const VacationRequestsTable = ({
         formOpen={formOpen}
         selectedRowIds={selectedRowIds}
         rows={rows}
+        setSelectedRowIds={setSelectedRowIds}
       />
       <DataGrid
         sx={{ height: dataGridHeight }}
@@ -108,15 +109,15 @@ const VacationRequestsTable = ({
           setSelectedRowIds(index);
         }}
         rows={rows}
-        columns={columns}
-        checkboxSelection
-        rowSelectionModel={selectedRowIds}
-        isRowSelectable={() => (formOpen ? false : true)}
+        loading={loading && !rows.length ? true : false}
         slots={{
           loadingOverlay: CustomSkeletonTableRows,
           noRowsOverlay: CustomNoRowsOverlay
         }}
-        loading={isLoading}
+        columns={columns}
+        checkboxSelection
+        rowSelectionModel={selectedRowIds}
+        isRowSelectable={() => (formOpen ? false : true)}
         initialState={{
           sorting: {
             sortModel: [{ field: "updatedAt", sort: "desc" }]

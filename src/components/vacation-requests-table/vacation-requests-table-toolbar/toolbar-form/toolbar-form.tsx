@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
-import { getVacationDataFromRow } from "./get-vacation-data-from-row";
 import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
@@ -22,6 +21,7 @@ interface Props {
   rows: DataGridRow[];
   toolbarFormMode: ToolbarFormModes;
   setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
+  setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
 }
 
 /**
@@ -37,7 +37,8 @@ const ToolbarForm = ({
   selectedRowIds,
   rows,
   toolbarFormMode,
-  setToolbarFormMode
+  setToolbarFormMode,
+  setSelectedRowIds
 }: Props) => {
   const dateTimeNow = DateTime.now();
   const [startDate, setStartDate] = useState<DateTime>(dateTimeNow);
@@ -74,19 +75,41 @@ const ToolbarForm = ({
   }, [selectedRowIds, formOpen]);
 
   /**
+   * Get vacation data from row
+   */
+  const getVacationDataFromRow = () => {
+    const selectedVacationRow = rows.find((row) => row.id === selectedRowIds[0]);
+
+    if (selectedVacationRow) {
+      const selectedVacationRequest = vacationRequests.find(
+        (vacationRequest) => vacationRequest.id === selectedVacationRow.id
+      );
+
+      if (selectedVacationRequest?.id) {
+        const startDate = DateTime.fromJSDate(selectedVacationRequest.startDate);
+        const endDate = DateTime.fromJSDate(selectedVacationRequest.endDate);
+        const days = selectedVacationRequest.days;
+
+        setVacationData({
+          type: selectedVacationRequest.type,
+          message: selectedVacationRequest.message,
+          startDate: startDate,
+          endDate: endDate,
+          days: days
+        });
+        setSelectedVacationRequestId(selectedVacationRequest.id);
+        setStartDate(startDate);
+        setEndDate(endDate);
+      }
+    }
+  };
+
+  /**
    * Set vacation data from selected row if toolbar is in edit mode
    */
   useEffect(() => {
     if (toolbarFormMode === ToolbarFormModes.EDIT && selectedRowIds?.length && rows?.length) {
-      getVacationDataFromRow({
-        vacationRequests: vacationRequests,
-        rows: rows,
-        selectedRowIds: selectedRowIds,
-        setSelectedVacationRequestId: setSelectedVacationRequestId,
-        setStartDate: setStartDate,
-        setEndDate: setEndDate,
-        setVacationData: setVacationData
-      });
+      getVacationDataFromRow();
     } else {
       resetVacationData();
     }
@@ -95,11 +118,13 @@ const ToolbarForm = ({
   /**
    * Handle form submit
    */
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
     if (toolbarFormMode === ToolbarFormModes.CREATE) {
-      createVacationRequest(vacationData);
+      await createVacationRequest(vacationData);
     } else if (toolbarFormMode === ToolbarFormModes.EDIT) {
-      updateVacationRequest(vacationData, selectedVacationRequestId);
+      await updateVacationRequest(vacationData, selectedVacationRequestId).then(() => {
+        setSelectedRowIds([]);
+      });
     }
     setFormOpen(false);
     if (toolbarFormMode !== ToolbarFormModes.EDIT) {

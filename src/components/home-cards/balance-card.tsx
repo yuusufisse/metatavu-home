@@ -17,14 +17,14 @@ const BalanceCard = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
 
   /**
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    setIsLoading(true);
+    setLoading(true);
     const fetchedPersons = await personsApi.listPersons({ active: true });
     const loggedInPerson = fetchedPersons.find((person) => person.keycloakId === userProfile?.id);
 
@@ -38,7 +38,7 @@ const BalanceCard = () => {
         setError(`${strings.errors.fetchFailedGeneral}, ${error}`);
       }
 
-    setIsLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -58,21 +58,19 @@ const BalanceCard = () => {
   };
 
   return (
-    <>
-      <Card>
-        <CardContent>
-          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
-          <Grid container>
-            <Grid item xs={1}>
-              <ScheduleIcon />
-            </Grid>
-            <Grid item xs={11}>
-              {isLoading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
-            </Grid>
+    <Card>
+      <CardContent>
+        <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
+        <Grid container>
+          <Grid item xs={1}>
+            <ScheduleIcon />
           </Grid>
-        </CardContent>
-      </Card>
-    </>
+          <Grid item xs={11}>
+            {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };
 

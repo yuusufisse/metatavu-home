@@ -3,6 +3,9 @@ import strings from "../../localization/strings";
 import { List } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
+/**
+ * Vacations card component
+ */
 const VacationsCard = () => (
   <Card>
     <CardContent>
@@ -12,7 +15,7 @@ const VacationsCard = () => (
           <List />
         </Grid>
         <Grid item xs={11}>
-          <Link to={"/vacations"}>Manage my vacation requests</Link>
+          <Link to={"/vacations"}>{strings.vacationsCard.vacations}</Link>
         </Grid>
       </Grid>
     </CardContent>

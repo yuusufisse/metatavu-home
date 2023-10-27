@@ -14,6 +14,8 @@ interface Props {
 
 /**
  * Skeleton table rows component
+ *
+ * @param props component properties
  */
 const SkeletonTableRows = ({
   dataGridHeight,

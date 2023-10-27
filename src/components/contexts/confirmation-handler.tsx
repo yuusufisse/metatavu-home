@@ -18,28 +18,26 @@ interface Props {
  */
 const ConfirmationHandler = ({ open, setOpen, deleteVacationsData }: Props) => {
   return (
-    <>
-      <GenericDialog
-        open={open}
-        error={false}
-        onClose={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-        onConfirm={() => {
-          setOpen(false);
-          deleteVacationsData();
-        }}
-        confirmButtonText={strings.confirmationHandler.confirmButtonText}
-        cancelButtonText={strings.confirmationHandler.cancelButtonText}
-        title={strings.confirmationHandler.title}
-      >
-        {open && (
-          <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
-            {strings.confirmationHandler.message}
-          </Typography>
-        )}
-        <Divider />
-      </GenericDialog>
-    </>
+    <GenericDialog
+      open={open}
+      error={false}
+      onClose={() => setOpen(false)}
+      onCancel={() => setOpen(false)}
+      onConfirm={() => {
+        setOpen(false);
+        deleteVacationsData();
+      }}
+      confirmButtonText={strings.confirmationHandler.confirmButtonText}
+      cancelButtonText={strings.confirmationHandler.cancelButtonText}
+      title={strings.confirmationHandler.title}
+    >
+      {open && (
+        <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
+          {strings.confirmationHandler.message}
+        </Typography>
+      )}
+      <Divider />
+    </GenericDialog>
   );
 };
 

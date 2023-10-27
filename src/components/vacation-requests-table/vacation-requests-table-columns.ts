@@ -4,6 +4,9 @@ import { DateTime } from "luxon";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "../../atoms/languageAtom";
 
+/**
+ * Vacation requests table columns component
+ */
 const VacationRequestsTableColumns = () => {
   const language = useAtomValue(languageAtom);
 
@@ -11,12 +14,11 @@ const VacationRequestsTableColumns = () => {
    * Format date
    *
    * @param date datetime object
+   * @param dateWithTime datetime object with time
    * @returns formatted date time
    */
   function formatDate(date: DateTime, dateWithTime?: boolean) {
-    if (!date) {
-      return "";
-    }
+    if (!date) return "";
     return date
       .setLocale(language)
       .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);

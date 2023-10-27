@@ -132,6 +132,12 @@ export interface Localized extends LocalizedStringsMethods {
   dataGrid: {
     noRows: string;
   };
+  /**
+   * Translations related to vacations card
+   */
+  vacationsCard: {
+    vacations: string;
+  };
 }
 
 /**

@@ -1,5 +1,5 @@
 import { Card } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import VacationRequestsTable from "../../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
@@ -28,26 +28,20 @@ const VacationRequestsScreen = () => {
     []
   );
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchVacationsRequests();
-  }, [userProfile]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
   }, [vacationRequestStatuses]);
 
-  useEffect(() => {
-    fetchVacationRequestStatuses();
-  }, [vacationRequests]);
-
   /**
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests) {
+    if (vacationRequests.length) {
       try {
+        console.log("fetchign statuses");
+        setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
 
         await Promise.all(
@@ -64,17 +58,22 @@ const VacationRequestsScreen = () => {
           })
         );
         setVacationRequestStatuses(vacationRequestStatuses);
+        setLoading(false);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
     }
   };
 
+  useMemo(() => {
+    fetchVacationRequestStatuses();
+  }, [vacationRequests]);
+
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests && vacationRequestStatuses) {
+    if (vacationRequests.length && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -92,15 +91,13 @@ const VacationRequestsScreen = () => {
               return a.updatedAt > b.updatedAt ? a : b;
             } else if (a.updatedAt) {
               return a;
-            } else {
-              return b;
             }
+            return b;
           });
           selectedLatestVacationRequestStatuses.push(latestStatus);
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
-      setIsLoading(false);
     }
   };
 
@@ -108,15 +105,25 @@ const VacationRequestsScreen = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
+    if (!userProfile?.id) return;
+
     try {
+      console.log("fetchign requests");
+      setLoading(true);
       const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
         personId: userProfile?.id
+        // personId: "326a887b-2666-44c1-9100-23a58011452e"
       });
       setVacationRequests(fetchedVacationRequests);
+      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
     }
   };
+
+  useMemo(() => {
+    fetchVacationsRequests();
+  }, [userProfile]);
 
   /**
    * Delete vacation request status
@@ -126,6 +133,7 @@ const VacationRequestsScreen = () => {
   const deleteVacationRequestStatus = async (selectedRow: GridRowId) => {
     if (vacationRequestStatuses.length) {
       try {
+        setLoading(true);
         const foundVacationRequestStatus = vacationRequestStatuses.find(
           (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRow
         );
@@ -138,6 +146,7 @@ const VacationRequestsScreen = () => {
             (vacationRequestStatus) => vacationRequestStatus.id !== foundVacationRequestStatus.id
           );
           setVacationRequestStatuses(filteredVacationRequestStatuses);
+          setLoading(false);
         }
       } catch (error) {
         setError(`${strings.vacationRequestError.deleteStatusError}, ${error}`);
@@ -151,18 +160,20 @@ const VacationRequestsScreen = () => {
    * @param selectedRowIds selected row ids
    */
   const deleteVacationRequests = async (selectedRowIds: GridRowId[]) => {
-    if (vacationRequests) {
-      let updatedVacationRequests: VacationRequest[] = [];
+    if (vacationRequests.length) {
+      let updatedVacationRequests: VacationRequest[] = vacationRequests;
       await Promise.all(
         selectedRowIds.map(async (selectedRowId) => {
           try {
+            setLoading(true);
             await deleteVacationRequestStatus(selectedRowId);
             await vacationRequestsApi.deleteVacationRequest({
               id: selectedRowId as string
             });
-            updatedVacationRequests = vacationRequests.filter(
+            updatedVacationRequests = updatedVacationRequests.filter(
               (vacationRequest) => vacationRequest.id !== selectedRowId
             );
+            setLoading(false);
           } catch (error) {
             setError(`${strings.vacationRequestError.deleteRequestError}, ${error}`);
           }
@@ -178,9 +189,10 @@ const VacationRequestsScreen = () => {
    * @param createdRequest created vacation request
    */
   const createVacationRequestStatus = async (createdRequest: VacationRequest) => {
-    if (!userProfile || !userProfile.id) return;
+    if (!userProfile?.id) return;
 
     try {
+      setLoading(true);
       if (createdRequest.id) {
         const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
           id: createdRequest.id,
@@ -197,6 +209,7 @@ const VacationRequestsScreen = () => {
 
         setVacationRequestStatuses([createdStatus, ...vacationRequestStatuses]);
       }
+      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
@@ -208,9 +221,10 @@ const VacationRequestsScreen = () => {
    * @param vacationData vacation data
    */
   const createVacationRequest = async (vacationData: VacationData) => {
-    if (!userProfile || !userProfile.id) return;
+    if (!userProfile?.id) return;
 
     try {
+      setLoading(true);
       const createdRequest = await vacationRequestsApi.createVacationRequest({
         vacationRequest: {
           personId: userProfile.id,
@@ -227,6 +241,7 @@ const VacationRequestsScreen = () => {
 
       createVacationRequestStatus(createdRequest);
       setVacationRequests([createdRequest, ...vacationRequests]);
+      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.createRequestError}, ${error}`);
     }
@@ -239,9 +254,10 @@ const VacationRequestsScreen = () => {
    * @param vacationRequestId vacation request id
    */
   const updateVacationRequest = async (vacationData: VacationData, vacationRequestId: string) => {
-    if (!userProfile || !userProfile.id) return;
+    if (!userProfile?.id) return;
 
     try {
+      setLoading(true);
       const vacationRequest = vacationRequests.find(
         (vacationRequest) => vacationRequest.id === vacationRequestId
       );
@@ -258,15 +274,13 @@ const VacationRequestsScreen = () => {
             days: vacationData.days
           }
         });
-        const updatedVacationRequests = vacationRequests.map((vacationRequest) => {
-          if (vacationRequest.id === updatedRequest.id) {
-            return updatedRequest;
-          }
-          return vacationRequest;
-        });
+        const updatedVacationRequests = vacationRequests.map((vacationRequest) =>
+          vacationRequest.id === updatedRequest.id ? updatedRequest : vacationRequest
+        );
 
         setVacationRequests(updatedVacationRequests);
       }
+      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.updateRequestError}, ${error}`);
     }
@@ -278,7 +292,7 @@ const VacationRequestsScreen = () => {
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
-        isLoading={isLoading}
+        loading={loading}
       />
     </Card>
   );

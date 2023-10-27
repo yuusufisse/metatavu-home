@@ -40,7 +40,11 @@ const FormToggleButton = ({
     }}
   >
     {ButtonIcon && <ButtonIcon />}
-    {title && <Typography variant={titleVariant ? titleVariant : "h6"}>&nbsp;{title}</Typography>}
+    {title && (
+      <Typography variant={titleVariant ? titleVariant : "h6"} marginLeft={1}>
+        {title}
+      </Typography>
+    )}
     {children}
   </Button>
 );

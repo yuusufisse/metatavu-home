@@ -21,6 +21,7 @@ interface Props {
   formOpen: boolean;
   selectedRowIds: GridRowId[];
   rows: DataGridRow[];
+  setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
 }
 /**
  * Table toolbar component
@@ -34,7 +35,8 @@ const TableToolbar = ({
   setFormOpen,
   formOpen,
   selectedRowIds,
-  rows
+  rows,
+  setSelectedRowIds
 }: Props) => {
   const [toolbarOpen, setToolbarOpen] = useState(false);
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
@@ -135,6 +137,7 @@ const TableToolbar = ({
           rows={rows}
           toolbarFormMode={toolbarFormMode}
           setToolbarFormMode={setToolbarFormMode}
+          setSelectedRowIds={setSelectedRowIds}
         />
       </Collapse>
     </Box>

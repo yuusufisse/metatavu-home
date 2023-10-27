@@ -15,7 +15,7 @@ const VacationRequestsTableRows = () => {
    * @param vacationRequest vacation request
    * @returns dataGridRow
    */
-  const createDataGridRow = (vacationRequest: VacationRequest): DataGridRow => {
+  const createDataGridRow = (vacationRequest: VacationRequest) => {
     const row: DataGridRow = {
       id: vacationRequest.id,
       type: LocalizationUtils.getLocalizedVacationRequestType(vacationRequest.type),
@@ -32,11 +32,14 @@ const VacationRequestsTableRows = () => {
 
   /**
    * Create vacation requests data grid rows
+   *
+   * @param vacationRequest vacation request
+   * @param vacationRequestStatuses vacation request statuses
    */
   const createDataGridRows = (
     vacationRequests: VacationRequest[],
     vacationRequestStatuses: VacationRequestStatus[]
-  ): DataGridRow[] => {
+  ) => {
     const tempRows: DataGridRow[] = [];
     if (vacationRequests.length && vacationRequestStatuses.length) {
       vacationRequests.forEach((vacationRequest) => {
