@@ -58,6 +58,7 @@ const SyncButton = () => {
   const handleSyncButtonClick = () => {
     setSyncHandlerOpen(true);
   };
+  
   return (
     <>
       <SyncDialog
