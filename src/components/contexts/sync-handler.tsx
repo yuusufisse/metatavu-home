@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * syncStartDate handler component
+ * SyncHandler component
  *
  * @param props component properties
  */
