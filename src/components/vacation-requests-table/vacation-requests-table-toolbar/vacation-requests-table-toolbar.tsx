@@ -44,18 +44,25 @@ const TableToolbar = ({
   const [title, setTitle] = useState(strings.tableToolbar.myRequests);
 
   useEffect(() => {
-    if (toolbarFormMode) {
-      setTitle(getToolbarTitle(toolbarFormMode));
-    }
+    setTitle(getToolbarTitle(toolbarFormMode));
   }, [toolbarFormMode]);
 
   useEffect(() => {
+    toggleToolbarOpenOnSelectedRowIds(selectedRowIds);
+  }, [selectedRowIds]);
+
+  /**
+   * Toggle toolbar open on selected row ids
+   *
+   * @param selectedRowIds selected row ids
+   */
+  const toggleToolbarOpenOnSelectedRowIds = (selectedRowIds: GridRowId[]) => {
     if (selectedRowIds) {
       setToolbarOpen(true);
     } else {
       setToolbarOpen(false);
     }
-  }, [selectedRowIds]);
+  };
 
   /**
    * Delete vacation requests and statuses
@@ -91,7 +98,7 @@ const TableToolbar = ({
           <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
-          {selectedRowIds?.length === 1 ? (
+          {selectedRowIds?.length === 1 && (
             <ToolbarGridItem item xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
@@ -100,7 +107,7 @@ const TableToolbar = ({
                 setValue={setFormOpen}
               />
             </ToolbarGridItem>
-          ) : null}
+          )}
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>

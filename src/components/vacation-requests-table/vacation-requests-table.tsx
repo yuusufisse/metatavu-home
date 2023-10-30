@@ -80,6 +80,9 @@ const VacationRequestsTable = ({
     </StyledGridOverlay>
   );
 
+  /**
+   * Custom skeleton table rows component
+   */
   const CustomSkeletonTableRows = () => (
     <SkeletonTableRows
       dataGridHeight={dataGridHeight}
@@ -117,7 +120,7 @@ const VacationRequestsTable = ({
         columns={columns}
         checkboxSelection
         rowSelectionModel={selectedRowIds}
-        isRowSelectable={() => (formOpen ? false : true)}
+        isRowSelectable={() => !formOpen}
         initialState={{
           sorting: {
             sortModel: [{ field: "updatedAt", sort: "desc" }]

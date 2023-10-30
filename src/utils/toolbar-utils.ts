@@ -31,7 +31,6 @@ export const determineToolbarFormMode = ({
         break;
       default:
         setToolbarFormMode(ToolbarFormModes.NONE);
-        break;
     }
   }
 };

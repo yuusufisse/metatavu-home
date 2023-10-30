@@ -18,7 +18,7 @@ export const getHoursAndMinutes = (minutes: number) => {
  * @param endDate end date
  * @returns days
  */
-export const getVacationDurationInDays = (startDate: DateTime, endDate: DateTime): number => {
+export const getVacationDurationInDays = (startDate: DateTime, endDate: DateTime) => {
   let days;
   if (startDate && endDate) {
     const diff = endDate.diff(startDate, ["days"]);
