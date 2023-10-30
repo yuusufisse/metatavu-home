@@ -39,9 +39,22 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
       strings.localization.time
     );
     return `${startDate} – ${endDate}`; //All time
-  } else if (timespan.length === 2) {
-    return `${timespan[0]}/${timespan[2]}`; //Month
+  } else if (timespan.length === 2 && timespan[0].length <= 4) {
+    return `${timespan[0]}/${timespan[1]}`; //Month
   } else if (timespan.length === 3) {
-    return `${timespan[0]}/${timespan[1]}`; //Week
+    return `${timespan[0]}/${timespan[2]}`; //Week
   } else return `${timespan[0]}`; // Year
 };
+
+/**
+ * Formats inputted week value to be parsable in ISO string
+ * 
+ * @param weeks week number as string
+ * @returns always a double digit value
+ */
+export const formatISOWeeks = (weeks : string | undefined) => {
+  if (!weeks) return null;
+
+  if (weeks.length < 2) return `0${weeks}`
+  else return weeks 
+}

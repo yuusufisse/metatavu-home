@@ -6,7 +6,6 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import {
   dailyEntriesAtom,
-  employmentYearsAtom,
   personDailyEntryAtom,
   personTotalTimeAtom,
   personsAtom,
@@ -36,7 +35,7 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     getPersonTotalTime();
-  }, [persons, timespan]);
+  }, [timespan, persons]);
 
   useEffect(() => {
     getPersonDailyEntries();
@@ -60,7 +59,6 @@ const TimebankScreen = () => {
           });
           setTotalTime(fetchedPersonTotalTime);
           setPersonTotalTime(fetchedPersonTotalTime[0]);
-          console.log(personTotalTime);
         } catch (error) {
           setError(`${strings.error.totalTimeFetch}, ${error}`);
         }

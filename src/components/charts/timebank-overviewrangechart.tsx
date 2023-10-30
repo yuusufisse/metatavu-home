@@ -2,7 +2,7 @@ import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } fro
 import { PersonTotalTime } from "../../generated/client";
 import { theme } from "../../theme";
 import strings from "../../localization/strings";
-import { getHours } from "../../utils/time-utils";
+import { formatTimePeriod, getHours } from "../../utils/time-utils";
 import { Typography } from "@mui/material";
 import { renderCustomizedTooltipBarChart } from "../../utils/chart-utils";
 import { Worktime } from "../../types";
@@ -21,7 +21,7 @@ const TimebankOverviewRangeChart = (props: Props) => {
   const { selectedTotalEntries } = props;
   const chartData = selectedTotalEntries.map((entry) => {
     return {
-      name: entry.timePeriod,
+      name: formatTimePeriod(entry.timePeriod?.split(",")),
       internal: entry.internalTime,
       billableProject: entry.billableProjectTime,
       nonBillableProject: entry.nonBillableProjectTime,

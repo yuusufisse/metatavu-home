@@ -82,6 +82,19 @@ const TimebankContent = (props: Props) => {
       : true;
   };
 
+  const renderOverviewRangePicker = () => {
+    if (byRange.overview) {
+      return (
+        <OverviewRangePicker
+          totalTime={totalTime}
+          selectedTotalEntries={selectedTotalEntries}
+          setSelectedTotalEntries={setSelectedTotalEntries}
+          today={todayOrEarlier}
+        />
+      );
+    }
+  };
+
   /**
    * Renders overview chart and list item elements containing total time summaries
    */
@@ -91,55 +104,81 @@ const TimebankContent = (props: Props) => {
     }
     if (!personTotalTime) return null;
 
-    return (
-      <>
-        {byRange.overview ? (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <OverviewRangePicker
-              totalTime={totalTime}
-              selectedTotalEntries={selectedTotalEntries}
-              setSelectedTotalEntries={setSelectedTotalEntries}
-              today={todayOrEarlier}
-            />
-            <TimebankOverviewRangeChart selectedTotalEntries={selectedTotalEntries} />
-          </Box>
-        ) : (
+    if (byRange.overview) {
+      return (
+        <>
+          <TimebankOverviewRangeChart selectedTotalEntries={selectedTotalEntries} />
+          <List dense sx={{ marginLeft: "5%" }}>
+            <ListItem>
+              <ListItemText
+                sx={{
+                  color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
+                    ? theme.palette.error.main
+                    : theme.palette.success.main
+                }}
+                primary={strings.timebank.balance}
+                secondary={getHoursAndMinutes(
+                  Number(selectedTotalEntries.reduce((prev, next) => prev + next.balance, 0))
+                )}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.logged}
+                secondary={getHoursAndMinutes(
+                  Number(selectedTotalEntries.reduce((prev, next) => prev + next.logged, 0))
+                )}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.expected}
+                secondary={getHoursAndMinutes(
+                  Number(selectedTotalEntries.reduce((prev, next) => prev + next.expected, 0))
+                )}
+              />
+            </ListItem>
+          </List>
+        </>
+      );
+    } else {
+      return (
+        <>
           <TimebankOverviewChart />
-        )}
-
-        <List dense sx={{ marginLeft: "5%" }}>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.timeperiod}
-              secondary={formatTimePeriod(personTotalTime.timePeriod?.split(","))}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              sx={{
-                color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
-                  ? theme.palette.error.main
-                  : theme.palette.success.main
-              }}
-              primary={strings.timebank.balance}
-              secondary={getHoursAndMinutes(personTotalTime.balance)}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.logged}
-              secondary={getHoursAndMinutes(personTotalTime.logged)}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={strings.timebank.expected}
-              secondary={getHoursAndMinutes(personTotalTime.expected)}
-            />
-          </ListItem>
-        </List>
-      </>
-    );
+          <List dense sx={{ marginLeft: "5%" }}>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.timeperiod}
+                secondary={formatTimePeriod(personTotalTime.timePeriod?.split(","))}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                sx={{
+                  color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
+                    ? theme.palette.error.main
+                    : theme.palette.success.main
+                }}
+                primary={strings.timebank.balance}
+                secondary={getHoursAndMinutes(personTotalTime.balance)}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.logged}
+                secondary={getHoursAndMinutes(personTotalTime.logged)}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={strings.timebank.expected}
+                secondary={getHoursAndMinutes(personTotalTime.expected)}
+              />
+            </ListItem>
+          </List>
+        </>
+      );
+    }
   };
 
   /**
@@ -193,35 +232,40 @@ const TimebankContent = (props: Props) => {
         <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
           {strings.timebank.barChartDescription}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Select
-            sx={{
-              width: "50%",
-              marginRight: "1%",
-              textAlign: "center"
-            }}
-            value={timespan}
-            onChange={(e) => {
-              setTimespan(e.target.value as Timespan);
-            }}
-          >
-            <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
-            <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
-            <MenuItem value={Timespan.YEAR}>{strings.timeExpressions.year}</MenuItem>
-            <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
-          </Select>
-          <FormControlLabel
-            sx={{ display: "inline" }}
-            label={strings.timebank.byrange}
-            control={
-              <Checkbox
-                checked={byRange.overview}
-                onClick={() =>
-                  setByRange({ ...byRange, overview: byRange.overview ? false : true })
-                }
-              />
-            }
-          />
+        <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
+          <Box width="100%">
+            <Select
+              sx={{
+                width: "50%",
+                marginRight: "1%",
+                textAlign: "center"
+              }}
+              value={timespan}
+              onChange={(e) => {
+                setTimespan(e.target.value as Timespan);
+              }}
+            >
+              <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
+              <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
+              <MenuItem value={Timespan.YEAR}>{strings.timeExpressions.year}</MenuItem>
+              {byRange.overview ? null : (
+                <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
+              )}
+            </Select>
+            <FormControlLabel
+              label={strings.timebank.byrange}
+              control={
+                <Checkbox
+                  checked={byRange.overview}
+                  onClick={() => {
+                    setByRange({ ...byRange, overview: byRange.overview ? false : true });
+                    setTimespan(Timespan.MONTH);
+                  }}
+                />
+              }
+            />
+          </Box>
+          <Box width="100%">{renderOverviewRangePicker()}</Box>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
           {renderOverviewOrRangeChart()}
