@@ -1,4 +1,4 @@
 /**
  * Type describing available languages
  */
-export type Language = "fi" | "en";
+export type Language = "fi" | "en-gb";

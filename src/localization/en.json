@@ -29,5 +29,16 @@
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
     "fetchFailedNoEntriesGeneral": "No time entries found"
+  },
+  "syncDialog": {
+    "cancel": "Cancel",
+    "sync": "Sync",
+    "title": "Select date",
+    "label": "Sync from"
+  },
+  "syncButton": {
+    "success": "Synchronization was successful!",
+    "sync": "Sync",
+    "error": "Synchronizing has failed"
   }
 }

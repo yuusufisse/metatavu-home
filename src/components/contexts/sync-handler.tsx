@@ -1,20 +1,19 @@
 import { Divider } from "@mui/material";
-import { Dispatch } from "react";
 import GenericDialog from "../generics/generic-dialog";
 import { DatePicker } from "@mui/x-date-pickers";
-import { SetStateAction } from "jotai/ts3.8/vanilla";
 import { DateTime } from "luxon";
+import strings from "../../localization/strings";
 
 /**
  * Component properties
  */
 interface Props {
   syncStartDate: DateTime;
-  setSyncStartDate: Dispatch<SetStateAction<DateTime>>;
+  setSyncStartDate: (syncStartDate: DateTime) => void;
   yesterday: DateTime;
   syncHandlerOpen: boolean;
-  setSyncHandlerOpen: Dispatch<SetStateAction<boolean>>;
-  synchronize: () => void;
+  setSyncHandlerOpen: (syncHandlerOpen: boolean) => void;
+  synchronizeTimeEntries: () => void;
 }
 
 /**
@@ -22,45 +21,42 @@ interface Props {
  *
  * @param props component properties
  */
-const SyncHandler = ({
+const SyncDialog = ({
   syncStartDate,
   setSyncStartDate,
   syncHandlerOpen,
   setSyncHandlerOpen,
-  synchronize
+  synchronizeTimeEntries
 }: Props) => {
   /**
    * Component render
    */
   return (
-    <>
-      <GenericDialog
-        open={syncHandlerOpen}
-        onClose={() => {
-          setSyncHandlerOpen(false);
-        }}
-        onCancel={() => {
-          setSyncHandlerOpen(false);
-        }}
-        onConfirm={() => {
-          synchronize();
-          setSyncHandlerOpen(false);
-        }}
-        cancelButtonText={"Cancel"}
-        confirmButtonText={"Sync"}
-        title={"Select date"}
-      >
-        <DatePicker
-          label="Sync from"
-          maxDate={DateTime.now()}
-          value={syncStartDate}
-          onChange={(newValue: DateTime | null) => newValue && setSyncStartDate(newValue)}
-        />
-
-        <Divider />
-      </GenericDialog>
-    </>
+    <GenericDialog
+      open={syncHandlerOpen}
+      onClose={() => {
+        setSyncHandlerOpen(false);
+      }}
+      onCancel={() => {
+        setSyncHandlerOpen(false);
+      }}
+      onConfirm={() => {
+        synchronizeTimeEntries();
+        setSyncHandlerOpen(false);
+      }}
+      cancelButtonText={strings.syncDialog.cancel}
+      confirmButtonText={strings.syncDialog.sync}
+      title={strings.syncDialog.title}
+    >
+      <DatePicker
+        label={strings.syncDialog.label}
+        maxDate={DateTime.now()}
+        value={syncStartDate}
+        onChange={(newValue: DateTime | null) => newValue && setSyncStartDate(newValue)}
+      />
+      <Divider />
+    </GenericDialog>
   );
 };
 
-export default SyncHandler;
+export default SyncDialog;
