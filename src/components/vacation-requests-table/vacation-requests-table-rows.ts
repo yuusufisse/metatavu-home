@@ -6,7 +6,6 @@ import strings from "../../localization/strings";
 
 /**
  * Vacation requests table rows component
- *
  */
 const VacationRequestsTableRows = () => {
   /**
