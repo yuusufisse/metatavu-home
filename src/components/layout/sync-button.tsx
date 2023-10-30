@@ -1,11 +1,12 @@
 import { Button, Box, LinearProgress, Snackbar, Alert } from "@mui/material";
 import { DateTime } from "luxon";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { errorAtom } from "../../atoms/error";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import SyncDialog from "../contexts/sync-handler";
 import strings from "../../localization/strings";
+import { dailyEntriesAtom } from "../../atoms/person";
 
 /**
  * Sync button component
@@ -18,6 +19,25 @@ const SyncButton = () => {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
+  const dailyEntries = useAtomValue(dailyEntriesAtom);
+
+  useEffect(() => {
+    getLatestDailyEntryDate();
+  }, [dailyEntries]);
+
+  /**
+   * Get latest daily entry date
+   */
+  const getLatestDailyEntryDate = () => {
+    let dailyEntryDates: DateTime[] = [];
+    if (dailyEntries) {
+      dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
+    }
+    if (dailyEntryDates.length) {
+      setSyncStartDate(DateTime.max(...dailyEntryDates));
+      console.log("latest: ", DateTime.max(...dailyEntryDates));
+    }
+  };
 
   /**
    * Handle sync button close
