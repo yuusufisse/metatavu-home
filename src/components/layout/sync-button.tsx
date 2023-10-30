@@ -76,7 +76,7 @@ const SyncButton = () => {
       >
         <Box sx={{ width: "100%" }}>
           {strings.syncButton.sync}
-          {isSyncing ? <LinearProgress /> : null}
+          {isSyncing && <LinearProgress />}
         </Box>
       </Button>
       <Snackbar open={syncSuccess} autoHideDuration={6000} onClose={handleSyncButtonClose}>
