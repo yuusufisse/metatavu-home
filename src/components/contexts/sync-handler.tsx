@@ -10,7 +10,6 @@ import strings from "../../localization/strings";
 interface Props {
   syncStartDate: DateTime;
   setSyncStartDate: (syncStartDate: DateTime) => void;
-  yesterday: DateTime;
   syncHandlerOpen: boolean;
   setSyncHandlerOpen: (syncHandlerOpen: boolean) => void;
   synchronizeTimeEntries: () => void;
