@@ -37,7 +37,7 @@ const SyncButton = () => {
    * Synchronize time entries
    */
   const synchronizeTimeEntries = async () => {
-    setIsSyncing(true);
+    setSyncing(true);
     try {
       await synchronizeApi.synchronizeTimeEntries({
         after: syncStartDate.toJSDate() || undefined,
@@ -48,7 +48,7 @@ const SyncButton = () => {
       setError(`${strings.syncButton.error} ${error}`);
       setSyncSuccess(false);
     }
-    setIsSyncing(false);
+    setSyncing(false);
     setSyncStartDate(yesterday);
   };
 
@@ -58,7 +58,7 @@ const SyncButton = () => {
   const handleSyncButtonClick = () => {
     setSyncHandlerOpen(true);
   };
-  
+
   return (
     <>
       <SyncDialog
@@ -73,11 +73,11 @@ const SyncButton = () => {
         onClick={() => {
           handleSyncButtonClick();
         }}
-        disabled={isSyncing}
+        disabled={syncing}
       >
         <Box sx={{ width: "100%" }}>
           {strings.syncButton.sync}
-          {isSyncing && <LinearProgress />}
+          {syncing && <LinearProgress />}
         </Box>
       </Button>
       <Snackbar open={syncSuccess} autoHideDuration={6000} onClose={handleSyncButtonClose}>
