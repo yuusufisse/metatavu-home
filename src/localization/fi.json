@@ -30,6 +30,16 @@
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   },
+  "error": {
+    "oops": "Hups!",
+    "generic": "Odottamaton virhe havaittu",
+    "totalTimeFetch": "Yhteenvetotietojen haku epäonnistui",
+    "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
+    "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
+    "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  },
   "syncDialog": {
     "cancel": "Peruuta",
     "sync": "Synkronoi",
