@@ -4,7 +4,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
-import HomeScreen from "./components/screens/home/home-screen";
+import HomeScreen from "./components/home/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
