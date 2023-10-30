@@ -1,5 +1,5 @@
 import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
-import { DailyEntry, PersonTotalTime } from "../../generated/client";
+import { PersonTotalTime } from "../../generated/client";
 import { theme } from "../../theme";
 import strings from "../../localization/strings";
 import { getHours } from "../../utils/time-utils";

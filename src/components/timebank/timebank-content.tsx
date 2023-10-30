@@ -23,7 +23,13 @@ import DateRangePicker from "./timebank-daterange-picker";
 import { useState } from "react";
 import { theme } from "../../theme";
 import { useAtom, useAtomValue } from "jotai";
-import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom, timespanAtom, totalTimeAtom } from "../../atoms/person";
+import {
+  personTotalTimeAtom,
+  personDailyEntryAtom,
+  dailyEntriesAtom,
+  timespanAtom,
+  totalTimeAtom
+} from "../../atoms/person";
 import OverviewRangePicker from "./timebank-overview-picker";
 import TimebankOverviewRangeChart from "../charts/timebank-overviewrangechart";
 
@@ -89,10 +95,14 @@ const TimebankContent = (props: Props) => {
       <>
         {byRange.overview ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <OverviewRangePicker totalTime={totalTime} selectedTotalEntries={selectedTotalEntries} setSelectedTotalEntries={setSelectedTotalEntries} today={todayOrEarlier}/>
+            <OverviewRangePicker
+              totalTime={totalTime}
+              selectedTotalEntries={selectedTotalEntries}
+              setSelectedTotalEntries={setSelectedTotalEntries}
+              today={todayOrEarlier}
+            />
             <TimebankOverviewRangeChart selectedTotalEntries={selectedTotalEntries} />
           </Box>
-
         ) : (
           <TimebankOverviewChart />
         )}
@@ -197,6 +207,7 @@ const TimebankContent = (props: Props) => {
           >
             <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
             <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
+            <MenuItem value={Timespan.YEAR}>{strings.timeExpressions.year}</MenuItem>
             <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
           </Select>
           <FormControlLabel
@@ -274,7 +285,10 @@ const TimebankContent = (props: Props) => {
                   byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
                         Number(
-                          selectedEntries.reduce((prev, next) => prev + next.nonBillableProjectTime, 0)
+                          selectedEntries.reduce(
+                            (prev, next) => prev + next.nonBillableProjectTime,
+                            0
+                          )
                         )
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))

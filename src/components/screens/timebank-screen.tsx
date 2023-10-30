@@ -10,7 +10,7 @@ import {
   personDailyEntryAtom,
   personTotalTimeAtom,
   personsAtom,
-  totalTimeAtom
+  totalTimeAtom,
   timespanAtom
 } from "../../atoms/person";
 import { useApi } from "../../hooks/use-api";
@@ -33,7 +33,6 @@ const TimebankScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const setTotalTime = useSetAtom(totalTimeAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  const [employmentYears, setEmploymentYears] = useAtom(employmentYearsAtom);
 
   useEffect(() => {
     getPersonTotalTime();
@@ -59,7 +58,9 @@ const TimebankScreen = () => {
             timespan: timespan || Timespan.ALL_TIME,
             before: new Date()
           });
+          setTotalTime(fetchedPersonTotalTime);
           setPersonTotalTime(fetchedPersonTotalTime[0]);
+          console.log(personTotalTime);
         } catch (error) {
           setError(`${strings.error.totalTimeFetch}, ${error}`);
         }
@@ -81,24 +82,13 @@ const TimebankScreen = () => {
           personId: loggedInPerson?.id || config.person.id
         });
         setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)); // Gets today's entry or earlier
+        setPersonDailyEntry(
+          fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
+        ); // Gets today's entry or earlier
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
     }
-  };
-
-  /**
-   * Gets the person's employment start and current years
-   */
-  const getEmploymentYears = () => {
-    if (personTotalTime && timespan === Timespan.ALL_TIME) {
-      setEmploymentYears([
-        String(personTotalTime.timePeriod?.split(",")[0].substring(0, 4)),
-        String(personTotalTime.timePeriod?.split(",")[1].substring(0, 4))
-      ]);
-    }
-    console.log(employmentYears);
   };
 
   /**

@@ -26,7 +26,7 @@ export const getHours = (minutes: number) =>
  * Formats inputted time period from @PersonTotalTime
  *
  * @param timespan time period
- * @returns formatted timespan in the following formats (DD.MM.YYYY – DD.MM.YYYY), (YYYY/WW), (YYYY/MM)
+ * @returns formatted timespan in the following formats (DD.MM.YYYY – DD.MM.YYYY), (YYYY/WW), (YYYY/MM), (YYYY)
  */
 export const formatTimePeriod = (timespan: string[] | undefined) => {
   if (!timespan) return null;
@@ -39,8 +39,9 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
       strings.localization.time
     );
     return `${startDate} – ${endDate}`; //All time
-  } else if (timespan.length > 2) {
+  } else if (timespan.length === 2) {
     return `${timespan[0]}/${timespan[2]}`; //Month
-  }
-  return `${timespan[0]}/${timespan[1]}`; //Week
+  } else if (timespan.length === 3) {
+    return `${timespan[0]}/${timespan[1]}`; //Week
+  } else return `${timespan[0]}`; // Year
 };

@@ -7,4 +7,3 @@ export const totalTimeAtom = atom<PersonTotalTime[]>([]);
 export const timespanAtom = atom<Timespan>(Timespan.ALL_TIME);
 export const personDailyEntryAtom = atom<DailyEntry | undefined>(undefined);
 export const dailyEntriesAtom = atom<DailyEntry[]>([]);
-export const employmentYearsAtom = atom<String[]>([]);
