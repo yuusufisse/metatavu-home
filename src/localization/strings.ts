@@ -11,7 +11,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   placeHolder: {
     notYetImplemented: string;
-  },
+  };
   label: {
     currentLocaleLabel: string;
   };
@@ -35,15 +35,12 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to errors
    */
   error: {
+    oops: string;
+    generic: string;
     totalTimeFetch: string;
     totalTimeNotFound: string;
     dailyEntriesFetch: string;
     dailyEntriesNotFound: string;
-    admin: string;
-    changeLanguage: string;
-    openSettings: string;
-    openUserMenu: string;
-    logoAlt: string;
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
   };
@@ -73,6 +70,7 @@ export interface Localized extends LocalizedStringsMethods {
     latestEntry: string;
     barChartDescription: string;
     pieChartDescription: string;
+    byrange: string;
   };
   /**
    * General time-related expressions
@@ -90,6 +88,8 @@ export interface Localized extends LocalizedStringsMethods {
     month: string;
     year: string;
     allTime: string;
+    startDate: string;
+    endDate: string;
   };
 }
 

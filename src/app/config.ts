@@ -1,4 +1,4 @@
-import { cleanEnv, str, url } from "envalid";
+import { cleanEnv, str, url, num } from "envalid";
 
 interface Config {
   auth: {
@@ -9,8 +9,8 @@ interface Config {
   api: {
     baseUrl: string;
   };
-  keycloak: {
-    id: string;
+  person: {
+    id: number;
   };
 }
 
@@ -19,7 +19,7 @@ const env = cleanEnv(import.meta.env, {
   VITE_KEYCLOAK_REALM: str(),
   VITE_KEYCLOAK_CLIENT_ID: str(),
   VITE_API_BASE_URL: url(),
-  VITE_EMPLOYEE_KEYCLOAK_ID: str()
+  VITE_PERSON_ID: num({default:undefined})
 });
 
 const config: Config = {
@@ -31,8 +31,8 @@ const config: Config = {
   api: {
     baseUrl: env.VITE_API_BASE_URL
   },
-  keycloak: {
-    id: env.VITE_EMPLOYEE_KEYCLOAK_ID
+  person: {
+    id: env.VITE_PERSON_ID
   }
 };
 

@@ -3,9 +3,8 @@ import { authAtom, userProfileAtom } from "../../atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { ReactNode, useCallback, useEffect } from "react";
-import { personAtom, personsAtom } from "../../atoms/person";
+import { personsAtom } from "../../atoms/person";
 import { useApi } from "../../hooks/use-api";
-import { Person } from "../../generated/client";
 
 interface Props {
   children: ReactNode;
@@ -18,8 +17,7 @@ const keycloak = new Keycloak(config.auth);
  */
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
-  const [userProfile, setUserProfile] = useAtom(userProfileAtom);
-  const [person, setPerson] = useAtom(personAtom);
+  const setUserProfile = useSetAtom(userProfileAtom);
   const setPersons = useSetAtom(personsAtom);
   const { personsApi } = useApi();
 
@@ -75,20 +73,16 @@ const AuthenticationProvider = ({ children }: Props) => {
   }, [auth]);
 
   /**
-   * Sets the logged in person from keycloak ID into global state (atom)
+   * Sets the logged in timebank person from keycloak ID into global state
    */
-  const getLoggedInPerson = async (): Promise<void> => {
+  const getPersonsList = async ()  => {
     const fetchedPersons = await personsApi.listPersons({ active: true });
-    const loggedInPerson = fetchedPersons.filter(
-      (person: Person) => person.keycloakId === config.keycloak.id || userProfile?.id
-    )[0];
-    setPerson(loggedInPerson);
     setPersons(fetchedPersons);
   };
 
   useEffect(() => {
-    if (auth) getLoggedInPerson();
-  }, [auth || person]);
+    if (auth) getPersonsList();
+  }, [auth]);
 
   /**
    * Initializes authentication when component mounts
