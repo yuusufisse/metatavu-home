@@ -41,7 +41,7 @@ const OverviewRangePicker = (props: Props) => {
   }, [timespan, range, totalTime, weekRange]);
 
   /**
-   * Gets total time from the selected time span
+   * Gets total time from the selected time span.
    */
   const getOverviewRange = () => {
     if (range.start && range.end) {
@@ -52,50 +52,39 @@ const OverviewRangePicker = (props: Props) => {
         case Timespan.WEEK: {
           const startWeekISO = `${weekRange.start?.split(",")[0]}-W${formatISOWeeks(
             weekRange.start?.split(",")[2]
-          )}-${range.start.weekday}`; //YYYY-WWW-D
+          )}-${range.start.weekday}`; //Formats YYYY,MM,WW from persontotalTime to ISO string (YYYY-WWW-D)
           const endWeekISO = `${weekRange.end?.split(",")[0]}-W${formatISOWeeks(
             weekRange.end?.split(",")[2]
-          )}-${range.end.weekday}`; //YYYY-WWW-D
-          selectedRange = DateTime.fromISO(endWeekISO)
-            .diff(DateTime.fromISO(startWeekISO), "weeks")
-            .toObject();
-          console.log(Number(selectedRange.weeks), startWeekISO, endWeekISO, range.start.toISODate());
-          for (
-            let i = 0;
-            selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks));
-            i++
-          ) {
+          )}-${range.end.weekday}`; //Formats YYYY,MM,WW from persontotalTime to ISO string (YYYY-WWW-D)
+
+          const startWeek = DateTime.fromISO(startWeekISO);
+          const endWeek = DateTime.fromISO(endWeekISO);
+
+          selectedRange = endWeek.diff(startWeek, "weeks").toObject();
+
+          for (let i = 0; selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks)); i++) {
             result.push(
-              totalTime.filter(
+              totalTime.find(
                 (item) =>
                   item.timePeriod ===
-                  `${range.start?.plus({ weeks: i }).get("year")},${range.start
-                    ?.plus({ weeks: i })
-                    .get("month")},${range.start?.plus({ weeks: i }).get("weekNumber")}`
-              )[0]
-            );
-            console.log(
-              `${range.start?.plus({ weeks: i }).get("year")},${range.start
-                ?.plus({ weeks: i })
-                .get("month")},${range.start?.plus({ weeks: i }).get("weekNumber")}`
+                  `${startWeek.plus({ weeks: i }).get("year")},${startWeek
+                    .plus({ weeks: i })
+                    .get("month")},${startWeek.plus({ weeks: i }).get("weekNumber")}`
+              )
             );
           }
         }
         case Timespan.MONTH:
           selectedRange = range.end.diff(range.start, "months").toObject();
-          for (
-            let i = 0;
-            selectedRange.months && i <= Math.trunc(Number(selectedRange.months));
-            i++
-          ) {
+          for (let i = 0; selectedRange.months && i <= Math.trunc(Number(selectedRange.months)); i++) {
             result.push(
-              totalTime.filter(
+              totalTime.find(
                 (item) =>
                   item.timePeriod ===
                   `${range.start?.plus({ months: i }).get("year")},${range.start
                     ?.plus({ months: i })
                     .get("month")}`
-              )[0]
+              )
             );
           }
         case Timespan.YEAR:
@@ -106,25 +95,25 @@ const OverviewRangePicker = (props: Props) => {
             i++
           ) {
             result.push(
-              totalTime.filter(
+              totalTime.find(
                 (item) => item.timePeriod === `${range.start?.plus({ years: i }).get("year")}`
-              )[0]
+              )
             );
           }
         default:
           break;
       }
-      setSelectedTotalEntries(result.filter((item) => item));
+      if (result.length){
+        setSelectedTotalEntries(result.filter((item) => item));
+      }
     }
   };
-  //`${range.start?.get("year")},${range.start?.get("month")}` YYYY,MM
-  //`${range.start?.get("year")},${range.start?.get("month")},${range.end?.weekNumber}` YYY,MM,WW
 
   /**
    * Changes date picker views based on selected time span
-   * Week view does not exist in MUI date picker. TODO: Custom function / view
+   * Week view does not exist in MUI date picker.
    */
-  const viewSelector = (): DateView[] => {
+  const viewRenderer= (): DateView[] => {
     switch (timespan) {
       case Timespan.WEEK:
         return ["year"];
@@ -137,17 +126,20 @@ const OverviewRangePicker = (props: Props) => {
     }
   };
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", mt: "1%" }}>
       <DatePicker
         label={strings.timeExpressions.startDate}
-        views={viewSelector()}
-        onChange={(dateTime) => {setRange({ ...range, start: dateTime }); console.log(range.start?.toISODate())}}
+        views={viewRenderer()}
+        onChange={(dateTime) => {
+          setRange({ ...range, start: dateTime });
+          console.log(range.start?.toISODate());
+        }}
         value={range.start}
         maxDate={range.end?.minus({ days: 1 })}
       />
       {timespan === Timespan.WEEK ? (
         <Select
-          sx={{ width: "20%" }}
+          sx={{ width: "6%", ml: "5px" }}
           value={weekRange.start}
           onChange={(e) => {
             setWeekRange({ ...weekRange, start: String(e.target.value) });
@@ -162,8 +154,9 @@ const OverviewRangePicker = (props: Props) => {
         </Select>
       ) : null}
       <DatePicker
+        sx={{ ml: "2%" }}
         label={strings.timeExpressions.endDate}
-        views={viewSelector()}
+        views={viewRenderer()}
         onChange={(dateTime) => setRange({ ...range, end: dateTime })}
         value={range.end}
         minDate={range.start?.plus({ days: 1 })}
@@ -171,7 +164,7 @@ const OverviewRangePicker = (props: Props) => {
       {timespan === Timespan.WEEK ? (
         <Select
           label="End week"
-          sx={{ width: "20%" }}
+          sx={{ width: "6%", ml: "5px" }}
           value={weekRange.end}
           onChange={(e) => {
             setWeekRange({ ...weekRange, end: String(e.target.value) });
