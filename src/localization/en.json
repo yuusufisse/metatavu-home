@@ -48,7 +48,8 @@
     "latestEntry": "Latest entry",
     "barChartDescription": "Summary of time entries by time span",
     "pieChartDescription": "Select a specific time entry or range",
-    "byrange": "By range"
+    "byrange": "By range",
+    "selectTimespan": "Select time span"
   },
   "timeExpressions": {
     "monday": "Monday",

@@ -171,7 +171,8 @@ const TimebankContent = (props: Props) => {
         <Card sx={{ border: "2px solid #bdbdbd;" }}>
           <Typography
             gutterBottom
-            variant="h5"
+            fontWeight={"bold"}
+            variant="h6"
             sx={{
               color: "white",
               textAlign: "center",
@@ -196,7 +197,7 @@ const TimebankContent = (props: Props) => {
                   textAlign: "center"
                 }}
               >
-                <InputLabel id="select">Select a time span</InputLabel>
+                <InputLabel id="select">{strings.timebank.selectTimespan}</InputLabel>
                 <Select
                   label="Select a time span"
                   labelId="select"
@@ -225,7 +226,8 @@ const TimebankContent = (props: Props) => {
         <Card sx={{ border: "2px solid #bdbdbd;", mb: 3 }}>
           <Typography
             gutterBottom
-            variant="h5"
+            fontWeight={"bold"}
+            variant="h6"
             sx={{
               color: "white",
               textAlign: "center",
