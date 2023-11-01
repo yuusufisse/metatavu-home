@@ -18,16 +18,52 @@
     "openUserMenu": "Open user menu",
     "logoAlt": "Metatavu logo"
   },
+  "error": {
+    "oops": "Oops!",
+    "generic": "Unexpected error has occurred",
+    "totalTimeFetch": "Retrieving total time data has failed",
+    "totalTimeNotFound": "Could not find total time data",
+    "dailyEntriesFetch": "Retrieving daily entries has failed",
+    "dailyEntriesNotFound": "Could not find daily entries",
+    "fetchFailedGeneral": "There was an error fetching data",
+    "fetchFailedNoEntriesGeneral": "No time entries found"
+  },
   "localization": {
     "en": "EN",
-    "fi": "FI"
+    "fi": "FI",
+    "time": "en-GB"
   },
   "timebank": {
     "balance": "Balance",
-    "yourBalanceIs": "Your balance is"
+    "yourBalanceIs": "Your balance is",
+    "logged": "Logged",
+    "expected": "Expected",
+    "billableProject": "Billable",
+    "nonBillableProject": "Non-billable",
+    "internal": "Internal time",
+    "billableHours": "Minimum billing rate",
+    "timeperiod": "Time period",
+    "noData": "No logged data",
+    "selectEntry": "Select date entry",
+    "latestEntry": "Latest entry",
+    "barChartDescription": "Summary of time entries by time span",
+    "pieChartDescription": "Select a specific time entry or range",
+    "byrange": "By range"
   },
-  "errors": {
-    "fetchFailedGeneral": "There was an error fetching data",
-    "fetchFailedNoEntriesGeneral": "No time entries found"
+  "timeExpressions": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "allTime": "All time",
+    "startDate": "Start date",
+    "endDate": "End date"
   }
 }

@@ -1,4 +1,5 @@
 import { useRouteError } from "react-router-dom";
+import strings from "../../localization/strings";
 
 /**
  * Error page for displaying error status text and message
@@ -10,8 +11,8 @@ const ErrorScreen = () => {
 
   return (
     <div>
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
+      <h1>{strings.error.oops}</h1>
+      <p>{strings.error.generic}</p>
       <p>
         <i>{(error as Error)?.message || (error as { statusText?: string })?.statusText}</i>
       </p>
