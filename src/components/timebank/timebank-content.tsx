@@ -232,12 +232,12 @@ const TimebankContent = (props: Props) => {
         <Typography gutterBottom variant="h5" sx={{ textAlign: "center" }}>
           {strings.timebank.barChartDescription}
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-          <Box width="100%">
+        <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+          <Box sx={{display:"flex", justifyContent:"center"}}>
             <Select
               sx={{
-                width: "50%",
-                marginRight: "1%",
+                width:"40%",
+                mx:"1%",
                 textAlign: "center"
               }}
               value={timespan}
@@ -279,7 +279,6 @@ const TimebankContent = (props: Props) => {
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
           {renderDatePickers()}
           <FormControlLabel
-            sx={{ display: "inline" }}
             label={strings.timebank.byrange}
             control={
               <Checkbox

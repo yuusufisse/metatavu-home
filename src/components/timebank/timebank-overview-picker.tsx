@@ -55,7 +55,7 @@ const OverviewRangePicker = (props: Props) => {
           )}-${range.start.weekday}`; //Formats YYYY,MM,WW from persontotalTime to ISO string (YYYY-WWW-D)
           const endWeekISO = `${weekRange.end?.split(",")[0]}-W${formatISOWeeks(
             weekRange.end?.split(",")[2]
-          )}-${range.end.weekday}`; //Formats YYYY,MM,WW from persontotalTime to ISO string (YYYY-WWW-D)
+          )}-${range.end.weekday}`;
 
           const startWeek = DateTime.fromISO(startWeekISO);
           const endWeek = DateTime.fromISO(endWeekISO);
@@ -89,11 +89,7 @@ const OverviewRangePicker = (props: Props) => {
           }
         case Timespan.YEAR:
           selectedRange = range.end.diff(range.start, "year").toObject();
-          for (
-            let i = 0;
-            selectedRange.years && i <= Math.trunc(Number(selectedRange.years));
-            i++
-          ) {
+          for (let i = 0; selectedRange.years && i <= Math.trunc(Number(selectedRange.years)); i++) {
             result.push(
               totalTime.find(
                 (item) => item.timePeriod === `${range.start?.plus({ years: i }).get("year")}`
