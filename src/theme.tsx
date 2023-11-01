@@ -2,6 +2,11 @@ import { Theme, createTheme } from "@mui/material";
 import NunitoSans from "../resources/fonts/NunitoSans.ttf";
 
 export const theme: Theme = createTheme({
+  typography: {
+    fontFamily: "Nunito Sans",
+    fontWeightRegular: 400,
+    fontSize: 15
+  },
   palette: {
     primary: {
       main: "#222"
@@ -9,11 +14,6 @@ export const theme: Theme = createTheme({
     secondary: {
       main: "#f78da7"
     }
-  },
-  typography: {
-    fontFamily: "Nunito Sans",
-    fontWeightRegular: 400,
-    fontSize: 15
   },
   components: {
     MuiCssBaseline: {
