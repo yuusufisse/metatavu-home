@@ -1,0 +1,33 @@
+{
+  "placeHolder": {
+    "notYetImplemented": "Ei vielä toteutettu"
+  },
+  "label": {
+    "currentLocaleLabel": "Nykyinen kieli:"
+  },
+  "header": {
+    "hello": "Hei",
+    "logout": "Kirjaudu ulos",
+    "home": "Koti",
+    "timebank": "Aikapankki",
+    "vacations": "Lomat",
+    "onCall": "Päivystys",
+    "admin": "Ylläpito",
+    "changeLanguage": "Vaihda kieltä",
+    "openSettings": "Asetukset",
+    "openUserMenu": "Käyttäjävalikko",
+    "logoAlt": "Metatavu logo"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
+  },
+  "timebank": {
+    "balance": "Saldo",
+    "yourBalanceIs": "Saldosi on"
+  },
+  "errors": {
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  }
+}

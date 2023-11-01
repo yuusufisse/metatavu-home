@@ -1,0 +1,42 @@
+{
+  "name": "metatavu-home",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "postinstall": "npm run build-client",
+    "build-client": "openapi-generator-cli generate -i time-bank-api-spec/swagger.yaml -o ./src/generated/client -c generator-config.json -g typescript-fetch"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.7",
+    "@mui/material": "^5.14.7",
+    "@mui/types": "^7.2.4",
+    "@types/luxon": "^3.3.2",
+    "@types/react-router": "^5.1.20",
+    "@types/react-router-dom": "^5.3.3",
+    "envalid": "^7.3.1",
+    "jotai": "^2.4.1",
+    "keycloak-js": "^19.0.2",
+    "localized-strings": "^0.2.4",
+    "luxon": "^3.4.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.15.0",
+    "react-router-dom": "^6.15.0"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "2.5.2",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "rome": "12.1.3",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.5"
+  }
+}

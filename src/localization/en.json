@@ -1,0 +1,33 @@
+{
+  "placeHolder": {
+    "notYetImplemented": "Not yet implemented"
+  },
+  "label": {
+    "currentLocaleLabel": "Current Locale:"
+  },
+  "header": {
+    "hello": "Hi",
+    "logout": "Log out",
+    "home": "Home",
+    "timebank": "Timebank",
+    "vacations": "Vacations",
+    "onCall": "On Call",
+    "admin": "Administration",
+    "changeLanguage": "Change language",
+    "openSettings": "Open settings",
+    "openUserMenu": "Open user menu",
+    "logoAlt": "Metatavu logo"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
+  },
+  "timebank": {
+    "balance": "Balance",
+    "yourBalanceIs": "Your balance is"
+  },
+  "errors": {
+    "fetchFailedGeneral": "There was an error fetching data",
+    "fetchFailedNoEntriesGeneral": "No time entries found"
+  }
+}
