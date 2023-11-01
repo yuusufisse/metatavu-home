@@ -1,20 +1,20 @@
 import { Card } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import VacationRequestsTable from "../../vacation-requests-table/vacation-requests-table";
+import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses
-} from "../../../generated/client";
-import { useApi } from "../../../hooks/use-api";
+} from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { userProfileAtom } from "../../../atoms/auth";
-import { errorAtom } from "../../../atoms/error";
+import { userProfileAtom } from "../../atoms/auth";
+import { errorAtom } from "../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
-import { VacationData } from "../../../types";
-import { vacationRequestsAtom } from "../../../atoms/vacationRequests";
-import { vacationRequestStatusesAtom } from "../../../atoms/vacationRequestStatuses";
-import strings from "../../../localization/strings";
+import { VacationData } from "../../types";
+import { vacationRequestsAtom } from "../../atoms/vacationRequests";
+import { vacationRequestStatusesAtom } from "../../atoms/vacationRequestStatuses";
+import strings from "../../localization/strings";
 
 /**
  * Vacation requests screen
@@ -40,7 +40,6 @@ const VacationRequestsScreen = () => {
   const fetchVacationRequestStatuses = async () => {
     if (vacationRequests.length) {
       try {
-        console.log("fetchign statuses");
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
 
@@ -108,11 +107,9 @@ const VacationRequestsScreen = () => {
     if (!userProfile?.id) return;
 
     try {
-      console.log("fetchign requests");
       setLoading(true);
       const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
         personId: userProfile?.id
-        // personId: "326a887b-2666-44c1-9100-23a58011452e"
       });
       setVacationRequests(fetchedVacationRequests);
       setLoading(false);

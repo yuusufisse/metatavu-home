@@ -1,17 +1,18 @@
 import { Grid } from "@mui/material";
 import BalanceCard from "../home/balance-card";
+import VacationsCard from "../home/vacations-card";
 
 /**
  * Home screen component
  */
 const HomeScreen = () => {
   return (
-    <Grid container>
-      <Grid item xs={12} md={4}>
+    <Grid container spacing={2}>
+      <Grid item xs={6}>
         <BalanceCard />
       </Grid>
-      <Grid item xs={12} md={8}>
-        {/* TODO: MORE CARDS */}
+      <Grid item xs={6}>
+        <VacationsCard />
       </Grid>
     </Grid>
   );

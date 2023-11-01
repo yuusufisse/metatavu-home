@@ -2,14 +2,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
-import VacationRequestsScreen from "./components/screens/vacation-requests/vacation-requests-screen";
+import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
 import BalanceScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/languageAtom";
 import HomeScreen from "./components/screens/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
-import strings from "./localization/strings";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
@@ -31,7 +30,8 @@ const App = () => {
         },
         {
           path: "/vacations",
-          element: <VacationRequestsScreen />
+          element: <VacationRequestsScreen />,
+          errorElement: <ErrorScreen />
         },
         {
           path: "/timebank",
