@@ -38,10 +38,7 @@ const TimebankPieChart = () => {
           label={renderCustomizedLabel}
         >
           {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
-            <>
-              <Cell key={`cell-${index}`} fill={COLORS[index]} />
-              <Tooltip content={renderCustomizedTooltipPieChart} />
-            </>
+            <Cell key={`cell-${index}`} fill={COLORS[index]} />
           ))}
         </Pie>
         <Tooltip content={renderCustomizedTooltipPieChart} />

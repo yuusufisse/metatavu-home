@@ -1,4 +1,4 @@
-import { Duration } from "luxon";
+import { DateTime, Duration } from "luxon";
 import strings from "../localization/strings";
 
 /**
@@ -43,4 +43,25 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
     return `${timespan[0]}/${timespan[2]}`; //Month
   }
   return `${timespan[0]}/${timespan[1]}`; //Week
+};
+
+/**
+ * Get time difference in days
+ *
+ * @param startDate start date
+ * @param endDate end date
+ * @returns days
+ */
+export const getVacationDurationInDays = (startDate: DateTime, endDate: DateTime) => {
+  let days;
+  if (startDate && endDate) {
+    const diff = endDate.diff(startDate, ["days"]);
+    days = Number(Math.round(diff.days));
+  }
+  if ((days && days < 1) || !days) {
+    days = 1;
+  } else {
+    days += 1;
+  }
+  return days;
 };
