@@ -90,6 +90,7 @@ const TimebankContent = (props: Props) => {
           selectedTotalEntries={selectedTotalEntries}
           setSelectedTotalEntries={setSelectedTotalEntries}
           today={todayOrEarlier}
+          loading={loading}
         />
       );
     }
@@ -233,13 +234,14 @@ const TimebankContent = (props: Props) => {
           {strings.timebank.barChartDescription}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-          <Box sx={{display:"flex", justifyContent:"center"}}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Select
               sx={{
-                width:"40%",
-                mx:"1%",
+                width: "40%",
+                mx: "1%",
                 textAlign: "center"
               }}
+              disabled={loading}
               value={timespan}
               onChange={(e) => {
                 setTimespan(e.target.value as Timespan);
@@ -257,6 +259,7 @@ const TimebankContent = (props: Props) => {
               control={
                 <Checkbox
                   checked={byRange.overview}
+                  disabled={loading}
                   onClick={() => {
                     setByRange({ ...byRange, overview: byRange.overview ? false : true });
                     setTimespan(Timespan.MONTH);

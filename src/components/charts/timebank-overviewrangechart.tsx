@@ -28,7 +28,6 @@ const TimebankOverviewRangeChart = (props: Props) => {
       expected: entry.expected
     };
   });
-  
 
   if (!chartData)
     return (

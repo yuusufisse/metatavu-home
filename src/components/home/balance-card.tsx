@@ -4,7 +4,7 @@ import strings from "../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { Person, PersonTotalTime, Timespan } from "../../generated/client";
 import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/person";

@@ -16,13 +16,14 @@ interface Props {
   selectedTotalEntries: PersonTotalTime[];
   setSelectedTotalEntries: (selectedTotalEntries: PersonTotalTime[]) => void;
   today: DateTime;
+  loading: boolean;
 }
 
 /**
  * Overview Range Picker component
  */
 const OverviewRangePicker = (props: Props) => {
-  const { setSelectedTotalEntries, selectedTotalEntries, totalTime, today } = props;
+  const { setSelectedTotalEntries, selectedTotalEntries, totalTime, today, loading } = props;
 
   const timespan = useAtomValue(timespanAtom);
 
@@ -62,7 +63,11 @@ const OverviewRangePicker = (props: Props) => {
 
           selectedRange = endWeek.diff(startWeek, "weeks").toObject();
 
-          for (let i = 0; selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks)); i++) {
+          for (
+            let i = 0;
+            selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks));
+            i++
+          ) {
             result.push(
               totalTime.find(
                 (item) =>
@@ -76,7 +81,11 @@ const OverviewRangePicker = (props: Props) => {
         }
         case Timespan.MONTH:
           selectedRange = range.end.diff(range.start, "months").toObject();
-          for (let i = 0; selectedRange.months && i <= Math.trunc(Number(selectedRange.months)); i++) {
+          for (
+            let i = 0;
+            selectedRange.months && i <= Math.trunc(Number(selectedRange.months));
+            i++
+          ) {
             result.push(
               totalTime.find(
                 (item) =>
@@ -89,7 +98,11 @@ const OverviewRangePicker = (props: Props) => {
           }
         case Timespan.YEAR:
           selectedRange = range.end.diff(range.start, "year").toObject();
-          for (let i = 0; selectedRange.years && i <= Math.trunc(Number(selectedRange.years)); i++) {
+          for (
+            let i = 0;
+            selectedRange.years && i <= Math.trunc(Number(selectedRange.years));
+            i++
+          ) {
             result.push(
               totalTime.find(
                 (item) => item.timePeriod === `${range.start?.plus({ years: i }).get("year")}`
@@ -99,7 +112,7 @@ const OverviewRangePicker = (props: Props) => {
         default:
           break;
       }
-      if (result.length){
+      if (result.length) {
         setSelectedTotalEntries(result.filter((item) => item));
       }
     }
@@ -109,7 +122,7 @@ const OverviewRangePicker = (props: Props) => {
    * Changes date picker views based on selected time span
    * Week view does not exist in MUI date picker.
    */
-  const viewRenderer= (): DateView[] => {
+  const viewRenderer = (): DateView[] => {
     switch (timespan) {
       case Timespan.WEEK:
         return ["year"];
@@ -124,6 +137,7 @@ const OverviewRangePicker = (props: Props) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", mt: "1%" }}>
       <DatePicker
+        disabled={loading}
         label={strings.timeExpressions.startDate}
         views={viewRenderer()}
         onChange={(dateTime) => {
@@ -150,6 +164,7 @@ const OverviewRangePicker = (props: Props) => {
         </Select>
       ) : null}
       <DatePicker
+        disabled={loading}
         sx={{ ml: "2%" }}
         label={strings.timeExpressions.endDate}
         views={viewRenderer()}
