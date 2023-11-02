@@ -11,6 +11,11 @@ import strings from "../../../localization/strings";
 import { getToolbarTitle } from "../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "../../../atoms/language";
+import { useLocation } from "react-router-dom";
+import { authAtom } from "../../../atoms/auth";
+import UserRoleUtils from "../../../utils/user-role-utils";
+import { VacationRequestStatuses } from "../../../generated/client";
+import UpdateStatusButton from "./toolbar-update-status-button";
 
 /**
  * Component properties
@@ -24,6 +29,10 @@ interface Props {
   selectedRowIds: GridRowId[];
   rows: DataGridRow[];
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
+  updateVacationRequestStatuses: (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => Promise<void>;
 }
 
 /**
@@ -39,17 +48,25 @@ const TableToolbar = ({
   formOpen,
   selectedRowIds,
   rows,
-  setSelectedRowIds
+  setSelectedRowIds,
+  updateVacationRequestStatuses
 }: Props) => {
   const [toolbarOpen, setToolbarOpen] = useState(false);
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
   const [confirmationHandlerOpen, setConfirmationHandlerOpen] = useState(false);
   const [title, setTitle] = useState(strings.tableToolbar.myRequests);
   const language = useAtomValue(languageAtom);
+  const { pathname } = useLocation();
+  const adminPathname = "/admin/vacations";
+  const authToken = useAtomValue(authAtom)?.token;
+  const adminMode = UserRoleUtils.isAdmin(authToken) && pathname === adminPathname;
 
   useEffect(() => {
     setTitle(getToolbarTitle(toolbarFormMode));
-  }, [toolbarFormMode, language]);
+    if (adminMode && toolbarFormMode === ToolbarFormModes.NONE) {
+      setTitle(strings.tableToolbar.manageRequests);
+    }
+  }, [toolbarFormMode, language, pathname]);
 
   useEffect(() => {
     toggleToolbarOpenOnSelectedRowIds(selectedRowIds);
@@ -99,19 +116,35 @@ const TableToolbar = ({
       />
       {toolbarOpen && !formOpen && selectedRowIds?.length ? (
         <ToolbarGridContainer container>
-          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
+          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 3 : 6}>
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
           {selectedRowIds?.length === 1 && (
-            <ToolbarGridItem item xs={6}>
-              <FormToggleButton
-                title={strings.tableToolbar.edit}
-                ButtonIcon={Edit}
-                value={formOpen}
-                setValue={setFormOpen}
-              />
-            </ToolbarGridItem>
+            <>
+              <ToolbarGridItem item xs={3}>
+                <FormToggleButton
+                  title={strings.tableToolbar.edit}
+                  ButtonIcon={Edit}
+                  value={formOpen}
+                  setValue={setFormOpen}
+                />
+              </ToolbarGridItem>
+            </>
           )}
+          <ToolbarGridItem item xs={3}>
+            <UpdateStatusButton
+              updateVacationRequestStatuses={updateVacationRequestStatuses}
+              approval={true}
+              selectedRowIds={selectedRowIds}
+            />
+          </ToolbarGridItem>
+          <ToolbarGridItem item xs={3}>
+            <UpdateStatusButton
+              updateVacationRequestStatuses={updateVacationRequestStatuses}
+              approval={false}
+              selectedRowIds={selectedRowIds}
+            />
+          </ToolbarGridItem>
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>
@@ -128,12 +161,14 @@ const TableToolbar = ({
                 buttonVariant="outlined"
               />
             ) : (
-              <FormToggleButton
-                value={formOpen}
-                setValue={setFormOpen}
-                title={strings.tableToolbar.create}
-                ButtonIcon={Add}
-              />
+              !adminMode && (
+                <FormToggleButton
+                  value={formOpen}
+                  setValue={setFormOpen}
+                  title={strings.tableToolbar.create}
+                  ButtonIcon={Add}
+                />
+              )
             )}
           </ToolbarGridItem>
         </ToolbarGridContainer>
