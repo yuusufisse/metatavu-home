@@ -23,7 +23,7 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
-  
+
   /**
    * Initialize logged in person's time data.
    */
@@ -46,6 +46,16 @@ const BalanceCard = () => {
       setLoading(false);
     }
   };
+
+  /**
+   * Get person total time if it is undefined or set to "all time"
+   */
+  useMemo(() => {
+    if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
+      setTimespan(Timespan.ALL_TIME);
+      getPersons();
+    }
+  }, [persons, timespan]);
 
   /**
    * Renders person's total time
