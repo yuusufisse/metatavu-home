@@ -77,7 +77,9 @@ const TimebankScreen = () => {
           personId: loggedInPerson?.id || config.person.id
         });
         setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)); // Gets today's entry or earlier
+        setPersonDailyEntry(
+          fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
+        ); // Gets today's entry or earlier
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }

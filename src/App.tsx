@@ -2,13 +2,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
 import BalanceScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
-import { languageAtom } from "./atoms/languageAtom";
+import { languageAtom } from "./atoms/language";
 import HomeScreen from "./components/screens/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
-import strings from "./localization/strings";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
@@ -17,7 +17,8 @@ import ErrorScreen from "./components/screens/error-screen";
  * Application component
  */
 const App = () => {
-  useAtomValue(languageAtom);
+  const language = useAtomValue(languageAtom);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -26,6 +27,11 @@ const App = () => {
         {
           path: "/",
           element: <HomeScreen />
+        },
+        {
+          path: "/vacations",
+          element: <VacationRequestsScreen />,
+          errorElement: <ErrorScreen />
         },
         {
           path: "/timebank",
@@ -38,18 +44,15 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <CssBaseline>
-          <ErrorHandler>
-            <AuthenticationProvider>
-              <LocalizationProvider
-                dateAdapter={AdapterLuxon}
-                adapterLocale={strings.localization.time}
-              >
+        <ErrorHandler>
+          <AuthenticationProvider>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
+              <CssBaseline>
                 <RouterProvider router={router} />
-              </LocalizationProvider>
-            </AuthenticationProvider>
-          </ErrorHandler>
-        </CssBaseline>
+              </CssBaseline>
+            </LocalizationProvider>
+          </AuthenticationProvider>
+        </ErrorHandler>
       </ThemeProvider>
     </div>
   );
