@@ -48,13 +48,34 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
 
 /**
  * Formats inputted week value to be parsable in ISO string
- * 
+ *
  * @param weeks week number as string
- * @returns always a double digit value
+ * @returns week number as a double digit value
  */
-export const formatISOWeeks = (weeks : string | undefined) => {
+export const formatISOWeeks = (weeks: string | undefined) => {
   if (!weeks) return null;
 
-  if (weeks.length < 2) return `0${weeks}`
-  else return weeks 
-}
+  if (weeks.length < 2) return `0${weeks}`;
+  else return weeks;
+};
+
+/**
+ * Get time difference in days
+ *
+ * @param startDate start date
+ * @param endDate end date
+ * @returns days
+ */
+export const getVacationDurationInDays = (startDate: DateTime, endDate: DateTime) => {
+  let days;
+  if (startDate && endDate) {
+    const diff = endDate.diff(startDate, ["days"]);
+    days = Number(Math.round(diff.days));
+  }
+  if ((days && days < 1) || !days) {
+    days = 1;
+  } else {
+    days += 1;
+  }
+  return days;
+};
