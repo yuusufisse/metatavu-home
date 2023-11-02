@@ -12,6 +12,7 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
+import AdminScreen from "./components/screens/admin-screen";
 
 /**
  * Application component
@@ -23,6 +24,7 @@ const App = () => {
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorScreen />,
       children: [
         {
           path: "/",
@@ -30,13 +32,26 @@ const App = () => {
         },
         {
           path: "/vacations",
-          element: <VacationRequestsScreen />,
-          errorElement: <ErrorScreen />
+          element: <VacationRequestsScreen />
         },
         {
           path: "/timebank",
-          element: <BalanceScreen />,
-          errorElement: <ErrorScreen />
+          element: <BalanceScreen />
+        }
+      ]
+    },
+    {
+      path: "/admin",
+      element: <Layout />,
+      errorElement: <ErrorScreen />,
+      children: [
+        {
+          path: "/admin",
+          element: <AdminScreen />
+        },
+        {
+          path: "/admin/vacations",
+          element: <VacationRequestsScreen />
         }
       ]
     }
