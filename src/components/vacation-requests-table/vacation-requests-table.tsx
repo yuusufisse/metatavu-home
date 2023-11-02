@@ -11,6 +11,7 @@ import VacationRequestsTableColumns from "./vacation-requests-table-columns";
 import strings from "../../localization/strings";
 import { Inventory } from "@mui/icons-material";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import { VacationRequestStatuses } from "../../generated/client";
 
 /**
  * Component properties
@@ -20,6 +21,10 @@ interface Props {
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   loading: boolean;
+  updateVacationRequestStatuses: (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => Promise<void>;
 }
 
 /**
@@ -31,6 +36,7 @@ const VacationRequestsTable = ({
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
+  updateVacationRequestStatuses,
   loading
 }: Props) => {
   const vacationRequests = useAtomValue(vacationRequestsAtom);
@@ -96,6 +102,7 @@ const VacationRequestsTable = ({
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
+        updateVacationRequestStatuses={updateVacationRequestStatuses}
         setFormOpen={setFormOpen}
         formOpen={formOpen}
         selectedRowIds={selectedRowIds}
