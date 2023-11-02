@@ -116,35 +116,40 @@ const TableToolbar = ({
       />
       {toolbarOpen && !formOpen && selectedRowIds?.length ? (
         <ToolbarGridContainer container>
-          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 3 : 6}>
+          <ToolbarGridItem
+            item
+            xs={selectedRowIds?.length === 1 ? (adminMode ? 3 : 6) : adminMode ? 6 : 12}
+          >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
           {selectedRowIds?.length === 1 && (
+            <ToolbarGridItem item xs={adminMode ? 3 : 6}>
+              <FormToggleButton
+                title={strings.tableToolbar.edit}
+                ButtonIcon={Edit}
+                value={formOpen}
+                setValue={setFormOpen}
+              />
+            </ToolbarGridItem>
+          )}
+          {adminMode && (
             <>
               <ToolbarGridItem item xs={3}>
-                <FormToggleButton
-                  title={strings.tableToolbar.edit}
-                  ButtonIcon={Edit}
-                  value={formOpen}
-                  setValue={setFormOpen}
+                <UpdateStatusButton
+                  updateVacationRequestStatuses={updateVacationRequestStatuses}
+                  approval={true}
+                  selectedRowIds={selectedRowIds}
+                />
+              </ToolbarGridItem>
+              <ToolbarGridItem item xs={3}>
+                <UpdateStatusButton
+                  updateVacationRequestStatuses={updateVacationRequestStatuses}
+                  approval={false}
+                  selectedRowIds={selectedRowIds}
                 />
               </ToolbarGridItem>
             </>
           )}
-          <ToolbarGridItem item xs={3}>
-            <UpdateStatusButton
-              updateVacationRequestStatuses={updateVacationRequestStatuses}
-              approval={true}
-              selectedRowIds={selectedRowIds}
-            />
-          </ToolbarGridItem>
-          <ToolbarGridItem item xs={3}>
-            <UpdateStatusButton
-              updateVacationRequestStatuses={updateVacationRequestStatuses}
-              approval={false}
-              selectedRowIds={selectedRowIds}
-            />
-          </ToolbarGridItem>
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>
