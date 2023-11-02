@@ -15,8 +15,6 @@ export enum ToolbarFormModes {
  */
 export type ButtonIconProps = {};
 
-import { DateTime } from "luxon";
-
 /**
  * Type describing available languages
  */
