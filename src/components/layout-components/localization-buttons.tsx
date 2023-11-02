@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import strings from "../../localization/strings";
 import { ToggleButton, ToggleButtonGroup, Tooltip, styled } from "@mui/material";
-import { languageAtom } from "../../atoms/languageAtom";
+import { languageAtom } from "../../atoms/language";
 import { Language } from "../../types";
 /**
  * Styled toggle button group component for language switching
@@ -32,26 +32,19 @@ const LocalizationButton = () => {
 
   /**
    * Handles localization change
-   * 
+   *
    * @param locale locale to change to
    */
   const handleLocaleChange = (locale: string) => {
-    const newLocale = locale === "en" ? "fi" : "en";
+    const newLocale: Language = locale === "en-gb" ? "fi" : "en-gb";
     setLanguage(newLocale as Language);
   };
 
   return (
-    <LanguageButtons
-      value={language}
-      exclusive
-      aria-label="localization"
-    >
+    <LanguageButtons value={language} exclusive aria-label="localization">
       <Tooltip title={strings.header.changeLanguage}>
-        <ToggleButton
-          value={language}
-          onChange={() => handleLocaleChange(language)}
-        >
-          {language}
+        <ToggleButton value={language} onChange={() => handleLocaleChange(language)}>
+          {language === "fi" ? strings.localization.fi : strings.localization.en}
         </ToggleButton>
       </Tooltip>
     </LanguageButtons>

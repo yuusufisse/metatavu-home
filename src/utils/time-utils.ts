@@ -1,4 +1,4 @@
-import { Duration } from "luxon";
+import { DateTime, Duration } from "luxon";
 import strings from "../localization/strings";
 
 /**
