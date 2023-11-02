@@ -282,12 +282,62 @@ const VacationRequestsScreen = () => {
     }
   };
 
+  /**
+   * Update a vacation request status
+   *
+   * @param newStatus vacation data
+   * @param vacationRequestStatusId vacation request status id
+   */
+  const updateVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    if (!userProfile || !userProfile.id) return;
+
+    if (selectedRowIds && newStatus) {
+      const updatedStatuses: VacationRequestStatus[] = [];
+      await Promise.all(
+        selectedRowIds.map(async (selectedRowId) => {
+          const vacationRequestStatus = vacationRequestStatuses.find(
+            (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+          );
+          try {
+            if (vacationRequestStatus?.id) {
+              const updatedStatus = await vacationRequestStatusApi.updateVacationRequestStatus({
+                id: vacationRequestStatus.id,
+                statusId: vacationRequestStatus.id,
+                vacationRequestStatus: {
+                  ...vacationRequestStatus,
+                  status: newStatus
+                }
+              });
+              updatedStatuses.push(updatedStatus);
+            }
+          } catch (error) {
+            setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
+          }
+        })
+      );
+      const updatedVacatioRequestStatuses = vacationRequestStatuses.map((vacationRequestStatus) => {
+        const foundUpdatedStatus = updatedStatuses.find(
+          (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
+        );
+        if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
+          return foundUpdatedStatus;
+        }
+        return vacationRequestStatus;
+      });
+      setVacationRequestStatuses(updatedVacatioRequestStatuses);
+    }
+  };
+
   return (
     <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100" }}>
       <VacationRequestsTable
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}
+        updateVacationRequestStatuses={updateVacationRequestStatuses}
         loading={loading}
       />
     </Card>
