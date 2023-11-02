@@ -2,7 +2,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import strings from "../../localization/strings";
 import { DateTime } from "luxon";
 import { useAtomValue } from "jotai";
-import { languageAtom } from "../../atoms/languageAtom";
+import { languageAtom } from "../../atoms/language";
 
 /**
  * Vacation requests table columns component

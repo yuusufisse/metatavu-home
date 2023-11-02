@@ -6,14 +6,13 @@ import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useState, useEffect, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
-import { vacationRequestStatusesAtom } from "../../atoms/vacationRequestStatuses";
-import { vacationRequestsAtom } from "../../atoms/vacationRequests";
 import { VacationRequest, VacationRequestStatus } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { personsAtom } from "../../atoms/person";
 import { DateTime } from "luxon";
-import { languageAtom } from "../../atoms/languageAtom";
+import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
+import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
 
 /**
  * Vacations card component
@@ -161,7 +160,9 @@ const VacationsCard = () => {
       )?.status;
 
       return (
-        <Typography>{`${latestVacationRequest.message} - ${formatDate(
+        <Typography>{`${LocalizationUtils.getLocalizedVacationRequestType(
+          latestVacationRequest.type
+        )} - ${latestVacationRequest.message} - ${formatDate(
           DateTime.fromJSDate(latestVacationRequest.startDate)
         )} - ${formatDate(DateTime.fromJSDate(latestVacationRequest.endDate))} - ${
           localizedVacationRequestStatus &&
@@ -174,7 +175,13 @@ const VacationsCard = () => {
 
   return (
     <Link to={"/vacations"} style={{ textDecoration: "none" }}>
-      <Card>
+      <Card
+        sx={{
+          "&:hover": {
+            background: "#efefef"
+          }
+        }}
+      >
         <CardContent>
           <h3 style={{ marginTop: 6 }}>{strings.tableToolbar.myRequests}</h3>
           <Grid container>

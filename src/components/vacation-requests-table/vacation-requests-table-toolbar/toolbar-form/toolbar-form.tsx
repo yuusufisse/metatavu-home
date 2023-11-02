@@ -6,8 +6,8 @@ import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
 import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
-import { vacationRequestsAtom } from "../../../../atoms/vacationRequests";
 import ToolbarFormFields from "./toolbar-form-fields";
+import { vacationRequestsAtom } from "../../../../atoms/vacation";
 
 /**
  * Component properties

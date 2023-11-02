@@ -5,7 +5,7 @@ import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
 import BalanceScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
-import { languageAtom } from "./atoms/languageAtom";
+import { languageAtom } from "./atoms/language";
 import HomeScreen from "./components/screens/home-screen";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";

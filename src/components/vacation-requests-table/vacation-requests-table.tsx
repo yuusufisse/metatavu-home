@@ -5,13 +5,12 @@ import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-ta
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
 import { DataGridRow, VacationData } from "../../types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
-import { languageAtom } from "../../atoms/languageAtom";
+import { languageAtom } from "../../atoms/language";
 import { useAtomValue } from "jotai";
-import { vacationRequestsAtom } from "../../atoms/vacationRequests";
-import { vacationRequestStatusesAtom } from "../../atoms/vacationRequestStatuses";
 import VacationRequestsTableColumns from "./vacation-requests-table-columns";
 import strings from "../../localization/strings";
 import { Inventory } from "@mui/icons-material";
+import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
 
 /**
  * Component properties

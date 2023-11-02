@@ -74,7 +74,13 @@ const BalanceCard = () => {
 
   return (
     <Link to={"/timebank"} style={{ textDecoration: "none" }}>
-      <Card>
+      <Card
+        sx={{
+          "&:hover": {
+            background: "#efefef"
+          }
+        }}
+      >
         <CardContent>
           <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
           <Grid container>

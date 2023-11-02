@@ -12,9 +12,8 @@ import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../types";
-import { vacationRequestsAtom } from "../../atoms/vacationRequests";
-import { vacationRequestStatusesAtom } from "../../atoms/vacationRequestStatuses";
 import strings from "../../localization/strings";
+import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
 
 /**
  * Vacation requests screen

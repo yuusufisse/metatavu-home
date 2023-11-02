@@ -9,6 +9,8 @@ import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../contexts/confirmation-handler";
 import strings from "../../../localization/strings";
 import { getToolbarTitle } from "../../../utils/toolbar-utils";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "../../../atoms/language";
 
 /**
  * Component properties
@@ -23,6 +25,7 @@ interface Props {
   rows: DataGridRow[];
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
 }
+
 /**
  * Table toolbar component
  *
@@ -42,10 +45,11 @@ const TableToolbar = ({
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
   const [confirmationHandlerOpen, setConfirmationHandlerOpen] = useState(false);
   const [title, setTitle] = useState(strings.tableToolbar.myRequests);
+  const language = useAtomValue(languageAtom);
 
   useEffect(() => {
     setTitle(getToolbarTitle(toolbarFormMode));
-  }, [toolbarFormMode]);
+  }, [toolbarFormMode, language]);
 
   useEffect(() => {
     toggleToolbarOpenOnSelectedRowIds(selectedRowIds);
@@ -112,7 +116,7 @@ const TableToolbar = ({
       ) : (
         <ToolbarGridContainer container>
           <ToolbarGridItem item xs={6}>
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="h6">{title}</Typography>
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>
             {formOpen ? (
