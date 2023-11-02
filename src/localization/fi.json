@@ -118,7 +118,8 @@
     "editRequests": "Muokkaa lomahakemusta",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
-    "create": "Hae lomaa"
+    "create": "Hae lomaa",
+    "manageRequests": "Hallinnoi lomahakemuksia"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"

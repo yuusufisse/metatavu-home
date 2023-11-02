@@ -118,7 +118,8 @@
     "editRequests": "Edit a vacation request",
     "edit": "Edit",
     "cancel": "Cancel",
-    "create": "Request vacation"
+    "create": "Request vacation",
+    "manageRequests": "Manage vacation requests"
   },
   "dataGrid": {
     "noRows": "No Rows"
