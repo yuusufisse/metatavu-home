@@ -1,16 +1,16 @@
-import { Typography, Card, CardContent, Grid, Skeleton } from "@mui/material";
-import { useAtomValue, useAtom, useSetAtom } from "jotai";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import config from "../../app/config";
-import { userProfileAtom } from "../../atoms/auth";
-import { errorAtom } from "../../atoms/error";
-import { personsAtom, timespanAtom, personTotalTimeAtom } from "../../atoms/person";
-import { Timespan, Person, PersonTotalTime } from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
-import strings from "../../localization/strings";
 import { getHoursAndMinutes } from "../../utils/time-utils";
+import { Grid, Typography, Card, CardContent, Skeleton } from "@mui/material";
+import strings from "../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import { errorAtom } from "../../atoms/error";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useMemo, useState } from "react";
+import { useApi } from "../../hooks/use-api";
+import { Person, PersonTotalTime, Timespan } from "../../generated/client";
+import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/person";
+import { Link } from "react-router-dom";
+import { userProfileAtom } from "../../atoms/auth";
+import config from "../../app/config";
 
 /**
  * Component for displaying user's balance
@@ -23,17 +23,7 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
-
-  /**
-   * Get person total time if it is undefined or set to "all time"
-   */
-  useEffect(() => {
-    if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
-      setTimespan(Timespan.ALL_TIME);
-      getPersons();
-    }
-  }, [persons, timespan]);
-
+  
   /**
    * Initialize logged in person's time data.
    */
@@ -63,16 +53,24 @@ const BalanceCard = () => {
    * @param personTotalTime PersonTotalTime
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
-    if (!personTotalTime) {
+    if (!personTotalTime && !loading && persons.length) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
-
-    return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+    if (personTotalTime) {
+      return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+    }
+    return <Skeleton />;
   };
 
   return (
     <Link to={"/timebank"} style={{ textDecoration: "none" }}>
-      <Card>
+      <Card
+        sx={{
+          "&:hover": {
+            background: "#efefef"
+          }
+        }}
+      >
         <CardContent>
           <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
           <Grid container>
@@ -80,7 +78,7 @@ const BalanceCard = () => {
               <ScheduleIcon />
             </Grid>
             <Grid item xs={11}>
-              {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+              {renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>

@@ -2,10 +2,12 @@ import config from "../../app/config";
 import { authAtom, userProfileAtom } from "../../atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
-import { useCallback, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
+import { personsAtom } from "../../atoms/person";
+import { useApi } from "../../hooks/use-api";
 
 interface Props {
-  children: JSX.Element;
+  children: ReactNode;
 }
 
 const keycloak = new Keycloak(config.auth);
@@ -16,6 +18,9 @@ const keycloak = new Keycloak(config.auth);
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const setUserProfile = useSetAtom(userProfileAtom);
+  const setPersons = useSetAtom(personsAtom);
+  const { personsApi } = useApi();
+
   const updateAuthData = useCallback(() => {
     setAuth({
       token: keycloak?.tokenParsed,
@@ -65,6 +70,18 @@ const AuthenticationProvider = ({ children }: Props) => {
     } catch (error) {
       console.error(error);
     }
+  }, [auth]);
+
+  /**
+   * Sets the logged in timebank person from keycloak ID into global state
+   */
+  const getPersonsList = async ()  => {
+    const fetchedPersons = await personsApi.listPersons({ active: true });
+    setPersons(fetchedPersons);
+  };
+
+  useEffect(() => {
+    if (auth) getPersonsList();
   }, [auth]);
 
   /**

@@ -9,7 +9,7 @@
     "hello": "Hei",
     "logout": "Kirjaudu ulos",
     "home": "Koti",
-    "timebank": "Aikapankki",
+    "timebank": "Timebank",
     "vacations": "Lomat",
     "onCall": "Päivystys",
     "admin": "Ylläpito",
@@ -18,18 +18,6 @@
     "openUserMenu": "Käyttäjävalikko",
     "logoAlt": "Metatavu logo"
   },
-  "localization": {
-    "en": "EN",
-    "fi": "FI"
-  },
-  "timebank": {
-    "balance": "Saldo",
-    "yourBalanceIs": "Saldosi on"
-  },
-  "errors": {
-    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
-    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
-  },
   "error": {
     "oops": "Hups!",
     "generic": "Odottamaton virhe havaittu",
@@ -37,6 +25,32 @@
     "totalTimeNotFound": "Yhteenvetotietoja ei löytynyt",
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI",
+    "time": "fi-FI"
+  },
+  "timebank": {
+    "balance": "Saldo",
+    "yourBalanceIs": "Saldosi on",
+    "logged": "Kirjattu",
+    "expected": "Odotettu",
+    "billableProject": "Laskutettava",
+    "nonBillableProject": "Ei laskutettava",
+    "internal": "Sisäinen",
+    "billableHours": "Minimilaskutusaste",
+    "timeperiod": "Aikaväli",
+    "noData": "Ei kirjattua dataa",
+    "selectEntry": "Valitse aikakirjaus",
+    "latestEntry": "Viimeisin aikakirjaus",
+    "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
+    "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
+    "byrange": "Aikavälin mukaan"
+  },
+  "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
   },
@@ -50,5 +64,81 @@
     "success": "Synkronoitu onnistuneesti!",
     "sync": "Sync",
     "error": "Synkronointi epäonnistui"
+  },
+  "timeExpressions": {
+    "monday": "Maanantai",
+    "tuesday": "Tiistai",
+    "wednesday": "Keskiviikko",
+    "thursday": "Torstai",
+    "friday": "Perjantai",
+    "saturday": "Lauantai",
+    "sunday": "Sunnuntai",
+    "day": "Päivä",
+    "week": "Viikko",
+    "month": "Kuukausi",
+    "year": "Vuosi",
+    "allTime": "Koko ajalta",
+    "startDate": "Alkupäivämäärä",
+    "endDate": "Loppupäivämäärä"
+  },
+  "confirmationHandler": {
+    "confirmButtonText": "Kyllä",
+    "cancelButtonText": "En",
+    "title": "Oletko varma?",
+    "message": "Poista valitut lomahakemukset?"
+  },
+  "errorHandler": {
+    "cancelButtonText": "Sulje",
+    "title": "Tapahtui virhe"
+  },
+  "vacationRequest": {
+    "startDate": "Alku",
+    "endDate": "Loppu",
+    "type": "Lomatyyppi",
+    "message": "Viesti",
+    "days": "Päivät",
+    "status": "Tila",
+    "updatedAt": "Päivitetty",
+    "pending": "Odottaa",
+    "approved": "Hyväksytty",
+    "declined": "Hylätty",
+    "vacation": "Loma",
+    "maternityPaternityLeave": "Äitiys/vanhempainvapaa",
+    "unpaidTimeOff": "Palkaton vapaa",
+    "sickness": "Sairaus",
+    "personalDays": "Henkilökohtainen vapaa",
+    "childSickness": "Lapsen sairaus",
+    "surplusBalance": "Ylimääräinen loma",
+    "noMessage": "Ei viestiä",
+    "noStatus": "Ei tilaa"
+  },
+  "vacationRequestError": {
+    "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
+    "fetchStatusError": "Lomahakemustilojen hakeminen epäonnistui",
+    "createRequestError": "Lomahakemuksen luominen epäonnistui",
+    "createStatusError": "Lomahakemukstilan luominen epäonnistui",
+    "deleteRequestError": "Lomahakemuksen poistaminen epäonnistui",
+    "deleteStatusError": "Lomahakemustilojen poistaminen epäonnistui",
+    "updateRequestError": "Lomahakemuksen päivittäminen epäonnistui",
+    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui"
+  },
+  "form": {
+    "submit": "Lähetä",
+    "update": "Päivitä"
+  },
+  "tableToolbar": {
+    "delete": "Poista",
+    "myRequests": "Minun lomahakemukset",
+    "createRequests": "Uusi lomahakemus",
+    "editRequests": "Muokkaa lomahakemusta",
+    "edit": "Muokkaa",
+    "cancel": "Peruuta",
+    "create": "Hae lomaa"
+  },
+  "dataGrid": {
+    "noRows": "Ei rivejä"
+  },
+  "vacationsCard": {
+    "vacations": "Lomat"
   }
 }

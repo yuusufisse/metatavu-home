@@ -20,11 +20,25 @@
   },
   "localization": {
     "en": "EN",
-    "fi": "FI"
+    "fi": "FI",
+    "time": "en-GB"
   },
   "timebank": {
     "balance": "Balance",
-    "yourBalanceIs": "Your balance is"
+    "yourBalanceIs": "Your balance is",
+    "logged": "Logged",
+    "expected": "Expected",
+    "billableProject": "Billable",
+    "nonBillableProject": "Non-billable",
+    "internal": "Internal time",
+    "billableHours": "Minimum billing rate",
+    "timeperiod": "Time period",
+    "noData": "No logged data",
+    "selectEntry": "Select date entry",
+    "latestEntry": "Latest entry",
+    "barChartDescription": "Summary of time entries by time span",
+    "pieChartDescription": "Select a specific time entry or range",
+    "byrange": "By range"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
@@ -50,5 +64,81 @@
     "success": "Synchronization was successful!",
     "sync": "Sync",
     "error": "Synchronizing has failed"
+  },
+  "timeExpressions": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "allTime": "All time",
+    "startDate": "Start date",
+    "endDate": "End date"
+  },
+  "confirmationHandler": {
+    "confirmButtonText": "Yes",
+    "cancelButtonText": "No",
+    "title": "Are you sure?",
+    "message": "Delete selected vacation request(s)?"
+  },
+  "errorHandler": {
+    "cancelButtonText": "Close",
+    "title": "An error has occurred"
+  },
+  "vacationRequest": {
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "type": "Vacation Type",
+    "message": "Message",
+    "days": "Days",
+    "status": "Status",
+    "updatedAt": "Updated At",
+    "pending": "Pending",
+    "approved": "Approved",
+    "declined": "Declined",
+    "vacation": "Vacation",
+    "maternityPaternityLeave": "Maternity/Paternity leave",
+    "unpaidTimeOff": "Unpaid time off",
+    "sickness": "Sickness",
+    "personalDays": "Personal day",
+    "childSickness": "Child sickness",
+    "surplusBalance": "Surplus balance",
+    "noMessage": "No message",
+    "noStatus": "No status"
+  },
+  "vacationRequestError": {
+    "fetchRequestError": "Fetching vacation requests has failed",
+    "fetchStatusError": "Fetching vacation request statuses has failed",
+    "createRequestError": "Creating vacation request has failed",
+    "createStatusError": "Creating vacation request status has failed ",
+    "deleteRequestError": "Deleting vacation requests has failed",
+    "deleteStatusError": "Deleting vacation request statuses has failed",
+    "updateRequestError": "Updating vacation request has failed",
+    "updateStatusError": "Updating vacation request status has failed"
+  },
+  "form": {
+    "submit": "Submit",
+    "update": "Update"
+  },
+  "tableToolbar": {
+    "delete": "Delete",
+    "myRequests": "My vacation requests",
+    "createRequests": "New vacation request",
+    "editRequests": "Edit a vacation request",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "create": "Request vacation"
+  },
+  "dataGrid": {
+    "noRows": "No Rows"
+  },
+  "vacationsCard": {
+    "vacations": "Vacations"
   }
 }
