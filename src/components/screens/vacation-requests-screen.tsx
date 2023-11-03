@@ -14,6 +14,7 @@ import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../types";
 import strings from "../../localization/strings";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * Vacation requests screen
@@ -28,6 +29,7 @@ const VacationRequestsScreen = () => {
   );
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
   const [loading, setLoading] = useState(false);
+  const adminMode = UserRoleUtils.adminMode();
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -107,9 +109,13 @@ const VacationRequestsScreen = () => {
 
     try {
       setLoading(true);
-      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-        personId: userProfile?.id
-      });
+      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests(
+        adminMode
+          ? {}
+          : {
+              personId: userProfile?.id
+            }
+      );
       setVacationRequests(fetchedVacationRequests);
       setLoading(false);
     } catch (error) {
