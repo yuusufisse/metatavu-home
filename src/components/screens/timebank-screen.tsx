@@ -34,7 +34,7 @@ const TimebankScreen = () => {
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
 
   useEffect(() => {
-    getPersonTotalTime();
+      getPersonTotalTime();
   }, [timespan, persons]);
 
   useEffect(() => {
@@ -57,6 +57,7 @@ const TimebankScreen = () => {
             timespan: timespan || Timespan.ALL_TIME,
             before: new Date()
           });
+          console.log(fetchedPersonTotalTime);
           setTotalTime(fetchedPersonTotalTime);
           setPersonTotalTime(fetchedPersonTotalTime[0]);
         } catch (error) {

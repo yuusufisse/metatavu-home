@@ -50,7 +50,7 @@ const BalanceCard = () => {
   /**
    * Get person total time if it is undefined or set to "all time"
    */
-  useMemo(() => {
+  useEffect(() => {
     if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
       setTimespan(Timespan.ALL_TIME);
       getPersons();

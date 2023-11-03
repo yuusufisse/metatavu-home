@@ -33,13 +33,27 @@ const OverviewRangePicker = (props: Props) => {
   });
 
   const [weekRange, setWeekRange] = useState({
-    start: totalTime[totalTime.length - 1].timePeriod,
-    end: totalTime[0].timePeriod
+    start: "",
+    end: ""
   });
+
+  useEffect(() => {
+    initializeWeekRange()
+  }, [totalTime])
 
   useEffect(() => {
     getOverviewRange();
   }, [timespan, range, totalTime, weekRange]);
+
+  const initializeWeekRange = () => {
+    if (timespan === Timespan.WEEK) {
+      
+      setWeekRange({
+        start: String(totalTime[3].timePeriod),
+        end: String(totalTime[0].timePeriod)
+      });
+    }
+  };
 
   /**
    * Gets total time from the selected time span.
@@ -112,9 +126,7 @@ const OverviewRangePicker = (props: Props) => {
         default:
           break;
       }
-      if (result.length) {
-        setSelectedTotalEntries(result.filter((item) => item));
-      }
+      setSelectedTotalEntries(result.filter((item) => item));
     }
   };
 
@@ -157,7 +169,7 @@ const OverviewRangePicker = (props: Props) => {
           }}
         >
           {totalTime
-            .filter((entry) => entry.timePeriod?.split(",")[0] === String(range.start?.year))
+            .filter((entry) => entry.timePeriod?.split(",")[0] === String(range.start?.year) && entry.timePeriod?.split(",")[2] !== "0") //Filters the weeks outside the selected year and weeks starting with 0
             .map((entry) => (
               <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
             ))}
@@ -183,13 +195,13 @@ const OverviewRangePicker = (props: Props) => {
           }}
         >
           {totalTime
-            .filter((entry) => entry.timePeriod?.split(",")[0] === String(range.end?.year))
+            .filter((entry) => entry.timePeriod?.split(",")[0] === String(range.end?.year) && entry.timePeriod?.split(",")[2] !== "0")
             .map((entry) => (
               <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
             ))}
         </Select>
       ) : null}
-      <Button onClick={() => console.log(selectedTotalEntries, weekRange)}>TEST</Button>
+      <Button onClick={() => console.log(totalTime, timespan)}>TEST</Button>
     </Box>
   );
 };
