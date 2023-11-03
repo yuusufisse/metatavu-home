@@ -47,16 +47,30 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
 };
 
 /**
- * Formats inputted week value to be parsable in ISO string
+ * Formats inputted value to double digits
  *
- * @param weeks week number as string
- * @returns week number as a double digit value
+ * @param value
+ * @returns value as double digits i.e 9 -> 09
  */
-export const formatISOWeeks = (weeks: string | undefined) => {
-  if (!weeks) return null;
+export const doubleDigitFormatter = (value: string | undefined) => {
+  if (!value) return null;
 
-  if (weeks.length < 2) return `0${weeks}`;
-  else return weeks;
+  if (value.length < 2) return `0${value}`;
+  else return value;
+};
+
+/**
+ * Formats personTotalTime timePeriod attribute YYYY,MM,WW to ISO string and then to DateTime
+ * 
+ * @param year (YYYY),MM,WW
+ * @param week YYYY,MM,(WW)
+ * @param dayNumber Weekday number
+ * @returns DateTime object
+ */
+export const getWeekFromISO = (year: string, week: string, dayNumber: number) => {
+  const weekISO = `${year}-W${doubleDigitFormatter(week)}-${dayNumber}`
+  const weekParsed = DateTime.fromISO(weekISO);
+  return weekParsed;
 };
 
 /**

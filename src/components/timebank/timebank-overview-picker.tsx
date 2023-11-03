@@ -7,7 +7,7 @@ import strings from "../../localization/strings";
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { timespanAtom } from "../../atoms/person";
-import { formatISOWeeks } from "../../utils/time-utils";
+import { getWeekFromISO } from "../../utils/time-utils";
 /**
  * Component properties
  */
@@ -38,8 +38,8 @@ const OverviewRangePicker = (props: Props) => {
   });
 
   useEffect(() => {
-    initializeWeekRange()
-  }, [totalTime])
+    initializeWeekRange();
+  }, [totalTime]);
 
   useEffect(() => {
     getOverviewRange();
@@ -47,7 +47,6 @@ const OverviewRangePicker = (props: Props) => {
 
   const initializeWeekRange = () => {
     if (timespan === Timespan.WEEK) {
-      
       setWeekRange({
         start: String(totalTime[3].timePeriod),
         end: String(totalTime[0].timePeriod)
@@ -65,15 +64,16 @@ const OverviewRangePicker = (props: Props) => {
 
       switch (timespan) {
         case Timespan.WEEK: {
-          const startWeekISO = `${weekRange.start?.split(",")[0]}-W${formatISOWeeks(
-            weekRange.start?.split(",")[2]
-          )}-${range.start.weekday}`; //Formats YYYY,MM,WW from persontotalTime to ISO string (YYYY-WWW-D)
-          const endWeekISO = `${weekRange.end?.split(",")[0]}-W${formatISOWeeks(
-            weekRange.end?.split(",")[2]
-          )}-${range.end.weekday}`;
-
-          const startWeek = DateTime.fromISO(startWeekISO);
-          const endWeek = DateTime.fromISO(endWeekISO);
+          const startWeek = getWeekFromISO(
+            weekRange.start?.split(",")[0],
+            weekRange.start?.split(",")[2],
+            range.start.weekday
+          );
+          const endWeek = getWeekFromISO(
+            weekRange.end?.split(",")[0],
+            weekRange.end?.split(",")[2],
+            range.end.weekday
+          );
 
           selectedRange = endWeek.diff(startWeek, "weeks").toObject();
 
@@ -82,15 +82,11 @@ const OverviewRangePicker = (props: Props) => {
             selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks));
             i++
           ) {
-            result.push(
-              totalTime.find(
-                (item) =>
-                  item.timePeriod ===
-                  `${startWeek.plus({ weeks: i }).get("year")},${startWeek
-                    .plus({ weeks: i })
-                    .get("month")},${startWeek.plus({ weeks: i }).get("weekNumber")}`
-              )
-            );
+            const week = `${startWeek.plus({ weeks: i }).get("year")},${startWeek
+              .plus({ weeks: i })
+              .get("month")},${startWeek.plus({ weeks: i }).get("weekNumber")}`;
+
+            result.push(totalTime.find((item) => item.timePeriod === week));
           }
         }
         case Timespan.MONTH:
@@ -100,15 +96,11 @@ const OverviewRangePicker = (props: Props) => {
             selectedRange.months && i <= Math.trunc(Number(selectedRange.months));
             i++
           ) {
-            result.push(
-              totalTime.find(
-                (item) =>
-                  item.timePeriod ===
-                  `${range.start?.plus({ months: i }).get("year")},${range.start
-                    ?.plus({ months: i })
-                    .get("month")}`
-              )
-            );
+            const month = `${range.start?.plus({ months: i }).get("year")},${range.start
+              ?.plus({ months: i })
+              .get("month")}`;
+
+            result.push(totalTime.find((item) => item.timePeriod === month));
           }
         case Timespan.YEAR:
           selectedRange = range.end.diff(range.start, "year").toObject();
@@ -117,11 +109,8 @@ const OverviewRangePicker = (props: Props) => {
             selectedRange.years && i <= Math.trunc(Number(selectedRange.years));
             i++
           ) {
-            result.push(
-              totalTime.find(
-                (item) => item.timePeriod === `${range.start?.plus({ years: i }).get("year")}`
-              )
-            );
+            const year = `${range.start?.plus({ years: i }).get("year")}`;
+            result.push(totalTime.find((item) => item.timePeriod === year));
           }
         default:
           break;
@@ -169,7 +158,11 @@ const OverviewRangePicker = (props: Props) => {
           }}
         >
           {totalTime
-            .filter((entry) => entry.timePeriod?.split(",")[0] === String(range.start?.year) && entry.timePeriod?.split(",")[2] !== "0") //Filters the weeks outside the selected year and weeks starting with 0
+            .filter(
+              (entry) =>
+                entry.timePeriod?.split(",")[0] === String(range.start?.year) &&
+                entry.timePeriod?.split(",")[2] !== "0"
+            ) //Filters the weeks outside the selected year and weeks starting with 0
             .map((entry) => (
               <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
             ))}
@@ -195,7 +188,11 @@ const OverviewRangePicker = (props: Props) => {
           }}
         >
           {totalTime
-            .filter((entry) => entry.timePeriod?.split(",")[0] === String(range.end?.year) && entry.timePeriod?.split(",")[2] !== "0")
+            .filter(
+              (entry) =>
+                entry.timePeriod?.split(",")[0] === String(range.end?.year) &&
+                entry.timePeriod?.split(",")[2] !== "0"
+            )
             .map((entry) => (
               <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
             ))}
