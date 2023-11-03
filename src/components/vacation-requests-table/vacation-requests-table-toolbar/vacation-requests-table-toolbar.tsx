@@ -12,10 +12,9 @@ import { getToolbarTitle } from "../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "../../../atoms/language";
 import { useLocation } from "react-router-dom";
-import { authAtom } from "../../../atoms/auth";
-import UserRoleUtils from "../../../utils/user-role-utils";
 import { VacationRequestStatuses } from "../../../generated/client";
 import UpdateStatusButton from "./toolbar-update-status-button";
+import UserRoleUtils from "../../../utils/user-role-utils";
 
 /**
  * Component properties
@@ -56,10 +55,8 @@ const TableToolbar = ({
   const [confirmationHandlerOpen, setConfirmationHandlerOpen] = useState(false);
   const [title, setTitle] = useState(strings.tableToolbar.myRequests);
   const language = useAtomValue(languageAtom);
+  const adminMode = UserRoleUtils.adminMode();
   const { pathname } = useLocation();
-  const adminPathname = "/admin/vacations";
-  const authToken = useAtomValue(authAtom)?.token;
-  const adminMode = UserRoleUtils.isAdmin(authToken) && pathname === adminPathname;
 
   useEffect(() => {
     setTitle(getToolbarTitle(toolbarFormMode));
@@ -118,12 +115,13 @@ const TableToolbar = ({
         <ToolbarGridContainer container>
           <ToolbarGridItem
             item
-            xs={selectedRowIds?.length === 1 ? (adminMode ? 3 : 6) : adminMode ? 6 : 12}
+            sm={selectedRowIds?.length === 1 ? (adminMode ? 3 : 6) : adminMode ? 6 : 12}
+            xs={6}
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
           {selectedRowIds?.length === 1 && (
-            <ToolbarGridItem item xs={adminMode ? 3 : 6}>
+            <ToolbarGridItem item sm={adminMode ? 3 : 6} xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
                 ButtonIcon={Edit}
@@ -134,14 +132,14 @@ const TableToolbar = ({
           )}
           {adminMode && (
             <>
-              <ToolbarGridItem item xs={3}>
+              <ToolbarGridItem item sm={3} xs={6}>
                 <UpdateStatusButton
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
                   approval={true}
                   selectedRowIds={selectedRowIds}
                 />
               </ToolbarGridItem>
-              <ToolbarGridItem item xs={3}>
+              <ToolbarGridItem item sm={3} xs={6}>
                 <UpdateStatusButton
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
                   approval={false}
