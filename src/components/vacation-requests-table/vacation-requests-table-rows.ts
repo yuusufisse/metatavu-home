@@ -3,11 +3,14 @@ import { DateTime } from "luxon";
 import { VacationRequest, VacationRequestStatus } from "../../generated/client";
 import LocalizationUtils from "../../utils/localization-utils";
 import strings from "../../localization/strings";
+import { useAtomValue } from "jotai";
+import { personsAtom } from "../../atoms/person";
 
 /**
  * Vacation requests table rows component
  */
 const VacationRequestsTableRows = () => {
+  const persons = useAtomValue(personsAtom);
   /**
    * Create a single vacation request data grid row
    *
@@ -18,6 +21,9 @@ const VacationRequestsTableRows = () => {
     const row: DataGridRow = {
       id: vacationRequest.id,
       type: LocalizationUtils.getLocalizedVacationRequestType(vacationRequest.type),
+      personFullName: vacationRequest.personId
+        ? vacationRequest.personId
+        : strings.vacationRequest.noPersonFullName,
       updatedAt: DateTime.fromJSDate(vacationRequest.updatedAt),
       startDate: DateTime.fromJSDate(vacationRequest.startDate),
       endDate: DateTime.fromJSDate(vacationRequest.endDate),
@@ -50,10 +56,21 @@ const VacationRequestsTableRows = () => {
               vacationRequestStatus.status
             );
           }
-          if (vacationRequest.message.length) {
-            row.message = vacationRequest.message;
-          }
         });
+
+        if (vacationRequest.message.length) {
+          row.message = vacationRequest.message;
+        }
+
+        if (vacationRequest.personId) {
+          const foundPerson = persons.find(
+            (person) => person.keycloakId === vacationRequest.personId
+          );
+
+          if (foundPerson) {
+            row.personFullName = `${foundPerson.firstName} ${foundPerson.lastName}`;
+          }
+        }
 
         tempRows.push(row);
       });
