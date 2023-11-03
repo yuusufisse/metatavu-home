@@ -26,11 +26,12 @@ export type Language = "fi" | "en-gb";
 export interface DataGridRow {
   id: string | undefined;
   type: VacationType | string;
+  personFullName: string;
   updatedAt: string | DateTime;
   startDate: string | DateTime;
   endDate: string | DateTime;
   days: number;
-  message: string | undefined;
+  message: string;
   status: string;
 }
 
