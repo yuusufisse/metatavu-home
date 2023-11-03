@@ -2,6 +2,7 @@ import { Check, Close } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationRequestStatuses } from "../../../generated/client";
+import strings from "../../../localization/strings";
 
 /**
  * Component properties
@@ -38,7 +39,11 @@ const UpdateStatusButton = ({
     }
   >
     {approval ? <Check /> : <Close />}
-    <Typography variant="body1">{approval ? "Approve" : "Decline"}</Typography>
+    <Typography variant="body1">
+      {approval
+        ? strings.toolbarUpdateStatusButton.approve
+        : strings.toolbarUpdateStatusButton.decline}
+    </Typography>
   </Button>
 );
 
