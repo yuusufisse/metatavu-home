@@ -95,7 +95,9 @@
     "childSickness": "Lapsen sairaus",
     "surplusBalance": "Ylimääräinen loma",
     "noMessage": "Ei viestiä",
-    "noStatus": "Ei tilaa"
+    "noStatus": "Ei tilaa",
+    "person": "Henkilö",
+    "noPersonFullName": "Ei nimeä"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
@@ -126,5 +128,12 @@
   },
   "vacationsCard": {
     "vacations": "Lomat"
+  },
+  "personSelectDropdown": {
+    "label": "Suodata henkilöllä"
+  },
+  "toolbarUpdateStatusButton": {
+    "approve": "Hyväksy",
+    "decline": "Hylkää"
   }
 }

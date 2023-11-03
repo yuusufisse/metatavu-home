@@ -95,7 +95,9 @@
     "childSickness": "Child sickness",
     "surplusBalance": "Surplus balance",
     "noMessage": "No message",
-    "noStatus": "No status"
+    "noStatus": "No status",
+    "person": "Person",
+    "noPersonFullName": "No name"
   },
   "vacationRequestError": {
     "fetchRequestError": "Fetching vacation requests has failed",
@@ -126,5 +128,12 @@
   },
   "vacationsCard": {
     "vacations": "Vacations"
+  },
+  "personSelectDropdown": {
+    "label": "Filter by Person"
+  },
+  "toolbarUpdateStatusButton": {
+    "approve": "Approve",
+    "decline": "Decline"
   }
 }

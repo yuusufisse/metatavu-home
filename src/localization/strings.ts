@@ -129,6 +129,8 @@ export interface Localized extends LocalizedStringsMethods {
     childSickness: string;
     noMessage: string;
     noStatus: string;
+    person: string;
+    noPersonFullName: string;
   };
   /**
    * Translations related to vacation requests errors
@@ -174,6 +176,19 @@ export interface Localized extends LocalizedStringsMethods {
    */
   vacationsCard: {
     vacations: string;
+  };
+  /**
+   * Translation related to person select dropdown
+   */
+  personSelectDropdown: {
+    label: string;
+  };
+  /**
+   * Translations related to toolbar update status button
+   */
+  toolbarUpdateStatusButton: {
+    approve: string;
+    decline: string;
   };
 }
 
