@@ -42,49 +42,65 @@ const TimebankScreen = () => {
   /**
    * Gets person's total time data.
    */
-  const getPersonTotalTime = async () => {
-    if (persons.length) {
-      setLoading(true);
-      const loggedInPerson = persons.find(
-        (person: Person) => person.keycloakId === userProfile?.id
-      );
-      if (loggedInPerson || config.person.id) {
-        try {
-          const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id,
-            timespan: timespan || Timespan.ALL_TIME,
-            before: new Date()
-          });
-          setPersonTotalTime(fetchedPersonTotalTime[0]);
-        } catch (error) {
-          setError(`${strings.error.totalTimeFetch}, ${error}`);
-        }
+const getPersonTotalTime = async () => {
+  if (persons.length) {
+    setLoading(true);
+    const loggedInPerson = persons.find(
+      (person: Person) => person.keycloakId === userProfile?.id
+    );
+    if (loggedInPerson || config.person.id) {
+      try {
+        const currentDate = DateTime.now();
+        const beforeDate = currentDate.minus({ days: 1 });
+
+        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+          personId: loggedInPerson?.id || config.person.id,
+          timespan: timespan || Timespan.ALL_TIME,
+          before: beforeDate.toJSDate(),
+        });
+
+        setPersonTotalTime(fetchedPersonTotalTime[0]);
+      } catch (error) {
+        setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
     }
-    setLoading(false);
-  };
+  }
+  setLoading(false);
+};
+
 
   /**
    * Gets the logged in person's daily entries.
    */
-  const getPersonDailyEntries = async () => {
-    if (!persons.length) return null;
+const getPersonDailyEntries = async () => {
+  if (!persons.length) return null;
 
-    const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
-    if (loggedInPerson || config.person.id) {
-      try {
-        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson?.id || config.person.id
-        });
-        setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(
-          fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
-        ); // Gets today's entry or earlier
-      } catch (error) {
-        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
-      }
+  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
+  const currentDate = DateTime.now(); 
+
+  const beforeDate = currentDate.minus({ days: 1 }); 
+
+  if (loggedInPerson || config.person.id) {
+    try {
+      const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+        personId: loggedInPerson?.id || config.person.id
+      });
+      setDailyEntries(fetchedDailyEntries);
+
+      setPersonDailyEntry(
+  fetchedDailyEntries.find((item) => {
+    const itemDate = DateTime.fromJSDate(item.date);
+    return itemDate <= beforeDate && item.logged;
+  })
+);
+
+      // Gets today's entry or earlier
+    } catch (error) {
+      setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
-  };
+  }
+};
+
 
   /**
    * Changes the displayed daily entry in the pie chart via the Date Picker.

@@ -11,6 +11,7 @@ import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/pers
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
+import { DateTime } from "luxon";
 
 /**
  * Component for displaying user's balance
@@ -24,28 +25,35 @@ const BalanceCard = () => {
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
 
-  /**
-   * Initialize logged in person's time data.
-   */
-  const getPersons = async () => {
-    if (persons.length) {
-      setLoading(true);
-      const loggedInPerson = persons.find(
-        (person: Person) => person.keycloakId === userProfile?.id
-      );
-      if (loggedInPerson || config.person.id) {
-        try {
-          const fetchedPerson = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id
-          });
-          setPersonTotalTime(fetchedPerson[0]);
-        } catch (error) {
-          setError(`${strings.error.fetchFailedGeneral}, ${error}`);
-        }
+/**
+ * Initialize logged in person's time data.
+ */
+const getPersons = async () => {
+  if (persons.length) {
+    setLoading(true);
+    const loggedInPerson = persons.find(
+      (person: Person) => person.keycloakId === userProfile?.id
+    );
+    if (loggedInPerson || config.person.id) {
+      try {
+        const currentDate = DateTime.now();
+        const beforeDate = currentDate.minus({ days: 1 });
+
+        const fetchedPerson = await personsApi.listPersonTotalTime({
+          personId: loggedInPerson?.id || config.person.id,
+          timespan: Timespan.ALL_TIME,
+          before: beforeDate.toJSDate(),
+        });
+
+        setPersonTotalTime(fetchedPerson[0]);
+      } catch (error) {
+        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
       }
-      setLoading(false);
     }
-  };
+    setLoading(false);
+  }
+};
+
 
   /**
    * Get person total time if it is undefined or set to "all time"
