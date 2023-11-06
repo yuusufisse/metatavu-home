@@ -1,4 +1,4 @@
-import { Grid, Card, CardContent, Skeleton, Typography } from "@mui/material";
+import { Grid, Card, CardContent, Skeleton, Typography, Box } from "@mui/material";
 import strings from "../../localization/strings";
 import { Link } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
@@ -13,6 +13,8 @@ import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
+import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * Vacations card component
@@ -29,6 +31,7 @@ const VacationsCard = () => {
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
+  const adminMode = UserRoleUtils.adminMode();
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -154,27 +157,41 @@ const VacationsCard = () => {
         DateTime.fromJSDate(a.updatedAt) > DateTime.fromJSDate(b.updatedAt) ? a : b
       );
 
-      const localizedVacationRequestStatus = vacationRequestStatuses.find(
+      const vacationRequestStatus = vacationRequestStatuses.find(
         (vacationRequestStatus) =>
           latestVacationRequest.id === vacationRequestStatus.vacationRequestId
       )?.status;
 
       return (
-        <Typography>{`${LocalizationUtils.getLocalizedVacationRequestType(
-          latestVacationRequest.type
-        )} - ${latestVacationRequest.message} - ${formatDate(
-          DateTime.fromJSDate(latestVacationRequest.startDate)
-        )} - ${formatDate(DateTime.fromJSDate(latestVacationRequest.endDate))} - ${
-          localizedVacationRequestStatus &&
-          LocalizationUtils.getLocalizedVacationRequestStatus(localizedVacationRequestStatus)
-        }`}</Typography>
+        <Box>
+          {DateTime.fromJSDate(latestVacationRequest.startDate) > DateTime.now() ? (
+            <Typography>
+              {`${LocalizationUtils.getLocalizedVacationRequestType(
+                latestVacationRequest.type
+              )} - ${latestVacationRequest.message} - ${formatDate(
+                DateTime.fromJSDate(latestVacationRequest.startDate)
+              )} - ${formatDate(DateTime.fromJSDate(latestVacationRequest.endDate))} - `}
+              {vacationRequestStatus && (
+                <span
+                  style={{
+                    color: getVacationRequestStatusColor(vacationRequestStatus)
+                  }}
+                >
+                  {LocalizationUtils.getLocalizedVacationRequestStatus(vacationRequestStatus)}
+                </span>
+              )}
+            </Typography>
+          ) : (
+            <Typography>{strings.vacationsCard.noUpcomingVacations}</Typography>
+          )}
+        </Box>
       );
     }
     return <Skeleton />;
   };
 
   return (
-    <Link to={"/vacations"} style={{ textDecoration: "none" }}>
+    <Link to={adminMode ? "/admin/vacations" : "/vacations"} style={{ textDecoration: "none" }}>
       <Card
         sx={{
           "&:hover": {
@@ -183,7 +200,9 @@ const VacationsCard = () => {
         }}
       >
         <CardContent>
-          <h3 style={{ marginTop: 6 }}>{strings.tableToolbar.myRequests}</h3>
+          <h3 style={{ marginTop: 6 }}>
+            {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
+          </h3>
           <Grid container>
             <Grid item xs={1}>
               <LuggageIcon />

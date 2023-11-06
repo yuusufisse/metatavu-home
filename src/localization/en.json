@@ -127,7 +127,8 @@
     "noRows": "No Rows"
   },
   "vacationsCard": {
-    "vacations": "Vacations"
+    "vacations": "Vacations",
+    "noUpcomingVacations": "No upcoming vacations"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"
@@ -135,5 +136,9 @@
   "toolbarUpdateStatusButton": {
     "approve": "Approve",
     "decline": "Decline"
+  },
+  "adminRouteAccess": {
+    "notAdmin": "You don't have an admin role",
+    "noAccess": "Access denied"
   }
 }

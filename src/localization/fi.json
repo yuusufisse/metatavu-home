@@ -127,7 +127,8 @@
     "noRows": "Ei rivejä"
   },
   "vacationsCard": {
-    "vacations": "Lomat"
+    "vacations": "Lomat",
+    "noUpcomingVacations": "Ei tulevia lomia"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"
@@ -135,5 +136,9 @@
   "toolbarUpdateStatusButton": {
     "approve": "Hyväksy",
     "decline": "Hylkää"
+  },
+  "adminRouteAccess": {
+    "notAdmin": "Sinulla ei ole hallintaoikeuksia",
+    "noAccess": "Ei pääsyä"
   }
 }

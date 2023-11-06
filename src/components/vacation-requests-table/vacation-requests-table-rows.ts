@@ -52,9 +52,7 @@ const VacationRequestsTableRows = () => {
 
         vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
-            row.status = LocalizationUtils.getLocalizedVacationRequestStatus(
-              vacationRequestStatus.status
-            );
+            row.status = vacationRequestStatus.status;
           }
         });
 

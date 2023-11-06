@@ -13,12 +13,22 @@ import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
 import AdminScreen from "./components/screens/admin-screen";
+import UserRoleUtils from "./utils/user-role-utils";
+import strings from "./localization/strings";
 
 /**
  * Application component
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
+  const userIsAdmin = UserRoleUtils.isAdmin();
+
+  const AdminRouteErrorScreen = () => (
+    <ErrorScreen
+      message={strings.adminRouteAccess.notAdmin}
+      title={strings.adminRouteAccess.noAccess}
+    />
+  );
 
   const router = createBrowserRouter([
     {
@@ -47,11 +57,11 @@ const App = () => {
       children: [
         {
           path: "/admin",
-          element: <AdminScreen />
+          element: userIsAdmin ? <AdminScreen /> : <AdminRouteErrorScreen />
         },
         {
           path: "/admin/vacations",
-          element: <VacationRequestsScreen />
+          element: userIsAdmin ? <VacationRequestsScreen /> : <AdminRouteErrorScreen />
         }
       ]
     }

@@ -176,6 +176,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   vacationsCard: {
     vacations: string;
+    noUpcomingVacations: string;
   };
   /**
    * Translation related to person select dropdown
@@ -189,6 +190,13 @@ export interface Localized extends LocalizedStringsMethods {
   toolbarUpdateStatusButton: {
     approve: string;
     decline: string;
+  };
+  /**
+   * Translation related to admin route access
+   */
+  adminRouteAccess: {
+    notAdmin: string;
+    noAccess: string;
   };
 }
 

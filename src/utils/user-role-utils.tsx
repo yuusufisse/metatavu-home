@@ -1,5 +1,4 @@
 import { useAtomValue } from "jotai";
-import { KeycloakTokenParsed } from "keycloak-js";
 import { authAtom } from "../atoms/auth";
 import { useLocation } from "react-router";
 
@@ -13,7 +12,8 @@ export default class UserRoleUtils {
    * @param accessToken keycloak access token
    * @returns boolean
    */
-  public static isAdmin = (accessToken?: KeycloakTokenParsed) => {
+  public static isAdmin = () => {
+    const accessToken = useAtomValue(authAtom)?.token;
     return !!accessToken?.realm_access && accessToken.realm_access?.roles.includes("admin");
   };
 
@@ -25,7 +25,6 @@ export default class UserRoleUtils {
   public static adminMode = () => {
     const { pathname } = useLocation();
     const adminPathname = pathname.startsWith("/admin");
-    const authToken = useAtomValue(authAtom)?.token;
-    return UserRoleUtils.isAdmin(authToken) && adminPathname;
+    return UserRoleUtils.isAdmin() && adminPathname;
   };
 }

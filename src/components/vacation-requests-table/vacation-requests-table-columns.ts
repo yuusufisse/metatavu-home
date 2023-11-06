@@ -3,6 +3,7 @@ import strings from "../../localization/strings";
 import { DateTime } from "luxon";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "../../atoms/language";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Vacation requests table columns component
@@ -17,12 +18,12 @@ const VacationRequestsTableColumns = () => {
    * @param dateWithTime datetime object with time
    * @returns formatted date time
    */
-  function formatDate(date: DateTime, dateWithTime?: boolean) {
+  const formatDate = (date: DateTime, dateWithTime?: boolean) => {
     if (!date) return "";
     return date
       .setLocale(language)
       .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
-  }
+  };
 
   /**
    * Define columns for data grid
@@ -76,6 +77,16 @@ const VacationRequestsTableColumns = () => {
     {
       field: "status",
       headerName: strings.vacationRequest.status,
+      renderCell: (params) => {
+        if (!params.value) return "";
+        return LocalizationUtils.getLocalizedVacationRequestStatus(params.value);
+      },
+      cellClassName: (params) => {
+        if (params.value === null) {
+          return "";
+        }
+        return params.value;
+      },
       width: 100,
       editable: false
     }

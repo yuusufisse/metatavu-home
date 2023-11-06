@@ -12,6 +12,8 @@ import strings from "../../localization/strings";
 import { Inventory } from "@mui/icons-material";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
 import { VacationRequestStatuses } from "../../generated/client";
+import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
+import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * Component properties
@@ -51,6 +53,7 @@ const VacationRequestsTable = ({
   const dataGridHeight = 700;
   const dataGridRowHeight = 52;
   const dataGridColumnHeaderHeight = 56;
+  const adminMode = UserRoleUtils.adminMode();
 
   /**
    * Set data grid rows
@@ -97,7 +100,20 @@ const VacationRequestsTable = ({
   );
 
   return (
-    <Box ref={containerRef}>
+    <Box
+      sx={{
+        "& .APPROVED": {
+          color: `${getVacationRequestStatusColor(VacationRequestStatuses.APPROVED)}`
+        },
+        "& .DECLINED": {
+          color: `${getVacationRequestStatusColor(VacationRequestStatuses.DECLINED)}`
+        },
+        "& .PENDING": {
+          color: `${getVacationRequestStatusColor(VacationRequestStatuses.PENDING)}`
+        }
+      }}
+      ref={containerRef}
+    >
       <TableToolbar
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
@@ -129,7 +145,9 @@ const VacationRequestsTable = ({
         isRowSelectable={() => !formOpen}
         initialState={{
           sorting: {
-            sortModel: [{ field: "updatedAt", sort: "desc" }]
+            sortModel: adminMode
+              ? [{ field: "updatedAt", sort: "asc" }]
+              : [{ field: "updatedAt", sort: "desc" }]
           }
         }}
       />
