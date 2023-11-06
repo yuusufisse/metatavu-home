@@ -39,6 +39,12 @@ const OverviewRangePicker = (props: Props) => {
 
   useEffect(() => {
     initializeWeekRange();
+    return () => {
+      setWeekRange({
+        start: "",
+        end: ""
+      });
+    };
   }, [totalTime]);
 
   useEffect(() => {
@@ -51,6 +57,61 @@ const OverviewRangePicker = (props: Props) => {
         start: String(totalTime[3].timePeriod),
         end: String(totalTime[0].timePeriod)
       });
+    }
+  };
+
+  const renderStartWeekSelect = () => {
+    if (timespan !== Timespan.WEEK) return;
+
+    if (range.start) {
+      return (
+        <Select
+          sx={{ width: "8%", ml: "5px" }}
+          value={weekRange.start}
+          onChange={(e) => {
+            setWeekRange({ ...weekRange, start: String(e.target.value) });
+            console.log(e.target.value);
+          }}
+        >
+          {totalTime
+            .filter(
+              (entry) =>
+                entry.timePeriod?.split(",")[0] === String(range.start?.year) &&
+                entry.timePeriod?.split(",")[2] !== "0"
+            ) //Filters the weeks outside the selected year and weeks starting with 0
+            .map((entry) => (
+              <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
+            ))}
+        </Select>
+      );
+    }
+  };
+
+  const renderEndWeekSelect = () => {
+    if (timespan !== Timespan.WEEK) return;
+
+    if (range.end) {
+      return (
+        <Select
+          label="End week"
+          sx={{ width: "8%", ml: "5px" }}
+          value={weekRange.end}
+          onChange={(e) => {
+            setWeekRange({ ...weekRange, end: String(e.target.value) });
+            console.log(e.target.value);
+          }}
+        >
+          {totalTime
+            .filter(
+              (entry) =>
+                entry.timePeriod?.split(",")[0] === String(range.end?.year) &&
+                entry.timePeriod?.split(",")[2] !== "0"
+            )
+            .map((entry) => (
+              <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
+            ))}
+        </Select>
+      );
     }
   };
 
@@ -148,26 +209,7 @@ const OverviewRangePicker = (props: Props) => {
         value={range.start}
         maxDate={range.end?.minus({ days: 1 })}
       />
-      {timespan === Timespan.WEEK ? (
-        <Select
-          sx={{ width: "6%", ml: "5px" }}
-          value={weekRange.start}
-          onChange={(e) => {
-            setWeekRange({ ...weekRange, start: String(e.target.value) });
-            console.log(e.target.value);
-          }}
-        >
-          {totalTime
-            .filter(
-              (entry) =>
-                entry.timePeriod?.split(",")[0] === String(range.start?.year) &&
-                entry.timePeriod?.split(",")[2] !== "0"
-            ) //Filters the weeks outside the selected year and weeks starting with 0
-            .map((entry) => (
-              <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
-            ))}
-        </Select>
-      ) : null}
+      {renderStartWeekSelect()}
       <DatePicker
         disabled={loading}
         sx={{ ml: "2%" }}
@@ -177,27 +219,7 @@ const OverviewRangePicker = (props: Props) => {
         value={range.end}
         minDate={range.start?.plus({ days: 1 })}
       />
-      {timespan === Timespan.WEEK ? (
-        <Select
-          label="End week"
-          sx={{ width: "6%", ml: "5px" }}
-          value={weekRange.end}
-          onChange={(e) => {
-            setWeekRange({ ...weekRange, end: String(e.target.value) });
-            console.log(e.target.value);
-          }}
-        >
-          {totalTime
-            .filter(
-              (entry) =>
-                entry.timePeriod?.split(",")[0] === String(range.end?.year) &&
-                entry.timePeriod?.split(",")[2] !== "0"
-            )
-            .map((entry) => (
-              <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
-            ))}
-        </Select>
-      ) : null}
+      {renderEndWeekSelect()}
       <Button onClick={() => console.log(totalTime, timespan)}>TEST</Button>
     </Box>
   );
