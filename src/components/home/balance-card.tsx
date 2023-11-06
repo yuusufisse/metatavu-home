@@ -25,35 +25,34 @@ const BalanceCard = () => {
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
 
-/**
- * Initialize logged in person's time data.
- */
-const getPersons = async () => {
-  if (persons.length) {
-    setLoading(true);
-    const loggedInPerson = persons.find(
-      (person: Person) => person.keycloakId === userProfile?.id
-    );
-    if (loggedInPerson || config.person.id) {
-      try {
-        const currentDate = DateTime.now();
-        const beforeDate = currentDate.minus({ days: 1 });
+  /**
+   * Initialize logged in person's time data.
+   */
+  const getPersons = async () => {
+    if (persons.length) {
+      setLoading(true);
+      const loggedInPerson = persons.find(
+        (person: Person) => person.keycloakId === userProfile?.id
+      );
+      if (loggedInPerson || config.person.id) {
+        try {
+          const currentDate = DateTime.now();
+          const beforeDate = currentDate.minus({ days: 1 });
 
-        const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: loggedInPerson?.id || config.person.id,
-          timespan: Timespan.ALL_TIME,
-          before: beforeDate.toJSDate(),
-        });
+          const fetchedPerson = await personsApi.listPersonTotalTime({
+            personId: loggedInPerson?.id || config.person.id,
+            timespan: Timespan.ALL_TIME,
+            before: beforeDate.toJSDate()
+          });
 
-        setPersonTotalTime(fetchedPerson[0]);
-      } catch (error) {
-        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+          setPersonTotalTime(fetchedPerson[0]);
+        } catch (error) {
+          setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+        }
       }
+      setLoading(false);
     }
-    setLoading(false);
-  }
-};
-
+  };
 
   /**
    * Get person total time if it is undefined or set to "all time"
