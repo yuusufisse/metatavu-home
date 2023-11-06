@@ -51,6 +51,10 @@ const OverviewRangePicker = (props: Props) => {
     getOverviewRange();
   }, [timespan, range, totalTime, weekRange]);
 
+  /**
+   * Initializes default week values when selecting "By range -> Week"
+   *
+   */
   const initializeWeekRange = () => {
     if (timespan === Timespan.WEEK) {
       setWeekRange({
@@ -60,6 +64,10 @@ const OverviewRangePicker = (props: Props) => {
     }
   };
 
+  /**
+   * Render start week Select dropdown when week range is active
+   *
+   */
   const renderStartWeekSelect = () => {
     if (timespan !== Timespan.WEEK) return;
 
@@ -87,6 +95,10 @@ const OverviewRangePicker = (props: Props) => {
     }
   };
 
+  /**
+   * Render end week Select dropdown when week range is active
+   *
+   */
   const renderEndWeekSelect = () => {
     if (timespan !== Timespan.WEEK) return;
 
@@ -182,7 +194,7 @@ const OverviewRangePicker = (props: Props) => {
 
   /**
    * Changes date picker views based on selected time span
-   * Week view does not exist in MUI date picker.
+   * 
    */
   const viewRenderer = (): DateView[] => {
     switch (timespan) {
