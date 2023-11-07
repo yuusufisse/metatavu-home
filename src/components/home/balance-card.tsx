@@ -24,6 +24,9 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const currentDate = DateTime.now();
+  const beforeDate = currentDate.minus({ days: 1 }).startOf("day");
+  const formattedBeforeDate = beforeDate.toFormat("dd/MM/yyyy HH:mm");
 
   /**
    * Initialize logged in person's time data.
@@ -36,9 +39,6 @@ const BalanceCard = () => {
       );
       if (loggedInPerson || config.person.id) {
         try {
-          const currentDate = DateTime.now();
-          const beforeDate = currentDate.minus({ days: 1 });
-
           const fetchedPerson = await personsApi.listPersonTotalTime({
             personId: loggedInPerson?.id || config.person.id,
             timespan: Timespan.ALL_TIME,
@@ -89,7 +89,7 @@ const BalanceCard = () => {
         }}
       >
         <CardContent>
-          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
+          <h3 style={{ marginTop: 6 }}>{`${strings.timebank.balance} ${formattedBeforeDate}`}</h3>
           <Grid container>
             <Grid item xs={1}>
               <ScheduleIcon />

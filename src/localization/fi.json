@@ -34,7 +34,7 @@
     "time": "fi-FI"
   },
   "timebank": {
-    "balance": "Saldo",
+    "balance": "Saldosi päättyen päivämäärään",
     "yourBalanceIs": "Saldosi on",
     "logged": "Kirjattu",
     "expected": "Odotettu",
