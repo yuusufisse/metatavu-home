@@ -23,7 +23,7 @@
     "fi": "FI"
   },
   "timebank": {
-    "balance": "Saldo",
+    "balance": "Saldo päättyen päivämäärään",
     "yourBalanceIs": "Saldosi on"
   },
   "errors": {
