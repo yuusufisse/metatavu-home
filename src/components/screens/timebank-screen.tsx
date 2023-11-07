@@ -51,7 +51,7 @@ const TimebankScreen = () => {
       if (loggedInPerson || config.person.id) {
         try {
           const currentDate = DateTime.now();
-          const beforeDate = currentDate.minus({ days: 1 });
+          const beforeDate = currentDate.minus({ days: 1 }).startOf("day");
 
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
             personId: loggedInPerson?.id || config.person.id,
