@@ -10,6 +10,7 @@ import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { PersonTotalTime, Timespan } from "../../../generated/client";
 import config from "../../../app/config";
 import { DateTime } from "luxon";
+import { languageAtom } from "../../../atoms/languageAtom";
 
 /**
  * Component for displaying user's balance
@@ -23,7 +24,7 @@ const BalanceCard = () => {
   const currentDate = DateTime.now();
   const beforeDate = currentDate.minus({ days: 1 }).startOf("day");
   const language = useAtomValue(languageAtom);
-  const formattedBeforeDate = beforeDate.setLocale(language).toFormat('dd LLL yyyy');
+  const formattedBeforeDate = beforeDate.setLocale(language).toFormat("dd LLL yyyy");
 
   /**
    * Initialize logged in person's time data.
