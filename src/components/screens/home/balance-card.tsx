@@ -22,7 +22,8 @@ const BalanceCard = () => {
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const currentDate = DateTime.now();
   const beforeDate = currentDate.minus({ days: 1 }).startOf("day");
-  const formattedBeforeDate = beforeDate.toFormat("dd/MM/yyyy HH:mm");
+  const language = useAtomValue(languageAtom);
+  const formattedBeforeDate = beforeDate.setLocale(language).toFormat('dd LLL yyyy');
 
   /**
    * Initialize logged in person's time data.
