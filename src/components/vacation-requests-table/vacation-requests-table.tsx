@@ -148,7 +148,14 @@ const VacationRequestsTable = ({
             sortModel: adminMode
               ? [{ field: "updatedAt", sort: "asc" }]
               : [{ field: "updatedAt", sort: "desc" }]
-          }
+          },
+          filter: adminMode
+            ? {
+                filterModel: {
+                  items: [{ field: "status", operator: "contains", value: "pending" }]
+                }
+              }
+            : {}
         }}
       />
     </Box>
