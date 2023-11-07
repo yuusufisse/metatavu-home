@@ -314,6 +314,7 @@ const VacationRequestsScreen = () => {
                 statusId: vacationRequestStatus.id,
                 vacationRequestStatus: {
                   ...vacationRequestStatus,
+                  updatedAt: new Date(),
                   status: newStatus
                 }
               });
