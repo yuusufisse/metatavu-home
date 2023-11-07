@@ -45,7 +45,7 @@ const VacationRequestsTableColumns = () => {
       field: "updatedAt",
       headerName: strings.vacationRequest.updatedAt,
       renderCell: (params) => formatDate(params.row?.updatedAt, true),
-      width: 140,
+      width: 150,
       editable: false
     },
     {
@@ -87,7 +87,7 @@ const VacationRequestsTableColumns = () => {
         }
         return params.value;
       },
-      width: 100,
+      width: 120,
       editable: false
     }
   ];
