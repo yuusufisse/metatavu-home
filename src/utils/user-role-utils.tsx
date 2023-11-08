@@ -14,7 +14,12 @@ export default class UserRoleUtils {
    */
   public static isAdmin = () => {
     const accessToken = useAtomValue(authAtom)?.token;
-    return !!accessToken?.realm_access && accessToken.realm_access?.roles.includes("admin");
+
+    return accessToken
+      ? accessToken.realm_access
+        ? accessToken.realm_access.roles.includes("admin")
+        : false
+      : false;
   };
 
   /**
