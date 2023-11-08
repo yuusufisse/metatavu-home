@@ -130,8 +130,10 @@
     "vacations": "Vacations",
     "noUpcomingVacations": "No upcoming vacations",
     "youHave": "You have",
-    "pendingRequests": "pending requests",
-    "noPendingRequests": "No pending requests"
+    "pendingRequests": "pending vacation requests",
+    "noPendingRequests": "No pending vacation requests",
+    "ofWhich": "of which",
+    "areUpcoming": "are upcoming"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"

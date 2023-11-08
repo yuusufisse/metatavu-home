@@ -130,8 +130,10 @@
     "vacations": "Lomat",
     "noUpcomingVacations": "Ei tulevia lomia",
     "youHave": "Sinulla on",
-    "pendingRequests": "odottavaa hakemuksia",
-    "noPendingRequests": "Ei odottavia hakemuksia"
+    "pendingRequests": "odottavaa lomahakemusta",
+    "noPendingRequests": "Ei odottavia lomahakemuksia",
+    "ofWhich": "joista",
+    "areUpcoming": "ovat tulevia"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"

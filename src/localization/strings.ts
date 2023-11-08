@@ -180,6 +180,8 @@ export interface Localized extends LocalizedStringsMethods {
     youHave: string;
     pendingRequests: string;
     noPendingRequests: string;
+    ofWhich: string;
+    areUpcoming: string;
   };
   /**
    * Translation related to person select dropdown
