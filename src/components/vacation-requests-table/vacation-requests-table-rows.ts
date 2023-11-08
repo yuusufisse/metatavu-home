@@ -5,12 +5,14 @@ import LocalizationUtils from "../../utils/localization-utils";
 import strings from "../../localization/strings";
 import { useAtomValue } from "jotai";
 import { personsAtom } from "../../atoms/person";
+import { userProfileAtom } from "../../atoms/auth";
 
 /**
  * Vacation requests table rows component
  */
 const VacationRequestsTableRows = () => {
   const persons = useAtomValue(personsAtom);
+  const userProfile = useAtomValue(userProfileAtom);
   /**
    * Create a single vacation request data grid row
    *
@@ -67,6 +69,10 @@ const VacationRequestsTableRows = () => {
 
           if (foundPerson) {
             row.personFullName = `${foundPerson.firstName} ${foundPerson.lastName}`;
+          } else {
+            if (userProfile && userProfile.id === vacationRequest.personId) {
+              row.personFullName = `${userProfile.firstName} ${userProfile.lastName}`;
+            }
           }
         }
 
