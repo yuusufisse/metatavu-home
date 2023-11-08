@@ -23,7 +23,7 @@ import UserRoleUtils from "../../utils/user-role-utils";
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const adminMode = UserRoleUtils.adminMode();
+  const isAdmin = UserRoleUtils.isAdmin();
 
   /**
    * Handles opening user menu
@@ -54,7 +54,7 @@ const NavBar = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <NavItems />
-            {adminMode && (
+            {isAdmin && (
               <Link to={"/admin"}>
                 <Button>Admin</Button>
               </Link>
