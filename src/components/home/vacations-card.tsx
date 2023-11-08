@@ -6,7 +6,12 @@ import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useState, useEffect, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
-import { Person, VacationRequestStatus, VacationRequestStatuses } from "../../generated/client";
+import {
+  Person,
+  VacationRequest,
+  VacationRequestStatus,
+  VacationRequestStatuses
+} from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
@@ -161,6 +166,8 @@ const VacationsCard = () => {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
     if (vacationRequests?.length && vacationRequestStatuses?.length && !loading) {
+      let earliestUpcomingPendingVacationRequest: VacationRequest | undefined = undefined;
+
       const pendingVacationRequests = vacationRequestStatuses
         .filter(
           (vacationRequestStatus) =>
@@ -179,10 +186,11 @@ const VacationsCard = () => {
           DateTime.fromJSDate(pendingVacationRequest.startDate) > DateTime.now()
       );
 
-      const earliestUpcomingPendingVacationRequest = upcomingPendingVacationRequests.reduce(
-        (a, b) =>
+      if (upcomingPendingVacationRequests) {
+        earliestUpcomingPendingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
           a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
-      );
+        );
+      }
 
       const earliestUpcomingPendingVacationRequestStatus = vacationRequestStatuses.find(
         (vacationRequestStatus) =>
@@ -196,7 +204,7 @@ const VacationsCard = () => {
         let foundPerson: Person | undefined;
         if (earliestUpcomingPendingVacationRequest) {
           foundPerson = persons.find(
-            (person) => person.keycloakId === earliestUpcomingPendingVacationRequest.personId
+            (person) => person.keycloakId === earliestUpcomingPendingVacationRequest?.personId
           );
         }
         let personFullName = "";
