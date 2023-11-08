@@ -6,7 +6,7 @@ import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useState, useEffect, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
-import { VacationRequestStatus, VacationRequestStatuses } from "../../generated/client";
+import { Person, VacationRequestStatus, VacationRequestStatuses } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
@@ -15,6 +15,7 @@ import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/v
 import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
 import UserRoleUtils from "../../utils/user-role-utils";
 import { Check, Pending } from "@mui/icons-material";
+import { personsAtom } from "../../atoms/person";
 
 /**
  * Vacations card component
@@ -31,7 +32,10 @@ const VacationsCard = () => {
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
-  const [amountOfPendingRequests, setAmountOfPendingRequests] = useState(0);
+  const [pendingVacationRequestsCount, setPendingVacationRequestsCount] = useState(0);
+  const [upcomingPendingVacationRequestsCount, setUpcomingPendingVacationRequestsCount] =
+    useState(0);
+  const persons = useAtomValue(personsAtom);
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -77,7 +81,7 @@ const VacationsCard = () => {
   const filterLatestVacationRequestStatuses = async () => {
     if (vacationRequests.length && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
-      let amountOfPendingVacationRequests = 0;
+      let pendingVacationRequestsCount = 0;
 
       vacationRequests.forEach((vacationRequest) => {
         const selectedVacationRequestStatuses: VacationRequestStatus[] = [];
@@ -86,7 +90,7 @@ const VacationsCard = () => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
             selectedVacationRequestStatuses.push(vacationRequestStatus);
             if (vacationRequestStatus.status === VacationRequestStatuses.PENDING) {
-              amountOfPendingVacationRequests += 1;
+              pendingVacationRequestsCount += 1;
             }
           }
         });
@@ -104,7 +108,7 @@ const VacationsCard = () => {
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
-      setAmountOfPendingRequests(amountOfPendingVacationRequests);
+      setPendingVacationRequestsCount(pendingVacationRequestsCount);
     }
   };
 
@@ -149,38 +153,89 @@ const VacationsCard = () => {
   }
 
   /**
-   * Upcoming vacation request component
+   * Earliest upcoming vacation request component
+   * If user is admin, get the earliest upcoming pending vacation request
    */
-  const UpcomingVacationRequest = () => {
+  const EarliestUpcomingVacationRequest = () => {
     if (!vacationRequests?.length && !loading) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
-    if (vacationRequests?.length && vacationRequestStatuses?.length) {
-      const latestVacationRequest = vacationRequests.reduce((a, b) =>
-        DateTime.fromJSDate(a.updatedAt) > DateTime.fromJSDate(b.updatedAt) ? a : b
+    if (vacationRequests?.length && vacationRequestStatuses?.length && !loading) {
+      const pendingVacationRequests = vacationRequestStatuses
+        .filter(
+          (vacationRequestStatus) =>
+            vacationRequestStatus.status === VacationRequestStatuses.PENDING
+        )
+        .map((pendingVacationRequestStatus) =>
+          vacationRequests.find(
+            (vacationRequest) =>
+              vacationRequest.id === pendingVacationRequestStatus.vacationRequestId
+          )
+        );
+
+      const upcomingPendingVacationRequests = pendingVacationRequests.filter(
+        (pendingVacationRequest) =>
+          pendingVacationRequest &&
+          DateTime.fromJSDate(pendingVacationRequest.startDate) > DateTime.now()
       );
 
-      const vacationRequestStatus = vacationRequestStatuses.find(
+      const earliestUpcomingPendingVacationRequest = upcomingPendingVacationRequests.reduce(
+        (a, b) =>
+          a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
+      );
+
+      const earliestUpcomingPendingVacationRequestStatus = vacationRequestStatuses.find(
         (vacationRequestStatus) =>
-          latestVacationRequest.id === vacationRequestStatus.vacationRequestId
+          earliestUpcomingPendingVacationRequest &&
+          earliestUpcomingPendingVacationRequest.id === vacationRequestStatus.vacationRequestId
       )?.status;
+
+      setUpcomingPendingVacationRequestsCount(upcomingPendingVacationRequests.length);
+
+      const getVacationRequestCreatorFullName = () => {
+        let foundPerson: Person | undefined;
+        if (earliestUpcomingPendingVacationRequest) {
+          foundPerson = persons.find(
+            (person) => person.keycloakId === earliestUpcomingPendingVacationRequest.personId
+          );
+        }
+        let personFullName = "";
+        if (foundPerson) {
+          personFullName = `${foundPerson.firstName} ${foundPerson.lastName}`;
+        }
+        if (personFullName === "" && userProfile && earliestUpcomingPendingVacationRequest) {
+          if (userProfile.id === earliestUpcomingPendingVacationRequest.personId) {
+            personFullName = `${userProfile.firstName} ${userProfile.lastName}`;
+          }
+        }
+        return personFullName;
+      };
 
       return (
         <Box>
-          {DateTime.fromJSDate(latestVacationRequest.startDate) > DateTime.now() ? (
+          {earliestUpcomingPendingVacationRequest &&
+          DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate) > DateTime.now() ? (
             <Typography>
-              {`${LocalizationUtils.getLocalizedVacationRequestType(
-                latestVacationRequest.type
-              )} - ${latestVacationRequest.message} - ${formatDate(
-                DateTime.fromJSDate(latestVacationRequest.startDate)
-              )} - ${formatDate(DateTime.fromJSDate(latestVacationRequest.endDate))} - `}
-              {vacationRequestStatus && (
+              {`Next upcoming vacation: ${LocalizationUtils.getLocalizedVacationRequestType(
+                earliestUpcomingPendingVacationRequest.type
+              )} - ${getVacationRequestCreatorFullName()} - ${
+                earliestUpcomingPendingVacationRequest.message
+              } - ${formatDate(
+                DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate)
+              )} - ${formatDate(
+                DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.endDate)
+              )} - `}
+              {earliestUpcomingPendingVacationRequestStatus && (
                 <span
                   style={{
-                    color: getVacationRequestStatusColor(vacationRequestStatus)
+                    color: getVacationRequestStatusColor(
+                      earliestUpcomingPendingVacationRequestStatus
+                    )
                   }}
                 >
-                  {LocalizationUtils.getLocalizedVacationRequestStatus(vacationRequestStatus)}
+                  {LocalizationUtils.getLocalizedVacationRequestStatus(
+                    earliestUpcomingPendingVacationRequestStatus
+                  )}
                 </span>
               )}
             </Typography>
@@ -193,17 +248,18 @@ const VacationsCard = () => {
     return <Skeleton />;
   };
 
-  const AmountOfPendingVacationRequests = () => {
+  const PendingVacationRequests = () => {
     if (!loading) {
       return (
         <>
           <Grid item xs={1}>
-            {amountOfPendingRequests > 0 ? <Pending /> : <Check />}
+            {pendingVacationRequestsCount > 0 ? <Pending /> : <Check />}
           </Grid>
           <Grid item xs={11}>
-            {amountOfPendingRequests > 0
-              ? `${strings.vacationsCard.youHave} ${amountOfPendingRequests} ${strings.vacationsCard.pendingRequests}`
+            {pendingVacationRequestsCount > 0
+              ? `${strings.vacationsCard.youHave} ${pendingVacationRequestsCount} ${strings.vacationsCard.pendingRequests}`
               : strings.vacationsCard.noPendingRequests}
+            {` ${strings.vacationsCard.ofWhich} ${upcomingPendingVacationRequestsCount} ${strings.vacationsCard.areUpcoming}`}
           </Grid>
         </>
       );
@@ -234,12 +290,12 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
-            <AmountOfPendingVacationRequests />
+            <PendingVacationRequests />
             <Grid item xs={1}>
               <LuggageIcon />
             </Grid>
             <Grid item xs={11}>
-              <UpcomingVacationRequest />
+              <EarliestUpcomingVacationRequest />
             </Grid>
           </Grid>
         </CardContent>
