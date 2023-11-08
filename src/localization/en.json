@@ -128,7 +128,10 @@
   },
   "vacationsCard": {
     "vacations": "Vacations",
-    "noUpcomingVacations": "No upcoming vacations"
+    "noUpcomingVacations": "No upcoming vacations",
+    "youHave": "You have",
+    "pendingRequests": "pending requests",
+    "noPendingRequests": "No pending requests"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"

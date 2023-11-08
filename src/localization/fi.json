@@ -128,7 +128,10 @@
   },
   "vacationsCard": {
     "vacations": "Lomat",
-    "noUpcomingVacations": "Ei tulevia lomia"
+    "noUpcomingVacations": "Ei tulevia lomia",
+    "youHave": "Sinulla on",
+    "pendingRequests": "odottavaa hakemuksia",
+    "noPendingRequests": "Ei odottavia hakemuksia"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"

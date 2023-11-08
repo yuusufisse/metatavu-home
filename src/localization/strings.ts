@@ -177,6 +177,9 @@ export interface Localized extends LocalizedStringsMethods {
   vacationsCard: {
     vacations: string;
     noUpcomingVacations: string;
+    youHave: string;
+    pendingRequests: string;
+    noPendingRequests: string;
   };
   /**
    * Translation related to person select dropdown
