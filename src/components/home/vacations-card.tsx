@@ -6,15 +6,15 @@ import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useState, useEffect, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
-import { VacationRequest, VacationRequestStatus } from "../../generated/client";
+import { VacationRequestStatus, VacationRequestStatuses } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
-import { personsAtom } from "../../atoms/person";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
 import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
 import UserRoleUtils from "../../utils/user-role-utils";
+import { Check, Pending } from "@mui/icons-material";
 
 /**
  * Vacations card component
@@ -23,7 +23,6 @@ const VacationsCard = () => {
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const persons = useAtomValue(personsAtom);
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
   const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
     []
@@ -32,6 +31,7 @@ const VacationsCard = () => {
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
+  const [amountOfPendingRequests, setAmountOfPendingRequests] = useState(0);
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -77,6 +77,7 @@ const VacationsCard = () => {
   const filterLatestVacationRequestStatuses = async () => {
     if (vacationRequests.length && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
+      let amountOfPendingVacationRequests = 0;
 
       vacationRequests.forEach((vacationRequest) => {
         const selectedVacationRequestStatuses: VacationRequestStatus[] = [];
@@ -84,6 +85,9 @@ const VacationsCard = () => {
         vacationRequestStatuses.forEach((vacationRequestStatus) => {
           if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
             selectedVacationRequestStatuses.push(vacationRequestStatus);
+            if (vacationRequestStatus.status === VacationRequestStatuses.PENDING) {
+              amountOfPendingVacationRequests += 1;
+            }
           }
         });
 
@@ -100,6 +104,7 @@ const VacationsCard = () => {
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
+      setAmountOfPendingRequests(amountOfPendingVacationRequests);
     }
   };
 
@@ -111,9 +116,13 @@ const VacationsCard = () => {
 
     try {
       setLoading(true);
-      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-        personId: userProfile?.id
-      });
+      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests(
+        adminMode
+          ? {}
+          : {
+              personId: userProfile?.id
+            }
+      );
       setVacationRequests(fetchedVacationRequests);
       setLoading(false);
     } catch (error) {
@@ -140,16 +149,10 @@ const VacationsCard = () => {
   }
 
   /**
-   * Render the latest vacation request
-   *
-   * @param vacationRequests vacation requests
-   * @param vacationRequestStatuses vacation request statuses
+   * Upcoming vacation request component
    */
-  const renderVacationRequest = (
-    vacationRequests: VacationRequest[] | undefined,
-    vacationRequestStatuses: VacationRequestStatus[] | undefined
-  ) => {
-    if (!vacationRequests?.length && !loading && persons.length) {
+  const UpcomingVacationRequest = () => {
+    if (!vacationRequests?.length && !loading) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     }
     if (vacationRequests?.length && vacationRequestStatuses?.length) {
@@ -190,6 +193,33 @@ const VacationsCard = () => {
     return <Skeleton />;
   };
 
+  const AmountOfPendingVacationRequests = () => {
+    if (!loading) {
+      return (
+        <>
+          <Grid item xs={1}>
+            {amountOfPendingRequests > 0 ? <Pending /> : <Check />}
+          </Grid>
+          <Grid item xs={11}>
+            {amountOfPendingRequests > 0
+              ? `${strings.vacationsCard.youHave} ${amountOfPendingRequests} ${strings.vacationsCard.pendingRequests}`
+              : strings.vacationsCard.noPendingRequests}
+          </Grid>
+        </>
+      );
+    }
+    return (
+      <>
+        <Grid item xs={1}>
+          <Pending />
+        </Grid>
+        <Grid item xs={11}>
+          <Skeleton />
+        </Grid>
+      </>
+    );
+  };
+
   return (
     <Link to={adminMode ? "/admin/vacations" : "/vacations"} style={{ textDecoration: "none" }}>
       <Card
@@ -204,11 +234,12 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
+            <AmountOfPendingVacationRequests />
             <Grid item xs={1}>
               <LuggageIcon />
             </Grid>
             <Grid item xs={11}>
-              {renderVacationRequest(vacationRequests, vacationRequestStatuses)}
+              <UpcomingVacationRequest />
             </Grid>
           </Grid>
         </CardContent>
