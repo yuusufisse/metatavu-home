@@ -38,8 +38,6 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
   const [pendingVacationRequestsCount, setPendingVacationRequestsCount] = useState(0);
-  const [upcomingPendingVacationRequestsCount, setUpcomingPendingVacationRequestsCount] =
-    useState(0);
   const persons = useAtomValue(personsAtom);
 
   useEffect(() => {
@@ -158,6 +156,30 @@ const VacationsCard = () => {
   }
 
   /**
+   * Get upcoming pending vacation requests
+   *
+   * @returns upcoming pending vacation requests
+   */
+  const getUpcomingPendingVacationRequests = () => {
+    const pendingVacationRequests = vacationRequestStatuses
+      .filter(
+        (vacationRequestStatus) => vacationRequestStatus.status === VacationRequestStatuses.PENDING
+      )
+      .map((pendingVacationRequestStatus) =>
+        vacationRequests.find(
+          (vacationRequest) => vacationRequest.id === pendingVacationRequestStatus.vacationRequestId
+        )
+      );
+
+    const upcomingPendingVacationRequests = pendingVacationRequests.filter(
+      (pendingVacationRequest) =>
+        pendingVacationRequest &&
+        DateTime.fromJSDate(pendingVacationRequest.startDate) > DateTime.now()
+    );
+    return upcomingPendingVacationRequests;
+  };
+
+  /**
    * Earliest upcoming vacation request component
    * If user is admin, get the earliest upcoming pending vacation request
    */
@@ -167,26 +189,9 @@ const VacationsCard = () => {
     }
     if (vacationRequests?.length && vacationRequestStatuses?.length && !loading) {
       let earliestUpcomingPendingVacationRequest: VacationRequest | undefined = undefined;
+      const upcomingPendingVacationRequests = getUpcomingPendingVacationRequests();
 
-      const pendingVacationRequests = vacationRequestStatuses
-        .filter(
-          (vacationRequestStatus) =>
-            vacationRequestStatus.status === VacationRequestStatuses.PENDING
-        )
-        .map((pendingVacationRequestStatus) =>
-          vacationRequests.find(
-            (vacationRequest) =>
-              vacationRequest.id === pendingVacationRequestStatus.vacationRequestId
-          )
-        );
-
-      const upcomingPendingVacationRequests = pendingVacationRequests.filter(
-        (pendingVacationRequest) =>
-          pendingVacationRequest &&
-          DateTime.fromJSDate(pendingVacationRequest.startDate) > DateTime.now()
-      );
-
-      if (upcomingPendingVacationRequests) {
+      if (upcomingPendingVacationRequests.length) {
         earliestUpcomingPendingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
           a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
         );
@@ -197,8 +202,6 @@ const VacationsCard = () => {
           earliestUpcomingPendingVacationRequest &&
           earliestUpcomingPendingVacationRequest.id === vacationRequestStatus.vacationRequestId
       )?.status;
-
-      setUpcomingPendingVacationRequestsCount(upcomingPendingVacationRequests.length);
 
       const getVacationRequestCreatorFullName = () => {
         let foundPerson: Person | undefined;
@@ -267,7 +270,9 @@ const VacationsCard = () => {
             {pendingVacationRequestsCount > 0
               ? `${strings.vacationsCard.youHave} ${pendingVacationRequestsCount} ${strings.vacationsCard.pendingRequests}`
               : strings.vacationsCard.noPendingRequests}
-            {` ${strings.vacationsCard.ofWhich} ${upcomingPendingVacationRequestsCount} ${strings.vacationsCard.areUpcoming}`}
+            {` ${strings.vacationsCard.ofWhich} ${getUpcomingPendingVacationRequests().length} ${
+              strings.vacationsCard.areUpcoming
+            }`}
           </Grid>
         </>
       );
