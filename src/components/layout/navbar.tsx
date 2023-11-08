@@ -13,9 +13,6 @@ import strings from "../../localization/strings";
 import { authAtom } from "../../atoms/auth";
 import { useAtomValue } from "jotai";
 import NavItems from "./navitems";
-import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
-import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * NavBar component
@@ -23,7 +20,6 @@ import UserRoleUtils from "../../utils/user-role-utils";
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const isAdmin = UserRoleUtils.isAdmin();
 
   /**
    * Handles opening user menu
@@ -54,11 +50,6 @@ const NavBar = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <NavItems />
-            {isAdmin && (
-              <Link to={"/admin"}>
-                <Button>Admin</Button>
-              </Link>
-            )}
             <LocalizationButtons />
             <Box>
               <Tooltip title={strings.header.openUserMenu}>
