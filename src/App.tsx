@@ -12,12 +12,23 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
+import UserRoleUtils from "./utils/user-role-utils";
+import strings from "./localization/strings";
+import AdminScreen from "./components/screens/admin-screen";
 
 /**
  * Application component
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
+  const admin = UserRoleUtils.isAdmin();
+
+  const AdminRouteErrorScreen = () => (
+    <ErrorScreen
+      message={strings.adminRouteAccess.notAdmin}
+      title={strings.adminRouteAccess.noAccess}
+    />
+  );
 
   const router = createBrowserRouter([
     {
@@ -37,6 +48,21 @@ const App = () => {
           path: "/timebank",
           element: <BalanceScreen />,
           errorElement: <ErrorScreen />
+        }
+      ]
+    },
+    {
+      path: "/admin",
+      element: <Layout />,
+      errorElement: <ErrorScreen />,
+      children: [
+        {
+          path: "/admin",
+          element: admin ? <AdminScreen /> : <AdminRouteErrorScreen />
+        },
+        {
+          path: "/admin/timebank",
+          element: admin ? <BalanceScreen /> : <AdminRouteErrorScreen />
         }
       ]
     }
