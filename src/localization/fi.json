@@ -48,7 +48,8 @@
     "latestEntry": "Viimeisin aikakirjaus",
     "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
     "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
-    "byrange": "Aikavälin mukaan"
+    "byrange": "Aikavälin mukaan",
+    "selectTimespan": "Valitse aikaväli"
   },
   "timeExpressions": {
     "monday": "Maanantai",
