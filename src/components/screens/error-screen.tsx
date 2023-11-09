@@ -11,8 +11,6 @@ interface Props {
 
 /**
  * Error page for displaying error status text and message
- *
- * @returns ReactElement
  */
 const ErrorScreen = ({ title, message }: Props) => {
   const error: unknown = useRouteError();
