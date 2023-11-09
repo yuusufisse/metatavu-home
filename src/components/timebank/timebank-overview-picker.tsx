@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { PersonTotalTime, Timespan } from "../../generated/client";
 import { Range } from "../../types";
 import strings from "../../localization/strings";
-import { Box, Button, MenuItem, Select } from "@mui/material";
+import { Box, MenuItem, Select } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { dailyEntriesAtom, timespanAtom } from "../../atoms/person";
 import { getWeekFromISO } from "../../utils/time-utils";
@@ -23,7 +23,7 @@ interface Props {
  * Overview Range Picker component
  */
 const OverviewRangePicker = (props: Props) => {
-  const { setSelectedTotalEntries, selectedTotalEntries, totalTime, today, loading } = props;
+  const { setSelectedTotalEntries, totalTime, today, loading } = props;
 
   const dailyEntries = useAtomValue(dailyEntriesAtom);
 
@@ -53,7 +53,7 @@ const OverviewRangePicker = (props: Props) => {
         end: ""
       });
     };
-  }, [totalTime]);
+  }, [totalTime, range]);
 
   useEffect(() => {
     getOverviewRange();
@@ -65,6 +65,7 @@ const OverviewRangePicker = (props: Props) => {
    */
   const initializeWeekRange = () => {
     if (timespan === Timespan.WEEK) {
+      //TODO: Handle MUI out-of-range value warnings here
       setWeekRange({
         start: String(totalTime[3].timePeriod),
         end: String(totalTime[0].timePeriod)
