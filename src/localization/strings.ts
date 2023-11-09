@@ -71,6 +71,7 @@ export interface Localized extends LocalizedStringsMethods {
     barChartDescription: string;
     pieChartDescription: string;
     byrange: string;
+    viewAllTimeEntries: string;
   };
   /**
    * General time-related expressions
