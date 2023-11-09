@@ -39,6 +39,8 @@ const OverviewRangePicker = (props: Props) => {
 
   useEffect(() => {
     initializeWeekRange();
+
+    //Remove initial values when component dismounts
     return () => {
       setWeekRange({
         start: "",
