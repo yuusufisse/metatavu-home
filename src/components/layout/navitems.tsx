@@ -14,7 +14,7 @@ import UserRoleUtils from "../../utils/user-role-utils";
 const NavItems = () => {
   const [currentPage, setCurrentPage] = useState("");
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const isAdmin = UserRoleUtils.isAdmin();
+  const admin = UserRoleUtils.isAdmin();
 
   /**
    * Handles opening navigation menu
@@ -102,7 +102,7 @@ const NavItems = () => {
         >
           <Button>{strings.header.home}</Button>
         </Link>
-        {isAdmin && (
+        {admin && (
           <Link to={"/admin"} style={{ margin: 2, display: "block" }}>
             <Button>Admin</Button>
           </Link>

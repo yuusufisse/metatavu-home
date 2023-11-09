@@ -21,7 +21,7 @@ import strings from "./localization/strings";
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
-  const userIsAdmin = UserRoleUtils.isAdmin();
+  const admin = UserRoleUtils.isAdmin();
 
   const AdminRouteErrorScreen = () => (
     <ErrorScreen
@@ -57,11 +57,11 @@ const App = () => {
       children: [
         {
           path: "/admin",
-          element: userIsAdmin ? <AdminScreen /> : <AdminRouteErrorScreen />
+          element: admin ? <AdminScreen /> : <AdminRouteErrorScreen />
         },
         {
           path: "/admin/vacations",
-          element: userIsAdmin ? <VacationRequestsScreen /> : <AdminRouteErrorScreen />
+          element: admin ? <VacationRequestsScreen /> : <AdminRouteErrorScreen />
         }
       ]
     }
