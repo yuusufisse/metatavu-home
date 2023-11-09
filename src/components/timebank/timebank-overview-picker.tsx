@@ -80,7 +80,6 @@ const OverviewRangePicker = (props: Props) => {
           value={weekRange.start}
           onChange={(e) => {
             setWeekRange({ ...weekRange, start: String(e.target.value) });
-            console.log(e.target.value);
           }}
         >
           {totalTime
@@ -112,7 +111,6 @@ const OverviewRangePicker = (props: Props) => {
           value={weekRange.end}
           onChange={(e) => {
             setWeekRange({ ...weekRange, end: String(e.target.value) });
-            console.log(e.target.value);
           }}
         >
           {totalTime
@@ -218,7 +216,6 @@ const OverviewRangePicker = (props: Props) => {
         views={viewRenderer()}
         onChange={(dateTime) => {
           setRange({ ...range, start: dateTime });
-          console.log(range.start?.toISODate());
         }}
         value={range.start}
         maxDate={range.end?.minus({ days: 1 })}
@@ -234,7 +231,6 @@ const OverviewRangePicker = (props: Props) => {
         minDate={range.start?.plus({ days: 1 })}
       />
       {renderEndWeekSelect()}
-      <Button onClick={() => console.log(totalTime, timespan)}>TEST</Button>
     </Box>
   );
 };
