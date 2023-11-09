@@ -129,6 +129,8 @@ export interface Localized extends LocalizedStringsMethods {
     childSickness: string;
     noMessage: string;
     noStatus: string;
+    person: string;
+    noPersonFullName: string;
   };
   /**
    * Translations related to vacation requests errors
@@ -161,6 +163,7 @@ export interface Localized extends LocalizedStringsMethods {
     edit: string;
     cancel: string;
     create: string;
+    manageRequests: string;
   };
   /**
    * Translations related to data grid
@@ -173,6 +176,32 @@ export interface Localized extends LocalizedStringsMethods {
    */
   vacationsCard: {
     vacations: string;
+    noUpcomingVacations: string;
+    youHave: string;
+    pendingRequests: string;
+    noPendingRequests: string;
+    ofWhich: string;
+    areUpcoming: string;
+  };
+  /**
+   * Translation related to person select dropdown
+   */
+  personSelectDropdown: {
+    label: string;
+  };
+  /**
+   * Translations related to toolbar update status button
+   */
+  toolbarUpdateStatusButton: {
+    approve: string;
+    decline: string;
+  };
+  /**
+   * Translation related to admin route access
+   */
+  adminRouteAccess: {
+    notAdmin: string;
+    noAccess: string;
   };
 }
 

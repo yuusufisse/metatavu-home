@@ -95,7 +95,9 @@
     "childSickness": "Child sickness",
     "surplusBalance": "Surplus balance",
     "noMessage": "No message",
-    "noStatus": "No status"
+    "noStatus": "No status",
+    "person": "Person",
+    "noPersonFullName": "No name"
   },
   "vacationRequestError": {
     "fetchRequestError": "Fetching vacation requests has failed",
@@ -118,12 +120,30 @@
     "editRequests": "Edit a vacation request",
     "edit": "Edit",
     "cancel": "Cancel",
-    "create": "Request vacation"
+    "create": "Request vacation",
+    "manageRequests": "Manage vacation requests"
   },
   "dataGrid": {
     "noRows": "No Rows"
   },
   "vacationsCard": {
-    "vacations": "Vacations"
+    "vacations": "Vacations",
+    "noUpcomingVacations": "No upcoming vacations",
+    "youHave": "You have",
+    "pendingRequests": "pending vacation requests",
+    "noPendingRequests": "No pending vacation requests",
+    "ofWhich": "of which",
+    "areUpcoming": "are upcoming"
+  },
+  "personSelectDropdown": {
+    "label": "Filter by Person"
+  },
+  "toolbarUpdateStatusButton": {
+    "approve": "Approve",
+    "decline": "Decline"
+  },
+  "adminRouteAccess": {
+    "notAdmin": "You don't have an admin role",
+    "noAccess": "Access denied"
   }
 }

@@ -95,7 +95,9 @@
     "childSickness": "Lapsen sairaus",
     "surplusBalance": "Ylimääräinen loma",
     "noMessage": "Ei viestiä",
-    "noStatus": "Ei tilaa"
+    "noStatus": "Ei tilaa",
+    "person": "Henkilö",
+    "noPersonFullName": "Ei nimeä"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
@@ -118,12 +120,30 @@
     "editRequests": "Muokkaa lomahakemusta",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
-    "create": "Hae lomaa"
+    "create": "Hae lomaa",
+    "manageRequests": "Hallinnoi lomahakemuksia"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"
   },
   "vacationsCard": {
-    "vacations": "Lomat"
+    "vacations": "Lomat",
+    "noUpcomingVacations": "Ei tulevia lomia",
+    "youHave": "Sinulla on",
+    "pendingRequests": "odottavaa lomahakemusta",
+    "noPendingRequests": "Ei odottavia lomahakemuksia",
+    "ofWhich": "joista",
+    "areUpcoming": "ovat tulevia"
+  },
+  "personSelectDropdown": {
+    "label": "Suodata henkilöllä"
+  },
+  "toolbarUpdateStatusButton": {
+    "approve": "Hyväksy",
+    "decline": "Hylkää"
+  },
+  "adminRouteAccess": {
+    "notAdmin": "Sinulla ei ole hallintaoikeuksia",
+    "noAccess": "Ei pääsyä"
   }
 }
