@@ -70,10 +70,13 @@ const BalanceCard = () => {
     <>
       <Card>
         <CardContent>
-          <h3 style={{ marginTop: 6 }}>{`${strings.timebank.balance} ${formattedBeforeDate}`}</h3>
+          <h3 style={{ marginTop: 6 }}>{`${strings.timebank.balance}`}</h3>
           <Grid container>
-            <Grid item xs={1}>
-              <ScheduleIcon />
+            <Grid item xs={12}>
+              {`${formattedBeforeDate}`}
+            </Grid>
+            <Grid style={{ marginBottom: 1 }} item xs={1}>
+              <ScheduleIcon style={{ marginTop: 1 }} />
             </Grid>
             <Grid item xs={11}>
               {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
