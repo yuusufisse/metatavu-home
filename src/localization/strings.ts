@@ -175,19 +175,6 @@ export interface Localized extends LocalizedStringsMethods {
     vacations: string;
   };
   /**
-   * Translations related to errors
-   */
-  error: {
-    oops: string;
-    generic: string;
-    totalTimeFetch: string;
-    totalTimeNotFound: string;
-    dailyEntriesFetch: string;
-    dailyEntriesNotFound: string;
-    fetchFailedGeneral: string;
-    fetchFailedNoEntriesGeneral: string;
-  };
-  /**
    * Translations related to sync dialog
    */
   syncDialog: {
