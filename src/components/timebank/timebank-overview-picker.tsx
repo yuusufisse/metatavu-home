@@ -6,7 +6,7 @@ import { Range } from "../../types";
 import strings from "../../localization/strings";
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import { useAtomValue } from "jotai";
-import { timespanAtom } from "../../atoms/person";
+import { dailyEntriesAtom, timespanAtom } from "../../atoms/person";
 import { getWeekFromISO } from "../../utils/time-utils";
 /**
  * Component properties
@@ -24,6 +24,12 @@ interface Props {
  */
 const OverviewRangePicker = (props: Props) => {
   const { setSelectedTotalEntries, selectedTotalEntries, totalTime, today, loading } = props;
+
+  const dailyEntries = useAtomValue(dailyEntriesAtom);
+
+  const earliestEntry = DateTime.fromJSDate(
+    dailyEntries[dailyEntries.length - 1].date
+  );
 
   const timespan = useAtomValue(timespanAtom);
 
@@ -218,7 +224,8 @@ const OverviewRangePicker = (props: Props) => {
           setRange({ ...range, start: dateTime });
         }}
         value={range.start}
-        maxDate={range.end?.minus({ days: 1 })}
+        minDate={earliestEntry}
+        maxDate={today.minus({ days : 1})}
       />
       {renderStartWeekSelect()}
       <DatePicker
@@ -228,7 +235,8 @@ const OverviewRangePicker = (props: Props) => {
         views={viewRenderer()}
         onChange={(dateTime) => setRange({ ...range, end: dateTime })}
         value={range.end}
-        minDate={range.start?.plus({ days: 1 })}
+        minDate={earliestEntry}
+        maxDate={today}
       />
       {renderEndWeekSelect()}
     </Box>
