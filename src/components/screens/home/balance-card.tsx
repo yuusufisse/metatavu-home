@@ -70,7 +70,7 @@ const BalanceCard = () => {
     <>
       <Card>
         <CardContent>
-          <h3 style={{ marginTop: 6 }}>{`${strings.timebank.balance}`}</h3>
+          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
           <Grid container>
             <Grid item xs={12}>
               {`${formattedBeforeDate}`}
