@@ -11,6 +11,7 @@ import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/pers
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
+import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * Component for displaying user's balance
@@ -23,6 +24,7 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const adminMode = UserRoleUtils.adminMode();
 
   /**
    * Initialize logged in person's time data.
@@ -63,17 +65,18 @@ const BalanceCard = () => {
    * @param personTotalTime PersonTotalTime
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
-    if (!personTotalTime && !loading && persons.length) {
+    if (adminMode) {
+      return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
+    } else if (!personTotalTime && !loading && persons.length) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
-    }
-    if (personTotalTime) {
+    } else if (personTotalTime) {
       return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
     }
     return <Skeleton />;
   };
 
   return (
-    <Link to={"/timebank"} style={{ textDecoration: "none" }}>
+    <Link to={adminMode ? "/admin/timebank" : "/timebank"} style={{ textDecoration: "none" }}>
       <Card
         sx={{
           "&:hover": {
