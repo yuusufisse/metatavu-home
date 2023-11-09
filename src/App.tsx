@@ -15,6 +15,7 @@ import ErrorScreen from "./components/screens/error-screen";
 import UserRoleUtils from "./utils/user-role-utils";
 import strings from "./localization/strings";
 import AdminScreen from "./components/screens/admin-screen";
+import TimebankViewAllScreen from "./components/screens/timebank-view-all-screen";
 
 /**
  * Application component
@@ -63,6 +64,10 @@ const App = () => {
         {
           path: "/admin/timebank",
           element: admin ? <BalanceScreen /> : <AdminRouteErrorScreen />
+        },
+        {
+          path: "/admin/timebank/viewall",
+          element: admin ? <TimebankViewAllScreen /> : <AdminRouteErrorScreen />
         }
       ]
     }
