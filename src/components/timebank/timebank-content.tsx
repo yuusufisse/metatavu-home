@@ -9,7 +9,9 @@ import {
   ListItemText,
   Typography,
   Card,
-  CircularProgress
+  CircularProgress,
+  Grid,
+  Button
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
 import { DailyEntry, Timespan } from "../../generated/client";
@@ -23,7 +25,13 @@ import DateRangePicker from "./timebank-daterange-picker";
 import { useState } from "react";
 import { theme } from "../../theme";
 import { useAtom, useAtomValue } from "jotai";
-import { personTotalTimeAtom, personDailyEntryAtom, dailyEntriesAtom, timespanAtom } from "../../atoms/person";
+import {
+  personTotalTimeAtom,
+  personDailyEntryAtom,
+  dailyEntriesAtom,
+  timespanAtom
+} from "../../atoms/person";
+import { Link } from "react-router-dom";
 
 /**
  * Component properties
@@ -247,7 +255,10 @@ const TimebankContent = (props: Props) => {
                   byRange.dailyEntries && selectedEntries
                     ? getHoursAndMinutes(
                         Number(
-                          selectedEntries.reduce((prev, next) => prev + next.nonBillableProjectTime, 0)
+                          selectedEntries.reduce(
+                            (prev, next) => prev + next.nonBillableProjectTime,
+                            0
+                          )
                         )
                       )
                     : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))
@@ -282,6 +293,18 @@ const TimebankContent = (props: Props) => {
             </ListItem>
           </List>
         </Box>
+      </Card>
+      <br />
+      <Card sx={{ p: 3 }}>
+        <Grid container>
+          <Grid item xs={12} textAlign={"center"}>
+            <Link to={"/admin/timebank/viewall"}>
+              <Button sx={{ width: "100%", height: "100%" }} variant="contained">
+                <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
+              </Button>
+            </Link>
+          </Grid>
+        </Grid>
       </Card>
     </>
   );
