@@ -85,7 +85,11 @@ const TimebankContent = (props: Props) => {
    */
   const renderOverViewChart = () => {
     if (loading) {
-      return <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />;
+      return <CircularProgress sx={{ 
+        margin: "auto", 
+        mt: "5%", 
+        mb: "5%" 
+      }} />;
     }
     if (!personTotalTime) return null;
 
@@ -171,7 +175,7 @@ const TimebankContent = (props: Props) => {
         <Card sx={{ border: "2px solid #bdbdbd;" }}>
           <Typography
             gutterBottom
-            fontWeight={"bold"}
+            fontWeight="bold"
             variant="h6"
             sx={{
               color: "white",
@@ -185,7 +189,11 @@ const TimebankContent = (props: Props) => {
           </Typography>
           <Container sx={{ p: 3 }}>
             <ListItemText
-              sx={{ textAlign: "center", scale: "150%", mb: 3 }}
+              sx={{ 
+                textAlign: "center", 
+                scale: "150%", 
+                mb: 3 
+              }}
               primary={strings.timebank.timeperiod}
               secondary={formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
             />
@@ -215,7 +223,11 @@ const TimebankContent = (props: Props) => {
                 </Select>
               </FormControl>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: "row", 
+              justifyItems: "center" 
+              }}>
               {renderOverViewChart()}
             </Box>
           </Container>
@@ -226,7 +238,7 @@ const TimebankContent = (props: Props) => {
         <Card sx={{ border: "2px solid #bdbdbd;", mb: 3 }}>
           <Typography
             gutterBottom
-            fontWeight={"bold"}
+            fontWeight="bold"
             variant="h6"
             sx={{
               color: "white",
@@ -240,7 +252,11 @@ const TimebankContent = (props: Props) => {
           </Typography>
           <Container sx={{ p: 3 }}>
             <ListItemText
-              sx={{ textAlign: "center", scale: "150%", p: 3 }}
+              sx={{ 
+                textAlign: "center", 
+                scale: "150%", 
+                p: 3 
+              }}
               primary={strings.timebank.logged}
               secondary={
                 byRange.dailyEntries
@@ -250,7 +266,11 @@ const TimebankContent = (props: Props) => {
                   : getHoursAndMinutes(Number(personDailyEntry?.logged))
               }
             />
-            <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: "row", 
+              justifyContent: "center" 
+              }}>
               {renderDatePickers()}
               <FormControlLabel
                 sx={{ display: "inline" }}
@@ -265,7 +285,11 @@ const TimebankContent = (props: Props) => {
                 }
               />
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "row", justifyItems: "center" }}>
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: "row", 
+              justifyItems: "center" 
+              }}>
               {renderDailyEntryOrRangeChart()}
               <List dense sx={{ marginLeft: "5%" }}>
                 <ListItem>
