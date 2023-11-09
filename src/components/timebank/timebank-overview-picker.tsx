@@ -43,6 +43,17 @@ const OverviewRangePicker = (props: Props) => {
     end: ""
   });
 
+  const startWeek = getWeekFromISO(
+    weekRange.start?.split(",")[0],
+    weekRange.start?.split(",")[2],
+    range.start.weekday
+  );
+  const endWeek = getWeekFromISO(
+    weekRange.end?.split(",")[0],
+    weekRange.end?.split(",")[2],
+    range.end.weekday
+  );
+
   useEffect(() => {
     initializeWeekRange();
 
@@ -93,7 +104,8 @@ const OverviewRangePicker = (props: Props) => {
             .filter(
               (entry) =>
                 entry.timePeriod?.split(",")[0] === String(range.start?.year) &&
-                entry.timePeriod?.split(",")[2] !== "0"
+                entry.timePeriod?.split(",")[2] !== "0" &&
+                getWeekFromISO(entry.timePeriod?.split(",")[0], entry.timePeriod?.split(",")[2], range.start.weekday) < endWeek
             ) //Filters the weeks outside the selected year and weeks starting with 0
             .map((entry) => (
               <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
@@ -124,7 +136,8 @@ const OverviewRangePicker = (props: Props) => {
             .filter(
               (entry) =>
                 entry.timePeriod?.split(",")[0] === String(range.end?.year) &&
-                entry.timePeriod?.split(",")[2] !== "0"
+                entry.timePeriod?.split(",")[2] !== "0" &&
+                getWeekFromISO(entry.timePeriod?.split(",")[0], entry.timePeriod?.split(",")[2], range.start.weekday) > startWeek
             )
             .map((entry) => (
               <MenuItem value={entry.timePeriod}>{`${entry.timePeriod?.split(",")[2]}`}</MenuItem>
@@ -144,16 +157,6 @@ const OverviewRangePicker = (props: Props) => {
 
       switch (timespan) {
         case Timespan.WEEK: {
-          const startWeek = getWeekFromISO(
-            weekRange.start?.split(",")[0],
-            weekRange.start?.split(",")[2],
-            range.start.weekday
-          );
-          const endWeek = getWeekFromISO(
-            weekRange.end?.split(",")[0],
-            weekRange.end?.split(",")[2],
-            range.end.weekday
-          );
 
           selectedRange = endWeek.diff(startWeek, "weeks").toObject();
 
