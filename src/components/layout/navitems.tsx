@@ -34,6 +34,7 @@ const NavItems = () => {
   const handleNavItemClick = (event: MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLLinkElement;
     setCurrentPage(target.innerText);
+    handleCloseNavMenu();
   };
 
   return (
