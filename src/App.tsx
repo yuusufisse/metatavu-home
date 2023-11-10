@@ -3,7 +3,7 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
-import BalanceScreen from "./components/screens/timebank-screen";
+import TimebankScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/language";
 import HomeScreen from "./components/screens/home-screen";
@@ -15,7 +15,7 @@ import ErrorScreen from "./components/screens/error-screen";
 import UserRoleUtils from "./utils/user-role-utils";
 import strings from "./localization/strings";
 import AdminScreen from "./components/screens/admin-screen";
-import TimebankViewAllScreen from "./components/screens/timebank-view-all-screen";
+import TimebankScreenViewAll from "./components/screens/timebank-screen-view-all";
 
 /**
  * Application component
@@ -47,7 +47,7 @@ const App = () => {
         },
         {
           path: "/timebank",
-          element: <BalanceScreen />,
+          element: <TimebankScreen />,
           errorElement: <ErrorScreen />
         }
       ]
@@ -63,11 +63,11 @@ const App = () => {
         },
         {
           path: "/admin/timebank",
-          element: admin ? <BalanceScreen /> : <AdminRouteErrorScreen />
+          element: admin ? <TimebankScreen /> : <AdminRouteErrorScreen />
         },
         {
           path: "/admin/timebank/viewall",
-          element: admin ? <TimebankViewAllScreen /> : <AdminRouteErrorScreen />
+          element: admin ? <TimebankScreenViewAll /> : <AdminRouteErrorScreen />
         }
       ]
     }
