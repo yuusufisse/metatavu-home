@@ -4,15 +4,15 @@ import { Card, CardContent, Grid, Typography } from "@mui/material";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
 
-const TimebankViewAllScreen = () => {
+const TimebankScreenViewAll = () => {
   const persons = useAtomValue(personsAtom);
   const language = useAtomValue(languageAtom);
 
   return (
     <Grid container spacing={1} textAlign={"center"}>
-      {persons.map((person) => {
+      {persons.map((person, idx) => {
         return (
-          <Grid item xl={4}>
+          <Grid item xl={4} key={`person-totaltime-card-${idx}`}>
             <Card>
               <CardContent>
                 <Typography variant="body1">{`${person.firstName} ${person.lastName}`}</Typography>
@@ -31,4 +31,4 @@ const TimebankViewAllScreen = () => {
   );
 };
 
-export default TimebankViewAllScreen;
+export default TimebankScreenViewAll;
