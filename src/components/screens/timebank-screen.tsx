@@ -43,7 +43,15 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     getPersonDailyEntries();
-  }, [persons]);
+
+    // Find the selected person based on their ID
+    const selectedPerson = persons.find((person) => person.id === selectedEmployee);
+
+    // Check if the selected person is found before calling the function
+    if (selectedPerson) {
+      getPersonDailyEntriesForPieChart(selectedPerson);
+    }
+  }, [persons, selectedEmployee]);
 
   // Save selectedEmployee to localStorage
   useEffect(() => {
@@ -100,15 +108,36 @@ const TimebankScreen = () => {
   };
 
   /**
+   * Gets daily entries for the selected employee for the pie chart.
+   */
+  const getPersonDailyEntriesForPieChart = async (selectedPerson: Person) => {
+    if (selectedPerson) {
+      try {
+        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+          personId: selectedPerson.id
+        });
+        setDailyEntries(fetchedDailyEntries);
+        setPersonDailyEntry(
+          fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
+        );
+      } catch (error) {
+        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
+      }
+    }
+  };
+
+  /**
    * Changes the displayed daily entry in the pie chart via the Date Picker.
    *
    * @param selectedDate selected date from DatePicker
    */
   const handleDailyEntryChange = (selectedDate: DateTime) => {
-    if (selectedDate) {
+    if (selectedDate && selectedEmployee !== null && typeof selectedEmployee === "object") {
       setPersonDailyEntry(
         dailyEntries.find(
-          (item) => DateTime.fromJSDate(item.date).toISODate() === selectedDate?.toISODate()
+          (item) =>
+            item.person === selectedEmployee &&
+            DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
         )
       );
     }
