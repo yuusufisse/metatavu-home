@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Person, Timespan } from "../../generated/client";
-import { CircularProgress, Card } from "@mui/material";
+import { CircularProgress, Card, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { userProfileAtom } from "../../atoms/auth";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
@@ -30,20 +30,33 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
+  const [selectedEmployee, setSelectedEmployee] = useState<number | null>(
+    userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
+  );
 
   useEffect(() => {
-    getPersonTotalTime();
-  }, [persons, timespan]);
+    // Ensure that there is a selected employee before fetching data
+    if (selectedEmployee !== null) {
+      getPersonTotalTime(selectedEmployee);
+    }
+  }, [selectedEmployee, timespan]);
 
   useEffect(() => {
     getPersonDailyEntries();
   }, [persons]);
 
+  // Save selectedEmployee to localStorage
+  useEffect(() => {
+    if (selectedEmployee !== null) {
+      localStorage.setItem("selectedEmployee", selectedEmployee.toString());
+    }
+  }, [selectedEmployee]);
+
   /**
    * Gets person's total time data.
    */
-  const getPersonTotalTime = async () => {
-    if (persons.length) {
+  const getPersonTotalTime = async (selectedPersonId: number) => {
+    if (selectedPersonId) {
       setLoading(true);
       const loggedInPerson = persons.find(
         (person: Person) => person.keycloakId === userProfile?.id
@@ -51,7 +64,7 @@ const TimebankScreen = () => {
       if (loggedInPerson || config.person.id) {
         try {
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id,
+            personId: selectedPersonId,
             timespan: timespan || Timespan.ALL_TIME,
             before: new Date()
           });
@@ -68,7 +81,7 @@ const TimebankScreen = () => {
    * Gets the logged in person's daily entries.
    */
   const getPersonDailyEntries = async () => {
-    if (!persons.length) return null;
+    if (!persons.length || !userProfile) return null;
 
     const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
     if (loggedInPerson || config.person.id) {
@@ -101,15 +114,38 @@ const TimebankScreen = () => {
     }
   };
 
-  if (!personDailyEntry || !dailyEntries.length || !personTotalTime) {
-    return (
-      <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
-        {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
+  return (
+    <div>
+      <Card sx={{ p: "1%", display: "flex", justifyContent: "center" }}>
+        <FormControl fullWidth>
+          <InputLabel id="employee-select-label">Select Employee</InputLabel>
+          <Select
+            labelId="employee-select-label"
+            id="employee-select"
+            value={selectedEmployee}
+            onChange={(event) => setSelectedEmployee(Number(event.target.value))}
+            label="Select Employee"
+          >
+            {persons.map((person) => (
+              <MenuItem key={person.id} value={person.id}>
+                {`${person.firstName} ${person.lastName}`}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Card>
-    );
-  }
 
-  return <TimebankContent handleDailyEntryChange={handleDailyEntryChange} loading={loading} />;
+      <div style={{ marginTop: "16px" }} />
+
+      {!personDailyEntry || !dailyEntries.length || !personTotalTime ? (
+        <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
+          {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
+        </Card>
+      ) : (
+        <TimebankContent handleDailyEntryChange={handleDailyEntryChange} loading={loading} />
+      )}
+    </div>
+  );
 };
 
 export default TimebankScreen;
