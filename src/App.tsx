@@ -56,20 +56,31 @@ const App = () => {
       path: "/admin",
       element: <Layout />,
       errorElement: <ErrorScreen />,
-      children: [
-        {
-          path: "/admin",
-          element: admin ? <AdminScreen /> : <AdminRouteErrorScreen />
-        },
-        {
-          path: "/admin/timebank",
-          element: admin ? <TimebankScreen /> : <AdminRouteErrorScreen />
-        },
-        {
-          path: "/admin/timebank/viewall",
-          element: admin ? <TimebankScreenViewAll /> : <AdminRouteErrorScreen />
-        }
-      ]
+      children: admin
+        ? [
+            {
+              path: "/admin",
+              element: <AdminScreen />
+            },
+            {
+              path: "/admin/timebank",
+              element: <TimebankScreen />
+            },
+            {
+              path: "/admin/timebank/viewall",
+              element: <TimebankScreenViewAll />
+            }
+          ]
+        : [
+            {
+              path: "/admin",
+              element: <AdminRouteErrorScreen />
+            },
+            {
+              path: "/admin/*",
+              element: <AdminRouteErrorScreen />
+            }
+          ]
     }
   ]);
   return (
