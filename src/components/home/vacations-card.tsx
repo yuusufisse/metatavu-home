@@ -120,7 +120,6 @@ const VacationsCard = () => {
 
     if (!keepData) {
       try {
-        console.log("Loading from card");
         setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
