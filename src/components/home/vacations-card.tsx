@@ -203,19 +203,19 @@ const VacationsCard = () => {
     }
 
     if (vacationRequests?.length && vacationRequestStatuses?.length && !loading) {
-      let earliestUpcomingPendingVacationRequest: VacationRequest | undefined = undefined;
+      let earliestUpcomingVacationRequest: VacationRequest | undefined = undefined;
       const upcomingPendingVacationRequests = adminMode
         ? getUpcomingPendingVacationRequests()
         : getUpcomingVacationRequests();
 
       if (upcomingPendingVacationRequests.length) {
-        earliestUpcomingPendingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
+        earliestUpcomingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
           a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
         );
         earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
           (vacationRequestStatus) =>
-            earliestUpcomingPendingVacationRequest &&
-            earliestUpcomingPendingVacationRequest.id === vacationRequestStatus.vacationRequestId
+            earliestUpcomingVacationRequest &&
+            earliestUpcomingVacationRequest.id === vacationRequestStatus.vacationRequestId
         )?.status;
       }
 
@@ -239,8 +239,8 @@ const VacationsCard = () => {
 
       return (
         <Box>
-          {earliestUpcomingPendingVacationRequest &&
-          DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate) > DateTime.now() ? (
+          {earliestUpcomingVacationRequest &&
+          DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate) > DateTime.now() ? (
             <>
               <Typography fontWeight={"bold"}>
                 {`${strings.vacationsCard.nextUpcomingVacation}:`}
@@ -251,14 +251,14 @@ const VacationsCard = () => {
                 </VacationInfoItem>
                 <VacationInfoItem>
                   {`${LocalizationUtils.getLocalizedVacationRequestType(
-                    earliestUpcomingPendingVacationRequest.type
+                    earliestUpcomingVacationRequest.type
                   )}`}
                 </VacationInfoItem>
                 <VacationInfoItem>{strings.vacationRequest.applicant}:</VacationInfoItem>
                 <VacationInfoItem>
                   <Typography>
                     {`${getVacationRequestPersonFullName(
-                      earliestUpcomingPendingVacationRequest,
+                      earliestUpcomingVacationRequest,
                       persons,
                       userProfile
                     )}`}
@@ -268,9 +268,9 @@ const VacationsCard = () => {
                 <VacationInfoItem>
                   <Typography>
                     {`${formatDate(
-                      DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate)
+                      DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate)
                     )} - ${formatDate(
-                      DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.endDate)
+                      DateTime.fromJSDate(earliestUpcomingVacationRequest.endDate)
                     )}`}
                   </Typography>
                 </VacationInfoItem>
