@@ -1,4 +1,4 @@
-import { Card } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
@@ -15,6 +15,9 @@ import { VacationData } from "../../types";
 import strings from "../../localization/strings";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
 import UserRoleUtils from "../../utils/user-role-utils";
+import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
+import { KeyboardReturn } from "@mui/icons-material";
 
 /**
  * Vacation requests screen
@@ -30,6 +33,8 @@ const VacationRequestsScreen = () => {
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
+  const location = useLocation();
+  const keepData = location.state?.keepData;
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -39,7 +44,7 @@ const VacationRequestsScreen = () => {
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests.length) {
+    if (vacationRequests.length && !keepData) {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
@@ -73,7 +78,7 @@ const VacationRequestsScreen = () => {
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests.length && vacationRequestStatuses.length) {
+    if (vacationRequests.length && vacationRequestStatuses.length && !keepData) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -107,19 +112,23 @@ const VacationRequestsScreen = () => {
   const fetchVacationsRequests = async () => {
     if (!userProfile?.id) return;
 
-    try {
-      setLoading(true);
-      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests(
-        adminMode
-          ? {}
-          : {
-              personId: userProfile?.id
-            }
-      );
-      setVacationRequests(fetchedVacationRequests);
-      setLoading(false);
-    } catch (error) {
-      setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
+    if (!keepData) {
+      try {
+        console.log("Loading from screen");
+        setLoading(true);
+        let fetchedVacationRequests: VacationRequest[] = [];
+        if (adminMode) {
+          fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
+        } else {
+          fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
+            personId: userProfile?.id
+          });
+        }
+        setVacationRequests(fetchedVacationRequests);
+        setLoading(false);
+      } catch (error) {
+        setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
+      }
     }
   };
 
@@ -339,15 +348,29 @@ const VacationRequestsScreen = () => {
   };
 
   return (
-    <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100" }}>
-      <VacationRequestsTable
-        deleteVacationRequests={deleteVacationRequests}
-        createVacationRequest={createVacationRequest}
-        updateVacationRequest={updateVacationRequest}
-        updateVacationRequestStatuses={updateVacationRequestStatuses}
-        loading={loading}
-      />
-    </Card>
+    <>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+        <VacationRequestsTable
+          deleteVacationRequests={deleteVacationRequests}
+          createVacationRequest={createVacationRequest}
+          updateVacationRequest={updateVacationRequest}
+          updateVacationRequestStatuses={updateVacationRequestStatuses}
+          loading={loading}
+        />
+      </Card>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
+        <Link
+          to={adminMode ? "/admin" : "/"}
+          state={{ keepData: true }}
+          style={{ textDecoration: "none" }}
+        >
+          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+            <KeyboardReturn sx={{ marginRight: "10px" }} />{" "}
+            <Typography>{strings.vacationsScreen.back}</Typography>
+          </Button>
+        </Link>
+      </Card>
+    </>
   );
 };
 
