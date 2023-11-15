@@ -107,7 +107,8 @@
     "deleteRequestError": "Lomahakemuksen poistaminen epäonnistui",
     "deleteStatusError": "Lomahakemustilojen poistaminen epäonnistui",
     "updateRequestError": "Lomahakemuksen päivittäminen epäonnistui",
-    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui"
+    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui",
+    "noVacationRequestsFound": "Lomahakemuksia ei löydetty"
   },
   "form": {
     "submit": "Lähetä",
@@ -129,11 +130,10 @@
   "vacationsCard": {
     "vacations": "Lomat",
     "noUpcomingVacations": "Ei tulevia lomia",
-    "youHave": "Sinulla on",
-    "pendingRequests": "odottavaa lomahakemusta",
-    "noPendingRequests": "Ei odottavia lomahakemuksia",
-    "ofWhich": "joista",
-    "areUpcoming": "ovat tulevia"
+    "noUpcomingPendingVacations": "Ei tulevia odottavia lomahakemuksia",
+    "upComingVacations": "Sinulla on {0} tulevaa lomaa",
+    "upComingPendingVacations": "Sinulla on {0} tulevaa odottavaa lomaa",
+    "nextUpcomingVacation": "Seuraavaksi tuleva loma"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"

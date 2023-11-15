@@ -107,7 +107,8 @@
     "deleteRequestError": "Deleting vacation requests has failed",
     "deleteStatusError": "Deleting vacation request statuses has failed",
     "updateRequestError": "Updating vacation request has failed",
-    "updateStatusError": "Updating vacation request status has failed"
+    "updateStatusError": "Updating vacation request status has failed",
+    "noVacationRequestsFound": "No vacation requests found"
   },
   "form": {
     "submit": "Submit",
@@ -129,11 +130,10 @@
   "vacationsCard": {
     "vacations": "Vacations",
     "noUpcomingVacations": "No upcoming vacations",
-    "youHave": "You have",
-    "pendingRequests": "pending vacation requests",
-    "noPendingRequests": "No pending vacation requests",
-    "ofWhich": "of which",
-    "areUpcoming": "are upcoming"
+    "noUpcomingPendingVacations": "No upcoming pending vacations",
+    "upComingVacations": "You have {0} upcoming vacations",
+    "upComingPendingVacations": "You have {0} upcoming pending vacations",
+    "nextUpcomingVacation": "Next upcoming vacation"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"

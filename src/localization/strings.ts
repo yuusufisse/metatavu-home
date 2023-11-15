@@ -144,6 +144,7 @@ export interface Localized extends LocalizedStringsMethods {
     deleteStatusError: string;
     updateRequestError: string;
     updateStatusError: string;
+    noVacationRequestsFound: string;
   };
   /**
    * Translations related to form
@@ -177,11 +178,10 @@ export interface Localized extends LocalizedStringsMethods {
   vacationsCard: {
     vacations: string;
     noUpcomingVacations: string;
-    youHave: string;
-    pendingRequests: string;
-    noPendingRequests: string;
-    ofWhich: string;
-    areUpcoming: string;
+    noUpcomingPendingVacations: string;
+    upComingVacations: string;
+    upComingPendingVacations: string;
+    nextUpcomingVacation: string;
   };
   /**
    * Translation related to person select dropdown
