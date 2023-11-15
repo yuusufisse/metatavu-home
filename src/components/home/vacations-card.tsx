@@ -1,6 +1,6 @@
 import { Grid, Card, CardContent, Skeleton, Typography, Box } from "@mui/material";
 import strings from "../../localization/strings";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useState, useEffect, useMemo } from "react";
@@ -30,14 +30,17 @@ const VacationsCard = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
+  const initialVacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
   const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
-    []
+    initialVacationRequestStatuses
   );
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
   const persons = useAtomValue(personsAtom);
+  const location = useLocation();
+  const keepData = location.state?.keepData;
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -47,7 +50,7 @@ const VacationsCard = () => {
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests.length) {
+    if (vacationRequests.length && !keepData) {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
@@ -81,7 +84,7 @@ const VacationsCard = () => {
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests.length && vacationRequestStatuses.length) {
+    if (vacationRequests.length && vacationRequestStatuses.length && !keepData) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -113,21 +116,25 @@ const VacationsCard = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
-    if (!userProfile?.id) return;
+    if (!userProfile?.id && vacationRequests.length) return;
 
-    try {
-      setLoading(true);
-      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests(
-        adminMode
-          ? {}
-          : {
-              personId: userProfile?.id
-            }
-      );
-      setVacationRequests(fetchedVacationRequests);
-      setLoading(false);
-    } catch (error) {
-      setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
+    if (!keepData) {
+      try {
+        console.log("Loading from card");
+        setLoading(true);
+        let fetchedVacationRequests: VacationRequest[] = [];
+        if (adminMode) {
+          fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
+        } else {
+          fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
+            personId: userProfile?.id
+          });
+        }
+        setVacationRequests(fetchedVacationRequests);
+        setLoading(false);
+      } catch (error) {
+        setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
+      }
     }
   };
 
@@ -189,9 +196,12 @@ const VacationsCard = () => {
    * Render the earliest upcoming pending vacation request if in admin mode
    */
   const renderEarliestUpcomingVacationRequest = () => {
+    let earliestUpcomingVacationRequestStatus: VacationRequestStatuses | undefined;
+
     if (!vacationRequests?.length && !loading) {
       return <Typography>{strings.vacationRequestError.noVacationRequestsFound}</Typography>;
     }
+
     if (vacationRequests?.length && vacationRequestStatuses?.length && !loading) {
       let earliestUpcomingPendingVacationRequest: VacationRequest | undefined = undefined;
       const upcomingPendingVacationRequests = adminMode
@@ -202,13 +212,12 @@ const VacationsCard = () => {
         earliestUpcomingPendingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
           a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
         );
+        earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
+          (vacationRequestStatus) =>
+            earliestUpcomingPendingVacationRequest &&
+            earliestUpcomingPendingVacationRequest.id === vacationRequestStatus.vacationRequestId
+        )?.status;
       }
-
-      const earliestUpcomingPendingVacationRequestStatus = vacationRequestStatuses.find(
-        (vacationRequestStatus) =>
-          earliestUpcomingPendingVacationRequest &&
-          earliestUpcomingPendingVacationRequest.id === vacationRequestStatus.vacationRequestId
-      )?.status;
 
       const getVacationRequestCreatorFullName = () => {
         let foundPerson: Person | undefined;
@@ -247,16 +256,14 @@ const VacationsCard = () => {
               )} - ${formatDate(
                 DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.endDate)
               )} - `}
-              {earliestUpcomingPendingVacationRequestStatus && (
+              {earliestUpcomingVacationRequestStatus && (
                 <span
                   style={{
-                    color: getVacationRequestStatusColor(
-                      earliestUpcomingPendingVacationRequestStatus
-                    )
+                    color: getVacationRequestStatusColor(earliestUpcomingVacationRequestStatus)
                   }}
                 >
                   {LocalizationUtils.getLocalizedVacationRequestStatus(
-                    earliestUpcomingPendingVacationRequestStatus
+                    earliestUpcomingVacationRequestStatus
                   )}
                 </span>
               )}
@@ -318,7 +325,11 @@ const VacationsCard = () => {
   };
 
   return (
-    <Link to={adminMode ? "/admin/vacations" : "/vacations"} style={{ textDecoration: "none" }}>
+    <Link
+      to={adminMode ? "/admin/vacations" : "/vacations"}
+      state={{ keepData: true }}
+      style={{ textDecoration: "none" }}
+    >
       <Card
         sx={{
           "&:hover": {
