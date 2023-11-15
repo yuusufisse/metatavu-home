@@ -131,6 +131,8 @@ export interface Localized extends LocalizedStringsMethods {
     noStatus: string;
     person: string;
     noPersonFullName: string;
+    applicant: string;
+    timeOfVacation: string;
   };
   /**
    * Translations related to vacation requests errors

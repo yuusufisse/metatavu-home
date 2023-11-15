@@ -97,7 +97,9 @@
     "noMessage": "No message",
     "noStatus": "No status",
     "person": "Person",
-    "noPersonFullName": "No name"
+    "noPersonFullName": "No name",
+    "applicant": "Applicant",
+    "timeOfVacation": "Time of Vacation"
   },
   "vacationRequestError": {
     "fetchRequestError": "Fetching vacation requests has failed",

@@ -97,7 +97,9 @@
     "noMessage": "Ei viestiä",
     "noStatus": "Ei tilaa",
     "person": "Henkilö",
-    "noPersonFullName": "Ei nimeä"
+    "noPersonFullName": "Ei nimeä",
+    "applicant": "Hakija",
+    "timeOfVacation": "Ajankohta"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
