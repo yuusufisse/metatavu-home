@@ -145,5 +145,8 @@
   "adminRouteAccess": {
     "notAdmin": "You don't have an admin role",
     "noAccess": "Access denied"
+  },
+  "vacationsScreen": {
+    "back": "Back"
   }
 }

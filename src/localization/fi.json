@@ -145,5 +145,8 @@
   "adminRouteAccess": {
     "notAdmin": "Sinulla ei ole hallintaoikeuksia",
     "noAccess": "Ei pääsyä"
+  },
+  "vacationsScreen": {
+    "back": "Takaisin"
   }
 }

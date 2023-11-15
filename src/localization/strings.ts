@@ -203,6 +203,12 @@ export interface Localized extends LocalizedStringsMethods {
     notAdmin: string;
     noAccess: string;
   };
+  /**
+   * Translation related to vacations screen
+   */
+  vacationsScreen: {
+    back: string;
+  };
 }
 
 /**
