@@ -151,6 +151,7 @@ const VacationsCard = () => {
    */
   function formatDate(date: DateTime, dateWithTime?: boolean) {
     if (!date) return "";
+
     return date
       .setLocale(language)
       .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
@@ -177,6 +178,7 @@ const VacationsCard = () => {
         pendingVacationRequest &&
         DateTime.fromJSDate(pendingVacationRequest.startDate) > DateTime.now()
     );
+
     return upcomingPendingVacationRequests;
   };
 
@@ -188,6 +190,7 @@ const VacationsCard = () => {
       (vacationRequest) =>
         vacationRequest && DateTime.fromJSDate(vacationRequest.startDate) > DateTime.now()
     );
+
     return upcomingVacationRequests;
   };
 
@@ -300,6 +303,7 @@ const VacationsCard = () => {
         </Box>
       );
     }
+
     return <Skeleton />;
   };
 
@@ -311,6 +315,7 @@ const VacationsCard = () => {
       const upcomingVacationRequestsCount = adminMode
         ? getUpcomingPendingVacationRequests().length
         : getUpcomingVacationRequests().length;
+
       return (
         <>
           <Grid item xs={1}>
@@ -338,6 +343,7 @@ const VacationsCard = () => {
         </>
       );
     }
+
     return (
       <>
         <Grid item xs={1}>
