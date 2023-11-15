@@ -6,6 +6,7 @@ import strings from "../../localization/strings";
 import { useAtomValue } from "jotai";
 import { personsAtom } from "../../atoms/person";
 import { userProfileAtom } from "../../atoms/auth";
+import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
 
 /**
  * Vacation requests table rows component
@@ -13,6 +14,7 @@ import { userProfileAtom } from "../../atoms/auth";
 const VacationRequestsTableRows = () => {
   const persons = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
+
   /**
    * Create a single vacation request data grid row
    *
@@ -63,17 +65,11 @@ const VacationRequestsTableRows = () => {
         }
 
         if (vacationRequest.personId) {
-          const foundPerson = persons.find(
-            (person) => person.keycloakId === vacationRequest.personId
+          row.personFullName = getVacationRequestPersonFullName(
+            vacationRequest,
+            persons,
+            userProfile
           );
-
-          if (foundPerson) {
-            row.personFullName = `${foundPerson.firstName} ${foundPerson.lastName}`;
-          } else {
-            if (userProfile && userProfile.id === vacationRequest.personId) {
-              row.personFullName = `${userProfile.firstName} ${userProfile.lastName}`;
-            }
-          }
         }
 
         tempRows.push(row);
