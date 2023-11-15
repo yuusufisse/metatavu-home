@@ -3,11 +3,10 @@ import strings from "../../localization/strings";
 import { Link, useLocation } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, ReactNode } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import {
-  Person,
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses
@@ -21,6 +20,7 @@ import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils
 import UserRoleUtils from "../../utils/user-role-utils";
 import { Check, Pending } from "@mui/icons-material";
 import { personsAtom } from "../../atoms/person";
+import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
 
 /**
  * Vacations card component
@@ -219,55 +219,81 @@ const VacationsCard = () => {
         )?.status;
       }
 
-      const getVacationRequestCreatorFullName = () => {
-        let foundPerson: Person | undefined;
-        if (earliestUpcomingPendingVacationRequest) {
-          foundPerson = persons.find(
-            (person) => person.keycloakId === earliestUpcomingPendingVacationRequest?.personId
-          );
-        }
-        let personFullName = "";
-        if (foundPerson) {
-          personFullName = `${foundPerson.firstName} ${foundPerson.lastName}`;
-        } else {
-          earliestUpcomingPendingVacationRequest?.personId;
-        }
-        if (personFullName === "" && userProfile && earliestUpcomingPendingVacationRequest) {
-          if (userProfile.id === earliestUpcomingPendingVacationRequest.personId) {
-            personFullName = `${userProfile.firstName} ${userProfile.lastName}`;
-          }
-        }
-        return personFullName;
-      };
+      /**
+       * Vacation info item component component properties
+       */
+      interface VacationInfoItemProps {
+        children: ReactNode;
+      }
+
+      /**
+       * Vacation info item component
+       *
+       * @param props component properties
+       */
+      const VacationInfoItem = ({ children }: VacationInfoItemProps) => (
+        <Grid item xs={6}>
+          {children}
+        </Grid>
+      );
 
       return (
         <Box>
           {earliestUpcomingPendingVacationRequest &&
           DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate) > DateTime.now() ? (
-            <Typography>
-              {`${
-                strings.vacationsCard.nextUpcomingVacation
-              }: ${LocalizationUtils.getLocalizedVacationRequestType(
-                earliestUpcomingPendingVacationRequest.type
-              )} - ${getVacationRequestCreatorFullName()} - ${
-                earliestUpcomingPendingVacationRequest.message
-              } - ${formatDate(
-                DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate)
-              )} - ${formatDate(
-                DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.endDate)
-              )} - `}
-              {earliestUpcomingVacationRequestStatus && (
-                <span
-                  style={{
-                    color: getVacationRequestStatusColor(earliestUpcomingVacationRequestStatus)
-                  }}
-                >
-                  {LocalizationUtils.getLocalizedVacationRequestStatus(
-                    earliestUpcomingVacationRequestStatus
-                  )}
-                </span>
-              )}
-            </Typography>
+            <>
+              <Typography fontWeight={"bold"}>
+                {`${strings.vacationsCard.nextUpcomingVacation}:`}
+              </Typography>
+              <Grid container>
+                <VacationInfoItem>
+                  <Typography>{strings.vacationRequest.type}:</Typography>
+                </VacationInfoItem>
+                <VacationInfoItem>
+                  {`${LocalizationUtils.getLocalizedVacationRequestType(
+                    earliestUpcomingPendingVacationRequest.type
+                  )}`}
+                </VacationInfoItem>
+                <VacationInfoItem>{strings.vacationRequest.applicant}:</VacationInfoItem>
+                <VacationInfoItem>
+                  <Typography>
+                    {`${getVacationRequestPersonFullName(
+                      earliestUpcomingPendingVacationRequest,
+                      persons,
+                      userProfile
+                    )}`}
+                  </Typography>
+                </VacationInfoItem>
+                <VacationInfoItem>{strings.vacationRequest.timeOfVacation}:</VacationInfoItem>
+                <VacationInfoItem>
+                  <Typography>
+                    {`${formatDate(
+                      DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.startDate)
+                    )} - ${formatDate(
+                      DateTime.fromJSDate(earliestUpcomingPendingVacationRequest.endDate)
+                    )}`}
+                  </Typography>
+                </VacationInfoItem>
+                <VacationInfoItem>{strings.vacationRequest.status}:</VacationInfoItem>
+                <VacationInfoItem>
+                  <Typography>
+                    {earliestUpcomingVacationRequestStatus && (
+                      <span
+                        style={{
+                          color: getVacationRequestStatusColor(
+                            earliestUpcomingVacationRequestStatus
+                          )
+                        }}
+                      >
+                        {LocalizationUtils.getLocalizedVacationRequestStatus(
+                          earliestUpcomingVacationRequestStatus
+                        )}
+                      </span>
+                    )}
+                  </Typography>
+                </VacationInfoItem>
+              </Grid>
+            </>
           ) : (
             <Typography>{strings.vacationsCard.noUpcomingVacations}</Typography>
           )}
