@@ -114,7 +114,6 @@ const VacationRequestsScreen = () => {
 
     if (!keepData) {
       try {
-        console.log("Loading from screen");
         setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
@@ -300,7 +299,7 @@ const VacationRequestsScreen = () => {
   /**
    * Update a vacation request status
    *
-   * @param newStatus vacation data
+   * @param newStatus vacation request status
    * @param vacationRequestStatusId vacation request status id
    */
   const updateVacationRequestStatuses = async (
@@ -311,6 +310,7 @@ const VacationRequestsScreen = () => {
 
     if (selectedRowIds && newStatus) {
       const updatedStatuses: VacationRequestStatus[] = [];
+
       await Promise.all(
         selectedRowIds.map(async (selectedRowId) => {
           const vacationRequestStatus = vacationRequestStatuses.find(
@@ -334,16 +334,19 @@ const VacationRequestsScreen = () => {
           }
         })
       );
-      const updatedVacatioRequestStatuses = vacationRequestStatuses.map((vacationRequestStatus) => {
-        const foundUpdatedStatus = updatedStatuses.find(
-          (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
-        );
-        if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
-          return foundUpdatedStatus;
+
+      const updatedVacationRequestStatuses = vacationRequestStatuses.map(
+        (vacationRequestStatus) => {
+          const foundUpdatedStatus = updatedStatuses.find(
+            (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
+          );
+          if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
+            return foundUpdatedStatus;
+          }
+          return vacationRequestStatus;
         }
-        return vacationRequestStatus;
-      });
-      setVacationRequestStatuses(updatedVacatioRequestStatuses);
+      );
+      setVacationRequestStatuses(updatedVacationRequestStatuses);
     }
   };
 
