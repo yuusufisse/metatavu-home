@@ -131,8 +131,6 @@ export interface Localized extends LocalizedStringsMethods {
     noStatus: string;
     person: string;
     noPersonFullName: string;
-    applicant: string;
-    timeOfVacation: string;
   };
   /**
    * Translations related to vacation requests errors
@@ -184,6 +182,10 @@ export interface Localized extends LocalizedStringsMethods {
     upComingVacations: string;
     upComingPendingVacations: string;
     nextUpcomingVacation: string;
+    vacationType: string;
+    applicant: string;
+    timeOfVacation: string;
+    status: string;
   };
   /**
    * Translation related to person select dropdown

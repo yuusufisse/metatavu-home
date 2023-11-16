@@ -97,9 +97,7 @@
     "noMessage": "Ei viestiä",
     "noStatus": "Ei tilaa",
     "person": "Henkilö",
-    "noPersonFullName": "Ei nimeä",
-    "applicant": "Hakija",
-    "timeOfVacation": "Ajankohta"
+    "noPersonFullName": "Ei nimeä"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
@@ -135,7 +133,11 @@
     "noUpcomingPendingVacations": "Ei tulevia odottavia lomahakemuksia",
     "upComingVacations": "Sinulla on {0} tulevaa lomaa",
     "upComingPendingVacations": "Sinulla on {0} tulevaa odottavaa lomaa",
-    "nextUpcomingVacation": "Seuraavaksi tuleva loma"
+    "nextUpcomingVacation": "Seuraavaksi tuleva loma",
+    "vacationType": "Lomatyyppi:",
+    "applicant": "Hakija:",
+    "timeOfVacation": "Ajankohta:",
+    "status": "Tila"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"

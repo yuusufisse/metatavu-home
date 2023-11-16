@@ -97,9 +97,7 @@
     "noMessage": "No message",
     "noStatus": "No status",
     "person": "Person",
-    "noPersonFullName": "No name",
-    "applicant": "Applicant",
-    "timeOfVacation": "Time of Vacation"
+    "noPersonFullName": "No name"
   },
   "vacationRequestError": {
     "fetchRequestError": "Fetching vacation requests has failed",
@@ -135,7 +133,11 @@
     "noUpcomingPendingVacations": "No upcoming pending vacations",
     "upComingVacations": "You have {0} upcoming vacations",
     "upComingPendingVacations": "You have {0} upcoming pending vacations",
-    "nextUpcomingVacation": "Next upcoming vacation"
+    "nextUpcomingVacation": "Next upcoming vacation",
+    "vacationType": "Vacation Type:",
+    "applicant": "Applicant:",
+    "timeOfVacation": "Time of Vacation:",
+    "status": "Tila:"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"
