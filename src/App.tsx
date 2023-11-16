@@ -23,6 +23,9 @@ const App = () => {
   const language = useAtomValue(languageAtom);
   const admin = UserRoleUtils.isAdmin();
 
+  /**
+   * Admin route error screen component
+   */
   const AdminRouteErrorScreen = () => (
     <ErrorScreen
       message={strings.adminRouteAccess.notAdmin}
