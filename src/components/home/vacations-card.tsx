@@ -194,6 +194,17 @@ const VacationsCard = () => {
   };
 
   /**
+   * Render vacation info item
+   *
+   * @param children child components
+   */
+  const renderVacationInfoItem = (children: ReactNode) => (
+    <Grid item xs={6}>
+      {children}
+    </Grid>
+  );
+
+  /**
    * Render the earliest upcoming vacation request
    * Render the earliest upcoming pending vacation request if in admin mode
    */
@@ -221,24 +232,6 @@ const VacationsCard = () => {
         )?.status;
       }
 
-      /**
-       * Vacation info item component component properties
-       */
-      interface VacationInfoItemProps {
-        children: ReactNode;
-      }
-
-      /**
-       * Vacation info item component
-       *
-       * @param props component properties
-       */
-      const VacationInfoItem = ({ children }: VacationInfoItemProps) => (
-        <Grid item xs={6}>
-          {children}
-        </Grid>
-      );
-
       return (
         <Box>
           {earliestUpcomingVacationRequest &&
@@ -248,16 +241,16 @@ const VacationsCard = () => {
                 {`${strings.vacationsCard.nextUpcomingVacation}:`}
               </Typography>
               <Grid container>
-                <VacationInfoItem>
-                  <Typography>{strings.vacationRequest.type}:</Typography>
-                </VacationInfoItem>
-                <VacationInfoItem>
-                  {`${LocalizationUtils.getLocalizedVacationRequestType(
+                {renderVacationInfoItem(<Typography>{strings.vacationRequest.type}:</Typography>)}
+                {renderVacationInfoItem(
+                  LocalizationUtils.getLocalizedVacationRequestType(
                     earliestUpcomingVacationRequest.type
-                  )}`}
-                </VacationInfoItem>
-                <VacationInfoItem>{strings.vacationRequest.applicant}:</VacationInfoItem>
-                <VacationInfoItem>
+                  )
+                )}
+                {renderVacationInfoItem(
+                  <Typography>{strings.vacationRequest.applicant}:</Typography>
+                )}
+                {renderVacationInfoItem(
                   <Typography>
                     {`${getVacationRequestPersonFullName(
                       earliestUpcomingVacationRequest,
@@ -265,9 +258,11 @@ const VacationsCard = () => {
                       userProfile
                     )}`}
                   </Typography>
-                </VacationInfoItem>
-                <VacationInfoItem>{strings.vacationRequest.timeOfVacation}:</VacationInfoItem>
-                <VacationInfoItem>
+                )}
+                {renderVacationInfoItem(
+                  <Typography>{strings.vacationRequest.timeOfVacation}:</Typography>
+                )}
+                {renderVacationInfoItem(
                   <Typography>
                     {`${formatDate(
                       DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate)
@@ -275,9 +270,9 @@ const VacationsCard = () => {
                       DateTime.fromJSDate(earliestUpcomingVacationRequest.endDate)
                     )}`}
                   </Typography>
-                </VacationInfoItem>
-                <VacationInfoItem>{strings.vacationRequest.status}:</VacationInfoItem>
-                <VacationInfoItem>
+                )}
+                {renderVacationInfoItem(<Typography>{strings.vacationRequest.status}:</Typography>)}
+                {renderVacationInfoItem(
                   <Typography>
                     {earliestUpcomingVacationRequestStatus && (
                       <span
@@ -293,7 +288,7 @@ const VacationsCard = () => {
                       </span>
                     )}
                   </Typography>
-                </VacationInfoItem>
+                )}
               </Grid>
             </>
           ) : (
