@@ -162,15 +162,13 @@ const VacationsCard = () => {
    * @returns upcoming pending vacation requests
    */
   const getUpcomingPendingVacationRequests = () => {
-    const pendingVacationRequests = vacationRequestStatuses
-      .filter(
-        (vacationRequestStatus) => vacationRequestStatus.status === VacationRequestStatuses.PENDING
+    const pendingVacationRequests = vacationRequestStatuses.map((vacationRequestStatus) =>
+      vacationRequests.find(
+        (vacationRequest) =>
+          vacationRequest.id === vacationRequestStatus.vacationRequestId &&
+          vacationRequestStatus.status === VacationRequestStatuses.PENDING
       )
-      .map((pendingVacationRequestStatus) =>
-        vacationRequests.find(
-          (vacationRequest) => vacationRequest.id === pendingVacationRequestStatus.vacationRequestId
-        )
-      );
+    );
 
     const upcomingPendingVacationRequests = pendingVacationRequests.filter(
       (pendingVacationRequest) =>
@@ -211,26 +209,24 @@ const VacationsCard = () => {
   const renderEarliestUpcomingVacationRequest = () => {
     let earliestUpcomingVacationRequestStatus: VacationRequestStatuses | undefined;
 
-    if (!vacationRequests?.length && !loading) {
+    if (!vacationRequests?.length && !vacationRequestStatuses?.length && !loading) {
       return <Typography>{strings.vacationRequestError.noVacationRequestsFound}</Typography>;
     }
 
-    if (vacationRequests?.length && vacationRequestStatuses?.length && !loading) {
-      let earliestUpcomingVacationRequest: VacationRequest | undefined = undefined;
-      const upcomingPendingVacationRequests = adminMode
-        ? getUpcomingPendingVacationRequests()
-        : getUpcomingVacationRequests();
+    let earliestUpcomingVacationRequest: VacationRequest | undefined = undefined;
+    const upcomingPendingVacationRequests = adminMode
+      ? getUpcomingPendingVacationRequests()
+      : getUpcomingVacationRequests();
 
-      if (upcomingPendingVacationRequests.length) {
-        earliestUpcomingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
-          a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
-        );
-        earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
-          (vacationRequestStatus) =>
-            earliestUpcomingVacationRequest &&
-            earliestUpcomingVacationRequest.id === vacationRequestStatus.vacationRequestId
-        )?.status;
-      }
+    if (upcomingPendingVacationRequests.length) {
+      earliestUpcomingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
+        a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
+      );
+      earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
+        (vacationRequestStatus) =>
+          earliestUpcomingVacationRequest &&
+          earliestUpcomingVacationRequest.id === vacationRequestStatus.vacationRequestId
+      )?.status;
 
       return (
         <Box>
