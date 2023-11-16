@@ -34,7 +34,7 @@ const VacationRequestsScreen = () => {
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
   const location = useLocation();
-  const keepData = location.state?.keepData;
+  const keepVacationsData = location.state?.keepVacationsData;
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
@@ -44,7 +44,7 @@ const VacationRequestsScreen = () => {
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests.length && !keepData) {
+    if (vacationRequests.length && !keepVacationsData) {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
@@ -78,7 +78,7 @@ const VacationRequestsScreen = () => {
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests.length && vacationRequestStatuses.length && !keepData) {
+    if (vacationRequests.length && vacationRequestStatuses.length && !keepVacationsData) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -112,7 +112,7 @@ const VacationRequestsScreen = () => {
   const fetchVacationsRequests = async () => {
     if (!userProfile?.id) return;
 
-    if (!keepData) {
+    if (!keepVacationsData) {
       try {
         setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
@@ -364,7 +364,7 @@ const VacationRequestsScreen = () => {
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
         <Link
           to={adminMode ? "/admin" : "/"}
-          state={{ keepData: true }}
+          state={{ keepVacationsData: true }}
           style={{ textDecoration: "none" }}
         >
           <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
