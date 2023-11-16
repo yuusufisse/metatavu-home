@@ -116,7 +116,7 @@ const VacationsCard = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
-    if (!userProfile?.id && vacationRequests.length) return;
+    if (!userProfile?.id) return;
 
     if (!keepVacationsData) {
       try {
@@ -241,15 +241,15 @@ const VacationsCard = () => {
                 {`${strings.vacationsCard.nextUpcomingVacation}:`}
               </Typography>
               <Grid container>
-                {renderVacationInfoItem(<Typography>{strings.vacationRequest.type}:</Typography>)}
+                {renderVacationInfoItem(
+                  <Typography>{strings.vacationsCard.vacationType}</Typography>
+                )}
                 {renderVacationInfoItem(
                   LocalizationUtils.getLocalizedVacationRequestType(
                     earliestUpcomingVacationRequest.type
                   )
                 )}
-                {renderVacationInfoItem(
-                  <Typography>{strings.vacationRequest.applicant}:</Typography>
-                )}
+                {renderVacationInfoItem(<Typography>{strings.vacationsCard.applicant}</Typography>)}
                 {renderVacationInfoItem(
                   <Typography>
                     {`${getVacationRequestPersonFullName(
@@ -260,7 +260,7 @@ const VacationsCard = () => {
                   </Typography>
                 )}
                 {renderVacationInfoItem(
-                  <Typography>{strings.vacationRequest.timeOfVacation}:</Typography>
+                  <Typography>{strings.vacationsCard.timeOfVacation}</Typography>
                 )}
                 {renderVacationInfoItem(
                   <Typography>
@@ -271,7 +271,7 @@ const VacationsCard = () => {
                     )}`}
                   </Typography>
                 )}
-                {renderVacationInfoItem(<Typography>{strings.vacationRequest.status}:</Typography>)}
+                {renderVacationInfoItem(<Typography>{strings.vacationsCard.status}</Typography>)}
                 {renderVacationInfoItem(
                   <Typography>
                     {earliestUpcomingVacationRequestStatus && (
