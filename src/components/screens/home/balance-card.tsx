@@ -7,8 +7,9 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/use-api";
 import { authAtom, userProfileAtom } from "../../../atoms/auth";
-import { PersonTotalTime } from "../../../generated/client";
+import { PersonTotalTime, Timespan } from "../../../generated/client";
 import config from "../../../app/config";
+import { DateTime } from "luxon";
 
 /**
  * Component for displaying user's balance
@@ -19,6 +20,7 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
+  const beforeDate = DateTime.now().minus({ days: 1 });
 
   /**
    * Initialize logged in person's time data.
@@ -31,7 +33,9 @@ const BalanceCard = () => {
     if (loggedInPerson || config.person.id)
       try {
         const fetchedPerson = await personsApi.listPersonTotalTime({
-          personId: loggedInPerson?.id || config.person.id
+          personId: loggedInPerson?.id || config.person.id,
+          timespan: Timespan.ALL_TIME,
+          before: beforeDate.toJSDate()
         });
         setPersonTotalTime(fetchedPerson[0]);
       } catch (error) {
@@ -64,8 +68,11 @@ const BalanceCard = () => {
         <CardContent>
           <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
           <Grid container>
-            <Grid item xs={1}>
-              <ScheduleIcon />
+            <Grid item xs={12}>
+              {strings.formatString(strings.timebank.atTheEndOf, beforeDate.toLocaleString())}
+            </Grid>
+            <Grid style={{ marginBottom: 1 }} item xs={1}>
+              <ScheduleIcon style={{ marginTop: 1 }} />
             </Grid>
             <Grid item xs={11}>
               {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}

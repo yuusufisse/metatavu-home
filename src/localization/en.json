@@ -24,7 +24,8 @@
   },
   "timebank": {
     "balance": "Balance",
-    "yourBalanceIs": "Your balance is"
+    "yourBalanceIs": "Your balance is",
+    "atTheEndOf": "At the end of {0}"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",

@@ -47,6 +47,7 @@ export interface Localized extends LocalizedStringsMethods {
   timebank: {
     balance: string;
     yourBalanceIs: string;
+    atTheEndOf: string;
   };
   /**
    * Translations related to errors

@@ -7,12 +7,18 @@ import { languageAtom } from "./atoms/languageAtom";
 import HomeScreen from "./components/screens/home/home-screen";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
+import { Settings } from "luxon";
+import { useMemo } from "react";
 
 /**
  * Application component
  */
 const App = () => {
-  useAtomValue(languageAtom);
+  const language = useAtomValue(languageAtom);
+
+  useMemo(() => {
+    Settings.defaultLocale = language;
+  }, [language]);
 
   const router = createBrowserRouter([
     {
