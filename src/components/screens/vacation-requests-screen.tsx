@@ -300,7 +300,7 @@ const VacationRequestsScreen = () => {
    * Update a vacation request status
    *
    * @param newStatus vacation request status
-   * @param vacationRequestStatusId vacation request status id
+   * @param selectedRowIds selected row ids
    */
   const updateVacationRequestStatuses = async (
     newStatus: VacationRequestStatuses,
