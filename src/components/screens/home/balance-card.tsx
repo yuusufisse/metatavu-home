@@ -10,7 +10,6 @@ import { authAtom, userProfileAtom } from "../../../atoms/auth";
 import { PersonTotalTime, Timespan } from "../../../generated/client";
 import config from "../../../app/config";
 import { DateTime } from "luxon";
-import { languageAtom } from "../../../atoms/languageAtom";
 
 /**
  * Component for displaying user's balance
@@ -23,8 +22,6 @@ const BalanceCard = () => {
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const currentDate = DateTime.now();
   const beforeDate = currentDate.minus({ days: 1 }).set({ hour: 23, minute: 59 });
-  const language = useAtomValue(languageAtom);
-  const formattedBeforeDate = beforeDate.setLocale(language).toFormat("dd LLL yyyy");
 
   /**
    * Initialize logged in person's time data.
@@ -73,7 +70,7 @@ const BalanceCard = () => {
           <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
           <Grid container>
             <Grid item xs={12}>
-              {strings.formatString(strings.timebank.atTheEndOf, formattedBeforeDate)}
+              {strings.formatString(strings.timebank.atTheEndOf, beforeDate.toLocaleString())}
             </Grid>
             <Grid style={{ marginBottom: 1 }} item xs={1}>
               <ScheduleIcon style={{ marginTop: 1 }} />
