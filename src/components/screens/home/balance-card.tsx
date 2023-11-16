@@ -20,8 +20,7 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
-  const currentDate = DateTime.now();
-  const beforeDate = currentDate.minus({ days: 1 }).set({ hour: 23, minute: 59 });
+  const beforeDate = DateTime.now().minus({ days: 1 });
 
   /**
    * Initialize logged in person's time data.
