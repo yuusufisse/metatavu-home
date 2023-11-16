@@ -23,8 +23,9 @@
     "fi": "FI"
   },
   "timebank": {
-    "balance": "Saldo päättyen päivämäärään",
-    "yourBalanceIs": "Saldosi on"
+    "balance": "Saldo",
+    "yourBalanceIs": "Saldosi on",
+    "atTheEndOf": "{0} lopussa"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
