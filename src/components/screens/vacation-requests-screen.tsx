@@ -1,5 +1,5 @@
 import { Button, Card, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
@@ -30,15 +30,13 @@ const VacationRequestsScreen = () => {
   const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
     []
   );
-  const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
+  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
+    vacationRequestStatusesAtom
+  );
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
   const location = useLocation();
   const keepVacationsData = location.state?.keepVacationsData;
-
-  useEffect(() => {
-    filterLatestVacationRequestStatuses();
-  }, [vacationRequestStatuses]);
 
   /**
    * Fetch vacation request statuses
@@ -62,8 +60,7 @@ const VacationRequestsScreen = () => {
             });
           })
         );
-        setVacationRequestStatuses(vacationRequestStatuses);
-        setLoading(false);
+        return vacationRequestStatuses;
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
@@ -71,14 +68,23 @@ const VacationRequestsScreen = () => {
   };
 
   useMemo(() => {
-    fetchVacationRequestStatuses();
+    fetchVacationRequestStatuses().then((vacationRequestStatuses) =>
+      filterLatestVacationRequestStatuses(vacationRequestStatuses)
+    );
   }, [vacationRequests]);
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
-  const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests.length && vacationRequestStatuses.length && !keepVacationsData) {
+  const filterLatestVacationRequestStatuses = async (
+    vacationRequestStatuses: VacationRequestStatus[] | undefined
+  ) => {
+    if (
+      vacationRequests.length &&
+      vacationRequestStatuses &&
+      vacationRequestStatuses.length &&
+      !keepVacationsData
+    ) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -103,6 +109,7 @@ const VacationRequestsScreen = () => {
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
+      setLoading(false);
     }
   };
 
@@ -306,48 +313,44 @@ const VacationRequestsScreen = () => {
     newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => {
-    if (!userProfile || !userProfile.id) return;
+    const updatedStatuses: VacationRequestStatus[] = [];
 
-    if (selectedRowIds && newStatus) {
-      const updatedStatuses: VacationRequestStatus[] = [];
-
-      await Promise.all(
-        selectedRowIds.map(async (selectedRowId) => {
-          const vacationRequestStatus = vacationRequestStatuses.find(
-            (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
-          );
-          try {
-            if (vacationRequestStatus?.id) {
-              const updatedStatus = await vacationRequestStatusApi.updateVacationRequestStatus({
-                id: vacationRequestStatus.id,
-                statusId: vacationRequestStatus.id,
-                vacationRequestStatus: {
-                  ...vacationRequestStatus,
-                  updatedAt: new Date(),
-                  status: newStatus
-                }
-              });
-              updatedStatuses.push(updatedStatus);
-            }
-          } catch (error) {
-            setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
+    await Promise.all(
+      selectedRowIds.map(async (selectedRowId) => {
+        const vacationRequestStatus = latestVacationRequestStatuses.find(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+        );
+        try {
+          if (vacationRequestStatus?.id) {
+            const updatedStatus = await vacationRequestStatusApi.updateVacationRequestStatus({
+              id: vacationRequestStatus.id,
+              statusId: vacationRequestStatus.id,
+              vacationRequestStatus: {
+                ...vacationRequestStatus,
+                updatedAt: new Date(),
+                status: newStatus
+              }
+            });
+            updatedStatuses.push(updatedStatus);
           }
-        })
-      );
-
-      const updatedVacationRequestStatuses = vacationRequestStatuses.map(
-        (vacationRequestStatus) => {
-          const foundUpdatedStatus = updatedStatuses.find(
-            (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
-          );
-          if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
-            return foundUpdatedStatus;
-          }
-          return vacationRequestStatus;
+        } catch (error) {
+          setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
         }
-      );
-      setVacationRequestStatuses(updatedVacationRequestStatuses);
-    }
+      })
+    );
+
+    const updatedVacationRequestStatuses = latestVacationRequestStatuses.map(
+      (vacationRequestStatus) => {
+        const foundUpdatedStatus = updatedStatuses.find(
+          (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
+        );
+        if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
+          return foundUpdatedStatus;
+        }
+        return vacationRequestStatus;
+      }
+    );
+    setLatestVacationRequestStatuses(updatedVacationRequestStatuses);
   };
 
   return (

@@ -3,7 +3,7 @@ import strings from "../../localization/strings";
 import { Link, useLocation } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import {
@@ -33,7 +33,7 @@ const VacationsCard = () => {
   const setError = useSetAtom(errorAtom);
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
   const initialVacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
+  const [vacationRequestStatuses, _setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
     initialVacationRequestStatuses
   );
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
@@ -43,10 +43,6 @@ const VacationsCard = () => {
   const persons = useAtomValue(personsAtom);
   const location = useLocation();
   const keepVacationsData = location.state?.keepVacationsData;
-
-  useEffect(() => {
-    filterLatestVacationRequestStatuses();
-  }, [vacationRequestStatuses]);
 
   /**
    * Fetch vacation request statuses
@@ -70,8 +66,7 @@ const VacationsCard = () => {
             });
           })
         );
-        setVacationRequestStatuses(vacationRequestStatuses);
-        setLoading(false);
+        return vacationRequestStatuses;
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
@@ -79,14 +74,23 @@ const VacationsCard = () => {
   };
 
   useMemo(() => {
-    fetchVacationRequestStatuses();
+    fetchVacationRequestStatuses().then((vacationRequestStatuses) =>
+      filterLatestVacationRequestStatuses(vacationRequestStatuses)
+    );
   }, [vacationRequests]);
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
-  const filterLatestVacationRequestStatuses = async () => {
-    if (vacationRequests.length && vacationRequestStatuses.length && !keepVacationsData) {
+  const filterLatestVacationRequestStatuses = async (
+    vacationRequestStatuses: VacationRequestStatus[] | undefined
+  ) => {
+    if (
+      vacationRequests.length &&
+      vacationRequestStatuses &&
+      vacationRequestStatuses.length &&
+      !keepVacationsData
+    ) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -111,6 +115,7 @@ const VacationsCard = () => {
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
+      setLoading(false);
     }
   };
 
