@@ -1,5 +1,6 @@
 import { Person, VacationRequest } from "../generated/client";
 import { KeycloakProfile } from "keycloak-js";
+import strings from "../localization/strings";
 
 /**
  * Get vacation request person full name
@@ -13,7 +14,7 @@ export const getVacationRequestPersonFullName = (
   persons: Person[],
   userProfile?: KeycloakProfile | undefined
 ) => {
-  let personFullName = "";
+  let personFullName = strings.vacationRequestError.nameNotFound;
   const foundPerson = persons.find((person) => person.keycloakId === vacationRequest?.personId);
 
   if (foundPerson) {
