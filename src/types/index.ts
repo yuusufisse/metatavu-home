@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { VacationType } from "../generated/client";
+import { ReactNode } from "react";
 
 /**
  * Enum describing table form modes
@@ -90,4 +91,12 @@ export enum Worktime {
   NonBillable = "nonBillableProject",
   Internal = "internal",
   Expected = "expected"
+}
+
+/**
+ * Type describing vacation info list item
+ */
+export interface VacationInfoListItem {
+  name: string;
+  value: string | ReactNode;
 }
