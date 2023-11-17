@@ -9,7 +9,6 @@ export default class UserRoleUtils {
   /**
    * Check if the logged-in user has an admin role
    *
-   * @param accessToken keycloak access token
    * @returns boolean
    */
   public static isAdmin = () => {
