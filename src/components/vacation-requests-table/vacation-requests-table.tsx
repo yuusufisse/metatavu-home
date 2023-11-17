@@ -59,11 +59,9 @@ const VacationRequestsTable = ({
    * Set data grid rows
    */
   useMemo(() => {
-    if (vacationRequests.length && vacationRequestStatuses.length) {
-      const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
-      if (createdRows) {
-        setRows(createdRows);
-      }
+    const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
+    if (createdRows) {
+      setRows(createdRows);
     }
   }, [vacationRequests, vacationRequestStatuses, formOpen, language]);
 
