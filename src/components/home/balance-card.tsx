@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
 import UserRoleUtils from "../../utils/user-role-utils";
+import { theme } from "../../theme";
 
 /**
  * Component for displaying user's balance
@@ -65,12 +66,21 @@ const BalanceCard = () => {
    * @param personTotalTime PersonTotalTime
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
+    const balanceColor =
+      personTotalTime && personTotalTime.balance > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
+
     if (adminMode) {
       return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
     } else if (!personTotalTime && !loading && persons.length) {
-      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
+      return (
+        <Typography color={balanceColor}>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
+      );
     } else if (personTotalTime) {
-      return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+      return (
+        <Typography color={balanceColor}>{getHoursAndMinutes(personTotalTime.balance)}</Typography>
+      );
     }
     return <Skeleton />;
   };
