@@ -108,7 +108,8 @@
     "deleteStatusError": "Deleting vacation request statuses has failed",
     "updateRequestError": "Updating vacation request has failed",
     "updateStatusError": "Updating vacation request status has failed",
-    "noVacationRequestsFound": "No vacation requests found"
+    "noVacationRequestsFound": "No vacation requests found",
+    "nameNotFound": "Name not found"
   },
   "form": {
     "submit": "Submit",

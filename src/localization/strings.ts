@@ -145,6 +145,7 @@ export interface Localized extends LocalizedStringsMethods {
     updateRequestError: string;
     updateStatusError: string;
     noVacationRequestsFound: string;
+    nameNotFound: string;
   };
   /**
    * Translations related to form

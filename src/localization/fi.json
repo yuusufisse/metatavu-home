@@ -108,7 +108,8 @@
     "deleteStatusError": "Lomahakemustilojen poistaminen epäonnistui",
     "updateRequestError": "Lomahakemuksen päivittäminen epäonnistui",
     "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui",
-    "noVacationRequestsFound": "Lomahakemuksia ei löydetty"
+    "noVacationRequestsFound": "Lomahakemuksia ei löydetty",
+    "nameNotFound": "Nimeä ei löydetty"
   },
   "form": {
     "submit": "Lähetä",
