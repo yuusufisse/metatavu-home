@@ -3,7 +3,7 @@ import strings from "../../localization/strings";
 import { Link, useLocation } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
-import { useState, useEffect, useMemo, ReactNode } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import {
@@ -22,6 +22,7 @@ import { Check, Pending } from "@mui/icons-material";
 import { personsAtom } from "../../atoms/person";
 import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
 import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
+import { VacationInfoListItem } from "../../types";
 
 /**
  * Vacations card component
@@ -195,11 +196,15 @@ const VacationsCard = () => {
   /**
    * Render vacation info item
    *
-   * @param children child components
+   * @param vacationInfoListItem vacation info list item
+   * @param index index
    */
-  const renderVacationInfoItem = (children: ReactNode) => (
-    <Grid item xs={6}>
-      {children}
+  const renderVacationInfoItem = (vacationInfoListItem: VacationInfoListItem, index: number) => (
+    <Grid item xs={12} key={`vacations-info-list-item-${index}`}>
+      <Box sx={{ display: "flex" }}>
+        <Typography sx={{ flex: 1 }}>{vacationInfoListItem.name}</Typography>
+        <Typography sx={{ flex: 1 }}>{vacationInfoListItem.value}</Typography>
+      </Box>
     </Grid>
   );
 
@@ -220,14 +225,15 @@ const VacationsCard = () => {
       : getUpcomingVacationRequests();
 
     if (upcomingPendingVacationRequests.length) {
-      const filteredVacations = upcomingPendingVacationRequests.filter(
+      const filteredUpcomingPendingVacationRequests = upcomingPendingVacationRequests.filter(
         validateValueIsNotUndefinedNorNull
       );
 
-      earliestUpcomingVacationRequest = filteredVacations.reduce((vacationA, vacationB) =>
-        DateTime.fromJSDate(vacationA.startDate) > DateTime.fromJSDate(vacationB.startDate)
-          ? vacationB
-          : vacationA
+      earliestUpcomingVacationRequest = filteredUpcomingPendingVacationRequests.reduce(
+        (vacationA, vacationB) =>
+          DateTime.fromJSDate(vacationA.startDate) > DateTime.fromJSDate(vacationB.startDate)
+            ? vacationB
+            : vacationA
       );
 
       earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
@@ -236,73 +242,76 @@ const VacationsCard = () => {
           earliestUpcomingVacationRequest.id === vacationRequestStatus.vacationRequestId
       )?.status;
 
-      return (
-        <Box>
-          {earliestUpcomingVacationRequest &&
-          DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate) > DateTime.now() ? (
-            <>
-              <Typography fontWeight={"bold"}>
-                {`${strings.vacationsCard.nextUpcomingVacation}:`}
-              </Typography>
-              <Grid container>
-                {renderVacationInfoItem(
-                  <Typography>{strings.vacationsCard.vacationType}</Typography>
-                )}
-                {renderVacationInfoItem(
-                  LocalizationUtils.getLocalizedVacationRequestType(
-                    earliestUpcomingVacationRequest.type
-                  )
-                )}
-                {renderVacationInfoItem(<Typography>{strings.vacationsCard.applicant}</Typography>)}
-                {renderVacationInfoItem(
-                  <Typography>
-                    {`${getVacationRequestPersonFullName(
-                      earliestUpcomingVacationRequest,
-                      persons,
-                      userProfile
-                    )}`}
-                  </Typography>
-                )}
-                {renderVacationInfoItem(
-                  <Typography>{strings.vacationsCard.timeOfVacation}</Typography>
-                )}
-                {renderVacationInfoItem(
-                  <Typography>
-                    {`${formatDate(
-                      DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate)
-                    )} - ${formatDate(
-                      DateTime.fromJSDate(earliestUpcomingVacationRequest.endDate)
-                    )}`}
-                  </Typography>
-                )}
-                {renderVacationInfoItem(<Typography>{strings.vacationsCard.status}</Typography>)}
-                {renderVacationInfoItem(
-                  <Typography>
-                    {earliestUpcomingVacationRequestStatus && (
-                      <span
-                        style={{
-                          color: getVacationRequestStatusColor(
-                            earliestUpcomingVacationRequestStatus
-                          )
-                        }}
-                      >
-                        {LocalizationUtils.getLocalizedVacationRequestStatus(
-                          earliestUpcomingVacationRequestStatus
-                        )}
-                      </span>
-                    )}
-                  </Typography>
-                )}
-              </Grid>
-            </>
+      const vacationInfoListItems: VacationInfoListItem[] = [
+        {
+          name: strings.vacationsCard.vacationType,
+          value: LocalizationUtils.getLocalizedVacationRequestType(
+            earliestUpcomingVacationRequest.type
+          )
+        },
+        {
+          name: strings.vacationsCard.applicant,
+          value: getVacationRequestPersonFullName(
+            earliestUpcomingVacationRequest,
+            persons,
+            userProfile
+          )
+        },
+        {
+          name: strings.vacationsCard.timeOfVacation,
+          value: `${formatDate(
+            DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate)
+          )} - ${formatDate(DateTime.fromJSDate(earliestUpcomingVacationRequest.endDate))}`
+        },
+        {
+          name: strings.vacationsCard.status,
+          value: earliestUpcomingVacationRequestStatus ? (
+            <span
+              style={{
+                color: getVacationRequestStatusColor(earliestUpcomingVacationRequestStatus)
+              }}
+            >
+              {LocalizationUtils.getLocalizedVacationRequestStatus(
+                earliestUpcomingVacationRequestStatus
+              )}
+            </span>
           ) : (
-            <Typography>{strings.vacationsCard.noUpcomingVacations}</Typography>
-          )}
-        </Box>
+            strings.vacationRequest.noStatus
+          )
+        }
+      ];
+
+      return (
+        <>
+          <Grid item xs={1}>
+            <LuggageIcon />
+          </Grid>
+          <Grid item xs={11}>
+            <Box>
+              {earliestUpcomingVacationRequest &&
+                DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate) > DateTime.now() && (
+                  <>
+                    <Typography fontWeight={"bold"}>
+                      {`${strings.vacationsCard.nextUpcomingVacation}:`}
+                    </Typography>
+                    <Grid container>
+                      {vacationInfoListItems.map((vacationInfoListItem, index) =>
+                        renderVacationInfoItem(vacationInfoListItem, index)
+                      )}
+                    </Grid>
+                  </>
+                )}
+            </Box>
+          </Grid>
+        </>
       );
     }
 
-    return <Skeleton />;
+    if (!earliestUpcomingVacationRequest && !loading) {
+      return;
+    }
+
+    return;
   };
 
   /**
@@ -313,31 +322,27 @@ const VacationsCard = () => {
       ? getUpcomingPendingVacationRequests().length
       : getUpcomingVacationRequests().length;
 
-    if (upcomingVacationRequestsCount) {
+    if (upcomingVacationRequestsCount && !loading) {
       return (
         <>
           <Grid item xs={1}>
             {upcomingVacationRequestsCount > 0 ? <Pending /> : <Check />}
           </Grid>
-          {adminMode ? (
-            <Grid item xs={11}>
-              {upcomingVacationRequestsCount > 0
+          <Grid item xs={11}>
+            {adminMode
+              ? upcomingVacationRequestsCount > 0
                 ? strings.formatString(
                     strings.vacationsCard.upComingPendingVacations,
                     upcomingVacationRequestsCount
                   )
-                : strings.vacationsCard.noUpcomingPendingVacations}
-            </Grid>
-          ) : (
-            <Grid item xs={11}>
-              {upcomingVacationRequestsCount > 0
-                ? strings.formatString(
-                    strings.vacationsCard.upComingVacations,
-                    upcomingVacationRequestsCount
-                  )
-                : strings.vacationsCard.noUpcomingVacations}
-            </Grid>
-          )}
+                : strings.vacationsCard.noUpcomingPendingVacations
+              : upcomingVacationRequestsCount > 0
+              ? strings.formatString(
+                  strings.vacationsCard.upComingVacations,
+                  upcomingVacationRequestsCount
+                )
+              : strings.vacationsCard.noUpcomingVacations}
+          </Grid>
         </>
       );
     }
@@ -373,12 +378,7 @@ const VacationsCard = () => {
           </h3>
           <Grid container>
             {renderUpcomingVacationRequestsCount()}
-            <Grid item xs={1}>
-              <LuggageIcon />
-            </Grid>
-            <Grid item xs={11}>
-              {renderEarliestUpcomingVacationRequest()}
-            </Grid>
+            {renderEarliestUpcomingVacationRequest()}
           </Grid>
         </CardContent>
       </Card>
