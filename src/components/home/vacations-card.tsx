@@ -21,6 +21,7 @@ import UserRoleUtils from "../../utils/user-role-utils";
 import { Check, Pending } from "@mui/icons-material";
 import { personsAtom } from "../../atoms/person";
 import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
+import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 
 /**
  * Vacations card component
@@ -219,9 +220,16 @@ const VacationsCard = () => {
       : getUpcomingVacationRequests();
 
     if (upcomingPendingVacationRequests.length) {
-      earliestUpcomingVacationRequest = upcomingPendingVacationRequests.reduce((a, b) =>
-        a && b && DateTime.fromJSDate(a.startDate) > DateTime.fromJSDate(b.startDate) ? b : a
+      const filteredVacations = upcomingPendingVacationRequests.filter(
+        validateValueIsNotUndefinedNorNull
       );
+
+      earliestUpcomingVacationRequest = filteredVacations.reduce((vacationA, vacationB) =>
+        DateTime.fromJSDate(vacationA.startDate) > DateTime.fromJSDate(vacationB.startDate)
+          ? vacationB
+          : vacationA
+      );
+
       earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
         (vacationRequestStatus) =>
           earliestUpcomingVacationRequest &&
@@ -301,11 +309,11 @@ const VacationsCard = () => {
    * Render upcoming vacation requests count
    */
   const renderUpcomingVacationRequestsCount = () => {
-    if (!loading) {
-      const upcomingVacationRequestsCount = adminMode
-        ? getUpcomingPendingVacationRequests().length
-        : getUpcomingVacationRequests().length;
+    const upcomingVacationRequestsCount = adminMode
+      ? getUpcomingPendingVacationRequests().length
+      : getUpcomingVacationRequests().length;
 
+    if (upcomingVacationRequestsCount) {
       return (
         <>
           <Grid item xs={1}>
