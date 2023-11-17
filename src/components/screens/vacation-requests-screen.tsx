@@ -140,7 +140,7 @@ const VacationRequestsScreen = () => {
 
   useMemo(() => {
     fetchVacationsRequests();
-  }, [userProfile]);
+  }, []);
 
   /**
    * Delete vacation request status

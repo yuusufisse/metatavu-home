@@ -32,11 +32,9 @@ const VacationsCard = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
-  const initialVacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
-  const [vacationRequestStatuses, _setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
-    initialVacationRequestStatuses
+  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
+    vacationRequestStatusesAtom
   );
-  const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
   const adminMode = UserRoleUtils.adminMode();
@@ -146,7 +144,7 @@ const VacationsCard = () => {
 
   useMemo(() => {
     fetchVacationsRequests();
-  }, [userProfile]);
+  }, []);
 
   /**
    * Format date
@@ -169,7 +167,7 @@ const VacationsCard = () => {
    * @returns upcoming pending vacation requests
    */
   const getUpcomingPendingVacationRequests = () => {
-    const pendingVacationRequests = vacationRequestStatuses.map((vacationRequestStatus) =>
+    const pendingVacationRequests = latestVacationRequestStatuses.map((vacationRequestStatus) =>
       vacationRequests.find(
         (vacationRequest) =>
           vacationRequest.id === vacationRequestStatus.vacationRequestId &&
@@ -220,7 +218,7 @@ const VacationsCard = () => {
   const renderEarliestUpcomingVacationRequest = () => {
     let earliestUpcomingVacationRequestStatus: VacationRequestStatuses | undefined;
 
-    if (!vacationRequests?.length && !vacationRequestStatuses?.length && !loading) {
+    if (!vacationRequests?.length && !latestVacationRequestStatuses?.length && !loading) {
       return <Typography>{strings.vacationRequestError.noVacationRequestsFound}</Typography>;
     }
 
@@ -241,7 +239,7 @@ const VacationsCard = () => {
             : vacationA
       );
 
-      earliestUpcomingVacationRequestStatus = vacationRequestStatuses.find(
+      earliestUpcomingVacationRequestStatus = latestVacationRequestStatuses.find(
         (vacationRequestStatus) =>
           earliestUpcomingVacationRequest &&
           earliestUpcomingVacationRequest.id === vacationRequestStatus.vacationRequestId
