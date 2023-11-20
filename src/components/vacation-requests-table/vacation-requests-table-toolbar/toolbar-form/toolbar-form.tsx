@@ -7,7 +7,8 @@ import { GridRowId } from "@mui/x-data-grid";
 import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import ToolbarFormFields from "./toolbar-form-fields";
-import { vacationRequestsAtom } from "../../../../atoms/vacation";
+import { allVacationRequestsAtom, vacationRequestsAtom } from "../../../../atoms/vacation";
+import UserRoleUtils from "../../../../utils/user-role-utils";
 
 /**
  * Component properties
@@ -52,7 +53,8 @@ const ToolbarForm = ({
   };
   const [vacationData, setVacationData] = useState<VacationData>(defaultVacationData);
   const [selectedVacationRequestId, setSelectedVacationRequestId] = useState("");
-  const vacationRequests = useAtomValue(vacationRequestsAtom);
+  const adminMode = UserRoleUtils.adminMode();
+  const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
 
   /**
    * Reset vacation data
