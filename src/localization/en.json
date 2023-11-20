@@ -36,6 +36,7 @@
   "timebank": {
     "balance": "Balance",
     "yourBalanceIs": "Your balance is",
+    "atTheEndOf": "At the end of {0}",
     "logged": "Logged",
     "expected": "Expected",
     "billableProject": "Billable",
