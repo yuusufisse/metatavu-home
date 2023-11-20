@@ -72,6 +72,7 @@ export interface Localized extends LocalizedStringsMethods {
     pieChartDescription: string;
     byrange: string;
     selectTimespan: string;
+    atTheEndOf: string;
   };
   /**
    * General time-related expressions

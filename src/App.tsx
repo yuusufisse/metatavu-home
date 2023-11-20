@@ -15,6 +15,8 @@ import ErrorScreen from "./components/screens/error-screen";
 import AdminScreen from "./components/screens/admin-screen";
 import UserRoleUtils from "./utils/user-role-utils";
 import strings from "./localization/strings";
+import { Settings } from "luxon";
+import { useMemo } from "react";
 
 /**
  * Application component
@@ -32,6 +34,10 @@ const App = () => {
       title={strings.adminRouteAccess.noAccess}
     />
   );
+
+  useMemo(() => {
+    Settings.defaultLocale = language;
+  }, [language]);
 
   const router = createBrowserRouter([
     {
