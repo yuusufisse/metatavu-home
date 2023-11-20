@@ -9,6 +9,9 @@ export interface Localized extends LocalizedStringsMethods {
   /**
    * Translations related to generic words
    */
+  placeHolder: {
+    notYetImplemented: string;
+  };
   label: {
     currentLocaleLabel: string;
   };
@@ -29,10 +32,17 @@ export interface Localized extends LocalizedStringsMethods {
     logoAlt: string;
   };
   /**
-   * Translations related to place holders
+   * Translations related to errors
    */
-  placeHolder: {
-    notYetImplemented: string;
+  error: {
+    oops: string;
+    generic: string;
+    totalTimeFetch: string;
+    totalTimeNotFound: string;
+    dailyEntriesFetch: string;
+    dailyEntriesNotFound: string;
+    fetchFailedGeneral: string;
+    fetchFailedNoEntriesGeneral: string;
   };
   /**
    * Translations related to localization
@@ -40,6 +50,7 @@ export interface Localized extends LocalizedStringsMethods {
   localization: {
     en: string;
     fi: string;
+    time: string;
   };
   /**
    * Translations related to timebank
@@ -48,13 +59,122 @@ export interface Localized extends LocalizedStringsMethods {
     balance: string;
     yourBalanceIs: string;
     atTheEndOf: string;
+    logged: string;
+    expected: string;
+    billableProject: string;
+    nonBillableProject: string;
+    internal: string;
+    billableHours: string;
+    timeperiod: string;
+    noData: string;
+    selectEntry: string;
+    latestEntry: string;
+    barChartDescription: string;
+    pieChartDescription: string;
+    byrange: string;
+    selectTimespan: string;
   };
   /**
-   * Translations related to errors
+   * General time-related expressions
    */
-  errors: {
-    fetchFailedGeneral: string;
-    fetchFailedNoEntriesGeneral: string;
+  timeExpressions: {
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+    day: string;
+    week: string;
+    month: string;
+    year: string;
+    allTime: string;
+    startDate: string;
+    endDate: string;
+  };
+  /**
+   * Translations related to confirmation handler
+   */
+  confirmationHandler: {
+    confirmButtonText: string;
+    cancelButtonText: string;
+    title: string;
+    message: string;
+  };
+  /**
+   * Translations related to error handler
+   */
+  errorHandler: {
+    cancelButtonText: string;
+    title: string;
+  };
+  /**
+   * Translations related to vacation request
+   */
+  vacationRequest: {
+    startDate: string;
+    endDate: string;
+    type: string;
+    message: string;
+    days: string;
+    status: string;
+    updatedAt: string;
+    pending: string;
+    approved: string;
+    declined: string;
+    vacation: string;
+    maternityPaternityLeave: string;
+    unpaidTimeOff: string;
+    sickness: string;
+    personalDays: string;
+    childSickness: string;
+    noMessage: string;
+    noStatus: string;
+  };
+  /**
+   * Translations related to vacation requests errors
+   */
+  vacationRequestError: {
+    fetchRequestError: string;
+    fetchStatusError: string;
+    createRequestError: string;
+    createStatusError: string;
+    deleteRequestError: string;
+    deleteStatusError: string;
+    updateRequestError: string;
+    updateStatusError: string;
+  };
+  /**
+   * Translations related to form
+   */
+  form: {
+    submit: string;
+    update: string;
+  };
+  /**
+   * Translation related to table toolbar
+   */
+  tableToolbar: {
+    delete: string;
+    myRequests: string;
+    createRequests: string;
+    editRequests: string;
+    edit: string;
+    cancel: string;
+    create: string;
+  };
+  /**
+   * Translations related to data grid
+   */
+  dataGrid: {
+    noRows: string;
+  };
+  /**
+   * Translations related to vacations card
+   */
+  vacationsCard: {
+    vacations: string;
   };
 }
 
