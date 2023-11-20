@@ -10,7 +10,12 @@ import { useAtomValue } from "jotai";
 import VacationRequestsTableColumns from "./vacation-requests-table-columns";
 import strings from "../../localization/strings";
 import { Inventory } from "@mui/icons-material";
-import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import {
+  allVacationRequestsAtom,
+  allVacationRequestStatusesAtom,
+  vacationRequestsAtom,
+  vacationRequestStatusesAtom
+} from "../../atoms/vacation";
 import { VacationRequestStatuses } from "../../generated/client";
 import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
 import UserRoleUtils from "../../utils/user-role-utils";
@@ -41,8 +46,11 @@ const VacationRequestsTable = ({
   updateVacationRequestStatuses,
   loading
 }: Props) => {
-  const vacationRequests = useAtomValue(vacationRequestsAtom);
-  const vacationRequestStatuses = useAtomValue(vacationRequestStatusesAtom);
+  const adminMode = UserRoleUtils.adminMode();
+  const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
+  const vacationRequestStatuses = useAtomValue(
+    adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
+  );
   const containerRef = useRef(null);
   const [rows, setRows] = useState<DataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);
@@ -53,7 +61,6 @@ const VacationRequestsTable = ({
   const dataGridHeight = 700;
   const dataGridRowHeight = 52;
   const dataGridColumnHeaderHeight = 56;
-  const adminMode = UserRoleUtils.adminMode();
 
   /**
    * Set data grid rows

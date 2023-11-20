@@ -13,9 +13,13 @@ import { errorAtom } from "../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../types";
 import strings from "../../localization/strings";
-import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import {
+  allVacationRequestsAtom,
+  allVacationRequestStatusesAtom,
+  vacationRequestsAtom,
+  vacationRequestStatusesAtom
+} from "../../atoms/vacation";
 import UserRoleUtils from "../../utils/user-role-utils";
-import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
 
@@ -23,23 +27,23 @@ import { KeyboardReturn } from "@mui/icons-material";
  * Vacation requests screen
  */
 const VacationRequestsScreen = () => {
+  const adminMode = UserRoleUtils.adminMode();
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
+  const [vacationRequests, setVacationRequests] = useAtom(
+    adminMode ? allVacationRequestsAtom : vacationRequestsAtom
+  );
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
-    vacationRequestStatusesAtom
+    adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const adminMode = UserRoleUtils.adminMode();
-  const location = useLocation();
-  const keepVacationsData = location.state?.keepVacationsData;
 
   /**
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests.length && !keepVacationsData) {
+    if (vacationRequests.length && !latestVacationRequestStatuses.length) {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
@@ -76,12 +80,7 @@ const VacationRequestsScreen = () => {
   const filterLatestVacationRequestStatuses = async (
     vacationRequestStatuses: VacationRequestStatus[] | undefined
   ) => {
-    if (
-      vacationRequests.length &&
-      vacationRequestStatuses &&
-      vacationRequestStatuses.length &&
-      !keepVacationsData
-    ) {
+    if (vacationRequests.length && vacationRequestStatuses && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -116,7 +115,7 @@ const VacationRequestsScreen = () => {
   const fetchVacationsRequests = async () => {
     if (!userProfile?.id) return;
 
-    if (!keepVacationsData) {
+    if (!vacationRequests.length) {
       try {
         setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
@@ -362,11 +361,7 @@ const VacationRequestsScreen = () => {
         />
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
-        <Link
-          to={adminMode ? "/admin" : "/"}
-          state={{ keepVacationsData: true }}
-          style={{ textDecoration: "none" }}
-        >
+        <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
           <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
             <KeyboardReturn sx={{ marginRight: "10px" }} />
             <Typography>{strings.vacationsScreen.back}</Typography>

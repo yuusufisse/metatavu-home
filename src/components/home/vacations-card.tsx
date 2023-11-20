@@ -1,9 +1,9 @@
 import { Grid, Card, CardContent, Skeleton, Typography, Box } from "@mui/material";
 import strings from "../../localization/strings";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import {
@@ -15,7 +15,12 @@ import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
-import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import {
+  allVacationRequestsAtom,
+  allVacationRequestStatusesAtom,
+  vacationRequestsAtom,
+  vacationRequestStatusesAtom
+} from "../../atoms/vacation";
 import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
 import UserRoleUtils from "../../utils/user-role-utils";
 import { Check, Pending } from "@mui/icons-material";
@@ -28,25 +33,25 @@ import { VacationInfoListItem } from "../../types";
  * Vacations card component
  */
 const VacationsCard = () => {
+  const adminMode = UserRoleUtils.adminMode();
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
+  const [vacationRequests, setVacationRequests] = useAtom(
+    adminMode ? allVacationRequestsAtom : vacationRequestsAtom
+  );
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
-    vacationRequestStatusesAtom
+    adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
-  const adminMode = UserRoleUtils.adminMode();
   const persons = useAtomValue(personsAtom);
-  const location = useLocation();
-  const keepVacationsData = location.state?.keepVacationsData;
 
   /**
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests.length && !keepVacationsData) {
+    if (vacationRequests.length && !latestVacationRequestStatuses.length) {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
@@ -83,12 +88,7 @@ const VacationsCard = () => {
   const filterLatestVacationRequestStatuses = async (
     vacationRequestStatuses: VacationRequestStatus[] | undefined
   ) => {
-    if (
-      vacationRequests.length &&
-      vacationRequestStatuses &&
-      vacationRequestStatuses.length &&
-      !keepVacationsData
-    ) {
+    if (vacationRequests.length && vacationRequestStatuses && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -123,7 +123,7 @@ const VacationsCard = () => {
   const fetchVacationsRequests = async () => {
     if (!userProfile?.id) return;
 
-    if (!keepVacationsData) {
+    if (!vacationRequests.length) {
       try {
         setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
@@ -325,10 +325,6 @@ const VacationsCard = () => {
       ? getUpcomingPendingVacationRequests().length
       : getUpcomingVacationRequests().length;
 
-    useEffect(() => {
-      console.log(upcomingVacationRequestsCount);
-    }, [loading, upcomingVacationRequestsCount]);
-
     if (!loading) {
       return (
         <>
@@ -367,11 +363,7 @@ const VacationsCard = () => {
   };
 
   return (
-    <Link
-      to={adminMode ? "/admin/vacations" : "/vacations"}
-      state={{ keepVacationsData: true }}
-      style={{ textDecoration: "none" }}
-    >
+    <Link to={adminMode ? "/admin/vacations" : "/vacations"} style={{ textDecoration: "none" }}>
       <Card
         sx={{
           "&:hover": {
