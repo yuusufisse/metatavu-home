@@ -36,6 +36,7 @@
   "timebank": {
     "balance": "Saldo",
     "yourBalanceIs": "Saldosi on",
+    "atTheEndOf": "{0} lopussa",
     "logged": "Kirjattu",
     "expected": "Odotettu",
     "billableProject": "Laskutettava",

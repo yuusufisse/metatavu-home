@@ -12,12 +12,18 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
+import { Settings } from "luxon";
+import { useMemo } from "react";
 
 /**
  * Application component
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
+
+  useMemo(() => {
+    Settings.defaultLocale = language;
+  }, [language]);
 
   const router = createBrowserRouter([
     {
