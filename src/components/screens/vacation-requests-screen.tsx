@@ -27,9 +27,6 @@ const VacationRequestsScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
   const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
-    []
-  );
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
     vacationRequestStatusesAtom
   );
@@ -148,10 +145,10 @@ const VacationRequestsScreen = () => {
    * @param selectedRow selected row
    */
   const deleteVacationRequestStatus = async (selectedRow: GridRowId) => {
-    if (vacationRequestStatuses.length) {
+    if (latestVacationRequestStatuses.length) {
       try {
         setLoading(true);
-        const foundVacationRequestStatus = vacationRequestStatuses.find(
+        const foundVacationRequestStatus = latestVacationRequestStatuses.find(
           (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRow
         );
         if (foundVacationRequestStatus?.id) {
@@ -159,10 +156,10 @@ const VacationRequestsScreen = () => {
             id: foundVacationRequestStatus.id,
             statusId: foundVacationRequestStatus.id
           });
-          const filteredVacationRequestStatuses = vacationRequestStatuses.filter(
+          const filteredVacationRequestStatuses = latestVacationRequestStatuses.filter(
             (vacationRequestStatus) => vacationRequestStatus.id !== foundVacationRequestStatus.id
           );
-          setVacationRequestStatuses(filteredVacationRequestStatuses);
+          setLatestVacationRequestStatuses(filteredVacationRequestStatuses);
           setLoading(false);
         }
       } catch (error) {
@@ -224,7 +221,7 @@ const VacationRequestsScreen = () => {
           }
         });
 
-        setVacationRequestStatuses([createdStatus, ...vacationRequestStatuses]);
+        setLatestVacationRequestStatuses([createdStatus, ...latestVacationRequestStatuses]);
       }
       setLoading(false);
     } catch (error) {

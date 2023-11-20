@@ -3,7 +3,7 @@ import strings from "../../localization/strings";
 import { Link, useLocation } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import {
@@ -325,7 +325,11 @@ const VacationsCard = () => {
       ? getUpcomingPendingVacationRequests().length
       : getUpcomingVacationRequests().length;
 
-    if (upcomingVacationRequestsCount && !loading) {
+    useEffect(() => {
+      console.log(upcomingVacationRequestsCount);
+    }, [loading, upcomingVacationRequestsCount]);
+
+    if (!loading) {
       return (
         <>
           <Grid item xs={1}>
