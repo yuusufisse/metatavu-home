@@ -72,6 +72,7 @@ export interface Localized extends LocalizedStringsMethods {
     pieChartDescription: string;
     byrange: string;
     selectTimespan: string;
+    atTheEndOf: string;
   };
   /**
    * General time-related expressions
@@ -168,7 +169,6 @@ export interface Localized extends LocalizedStringsMethods {
    */
   dataGrid: {
     noRows: string;
-    atTheEndOf: string;
   };
   /**
    * Translations related to vacations card
