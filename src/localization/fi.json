@@ -89,7 +89,7 @@
     "approved": "Hyväksytty",
     "declined": "Hylätty",
     "vacation": "Loma",
-    "maternityPaternityLeave": "Äitiys/vanhempainvapaa",
+    "maternityPaternityLeave": "Vanhempainvapaa",
     "unpaidTimeOff": "Palkaton vapaa",
     "sickness": "Sairaus",
     "personalDays": "Henkilökohtainen vapaa",
@@ -114,7 +114,7 @@
   },
   "tableToolbar": {
     "delete": "Poista",
-    "myRequests": "Minun lomahakemukset",
+    "myRequests": "Lomahakemukset",
     "createRequests": "Uusi lomahakemus",
     "editRequests": "Muokkaa lomahakemusta",
     "edit": "Muokkaa",

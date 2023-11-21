@@ -89,7 +89,7 @@
     "approved": "Approved",
     "declined": "Declined",
     "vacation": "Vacation",
-    "maternityPaternityLeave": "Maternity/Paternity leave",
+    "maternityPaternityLeave": "Parental leave",
     "unpaidTimeOff": "Unpaid time off",
     "sickness": "Sickness",
     "personalDays": "Personal day",
@@ -114,7 +114,7 @@
   },
   "tableToolbar": {
     "delete": "Delete",
-    "myRequests": "My vacation requests",
+    "myRequests": "Vacation requests",
     "createRequests": "New vacation request",
     "editRequests": "Edit a vacation request",
     "edit": "Edit",
