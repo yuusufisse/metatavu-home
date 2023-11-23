@@ -43,10 +43,8 @@ const UpdateStatusButton = ({
   return (
     <Button
       variant="contained"
-      sx={{
-        width: "100%"
-      }}
-      onClick={() => handleUpdateVacationRequestStatus()}
+      fullWidth
+      onClick={handleUpdateVacationRequestStatus}
     >
       {approval ? <Check /> : <Close />}
       <Typography variant="body1">
