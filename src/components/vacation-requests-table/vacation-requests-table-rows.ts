@@ -25,9 +25,7 @@ const VacationRequestsTableRows = () => {
     const row: DataGridRow = {
       id: vacationRequest.id,
       type: LocalizationUtils.getLocalizedVacationRequestType(vacationRequest.type),
-      personFullName: vacationRequest.personId
-        ? vacationRequest.personId
-        : strings.vacationRequest.noPersonFullName,
+      personFullName: vacationRequest.personId ?? strings.vacationRequest.noPersonFullName,
       updatedAt: DateTime.fromJSDate(vacationRequest.updatedAt),
       startDate: DateTime.fromJSDate(vacationRequest.startDate),
       endDate: DateTime.fromJSDate(vacationRequest.endDate),
