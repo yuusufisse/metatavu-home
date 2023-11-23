@@ -17,8 +17,8 @@ const ErrorScreen = ({ title, message }: Props) => {
 
   return (
     <div>
-      <h1>{title ? title : strings.error.oops}</h1>
-      <p>{message ? message : strings.error.generic}</p>
+      <h1>{title ?? strings.error.oops}</h1>
+      <p>{message ?? strings.error.generic}</p>
       <p>
         <i>{(error as Error)?.message || (error as { statusText?: string })?.statusText}</i>
       </p>
