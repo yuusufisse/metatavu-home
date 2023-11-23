@@ -78,7 +78,7 @@ const VacationRequestsScreen = () => {
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async (
-    vacationRequestStatuses: VacationRequestStatus[] | undefined
+    vacationRequestStatuses?: VacationRequestStatus[]
   ) => {
     if (vacationRequests.length && vacationRequestStatuses && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
