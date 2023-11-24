@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { Box, styled } from "@mui/material";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
 import VacationRequestsTableRows from "./vacation-requests-table-rows";
-import { DataGridRow, VacationData } from "../../types";
+import { VacationsDataGridRow, VacationData } from "../../types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
 import { languageAtom } from "../../atoms/language";
 import { useAtomValue } from "jotai";
@@ -24,7 +24,10 @@ import UserRoleUtils from "../../utils/user-role-utils";
  * Component properties
  */
 interface Props {
-  deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
+  deleteVacationRequests: (
+    selectedRowIds: GridRowId[],
+    rows: VacationsDataGridRow[]
+  ) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   loading: boolean;
@@ -52,7 +55,7 @@ const VacationRequestsTable = ({
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const containerRef = useRef(null);
-  const [rows, setRows] = useState<DataGridRow[]>([]);
+  const [rows, setRows] = useState<VacationsDataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
   const createDataGridRows = VacationRequestsTableRows();

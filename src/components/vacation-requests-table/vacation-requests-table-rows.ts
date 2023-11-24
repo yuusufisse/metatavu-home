@@ -1,4 +1,4 @@
-import { DataGridRow } from "../../types";
+import { VacationsDataGridRow } from "../../types";
 import { DateTime } from "luxon";
 import { VacationRequest, VacationRequestStatus } from "../../generated/client";
 import LocalizationUtils from "../../utils/localization-utils";
@@ -22,7 +22,7 @@ const VacationRequestsTableRows = () => {
    * @returns dataGridRow
    */
   const createDataGridRow = (vacationRequest: VacationRequest) => {
-    const row: DataGridRow = {
+    const row: VacationsDataGridRow = {
       id: vacationRequest.id,
       type: LocalizationUtils.getLocalizedVacationRequestType(vacationRequest.type),
       personFullName: vacationRequest.personId ?? strings.vacationRequest.noPersonFullName,
@@ -47,7 +47,7 @@ const VacationRequestsTableRows = () => {
     vacationRequests: VacationRequest[],
     vacationRequestStatuses: VacationRequestStatus[]
   ) => {
-    const tempRows: DataGridRow[] = [];
+    const tempRows: VacationsDataGridRow[] = [];
     if (vacationRequests.length && vacationRequestStatuses.length) {
       vacationRequests.forEach((vacationRequest) => {
         const row = createDataGridRow(vacationRequest);

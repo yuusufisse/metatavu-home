@@ -22,9 +22,9 @@ export type ButtonIconProps = {};
 export type Language = "fi" | "en-gb";
 
 /**
- * Type describing row for data grid table
+ * Type describing row for vacations data grid table
  */
-export interface DataGridRow {
+export interface VacationsDataGridRow {
   id: string | undefined;
   type: VacationType | string;
   personFullName: string;

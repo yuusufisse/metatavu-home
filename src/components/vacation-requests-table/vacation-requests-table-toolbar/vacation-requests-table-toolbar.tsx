@@ -3,7 +3,7 @@ import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import { GridRowId } from "@mui/x-data-grid";
-import { DataGridRow, ToolbarFormModes, VacationData } from "../../../types";
+import { VacationsDataGridRow, ToolbarFormModes, VacationData } from "../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../contexts/confirmation-handler";
@@ -20,13 +20,16 @@ import UserRoleUtils from "../../../utils/user-role-utils";
  * Component properties
  */
 interface Props {
-  deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
+  deleteVacationRequests: (
+    selectedRowIds: GridRowId[],
+    rows: VacationsDataGridRow[]
+  ) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   setFormOpen: (formOpen: boolean) => void;
   formOpen: boolean;
   selectedRowIds: GridRowId[];
-  rows: DataGridRow[];
+  rows: VacationsDataGridRow[];
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
   updateVacationRequestStatuses: (
     newStatus: VacationRequestStatuses,

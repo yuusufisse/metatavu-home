@@ -140,7 +140,7 @@
     "vacationType": "Vacation Type:",
     "applicant": "Applicant:",
     "timeOfVacation": "Time of Vacation:",
-    "status": "Tila:"
+    "status": "Status:"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"

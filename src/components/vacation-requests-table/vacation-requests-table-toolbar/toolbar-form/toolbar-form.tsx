@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import { VacationType } from "../../../../generated/client";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../types";
+import { VacationsDataGridRow, VacationData, ToolbarFormModes } from "../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
 import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
@@ -19,7 +19,7 @@ interface Props {
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   selectedRowIds: GridRowId[];
-  rows: DataGridRow[];
+  rows: VacationsDataGridRow[];
   toolbarFormMode: ToolbarFormModes;
   setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
