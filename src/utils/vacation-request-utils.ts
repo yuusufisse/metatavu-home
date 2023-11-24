@@ -21,8 +21,6 @@ export const getVacationRequestPersonFullName = (
     personFullName = `${foundPerson.firstName} ${foundPerson.lastName}`;
   } else if (userProfile && userProfile.id === vacationRequest.personId) {
     personFullName = `${userProfile.firstName} ${userProfile.lastName}`;
-  } else if (vacationRequest.personId) {
-    personFullName = vacationRequest.personId;
   }
 
   return personFullName;
