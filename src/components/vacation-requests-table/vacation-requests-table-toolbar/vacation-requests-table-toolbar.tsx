@@ -135,7 +135,7 @@ const TableToolbar = ({
               <ToolbarGridItem item sm={3} xs={6}>
                 <UpdateStatusButton
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
-                  approval={true}
+                  approval
                   selectedRowIds={selectedRowIds}
                   setSelectedRowIds={setSelectedRowIds}
                 />
