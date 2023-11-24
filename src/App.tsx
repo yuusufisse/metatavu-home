@@ -13,27 +13,15 @@ import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
 import AdminScreen from "./components/screens/admin-screen";
-import UserRoleUtils from "./utils/user-role-utils";
-import strings from "./localization/strings";
 import { Settings } from "luxon";
 import { useMemo } from "react";
+import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 
 /**
  * Application component
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
-  const admin = UserRoleUtils.isAdmin();
-
-  /**
-   * Admin route error screen component
-   */
-  const AdminRouteErrorScreen = () => (
-    <ErrorScreen
-      message={strings.adminRouteAccess.notAdmin}
-      title={strings.adminRouteAccess.noAccess}
-    />
-  );
 
   useMemo(() => {
     Settings.defaultLocale = language;
@@ -61,29 +49,22 @@ const App = () => {
     },
     {
       path: "/admin",
-      element: <Layout />,
+      element: (
+        <RestrictedContentProvider>
+          <Layout />
+        </RestrictedContentProvider>
+      ),
       errorElement: <ErrorScreen />,
-      children: admin
-        ? [
-            {
-              path: "/admin",
-              element: <AdminScreen />
-            },
-            {
-              path: "/admin/vacations",
-              element: <VacationRequestsScreen />
-            }
-          ]
-        : [
-            {
-              path: "/admin",
-              element: <AdminRouteErrorScreen />
-            },
-            {
-              path: "/admin/*",
-              element: <AdminRouteErrorScreen />
-            }
-          ]
+      children: [
+        {
+          path: "/admin",
+          element: <AdminScreen />
+        },
+        {
+          path: "/admin/vacations",
+          element: <VacationRequestsScreen />
+        }
+      ]
     }
   ]);
   return (
