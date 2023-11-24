@@ -9,7 +9,7 @@ export default class UserRoleUtils {
   /**
    * Check if the logged-in user has an admin role
    *
-   * @returns boolean
+   * @returns boolean, indicates if user is admin
    */
   public static isAdmin = () => {
     const accessToken = useAtomValue(authAtom)?.token;
@@ -22,7 +22,7 @@ export default class UserRoleUtils {
   /**
    * Check if the logged-in user has admin role and is in admin route
    *
-   * @returns boolean
+   * @returns boolean, indicates if user is admin and in admin route
    */
   public static adminMode = () => {
     const { pathname } = useLocation();
