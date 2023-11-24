@@ -300,16 +300,17 @@ const VacationRequestsScreen = () => {
   };
 
   /**
-   * Update a vacation request status
+   * Get updated vacation requests statuses
    *
    * @param newStatus vacation request status
    * @param selectedRowIds selected row ids
+   * @returns updated vacation request statuses
    */
-  const updateVacationRequestStatuses = async (
+  const getUpdatedVacationRequestStatuses = async (
     newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => {
-    const updatedStatuses: VacationRequestStatus[] = [];
+    const updatedVacationRequestStatuses: VacationRequestStatus[] = [];
 
     await Promise.all(
       selectedRowIds.map(async (selectedRowId) => {
@@ -318,16 +319,16 @@ const VacationRequestsScreen = () => {
         );
         try {
           if (vacationRequestStatus?.id) {
-            const updatedStatus = await vacationRequestStatusApi.updateVacationRequestStatus({
-              id: vacationRequestStatus.id,
-              statusId: vacationRequestStatus.id,
-              vacationRequestStatus: {
-                ...vacationRequestStatus,
-                updatedAt: new Date(),
-                status: newStatus
-              }
-            });
-            updatedStatuses.push(updatedStatus);
+            const updatedVacationRequestStatus =
+              await vacationRequestStatusApi.updateVacationRequestStatus({
+                id: vacationRequestStatus.id,
+                statusId: vacationRequestStatus.id,
+                vacationRequestStatus: {
+                  ...vacationRequestStatus,
+                  status: newStatus
+                }
+              });
+            updatedVacationRequestStatuses.push(updatedVacationRequestStatus);
           }
         } catch (error) {
           setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
@@ -335,18 +336,40 @@ const VacationRequestsScreen = () => {
       })
     );
 
-    const updatedVacationRequestStatuses = latestVacationRequestStatuses.map(
-      (vacationRequestStatus) => {
-        const foundUpdatedStatus = updatedStatuses.find(
-          (updatedStatus) => updatedStatus.id === vacationRequestStatus.id
+    return updatedVacationRequestStatuses;
+  };
+
+  /**
+   * Update vacation request statuses
+   *
+   * @param newStatus vacation request status
+   * @param selectedRowIds selected row ids
+   */
+  const updateVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    const updatedVacationRequestStatuses = await getUpdatedVacationRequestStatuses(
+      newStatus,
+      selectedRowIds
+    );
+
+    const foundVacationRequestStatuses = latestVacationRequestStatuses.map(
+      (latestVacationRequestStatus) => {
+        const foundUpdatedVacationRequestStatus = updatedVacationRequestStatuses.find(
+          (updatedVacationRequestStatus) =>
+            updatedVacationRequestStatus.id === latestVacationRequestStatus.id
         );
-        if (foundUpdatedStatus && vacationRequestStatus.id === foundUpdatedStatus.id) {
-          return foundUpdatedStatus;
+        if (
+          foundUpdatedVacationRequestStatus &&
+          latestVacationRequestStatus.id === foundUpdatedVacationRequestStatus.id
+        ) {
+          return foundUpdatedVacationRequestStatus;
         }
-        return vacationRequestStatus;
+        return latestVacationRequestStatus;
       }
     );
-    setLatestVacationRequestStatuses(updatedVacationRequestStatuses);
+    setLatestVacationRequestStatuses(foundVacationRequestStatuses);
   };
 
   return (
