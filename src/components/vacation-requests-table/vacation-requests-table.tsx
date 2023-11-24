@@ -62,14 +62,15 @@ const VacationRequestsTable = ({
   const dataGridRowHeight = 52;
   const dataGridColumnHeaderHeight = 56;
 
+  useMemo(() => {
+    setSelectedRowIds([]);
+  }, [updateVacationRequestStatuses, deleteVacationRequests]);
+
   /**
    * Set data grid rows
    */
   useMemo(() => {
-    const createdRows = createDataGridRows(vacationRequests, vacationRequestStatuses);
-    if (createdRows) {
-      setRows(createdRows);
-    }
+    setRows(createDataGridRows(vacationRequests, vacationRequestStatuses));
   }, [vacationRequests, vacationRequestStatuses, formOpen, language]);
 
   /**

@@ -86,7 +86,7 @@ const TableToolbar = ({
    * Delete vacation requests and statuses
    */
   const deleteVacationsData = async () => {
-    await deleteVacationRequests(selectedRowIds, rows).then(() => setSelectedRowIds([]));
+    await deleteVacationRequests(selectedRowIds, rows);
   };
 
   /**
@@ -137,13 +137,11 @@ const TableToolbar = ({
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
                   approval
                   selectedRowIds={selectedRowIds}
-                  setSelectedRowIds={setSelectedRowIds}
                 />
               </ToolbarGridItem>
               <ToolbarGridItem item sm={3} xs={6}>
                 <UpdateStatusButton
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
-                  setSelectedRowIds={setSelectedRowIds}
                   selectedRowIds={selectedRowIds}
                 />
               </ToolbarGridItem>

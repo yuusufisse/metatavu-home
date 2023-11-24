@@ -12,9 +12,8 @@ interface UpdateStatusButtonProps {
     newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => Promise<void>;
-  approval: boolean;
+  approval?: boolean;
   selectedRowIds: GridRowId[];
-  setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
 }
 
 /**
@@ -25,8 +24,7 @@ interface UpdateStatusButtonProps {
 const UpdateStatusButton = ({
   updateVacationRequestStatuses,
   approval,
-  selectedRowIds,
-  setSelectedRowIds
+  selectedRowIds
 }: UpdateStatusButtonProps) => {
   /**
    * Handle update vacation status
@@ -35,17 +33,11 @@ const UpdateStatusButton = ({
     await updateVacationRequestStatuses(
       approval ? VacationRequestStatuses.APPROVED : VacationRequestStatuses.DECLINED,
       selectedRowIds
-    ).then(() => {
-      setSelectedRowIds([]);
-    });
+    );
   };
 
   return (
-    <Button
-      variant="contained"
-      fullWidth
-      onClick={handleUpdateVacationRequestStatus}
-    >
+    <Button variant="contained" fullWidth onClick={handleUpdateVacationRequestStatus}>
       {approval ? <Check /> : <Close />}
       <Typography variant="body1">
         {approval
