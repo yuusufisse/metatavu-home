@@ -12,8 +12,8 @@ interface UpdateStatusButtonProps {
     newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => Promise<void>;
-  approval?: boolean;
   selectedRowIds: GridRowId[];
+  buttonType: VacationRequestStatuses;
 }
 
 /**
@@ -23,24 +23,21 @@ interface UpdateStatusButtonProps {
  */
 const UpdateStatusButton = ({
   updateVacationRequestStatuses,
-  approval,
-  selectedRowIds
+  selectedRowIds,
+  buttonType
 }: UpdateStatusButtonProps) => {
   /**
    * Handle update vacation status
    */
   const handleUpdateVacationRequestStatus = async () => {
-    await updateVacationRequestStatuses(
-      approval ? VacationRequestStatuses.APPROVED : VacationRequestStatuses.DECLINED,
-      selectedRowIds
-    );
+    await updateVacationRequestStatuses(buttonType, selectedRowIds);
   };
 
   return (
     <Button variant="contained" fullWidth onClick={handleUpdateVacationRequestStatus}>
-      {approval ? <Check /> : <Close />}
+      {buttonType === VacationRequestStatuses.APPROVED ? <Check /> : <Close />}
       <Typography variant="body1">
-        {approval
+        {buttonType === VacationRequestStatuses.APPROVED
           ? strings.toolbarUpdateStatusButton.approve
           : strings.toolbarUpdateStatusButton.decline}
       </Typography>

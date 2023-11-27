@@ -32,7 +32,7 @@ interface Props {
   rows: VacationsDataGridRow[];
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
   updateVacationRequestStatuses: (
-    newStatus: VacationRequestStatuses,
+    buttonType: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => Promise<void>;
 }
@@ -137,13 +137,14 @@ const TableToolbar = ({
             <>
               <ToolbarGridItem item sm={3} xs={6}>
                 <UpdateStatusButton
+                  buttonType={VacationRequestStatuses.APPROVED}
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
-                  approval
                   selectedRowIds={selectedRowIds}
                 />
               </ToolbarGridItem>
               <ToolbarGridItem item sm={3} xs={6}>
                 <UpdateStatusButton
+                  buttonType={VacationRequestStatuses.DECLINED}
                   updateVacationRequestStatuses={updateVacationRequestStatuses}
                   selectedRowIds={selectedRowIds}
                 />
