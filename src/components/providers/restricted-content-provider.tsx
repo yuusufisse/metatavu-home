@@ -37,7 +37,7 @@ interface Props {
  */
 const RestrictedContentProvider = ({ children }: Props) => {
   const admin = UserRoleUtils.isAdmin();
-  const [restricted, setRestricted] = useState(admin ? false : true);
+  const [restricted, setRestricted] = useState(!admin);
 
   useEffect(() => {
     if (admin) {
