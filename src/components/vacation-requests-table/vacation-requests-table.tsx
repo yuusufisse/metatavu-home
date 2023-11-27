@@ -154,9 +154,7 @@ const VacationRequestsTable = ({
         isRowSelectable={() => !formOpen}
         initialState={{
           sorting: {
-            sortModel: adminMode
-              ? [{ field: "updatedAt", sort: "asc" }]
-              : [{ field: "updatedAt", sort: "desc" }]
+            sortModel: [{ field: "updatedAt", sort: "asc" }]
           },
           filter: adminMode
             ? {
