@@ -32,7 +32,7 @@ interface Props {
   rows: VacationsDataGridRow[];
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
   updateVacationRequestStatuses: (
-    buttonType: VacationRequestStatuses,
+    newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => Promise<void>;
 }

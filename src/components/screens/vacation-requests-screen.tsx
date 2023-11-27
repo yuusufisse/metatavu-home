@@ -303,12 +303,12 @@ const VacationRequestsScreen = () => {
   /**
    * Get updated vacation requests statuses
    *
-   * @param buttonType vacation request statuses
+   * @param newStatus vacation request status
    * @param selectedRowIds selected row ids
    * @returns updated vacation request statuses
    */
   const getUpdatedVacationRequestStatuses = async (
-    buttonType: VacationRequestStatuses,
+    newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => {
     const updatedVacationRequestStatuses: VacationRequestStatus[] = [];
@@ -326,7 +326,7 @@ const VacationRequestsScreen = () => {
                 statusId: vacationRequestStatus.id,
                 vacationRequestStatus: {
                   ...vacationRequestStatus,
-                  status: buttonType
+                  status: newStatus
                 }
               });
             updatedVacationRequestStatuses.push(updatedVacationRequestStatus);
@@ -343,15 +343,15 @@ const VacationRequestsScreen = () => {
   /**
    * Update vacation request statuses
    *
-   * @param buttonType vacation request statuses
+   * @param newStatus vacation request status
    * @param selectedRowIds selected row ids
    */
   const updateVacationRequestStatuses = async (
-    buttonType: VacationRequestStatuses,
+    newStatus: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => {
     const updatedVacationRequestStatuses = await getUpdatedVacationRequestStatuses(
-      buttonType,
+      newStatus,
       selectedRowIds
     );
 
