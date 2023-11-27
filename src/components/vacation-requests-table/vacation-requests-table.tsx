@@ -32,9 +32,11 @@ interface Props {
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   loading: boolean;
   updateVacationRequestStatuses: (
-    newStatus: VacationRequestStatuses,
+    buttonType: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => Promise<void>;
+  rows: VacationsDataGridRow[];
+  setRows: (rows: VacationsDataGridRow[]) => void;
 }
 
 /**
@@ -47,7 +49,9 @@ const VacationRequestsTable = ({
   createVacationRequest,
   updateVacationRequest,
   updateVacationRequestStatuses,
-  loading
+  loading,
+  rows,
+  setRows
 }: Props) => {
   const adminMode = UserRoleUtils.adminMode();
   const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
@@ -55,7 +59,6 @@ const VacationRequestsTable = ({
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const containerRef = useRef(null);
-  const [rows, setRows] = useState<VacationsDataGridRow[]>([]);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
   const createDataGridRows = VacationRequestsTableRows();

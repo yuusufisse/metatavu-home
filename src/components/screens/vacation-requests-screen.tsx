@@ -11,7 +11,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
-import { VacationData } from "../../types";
+import { VacationData, VacationsDataGridRow } from "../../types";
 import strings from "../../localization/strings";
 import {
   allVacationRequestsAtom,
@@ -38,6 +38,7 @@ const VacationRequestsScreen = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState<VacationsDataGridRow[]>([]);
 
   /**
    * Fetch vacation request statuses
@@ -302,12 +303,12 @@ const VacationRequestsScreen = () => {
   /**
    * Get updated vacation requests statuses
    *
-   * @param newStatus vacation request status
+   * @param buttonType vacation request statuses
    * @param selectedRowIds selected row ids
    * @returns updated vacation request statuses
    */
   const getUpdatedVacationRequestStatuses = async (
-    newStatus: VacationRequestStatuses,
+    buttonType: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => {
     const updatedVacationRequestStatuses: VacationRequestStatus[] = [];
@@ -325,7 +326,7 @@ const VacationRequestsScreen = () => {
                 statusId: vacationRequestStatus.id,
                 vacationRequestStatus: {
                   ...vacationRequestStatus,
-                  status: newStatus
+                  status: buttonType
                 }
               });
             updatedVacationRequestStatuses.push(updatedVacationRequestStatus);
@@ -342,15 +343,15 @@ const VacationRequestsScreen = () => {
   /**
    * Update vacation request statuses
    *
-   * @param newStatus vacation request status
+   * @param buttonType vacation request statuses
    * @param selectedRowIds selected row ids
    */
   const updateVacationRequestStatuses = async (
-    newStatus: VacationRequestStatuses,
+    buttonType: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => {
     const updatedVacationRequestStatuses = await getUpdatedVacationRequestStatuses(
-      newStatus,
+      buttonType,
       selectedRowIds
     );
 
@@ -381,6 +382,8 @@ const VacationRequestsScreen = () => {
           updateVacationRequest={updateVacationRequest}
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
+          rows={rows}
+          setRows={setRows}
         />
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
