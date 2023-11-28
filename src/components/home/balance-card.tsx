@@ -4,7 +4,7 @@ import strings from "../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { Person, PersonTotalTime, Timespan } from "../../generated/client";
 import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/person";
@@ -55,7 +55,7 @@ const BalanceCard = () => {
   /**
    * Get person total time if it is undefined or set to "all time"
    */
-  useMemo(() => {
+  useEffect(() => {
     if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
       setTimespan(Timespan.ALL_TIME);
       getPersons();
