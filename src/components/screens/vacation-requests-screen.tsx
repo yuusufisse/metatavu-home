@@ -11,7 +11,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "../../atoms/auth";
 import { errorAtom } from "../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
-import { VacationData, VacationsDataGridRow } from "../../types";
+import { VacationData } from "../../types";
 import strings from "../../localization/strings";
 import {
   allVacationRequestsAtom,
@@ -22,6 +22,7 @@ import {
 import UserRoleUtils from "../../utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Vacation requests screen
@@ -38,7 +39,6 @@ const VacationRequestsScreen = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState<VacationsDataGridRow[]>([]);
 
   /**
    * Fetch vacation request statuses
@@ -202,27 +202,31 @@ const VacationRequestsScreen = () => {
    *
    * @param createdRequest created vacation request
    */
-  const createVacationRequestStatus = async (createdRequest: VacationRequest) => {
+  const createVacationRequestStatus = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowId: GridRowId
+  ) => {
     if (!userProfile?.id) return;
 
     try {
       setLoading(true);
-      if (createdRequest.id) {
-        const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
-          id: createdRequest.id,
-          vacationRequestStatus: {
-            vacationRequestId: createdRequest.id,
-            status: VacationRequestStatuses.PENDING,
-            message: createdRequest.message,
-            createdAt: new Date(),
-            createdBy: userProfile.id,
-            updatedAt: new Date(),
-            updatedBy: userProfile.id
-          }
-        });
+      const vacationRequestId = selectedRowId as string;
 
-        setLatestVacationRequestStatuses([createdStatus, ...latestVacationRequestStatuses]);
-      }
+      const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
+        id: vacationRequestId,
+        vacationRequestStatus: {
+          vacationRequestId: vacationRequestId,
+          status: newStatus,
+          message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
+          createdAt: new Date(),
+          createdBy: userProfile.id,
+          updatedAt: new Date(),
+          updatedBy: userProfile.id
+        }
+      });
+
+      setLatestVacationRequestStatuses([createdStatus, ...latestVacationRequestStatuses]);
+
       setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
@@ -253,7 +257,6 @@ const VacationRequestsScreen = () => {
         }
       });
 
-      createVacationRequestStatus(createdRequest);
       setVacationRequests([createdRequest, ...vacationRequests]);
       setLoading(false);
     } catch (error) {
@@ -330,6 +333,8 @@ const VacationRequestsScreen = () => {
                 }
               });
             updatedVacationRequestStatuses.push(updatedVacationRequestStatus);
+          } else {
+            createVacationRequestStatus(newStatus, selectedRowId);
           }
         } catch (error) {
           setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
@@ -382,8 +387,6 @@ const VacationRequestsScreen = () => {
           updateVacationRequest={updateVacationRequest}
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
-          rows={rows}
-          setRows={setRows}
         />
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>

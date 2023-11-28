@@ -1,6 +1,10 @@
 import { VacationsDataGridRow } from "../../types";
 import { DateTime } from "luxon";
-import { VacationRequest, VacationRequestStatus } from "../../generated/client";
+import {
+  VacationRequest,
+  VacationRequestStatus,
+  VacationRequestStatuses
+} from "../../generated/client";
 import LocalizationUtils from "../../utils/localization-utils";
 import strings from "../../localization/strings";
 import { useAtomValue } from "jotai";
@@ -31,7 +35,7 @@ const VacationRequestsTableRows = () => {
       endDate: DateTime.fromJSDate(vacationRequest.endDate),
       days: vacationRequest.days,
       message: strings.vacationRequest.noMessage,
-      status: strings.vacationRequest.noStatus
+      status: VacationRequestStatuses.PENDING
     };
 
     return row;
@@ -48,7 +52,7 @@ const VacationRequestsTableRows = () => {
     vacationRequestStatuses: VacationRequestStatus[]
   ) => {
     const tempRows: VacationsDataGridRow[] = [];
-    if (vacationRequests.length && vacationRequestStatuses.length) {
+    if (vacationRequests.length) {
       vacationRequests.forEach((vacationRequest) => {
         const row = createDataGridRow(vacationRequest);
 

@@ -77,9 +77,10 @@ const VacationsCard = () => {
   };
 
   useMemo(() => {
-    fetchVacationRequestStatuses().then((vacationRequestStatuses) =>
-      filterLatestVacationRequestStatuses(vacationRequestStatuses)
-    );
+    fetchVacationRequestStatuses().then((vacationRequestStatuses) => {
+      filterLatestVacationRequestStatuses(vacationRequestStatuses);
+      setLoading(false);
+    });
   }, [vacationRequests]);
 
   /**
@@ -113,7 +114,6 @@ const VacationsCard = () => {
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
-      setLoading(false);
     }
   };
 
@@ -167,18 +167,14 @@ const VacationsCard = () => {
    * @returns upcoming pending vacation requests
    */
   const getUpcomingPendingVacationRequests = () => {
-    const pendingVacationRequests = latestVacationRequestStatuses.map((vacationRequestStatus) =>
-      vacationRequests.find(
-        (vacationRequest) =>
-          vacationRequest.id === vacationRequestStatus.vacationRequestId &&
-          vacationRequestStatus.status === VacationRequestStatuses.PENDING
-      )
-    );
-
-    const upcomingPendingVacationRequests = pendingVacationRequests.filter(
-      (pendingVacationRequest) =>
-        pendingVacationRequest &&
-        DateTime.fromJSDate(pendingVacationRequest.startDate) > DateTime.now()
+    const upcomingPendingVacationRequests = vacationRequests.filter(
+      (vacationRequest) =>
+        vacationRequest &&
+        DateTime.fromJSDate(vacationRequest.startDate) > DateTime.now() &&
+        !latestVacationRequestStatuses.find(
+          (latestVacationRequestStatus) =>
+            latestVacationRequestStatus.vacationRequestId === vacationRequest.id
+        )
     );
 
     return upcomingPendingVacationRequests;
@@ -279,7 +275,13 @@ const VacationsCard = () => {
               )}
             </span>
           ) : (
-            strings.vacationRequest.noStatus
+            <span
+              style={{
+                color: getVacationRequestStatusColor(VacationRequestStatuses.PENDING)
+              }}
+            >
+              {strings.vacationRequest.pending}
+            </span>
           )
         }
       ];

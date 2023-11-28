@@ -35,8 +35,6 @@ interface Props {
     buttonType: VacationRequestStatuses,
     selectedRowIds: GridRowId[]
   ) => Promise<void>;
-  rows: VacationsDataGridRow[];
-  setRows: (rows: VacationsDataGridRow[]) => void;
 }
 
 /**
@@ -49,9 +47,7 @@ const VacationRequestsTable = ({
   createVacationRequest,
   updateVacationRequest,
   updateVacationRequestStatuses,
-  loading,
-  rows,
-  setRows
+  loading
 }: Props) => {
   const adminMode = UserRoleUtils.adminMode();
   const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
@@ -62,6 +58,7 @@ const VacationRequestsTable = ({
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
   const createDataGridRows = VacationRequestsTableRows();
+  const [rows, setRows] = useState<VacationsDataGridRow[]>([]);
   const language = useAtomValue(languageAtom);
   const columns = VacationRequestsTableColumns();
   const dataGridHeight = 700;
