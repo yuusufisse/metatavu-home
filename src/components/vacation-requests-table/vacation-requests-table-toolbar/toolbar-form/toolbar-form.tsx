@@ -41,13 +41,13 @@ const ToolbarForm = ({
   setToolbarFormMode,
   setSelectedRowIds
 }: Props) => {
-  const dateTimeNow = DateTime.now();
-  const [startDate, setStartDate] = useState<DateTime>(dateTimeNow);
-  const [endDate, setEndDate] = useState<DateTime>(dateTimeNow);
+  const dateTimeTomorrow = DateTime.now().plus({ days: 1 });
+  const [startDate, setStartDate] = useState<DateTime>(dateTimeTomorrow);
+  const [endDate, setEndDate] = useState<DateTime>(dateTimeTomorrow);
   const defaultVacationData = {
     type: VacationType.VACATION,
-    startDate: dateTimeNow,
-    endDate: dateTimeNow,
+    startDate: dateTimeTomorrow,
+    endDate: dateTimeTomorrow,
     message: "",
     days: 1
   };
@@ -61,8 +61,8 @@ const ToolbarForm = ({
    */
   const resetVacationData = () => {
     setVacationData(defaultVacationData);
-    setStartDate(dateTimeNow);
-    setEndDate(dateTimeNow);
+    setStartDate(dateTimeTomorrow);
+    setEndDate(dateTimeTomorrow);
   };
 
   /**
@@ -145,7 +145,7 @@ const ToolbarForm = ({
             }}
           >
             <ToolbarFormFields
-              dateTimeNow={dateTimeNow}
+              dateTimeTomorrow={dateTimeTomorrow}
               startDate={startDate}
               endDate={endDate}
               setStartDate={setStartDate}

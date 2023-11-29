@@ -23,7 +23,7 @@ import LocalizationUtils from "../../../../utils/localization-utils";
 interface Props {
   vacationData: VacationData;
   setVacationData: (vacationDate: VacationData) => void;
-  dateTimeNow: DateTime;
+  dateTimeTomorrow: DateTime;
   startDate: DateTime;
   endDate: DateTime;
   setStartDate: (startDate: DateTime) => void;
@@ -39,7 +39,7 @@ interface Props {
 const ToolbarFormFields = ({
   vacationData,
   setVacationData,
-  dateTimeNow,
+  dateTimeTomorrow,
   endDate,
   setEndDate,
   setStartDate,
@@ -104,7 +104,7 @@ const ToolbarFormFields = ({
 
       <FormLabel sx={{ marginBottom: "5px" }}>{strings.vacationRequest.days}</FormLabel>
       <DateRangePicker
-        dateTimeNow={dateTimeNow}
+        dateTimeTomorrow={dateTimeTomorrow}
         setDates={setDates}
         startDate={startDate}
         endDate={endDate}
