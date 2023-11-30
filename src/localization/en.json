@@ -134,7 +134,7 @@
     "vacations": "Vacations",
     "noUpcomingVacations": "No upcoming vacations",
     "noPendingVacations": "No pending vacation requests",
-    "upComingVacations": "You have {0} upcoming vacation requests",
+    "upComingVacations": "You have {0} upcoming vacations",
     "pendingVacations": "You have {0} pending vacation requests",
     "nextUpcomingVacation": "Next upcoming vacation:",
     "vacationType": "Vacation Type:",
