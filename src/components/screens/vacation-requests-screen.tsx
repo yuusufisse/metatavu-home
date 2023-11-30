@@ -62,7 +62,7 @@ const VacationRequestsScreen = () => {
             });
           })
         );
-        return vacationRequestStatuses;
+        await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
@@ -70,9 +70,7 @@ const VacationRequestsScreen = () => {
   };
 
   useMemo(() => {
-    fetchVacationRequestStatuses().then((vacationRequestStatuses) =>
-      filterLatestVacationRequestStatuses(vacationRequestStatuses)
-    );
+    fetchVacationRequestStatuses();
   }, [vacationRequests]);
 
   /**
@@ -201,6 +199,7 @@ const VacationRequestsScreen = () => {
    * Create a vacation request status
    *
    * @param createdRequest created vacation request
+   * @returns created vacation status
    */
   const createVacationRequestStatus = async (
     newStatus: VacationRequestStatuses,
@@ -212,22 +211,23 @@ const VacationRequestsScreen = () => {
       setLoading(true);
       const vacationRequestId = selectedRowId as string;
 
-      const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
-        id: vacationRequestId,
-        vacationRequestStatus: {
-          vacationRequestId: vacationRequestId,
-          status: newStatus,
-          message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
-          createdAt: new Date(),
-          createdBy: userProfile.id,
-          updatedAt: new Date(),
-          updatedBy: userProfile.id
-        }
-      });
-
-      setLatestVacationRequestStatuses([createdStatus, ...latestVacationRequestStatuses]);
+      const createdVacationRequestStatus =
+        await vacationRequestStatusApi.createVacationRequestStatus({
+          id: vacationRequestId,
+          vacationRequestStatus: {
+            vacationRequestId: vacationRequestId,
+            status: newStatus,
+            message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
+            createdAt: new Date(),
+            createdBy: userProfile.id,
+            updatedAt: new Date(),
+            updatedBy: userProfile.id
+          }
+        });
 
       setLoading(false);
+
+      return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
@@ -333,8 +333,6 @@ const VacationRequestsScreen = () => {
                 }
               });
             updatedVacationRequestStatuses.push(updatedVacationRequestStatus);
-          } else {
-            createVacationRequestStatus(newStatus, selectedRowId);
           }
         } catch (error) {
           setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
@@ -343,6 +341,40 @@ const VacationRequestsScreen = () => {
     );
 
     return updatedVacationRequestStatuses;
+  };
+
+  /**
+   * Get created vacation request statuses
+   *
+   * @param newStatus vacation request status
+   * @param selectedRowIds selected row ids
+   * @returns created vacation request statuses
+   */
+  const getCreatedVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    const createdVacationRequestStatuses: VacationRequestStatus[] = [];
+
+    await Promise.all(
+      selectedRowIds.map(async (selectedRowId) => {
+        const foundVacationRequestStatus = latestVacationRequestStatuses.find(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+        );
+        if (!foundVacationRequestStatus) {
+          const createdVacationRequestStatus = await createVacationRequestStatus(
+            newStatus,
+            selectedRowId
+          );
+          console.log(createdVacationRequestStatus);
+          if (createdVacationRequestStatus) {
+            createdVacationRequestStatuses.push(createdVacationRequestStatus);
+          }
+        }
+      })
+    );
+
+    return createdVacationRequestStatuses;
   };
 
   /**
@@ -356,6 +388,10 @@ const VacationRequestsScreen = () => {
     selectedRowIds: GridRowId[]
   ) => {
     const updatedVacationRequestStatuses = await getUpdatedVacationRequestStatuses(
+      newStatus,
+      selectedRowIds
+    );
+    const createdVacationRequestStatuses = await getCreatedVacationRequestStatuses(
       newStatus,
       selectedRowIds
     );
@@ -375,7 +411,12 @@ const VacationRequestsScreen = () => {
         return latestVacationRequestStatus;
       }
     );
-    setLatestVacationRequestStatuses(foundVacationRequestStatuses);
+
+    const createdAndFoundVacationRequestStatuses = foundVacationRequestStatuses.concat(
+      createdVacationRequestStatuses
+    );
+
+    setLatestVacationRequestStatuses(createdAndFoundVacationRequestStatuses);
   };
 
   return (
