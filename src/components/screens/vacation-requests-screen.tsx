@@ -77,9 +77,9 @@ const VacationRequestsScreen = () => {
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async (
-    vacationRequestStatuses?: VacationRequestStatus[]
+    vacationRequestStatuses: VacationRequestStatus[]
   ) => {
-    if (vacationRequests.length && vacationRequestStatuses && vacationRequestStatuses.length) {
+    if (vacationRequests.length && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -198,8 +198,8 @@ const VacationRequestsScreen = () => {
   /**
    * Create a vacation request status
    *
-   * @param createdRequest created vacation request
-   * @returns created vacation status
+   * @param newStatus new vacation request status
+   * @param selectedRowId selected row ids
    */
   const createVacationRequestStatus = async (
     newStatus: VacationRequestStatuses,
@@ -210,7 +210,6 @@ const VacationRequestsScreen = () => {
     try {
       setLoading(true);
       const vacationRequestId = selectedRowId as string;
-
       const createdVacationRequestStatus =
         await vacationRequestStatusApi.createVacationRequestStatus({
           id: vacationRequestId,
@@ -402,10 +401,7 @@ const VacationRequestsScreen = () => {
           (updatedVacationRequestStatus) =>
             updatedVacationRequestStatus.id === latestVacationRequestStatus.id
         );
-        if (
-          foundUpdatedVacationRequestStatus &&
-          latestVacationRequestStatus.id === foundUpdatedVacationRequestStatus.id
-        ) {
+        if (foundUpdatedVacationRequestStatus) {
           return foundUpdatedVacationRequestStatus;
         }
         return latestVacationRequestStatus;
