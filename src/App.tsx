@@ -3,7 +3,7 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
-import BalanceScreen from "./components/screens/timebank-screen";
+import TimebankScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/language";
 import HomeScreen from "./components/screens/home-screen";
@@ -43,7 +43,7 @@ const App = () => {
         },
         {
           path: "/timebank",
-          element: <BalanceScreen />
+          element: <TimebankScreen />
         }
       ]
     },
