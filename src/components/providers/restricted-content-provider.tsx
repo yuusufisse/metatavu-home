@@ -11,6 +11,9 @@ interface Props {
 
 /**
  * Restricted content provider component
+ *
+ * @param props component properties
+ * @returns admin route screen if restricted, child components otherwise
  */
 const RestrictedContentProvider = ({ children }: Props) => {
   const admin = UserRoleUtils.isAdmin();
