@@ -133,14 +133,14 @@
   "vacationsCard": {
     "vacations": "Lomat",
     "noUpcomingVacations": "Ei tulevia lomia",
-    "noUpcomingPendingVacations": "Ei tulevia odottavia lomahakemuksia",
+    "noPendingVacations": "Ei odottavia lomahakemuksia",
     "upComingVacations": "Sinulla on {0} tulevaa lomaa",
-    "upComingPendingVacations": "Sinulla on {0} tulevaa odottavaa lomaa",
-    "nextUpcomingVacation": "Seuraavaksi tuleva loma",
+    "pendingVacations": "Sinulla on {0} odottavaa lomahakemusta",
+    "nextUpcomingVacation": "Seuraava loma:",
     "vacationType": "Lomatyyppi:",
     "applicant": "Hakija:",
     "timeOfVacation": "Ajankohta:",
-    "status": "Tila"
+    "status": "Tila:"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"

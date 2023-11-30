@@ -181,9 +181,9 @@ export interface Localized extends LocalizedStringsMethods {
   vacationsCard: {
     vacations: string;
     noUpcomingVacations: string;
-    noUpcomingPendingVacations: string;
+    noPendingVacations: string;
     upComingVacations: string;
-    upComingPendingVacations: string;
+    pendingVacations: string;
     nextUpcomingVacation: string;
     vacationType: string;
     applicant: string;
