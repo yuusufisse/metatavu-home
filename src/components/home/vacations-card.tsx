@@ -222,10 +222,6 @@ const VacationsCard = () => {
   const renderEarliestUpcomingVacationRequest = () => {
     let earliestUpcomingVacationRequest: VacationRequest | undefined = undefined;
     let earliestUpcomingVacationRequestStatus: VacationRequestStatuses | undefined;
-
-    if (!latestVacationRequestStatuses?.length && !loading) {
-      return <Typography>{strings.vacationRequestError.noVacationRequestsFound}</Typography>;
-    }
     let upcomingVacationRequests = getUpcomingVacationRequests();
 
     if (upcomingVacationRequests.length) {
@@ -331,24 +327,32 @@ const VacationsCard = () => {
     const vacationRequestsCount = adminMode
       ? getPendingVacationRequests().length
       : getUpcomingVacationRequests().length;
+    let message: string | (string | number)[] = adminMode
+      ? strings.vacationsCard.noPendingVacations
+      : strings.vacationsCard.noUpcomingVacations;
 
-    if (!loading) {
+    if (vacationRequestsCount) {
+      if (adminMode) {
+        message = strings.formatString(
+          strings.vacationsCard.pendingVacations,
+          vacationRequestsCount
+        );
+      } else {
+        message = strings.formatString(
+          strings.vacationsCard.upComingVacations,
+          vacationRequestsCount
+        );
+      }
+    }
+
+    if (loading) {
       return (
         <>
           <Grid item xs={1}>
-            {vacationRequestsCount > 0 ? <Pending /> : <Check />}
+            <Pending />
           </Grid>
           <Grid item xs={11}>
-            {adminMode
-              ? vacationRequestsCount > 0
-                ? strings.formatString(
-                    strings.vacationsCard.pendingVacations,
-                    vacationRequestsCount
-                  )
-                : strings.vacationsCard.noPendingVacations
-              : vacationRequestsCount > 0
-              ? strings.formatString(strings.vacationsCard.upComingVacations, vacationRequestsCount)
-              : strings.vacationsCard.noUpcomingVacations}
+            <Skeleton />
           </Grid>
         </>
       );
@@ -357,10 +361,10 @@ const VacationsCard = () => {
     return (
       <>
         <Grid item xs={1}>
-          <Pending />
+          {vacationRequestsCount ? <Pending /> : <Check />}
         </Grid>
         <Grid item xs={11}>
-          <Skeleton />
+          {message}
         </Grid>
       </>
     );
