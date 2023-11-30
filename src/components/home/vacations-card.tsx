@@ -69,7 +69,7 @@ const VacationsCard = () => {
             });
           })
         );
-        return vacationRequestStatuses;
+        await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
@@ -77,19 +77,16 @@ const VacationsCard = () => {
   };
 
   useMemo(() => {
-    fetchVacationRequestStatuses().then((vacationRequestStatuses) => {
-      filterLatestVacationRequestStatuses(vacationRequestStatuses);
-      setLoading(false);
-    });
+    fetchVacationRequestStatuses();
   }, [vacationRequests]);
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
   const filterLatestVacationRequestStatuses = async (
-    vacationRequestStatuses: VacationRequestStatus[] | undefined
+    vacationRequestStatuses: VacationRequestStatus[]
   ) => {
-    if (vacationRequests.length && vacationRequestStatuses && vacationRequestStatuses.length) {
+    if (vacationRequests.length && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
       vacationRequests.forEach((vacationRequest) => {
@@ -115,6 +112,7 @@ const VacationsCard = () => {
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
     }
+    setLoading(false);
   };
 
   /**
@@ -162,32 +160,43 @@ const VacationsCard = () => {
   }
 
   /**
-   * Get upcoming pending vacation requests
+   * Get pending vacation requests by checking wether it has a status or not
    *
-   * @returns upcoming pending vacation requests
+   * @returns pending vacation requests
    */
-  const getUpcomingPendingVacationRequests = () => {
-    const upcomingPendingVacationRequests = vacationRequests.filter(
-      (vacationRequest) =>
-        vacationRequest &&
-        DateTime.fromJSDate(vacationRequest.startDate) > DateTime.now() &&
-        !latestVacationRequestStatuses.find(
-          (latestVacationRequestStatus) =>
-            latestVacationRequestStatus.vacationRequestId === vacationRequest.id
-        )
-    );
+  const getPendingVacationRequests = () => {
+    const pendingVacationRequests = vacationRequests
+      .filter(
+        (vacationRequest) =>
+          vacationRequest &&
+          !latestVacationRequestStatuses.find(
+            (latestVacationRequestStatus) =>
+              latestVacationRequestStatus.vacationRequestId === vacationRequest.id
+          )
+      )
+      .filter(validateValueIsNotUndefinedNorNull);
 
-    return upcomingPendingVacationRequests;
+    return pendingVacationRequests;
   };
 
   /**
-   * Get upcoming vacation requests
+   * Get upcoming vacation requests and filter out declined vacation requests
+   *
+   * @returns upcoming vacation requests
    */
   const getUpcomingVacationRequests = () => {
-    const upcomingVacationRequests = vacationRequests.filter(
-      (vacationRequest) =>
-        vacationRequest && DateTime.fromJSDate(vacationRequest.startDate) > DateTime.now()
-    );
+    const upcomingVacationRequests = vacationRequests
+      .filter(
+        (vacationRequest) =>
+          vacationRequest &&
+          DateTime.fromJSDate(vacationRequest.startDate) > DateTime.now() &&
+          !latestVacationRequestStatuses.find(
+            (latestVacationRequestStatus) =>
+              latestVacationRequestStatus.vacationRequestId === vacationRequest.id &&
+              latestVacationRequestStatus.status === VacationRequestStatuses.DECLINED
+          )
+      )
+      .filter(validateValueIsNotUndefinedNorNull);
 
     return upcomingVacationRequests;
   };
@@ -209,30 +218,25 @@ const VacationsCard = () => {
 
   /**
    * Render the earliest upcoming vacation request
-   * Render the earliest upcoming pending vacation request if in admin mode
    */
   const renderEarliestUpcomingVacationRequest = () => {
+    let earliestUpcomingVacationRequest: VacationRequest | undefined = undefined;
     let earliestUpcomingVacationRequestStatus: VacationRequestStatuses | undefined;
 
-    if (!vacationRequests?.length && !latestVacationRequestStatuses?.length && !loading) {
+    if (!latestVacationRequestStatuses?.length && !loading) {
       return <Typography>{strings.vacationRequestError.noVacationRequestsFound}</Typography>;
     }
+    let upcomingVacationRequests = getUpcomingVacationRequests();
 
-    let earliestUpcomingVacationRequest: VacationRequest | undefined = undefined;
-    const upcomingPendingVacationRequests = adminMode
-      ? getUpcomingPendingVacationRequests()
-      : getUpcomingVacationRequests();
-
-    if (upcomingPendingVacationRequests.length) {
-      const filteredUpcomingPendingVacationRequests = upcomingPendingVacationRequests.filter(
+    if (upcomingVacationRequests.length) {
+      upcomingVacationRequests = upcomingVacationRequests.filter(
         validateValueIsNotUndefinedNorNull
       );
 
-      earliestUpcomingVacationRequest = filteredUpcomingPendingVacationRequests.reduce(
-        (vacationA, vacationB) =>
-          DateTime.fromJSDate(vacationA.startDate) > DateTime.fromJSDate(vacationB.startDate)
-            ? vacationB
-            : vacationA
+      earliestUpcomingVacationRequest = upcomingVacationRequests.reduce((vacationA, vacationB) =>
+        DateTime.fromJSDate(vacationA.startDate) > DateTime.fromJSDate(vacationB.startDate)
+          ? vacationB
+          : vacationA
       );
 
       earliestUpcomingVacationRequestStatus = latestVacationRequestStatuses.find(
@@ -297,7 +301,7 @@ const VacationsCard = () => {
                 DateTime.fromJSDate(earliestUpcomingVacationRequest.startDate) > DateTime.now() && (
                   <>
                     <Typography fontWeight={"bold"}>
-                      {`${strings.vacationsCard.nextUpcomingVacation}:`}
+                      {`${strings.vacationsCard.nextUpcomingVacation}`}
                     </Typography>
                     <Grid container>
                       {vacationInfoListItems.map((vacationInfoListItem, index) =>
@@ -320,32 +324,30 @@ const VacationsCard = () => {
   };
 
   /**
-   * Render upcoming vacation requests count
+   * Render upcoming vacation requests count if not admin mode
+   * Render pending vacation requests count if admin mode
    */
-  const renderUpcomingVacationRequestsCount = () => {
-    const upcomingVacationRequestsCount = adminMode
-      ? getUpcomingPendingVacationRequests().length
+  const renderUpcomingOrPendingVacationRequestsCount = () => {
+    const vacationRequestsCount = adminMode
+      ? getPendingVacationRequests().length
       : getUpcomingVacationRequests().length;
 
     if (!loading) {
       return (
         <>
           <Grid item xs={1}>
-            {upcomingVacationRequestsCount > 0 ? <Pending /> : <Check />}
+            {vacationRequestsCount > 0 ? <Pending /> : <Check />}
           </Grid>
           <Grid item xs={11}>
             {adminMode
-              ? upcomingVacationRequestsCount > 0
+              ? vacationRequestsCount > 0
                 ? strings.formatString(
-                    strings.vacationsCard.upComingPendingVacations,
-                    upcomingVacationRequestsCount
+                    strings.vacationsCard.pendingVacations,
+                    vacationRequestsCount
                   )
-                : strings.vacationsCard.noUpcomingPendingVacations
-              : upcomingVacationRequestsCount > 0
-              ? strings.formatString(
-                  strings.vacationsCard.upComingVacations,
-                  upcomingVacationRequestsCount
-                )
+                : strings.vacationsCard.noPendingVacations
+              : vacationRequestsCount > 0
+              ? strings.formatString(strings.vacationsCard.upComingVacations, vacationRequestsCount)
               : strings.vacationsCard.noUpcomingVacations}
           </Grid>
         </>
@@ -378,7 +380,7 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
-            {renderUpcomingVacationRequestsCount()}
+            {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
           </Grid>
         </CardContent>
