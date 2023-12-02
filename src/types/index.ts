@@ -69,8 +69,8 @@ export interface VacationData {
  * Date range picker object.
  */
 export interface Range {
-  start: DateTime | null;
-  end: DateTime | null;
+  start: DateTime;
+  end: DateTime;
 }
 
 /**
