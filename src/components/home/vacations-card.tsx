@@ -312,10 +312,6 @@ const VacationsCard = () => {
       );
     }
 
-    if (!earliestUpcomingVacationRequest && !loading) {
-      return;
-    }
-
     return;
   };
 
