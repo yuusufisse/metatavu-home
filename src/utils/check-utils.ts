@@ -13,3 +13,13 @@ export const hasAllPropsDefined = (object: object): boolean => {
   });
   return response;
 };
+
+/**
+ * Check if value is between min and max values
+ *
+ * @param value value
+ * @param min min value
+ * @param max max value
+ * @returns true if between min and max values
+ */
+export const between = (value: number, min: number, max: number) => value >= min && value <= max;

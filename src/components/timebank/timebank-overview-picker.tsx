@@ -8,6 +8,7 @@ import { Box, MenuItem, Select } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { dailyEntriesAtom, timespanAtom } from "../../atoms/person";
 import { getWeekFromISO } from "../../utils/time-utils";
+import { between } from "../../utils/check-utils";
 
 /**
  * Component properties
@@ -109,51 +110,45 @@ const OverviewRangePicker = (props: Props) => {
         ) > startWeek
     );
 
-  /**
-   * Get week range boundaries
-   *
-   * @returns week range boundaries
-   */
-  const getWeekRangeBoundaries = () => {
-    const startRangeTimeEntries = getStartRangeTimeEntries();
-    const endRangeTimeEntries = getEndRangeTimeEntries();
-    let startRangeWeekNumbers: number[] = [];
-    let endRangeWeekNumbers: number[] = [];
-    const weekRangeBoundaries = {
-      start: { min: 1, max: 1 },
-      end: { min: 1, max: 1 }
-    };
-
-    startRangeWeekNumbers = startRangeTimeEntries.map((startRangeTimeEntry) =>
-      Number(startRangeTimeEntry.timePeriod?.split(",")[2])
-    );
-
-    endRangeWeekNumbers = endRangeTimeEntries.map((endRangeTimeEntry) =>
-      Number(endRangeTimeEntry.timePeriod?.split(",")[2])
-    );
-
-    const startMax = startRangeWeekNumbers.reduce((a, b) => (a > b ? a : b));
-    const startMin = startRangeWeekNumbers.reduce((a, b) => (a > b ? b : a));
-    const endMax = endRangeWeekNumbers.reduce((a, b) => (a > b ? a : b));
-    const endMin = endRangeWeekNumbers.reduce((a, b) => (a > b ? b : a));
-
-    weekRangeBoundaries.start.max = startMax;
-    weekRangeBoundaries.start.min = startMin;
-    weekRangeBoundaries.end.max = endMax;
-    weekRangeBoundaries.end.min = endMin;
-
-    return weekRangeBoundaries;
+/**
+ * Get week range boundaries
+ *
+ * @returns week range boundaries
+ */
+const getWeekRangeBoundaries = () => {
+  const startRangeTimeEntries = getStartRangeTimeEntries();
+  const endRangeTimeEntries = getEndRangeTimeEntries();
+  let startRangeWeekNumbers = [];
+  let endRangeWeekNumbers = [];
+  const weekRangeBoundaries = {
+    start: { min: 1, max: 1 },
+    end: { min: 1, max: 1 }
   };
 
-  /**
-   * Check if value is between min and max values
-   *
-   * @param value value
-   * @param min min value
-   * @param max max value
-   * @returns true if between min and max values
-   */
-  const between = (value: number, min: number, max: number) => value >= min && value <= max;
+  startRangeWeekNumbers = startRangeTimeEntries.map((startRangeTimeEntry) =>
+    Number(startRangeTimeEntry.timePeriod?.split(",")[2])
+  );
+
+  endRangeWeekNumbers = endRangeTimeEntries.map((endRangeTimeEntry) =>
+    Number(endRangeTimeEntry.timePeriod?.split(",")[2])
+  );
+
+  if (startRangeWeekNumbers.length) {
+    const startMax = startRangeWeekNumbers.reduce((a, b) => (a > b ? a : b));
+    const startMin = startRangeWeekNumbers.reduce((a, b) => (a > b ? b : a));
+    weekRangeBoundaries.start.max = startMax;
+    weekRangeBoundaries.start.min = startMin;
+  }
+
+  if (endRangeWeekNumbers.length) {
+    const endMax = endRangeWeekNumbers.reduce((a, b) => (a > b ? a : b));
+    const endMin = endRangeWeekNumbers.reduce((a, b) => (a > b ? b : a));
+    weekRangeBoundaries.end.max = endMax;
+    weekRangeBoundaries.end.min = endMin;
+  }
+
+  return weekRangeBoundaries;
+};
 
   /**
    * Handle range change
@@ -260,6 +255,7 @@ const OverviewRangePicker = (props: Props) => {
           result.push(totalTime.find((item) => item.timePeriod === week));
         }
       }
+      break;
       case Timespan.MONTH:
         selectedRange = range.end.diff(range.start, "months").toObject();
         for (
@@ -273,12 +269,14 @@ const OverviewRangePicker = (props: Props) => {
 
           result.push(totalTime.find((item) => item.timePeriod === month));
         }
+        break;
       case Timespan.YEAR:
         selectedRange = range.end.diff(range.start, "year").toObject();
         for (let i = 0; selectedRange.years && i <= Math.trunc(Number(selectedRange.years)); i++) {
           const year = `${range.start?.plus({ years: i }).get("year")}`;
           result.push(totalTime.find((item) => item.timePeriod === year));
         }
+        break;
       default:
         break;
     }
