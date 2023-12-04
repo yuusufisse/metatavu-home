@@ -365,7 +365,6 @@ const VacationRequestsScreen = () => {
             newStatus,
             selectedRowId
           );
-          console.log(createdVacationRequestStatus);
           if (createdVacationRequestStatus) {
             createdVacationRequestStatuses.push(createdVacationRequestStatus);
           }
