@@ -11,6 +11,7 @@ import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/pers
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
+import UserRoleUtils from "../../utils/user-role-utils";
 import { theme } from "../../theme";
 import { DateTime } from "luxon";
 
@@ -25,6 +26,7 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const adminMode = UserRoleUtils.adminMode();
   const beforeDate = DateTime.now().minus({ days: 1 });
 
   /**
@@ -72,12 +74,14 @@ const BalanceCard = () => {
       personTotalTime && personTotalTime.balance > 0
         ? theme.palette.success.main
         : theme.palette.error.main;
-    if (!personTotalTime && !loading && persons.length) {
+    
+    if (adminMode) {
+      return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
+    } else if (!personTotalTime && !loading && persons.length) {
       return (
         <Typography color={balanceColor}>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
       );
-    }
-    if (personTotalTime) {
+    } else if (personTotalTime) {
       return (
         <Typography color={balanceColor}>{getHoursAndMinutes(personTotalTime.balance)}</Typography>
       );

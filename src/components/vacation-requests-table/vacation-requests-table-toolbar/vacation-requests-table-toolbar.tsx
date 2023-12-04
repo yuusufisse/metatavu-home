@@ -3,7 +3,7 @@ import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import { GridRowId } from "@mui/x-data-grid";
-import { DataGridRow, ToolbarFormModes, VacationData } from "../../../types";
+import { VacationsDataGridRow, ToolbarFormModes, VacationData } from "../../../types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../contexts/confirmation-handler";
@@ -11,19 +11,30 @@ import strings from "../../../localization/strings";
 import { getToolbarTitle } from "../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "../../../atoms/language";
+import { useLocation } from "react-router-dom";
+import { VacationRequestStatuses } from "../../../generated/client";
+import UpdateStatusButton from "./toolbar-update-status-button";
+import UserRoleUtils from "../../../utils/user-role-utils";
 
 /**
  * Component properties
  */
 interface Props {
-  deleteVacationRequests: (selectedRowIds: GridRowId[], rows: DataGridRow[]) => Promise<void>;
+  deleteVacationRequests: (
+    selectedRowIds: GridRowId[],
+    rows: VacationsDataGridRow[]
+  ) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   setFormOpen: (formOpen: boolean) => void;
   formOpen: boolean;
   selectedRowIds: GridRowId[];
-  rows: DataGridRow[];
+  rows: VacationsDataGridRow[];
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
+  updateVacationRequestStatuses: (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => Promise<void>;
 }
 
 /**
@@ -39,17 +50,23 @@ const TableToolbar = ({
   formOpen,
   selectedRowIds,
   rows,
-  setSelectedRowIds
+  setSelectedRowIds,
+  updateVacationRequestStatuses
 }: Props) => {
   const [toolbarOpen, setToolbarOpen] = useState(false);
   const [toolbarFormMode, setToolbarFormMode] = useState<ToolbarFormModes>(ToolbarFormModes.NONE);
   const [confirmationHandlerOpen, setConfirmationHandlerOpen] = useState(false);
   const [title, setTitle] = useState(strings.tableToolbar.myRequests);
   const language = useAtomValue(languageAtom);
+  const adminMode = UserRoleUtils.adminMode();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     setTitle(getToolbarTitle(toolbarFormMode));
-  }, [toolbarFormMode, language]);
+    if (adminMode && toolbarFormMode === ToolbarFormModes.NONE) {
+      setTitle(strings.tableToolbar.manageRequests);
+    }
+  }, [toolbarFormMode, language, pathname]);
 
   useEffect(() => {
     toggleToolbarOpenOnSelectedRowIds(selectedRowIds);
@@ -99,11 +116,15 @@ const TableToolbar = ({
       />
       {toolbarOpen && !formOpen && selectedRowIds?.length ? (
         <ToolbarGridContainer container>
-          <ToolbarGridItem item xs={selectedRowIds?.length === 1 ? 6 : 12}>
+          <ToolbarGridItem
+            item
+            sm={selectedRowIds?.length === 1 ? (adminMode ? 3 : 6) : adminMode ? 6 : 12}
+            xs={6}
+          >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
           {selectedRowIds?.length === 1 && (
-            <ToolbarGridItem item xs={6}>
+            <ToolbarGridItem item sm={adminMode ? 3 : 6} xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
                 ButtonIcon={Edit}
@@ -111,6 +132,24 @@ const TableToolbar = ({
                 setValue={setFormOpen}
               />
             </ToolbarGridItem>
+          )}
+          {adminMode && (
+            <>
+              <ToolbarGridItem item sm={3} xs={6}>
+                <UpdateStatusButton
+                  buttonType={VacationRequestStatuses.APPROVED}
+                  updateVacationRequestStatuses={updateVacationRequestStatuses}
+                  selectedRowIds={selectedRowIds}
+                />
+              </ToolbarGridItem>
+              <ToolbarGridItem item sm={3} xs={6}>
+                <UpdateStatusButton
+                  buttonType={VacationRequestStatuses.DECLINED}
+                  updateVacationRequestStatuses={updateVacationRequestStatuses}
+                  selectedRowIds={selectedRowIds}
+                />
+              </ToolbarGridItem>
+            </>
           )}
         </ToolbarGridContainer>
       ) : (
@@ -128,12 +167,14 @@ const TableToolbar = ({
                 buttonVariant="outlined"
               />
             ) : (
-              <FormToggleButton
-                value={formOpen}
-                setValue={setFormOpen}
-                title={strings.tableToolbar.create}
-                ButtonIcon={Add}
-              />
+              !adminMode && (
+                <FormToggleButton
+                  value={formOpen}
+                  setValue={setFormOpen}
+                  title={strings.tableToolbar.create}
+                  ButtonIcon={Add}
+                />
+              )
             )}
           </ToolbarGridItem>
         </ToolbarGridContainer>
