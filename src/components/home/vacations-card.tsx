@@ -356,10 +356,14 @@ const VacationsCard = () => {
 
     return (
       <>
-        <Grid item xs={1}>
-          {vacationRequestsCount ? <Pending /> : <Check />}
-        </Grid>
-        <Grid item xs={11}>
+        {adminMode || vacationRequestsCount ? (
+          <Grid item xs={1}>
+            {vacationRequestsCount ? <Pending /> : <Check />}
+          </Grid>
+        ) : (
+          <></>
+        )}
+        <Grid item xs={adminMode || vacationRequestsCount ? 11 : 12}>
           {message}
         </Grid>
       </>
