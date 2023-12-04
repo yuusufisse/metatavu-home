@@ -16,7 +16,7 @@ interface Props {
 
 /**
  * Date Range Picker component
- * 
+ *
  * @param props Component properties
  */
 const DateRangePicker = (props: Props) => {
@@ -63,7 +63,9 @@ const DateRangePicker = (props: Props) => {
           mx: "1%"
         }}
         label={strings.timeExpressions.startDate}
-        onChange={(dateTime) => setRange({ ...range, start: dateTime })}
+        onChange={(dateTime: DateTime | null) =>
+          dateTime && setRange({ ...range, start: dateTime })
+        }
         value={range.start}
         maxDate={range.end?.minus({ days: 1 })}
       />
@@ -73,7 +75,7 @@ const DateRangePicker = (props: Props) => {
           mx: "1%"
         }}
         label={strings.timeExpressions.endDate}
-        onChange={(dateTime) => setRange({ ...range, end: dateTime })}
+        onChange={(dateTime: DateTime | null) => dateTime && setRange({ ...range, end: dateTime })}
         value={range.end}
         minDate={range.start?.plus({ days: 1 })}
       />
