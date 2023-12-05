@@ -7,7 +7,6 @@ import { MouseEvent, useState } from "react";
 import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import strings from "../../localization/strings";
 import UserRoleUtils from "../../utils/user-role-utils";
-import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * Navigation Items component
@@ -15,7 +14,6 @@ import UserRoleUtils from "../../utils/user-role-utils";
 const NavItems = () => {
   const [currentPage, setCurrentPage] = useState("");
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const admin = UserRoleUtils.isAdmin();
   const admin = UserRoleUtils.isAdmin();
 
   /**
