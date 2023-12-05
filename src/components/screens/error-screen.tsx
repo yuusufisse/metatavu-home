@@ -1,5 +1,6 @@
 import { useRouteError } from "react-router-dom";
 import strings from "../../localization/strings";
+import { Container } from "@mui/material";
 
 /**
  * Component properties
@@ -16,13 +17,13 @@ const ErrorScreen = ({ title, message }: Props) => {
   const error: unknown = useRouteError();
 
   return (
-    <div>
-      <h1>{title ? title : strings.error.oops}</h1>
-      <p>{message ? message : strings.error.generic}</p>
+    <Container>
+      <h1>{title ?? strings.error.oops}</h1>
+      <p>{message ?? strings.error.generic}</p>
       <p>
         <i>{(error as Error)?.message || (error as { statusText?: string })?.statusText}</i>
       </p>
-    </div>
+    </Container>
   );
 };
 

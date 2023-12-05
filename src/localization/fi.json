@@ -36,6 +36,7 @@
   "timebank": {
     "balance": "Saldo",
     "yourBalanceIs": "Saldosi on",
+    "atTheEndOf": "{0} lopussa",
     "logged": "Kirjattu",
     "expected": "Odotettu",
     "billableProject": "Laskutettava",
@@ -49,7 +50,8 @@
     "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
     "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
     "byrange": "Aikavälin mukaan",
-    "viewAllTimeEntries": "Näytä kaikki"
+    "viewAllTimeEntries": "Näytä kaikki",
+    "selectTimespan": "Valitse aikaväli"
   },
   "timeExpressions": {
     "monday": "Maanantai",
@@ -89,7 +91,7 @@
     "approved": "Hyväksytty",
     "declined": "Hylätty",
     "vacation": "Loma",
-    "maternityPaternityLeave": "Äitiys/vanhempainvapaa",
+    "maternityPaternityLeave": "Vanhempainvapaa",
     "unpaidTimeOff": "Palkaton vapaa",
     "sickness": "Sairaus",
     "personalDays": "Henkilökohtainen vapaa",
@@ -108,7 +110,9 @@
     "deleteRequestError": "Lomahakemuksen poistaminen epäonnistui",
     "deleteStatusError": "Lomahakemustilojen poistaminen epäonnistui",
     "updateRequestError": "Lomahakemuksen päivittäminen epäonnistui",
-    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui"
+    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui",
+    "noVacationRequestsFound": "Lomahakemuksia ei löydetty",
+    "nameNotFound": "Nimeä ei löydetty"
   },
   "form": {
     "submit": "Lähetä",
@@ -116,7 +120,7 @@
   },
   "tableToolbar": {
     "delete": "Poista",
-    "myRequests": "Minun lomahakemukset",
+    "myRequests": "Lomahakemukset",
     "createRequests": "Uusi lomahakemus",
     "editRequests": "Muokkaa lomahakemusta",
     "edit": "Muokkaa",
@@ -130,11 +134,14 @@
   "vacationsCard": {
     "vacations": "Lomat",
     "noUpcomingVacations": "Ei tulevia lomia",
-    "youHave": "Sinulla on",
-    "pendingRequests": "odottavaa lomahakemusta",
-    "noPendingRequests": "Ei odottavia lomahakemuksia",
-    "ofWhich": "joista",
-    "areUpcoming": "ovat tulevia"
+    "noPendingVacations": "Ei odottavia lomahakemuksia",
+    "upComingVacations": "Sinulla on {0} tulevaa lomaa",
+    "pendingVacations": "Sinulla on {0} odottavaa lomahakemusta",
+    "nextUpcomingVacation": "Seuraava loma:",
+    "vacationType": "Lomatyyppi:",
+    "applicant": "Hakija:",
+    "timeOfVacation": "Ajankohta:",
+    "status": "Tila:"
   },
   "personSelectDropdown": {
     "label": "Suodata henkilöllä"
@@ -146,5 +153,8 @@
   "adminRouteAccess": {
     "notAdmin": "Sinulla ei ole hallintaoikeuksia",
     "noAccess": "Ei pääsyä"
+  },
+  "vacationsScreen": {
+    "back": "Takaisin"
   }
 }

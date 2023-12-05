@@ -12,29 +12,27 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
-import UserRoleUtils from "./utils/user-role-utils";
-import strings from "./localization/strings";
-import AdminScreen from "./components/screens/admin-screen";
 import TimebankScreenViewAll from "./components/screens/timebank-screen-view-all";
+import AdminScreen from "./components/screens/admin-screen";
+import { Settings } from "luxon";
+import { useMemo } from "react";
+import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 
 /**
  * Application component
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
-  const admin = UserRoleUtils.isAdmin();
 
-  const AdminRouteErrorScreen = () => (
-    <ErrorScreen
-      message={strings.adminRouteAccess.notAdmin}
-      title={strings.adminRouteAccess.noAccess}
-    />
-  );
+  useMemo(() => {
+    Settings.defaultLocale = language;
+  }, [language]);
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorScreen />,
       children: [
         {
           path: "/",
@@ -42,45 +40,36 @@ const App = () => {
         },
         {
           path: "/vacations",
-          element: <VacationRequestsScreen />,
-          errorElement: <ErrorScreen />
+          element: <VacationRequestsScreen />
         },
         {
           path: "/timebank",
-          element: <TimebankScreen />,
-          errorElement: <ErrorScreen />
+          element: <TimebankScreen />
         }
       ]
     },
     {
       path: "/admin",
-      element: <Layout />,
+      element: (
+        <RestrictedContentProvider>
+          <Layout />
+        </RestrictedContentProvider>
+      ),
       errorElement: <ErrorScreen />,
-      children: admin
-        ? [
-            {
-              path: "/admin",
-              element: <AdminScreen />
-            },
-            {
-              path: "/admin/timebank",
-              element: <TimebankScreen />
-            },
-            {
-              path: "/admin/timebank/viewall",
-              element: <TimebankScreenViewAll />
-            }
-          ]
-        : [
-            {
-              path: "/admin",
-              element: <AdminRouteErrorScreen />
-            },
-            {
-              path: "/admin/*",
-              element: <AdminRouteErrorScreen />
-            }
-          ]
+      children: [
+        {
+          path: "/admin",
+          element: <AdminScreen />
+        },
+        {
+          path: "/admin/vacations",
+          element: <VacationRequestsScreen />
+        },
+        {
+          path: "/admin/timebank/viewall",
+          element: <TimebankScreenViewAll />
+        }
+      ]
     }
   ]);
   return (

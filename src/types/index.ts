@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { Person, PersonTotalTime, VacationType } from "../generated/client";
+import { ReactNode } from "react";
 
 /**
  * Enum describing table form modes
@@ -21,16 +22,17 @@ export type ButtonIconProps = {};
 export type Language = "fi" | "en-gb";
 
 /**
- * Type describing row for data grid table
+ * Type describing row for vacations data grid table
  */
-export interface DataGridRow {
+export interface VacationsDataGridRow {
   id: string | undefined;
   type: VacationType | string;
+  personFullName: string;
   updatedAt: string | DateTime;
   startDate: string | DateTime;
   endDate: string | DateTime;
   days: number;
-  message: string | undefined;
+  message: string;
   status: string;
 }
 
@@ -119,4 +121,12 @@ export interface WorkTimeTotalData {
   balance: number;
   logged?: number;
   expected?: number;
+}
+
+/**
+ * Type describing vacation info list item
+ */
+export interface VacationInfoListItem {
+  name: string;
+  value: string | ReactNode;
 }

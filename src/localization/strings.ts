@@ -72,6 +72,8 @@ export interface Localized extends LocalizedStringsMethods {
     pieChartDescription: string;
     byrange: string;
     viewAllTimeEntries: string;
+    selectTimespan: string;
+    atTheEndOf: string;
   };
   /**
    * General time-related expressions
@@ -145,6 +147,8 @@ export interface Localized extends LocalizedStringsMethods {
     deleteStatusError: string;
     updateRequestError: string;
     updateStatusError: string;
+    noVacationRequestsFound: string;
+    nameNotFound: string;
   };
   /**
    * Translations related to form
@@ -178,11 +182,14 @@ export interface Localized extends LocalizedStringsMethods {
   vacationsCard: {
     vacations: string;
     noUpcomingVacations: string;
-    youHave: string;
-    pendingRequests: string;
-    noPendingRequests: string;
-    ofWhich: string;
-    areUpcoming: string;
+    noPendingVacations: string;
+    upComingVacations: string;
+    pendingVacations: string;
+    nextUpcomingVacation: string;
+    vacationType: string;
+    applicant: string;
+    timeOfVacation: string;
+    status: string;
   };
   /**
    * Translation related to person select dropdown
@@ -203,6 +210,12 @@ export interface Localized extends LocalizedStringsMethods {
   adminRouteAccess: {
     notAdmin: string;
     noAccess: string;
+  };
+  /**
+   * Translation related to vacations screen
+   */
+  vacationsScreen: {
+    back: string;
   };
 }
 

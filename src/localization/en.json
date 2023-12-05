@@ -36,6 +36,7 @@
   "timebank": {
     "balance": "Balance",
     "yourBalanceIs": "Your balance is",
+    "atTheEndOf": "At the end of {0}",
     "logged": "Logged",
     "expected": "Expected",
     "billableProject": "Billable",
@@ -49,7 +50,8 @@
     "barChartDescription": "Summary of time entries by time span",
     "pieChartDescription": "Select a specific time entry or range",
     "byrange": "By range",
-    "viewAllTimeEntries": "View all"
+    "viewAllTimeEntries": "View all",
+    "selectTimespan": "Select time span"
   },
   "timeExpressions": {
     "monday": "Monday",
@@ -89,7 +91,7 @@
     "approved": "Approved",
     "declined": "Declined",
     "vacation": "Vacation",
-    "maternityPaternityLeave": "Maternity/Paternity leave",
+    "maternityPaternityLeave": "Parental leave",
     "unpaidTimeOff": "Unpaid time off",
     "sickness": "Sickness",
     "personalDays": "Personal day",
@@ -108,7 +110,9 @@
     "deleteRequestError": "Deleting vacation requests has failed",
     "deleteStatusError": "Deleting vacation request statuses has failed",
     "updateRequestError": "Updating vacation request has failed",
-    "updateStatusError": "Updating vacation request status has failed"
+    "updateStatusError": "Updating vacation request status has failed",
+    "noVacationRequestsFound": "No vacation requests found",
+    "nameNotFound": "Name not found"
   },
   "form": {
     "submit": "Submit",
@@ -116,7 +120,7 @@
   },
   "tableToolbar": {
     "delete": "Delete",
-    "myRequests": "My vacation requests",
+    "myRequests": "Vacation requests",
     "createRequests": "New vacation request",
     "editRequests": "Edit a vacation request",
     "edit": "Edit",
@@ -130,11 +134,14 @@
   "vacationsCard": {
     "vacations": "Vacations",
     "noUpcomingVacations": "No upcoming vacations",
-    "youHave": "You have",
-    "pendingRequests": "pending vacation requests",
-    "noPendingRequests": "No pending vacation requests",
-    "ofWhich": "of which",
-    "areUpcoming": "are upcoming"
+    "noPendingVacations": "No pending vacation requests",
+    "upComingVacations": "You have {0} upcoming vacations",
+    "pendingVacations": "You have {0} pending vacation requests",
+    "nextUpcomingVacation": "Next upcoming vacation:",
+    "vacationType": "Vacation Type:",
+    "applicant": "Applicant:",
+    "timeOfVacation": "Time of Vacation:",
+    "status": "Status:"
   },
   "personSelectDropdown": {
     "label": "Filter by Person"
@@ -146,5 +153,8 @@
   "adminRouteAccess": {
     "notAdmin": "You don't have an admin role",
     "noAccess": "Access denied"
+  },
+  "vacationsScreen": {
+    "back": "Back"
   }
 }
