@@ -114,7 +114,7 @@ const NavItems = () => {
         </Link>
         {admin && (
           <Link to={"/admin"} style={{ margin: 2, display: "block" }}>
-            <Button>Admin</Button>
+            <Button>{strings.header.admin}</Button>
           </Link>
         )}
       </Box>

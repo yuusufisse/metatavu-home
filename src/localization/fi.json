@@ -51,7 +51,8 @@
     "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
     "byrange": "Aikavälin mukaan",
     "viewAllTimeEntries": "Näytä kaikki",
-    "selectTimespan": "Valitse aikaväli"
+    "selectTimespan": "Valitse aikaväli",
+    "searchPlaceholder": "Hae henkilöä..."
   },
   "timeExpressions": {
     "monday": "Maanantai",

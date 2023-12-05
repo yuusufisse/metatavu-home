@@ -51,7 +51,8 @@
     "pieChartDescription": "Select a specific time entry or range",
     "byrange": "By range",
     "viewAllTimeEntries": "View all",
-    "selectTimespan": "Select time span"
+    "selectTimespan": "Select time span",
+    "searchPlaceholder": "Search for a person..."
   },
   "timeExpressions": {
     "monday": "Monday",
