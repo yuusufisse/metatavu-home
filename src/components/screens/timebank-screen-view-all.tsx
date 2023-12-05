@@ -1,6 +1,14 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { personsAtom, personsWithTotalTimeAtom } from "../../atoms/person";
-import { Box, Card, CircularProgress, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CircularProgress,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography
+} from "@mui/material";
 import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
 import { theme } from "../../theme";
@@ -12,7 +20,8 @@ import strings from "../../localization/strings";
 import { useApi } from "../../hooks/use-api";
 import { errorAtom } from "../../atoms/error";
 import { Person, PersonTotalTime, Timespan } from "../../generated/client";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Search } from "@mui/icons-material";
 
 /**
  * Timebank screen view all component
@@ -24,6 +33,10 @@ const TimebankScreenViewAll = () => {
   const [personsWithTotalTime, setPersonsWithTotalTime] = useAtom(personsWithTotalTimeAtom);
   const [persons, setPersons] = useAtom(personsAtom);
   const [loading, setLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [displayedPersonsWithTotalTime, setDisplayedPersonsWithTotalTime] = useState<
+    PersonWithTotalTime[]
+  >([]);
 
   /**
    * Renders the customized tooltip for charts
@@ -157,6 +170,7 @@ const TimebankScreenViewAll = () => {
       );
 
       setPersonsWithTotalTime(populatedPersonTotalsTimeList);
+      setDisplayedPersonsWithTotalTime(populatedPersonTotalsTimeList);
     } catch (error) {
       setError(`${error} ${strings.error.fetchFailedGeneral}`);
     }
@@ -168,41 +182,90 @@ const TimebankScreenViewAll = () => {
     fetchPersonsAndPersonsTotalTime();
   }, []);
 
+  /**
+   * Renders the search
+   */
+  const renderSearch = () => (
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <TextField
+        value={searchInput}
+        onChange={handleSearchInputChange}
+        placeholder={strings.timebank.searchPlaceholder}
+        variant="standard"
+        disabled={loading}
+        sx={{ width: "99%", padding: 1 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search />
+            </InputAdornment>
+          )
+        }}
+      />
+    </Box>
+  );
+
+  /**
+   * Handle search input change
+   *
+   * @param event input change event
+   */
+  const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newSearchInput = event.target.value;
+    setSearchInput(newSearchInput);
+
+    if (newSearchInput === "") {
+      setDisplayedPersonsWithTotalTime(personsWithTotalTime);
+      return;
+    }
+
+    const newDisplayedPersonsWithTotalTime = personsWithTotalTime.filter((personsWithTotalTime) =>
+      `${personsWithTotalTime.person.firstName} ${personsWithTotalTime.person.lastName}`
+        .toLowerCase()
+        .includes(newSearchInput.toLowerCase())
+    );
+
+    setDisplayedPersonsWithTotalTime(newDisplayedPersonsWithTotalTime);
+  };
+
   return (
-    <Grid container spacing={1} textAlign={"center"}>
-      {!loading ? (
-        personsWithTotalTime.map((personWithTotalTime, idx) => {
-          return (
-            <Grid item xs={12} sm={6} md={4} key={`person-totaltime-card-${idx}`}>
-              <Card
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height: "400px",
-                  "& .recharts-wrapper .recharts-surface": {
-                    overflow: "visible"
-                  }
-                }}
-              >
-                <Box sx={{ padding: "10px", marginBottom: "60px" }}>
-                  <Typography variant="h4">{`${personWithTotalTime.person.firstName} ${personWithTotalTime.person.lastName}`}</Typography>
-                  <Typography>
-                    {personWithTotalTime.person.startDate &&
-                      DateTime.fromFormat(personWithTotalTime.person.startDate, "yyyy-M-d")
-                        .setLocale(language)
-                        .toLocaleString()}
-                  </Typography>
-                </Box>
-                {renderPieChart(personWithTotalTime, false)}
-              </Card>
-            </Grid>
-          );
-        })
-      ) : (
-        <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />
-      )}
-    </Grid>
+    <>
+      <Card sx={{ marginBottom: 2 }}>{renderSearch()}</Card>
+      <Grid container spacing={2} textAlign={"center"}>
+        {!loading ? (
+          displayedPersonsWithTotalTime.map((personWithTotalTime, idx) => {
+            return (
+              <Grid item xs={12} sm={6} md={4} key={`person-totaltime-card-${idx}`}>
+                <Card
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    height: "400px",
+                    "& .recharts-wrapper .recharts-surface": {
+                      overflow: "visible"
+                    }
+                  }}
+                >
+                  <Box sx={{ padding: "10px", marginBottom: "60px" }}>
+                    <Typography variant="h4">{`${personWithTotalTime.person.firstName} ${personWithTotalTime.person.lastName}`}</Typography>
+                    <Typography>
+                      {personWithTotalTime.person.startDate &&
+                        DateTime.fromFormat(personWithTotalTime.person.startDate, "yyyy-M-d")
+                          .setLocale(language)
+                          .toLocaleString()}
+                    </Typography>
+                  </Box>
+                  {renderPieChart(personWithTotalTime, false)}
+                </Card>
+              </Grid>
+            );
+          })
+        ) : (
+          <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />
+        )}
+      </Grid>
+    </>
   );
 };
 
