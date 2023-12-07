@@ -377,11 +377,11 @@ const TimebankContent = (props: Props) => {
         </Card>
       </Grow>
       <Grow in>
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 1 }}>
           <Grid container>
             <Grid item xs={12} textAlign={"center"}>
               <Link to={"/admin/timebank/viewall"}>
-                <Button sx={{ width: "100%", height: "100%" }} variant="contained">
+                <Button sx={{ width: "100%", height: "50px" }} variant="contained">
                   <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
                 </Button>
               </Link>
