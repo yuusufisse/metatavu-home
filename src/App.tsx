@@ -12,7 +12,7 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
-import TimebankScreenViewAll from "./components/screens/timebank-screen-view-all";
+import TimebankViewAllScreen from "./components/screens/timebank-view-all-screen";
 import AdminScreen from "./components/screens/admin-screen";
 import { Settings } from "luxon";
 import { useMemo } from "react";
@@ -67,7 +67,7 @@ const App = () => {
         },
         {
           path: "/admin/timebank/viewall",
-          element: <TimebankScreenViewAll />
+          element: <TimebankViewAllScreen />
         }
       ]
     }

@@ -24,9 +24,9 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Search } from "@mui/icons-material";
 
 /**
- * Timebank screen view all component
+ * Timebank view all screen component
  */
-const TimebankScreenViewAll = () => {
+const TimebankViewAllScreen = () => {
   const { personsApi } = useApi();
   const language = useAtomValue(languageAtom);
   const setError = useSetAtom(errorAtom);
@@ -280,4 +280,4 @@ const TimebankScreenViewAll = () => {
   );
 };
 
-export default TimebankScreenViewAll;
+export default TimebankViewAllScreen;
