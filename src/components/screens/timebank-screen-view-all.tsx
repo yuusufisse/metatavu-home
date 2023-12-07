@@ -231,9 +231,13 @@ const TimebankScreenViewAll = () => {
   return (
     <>
       <Card sx={{ marginBottom: 2 }}>{renderSearch()}</Card>
-      <Grid container spacing={2} textAlign={"center"}>
+      <Grid container spacing={2} textAlign={"center"} marginBottom={20}>
         {!loading ? (
           displayedPersonsWithTotalTime.map((personWithTotalTime, idx) => {
+            const balanceColor =
+              personWithTotalTime.personTotalTime && personWithTotalTime.personTotalTime.balance > 0
+                ? theme.palette.success.main
+                : theme.palette.error.main;
             return (
               <Grid item xs={12} sm={6} md={4} key={`person-totaltime-card-${idx}`}>
                 <Card
@@ -257,6 +261,13 @@ const TimebankScreenViewAll = () => {
                     </Typography>
                   </Box>
                   {renderPieChart(personWithTotalTime, false)}
+                  <Box sx={{ marginTop: "60px" }}>
+                    {personWithTotalTime.personTotalTime && (
+                      <Typography fontSize={22} color={balanceColor}>
+                        {getHoursAndMinutes(personWithTotalTime.personTotalTime.balance)}
+                      </Typography>
+                    )}
+                  </Box>
                 </Card>
               </Grid>
             );
