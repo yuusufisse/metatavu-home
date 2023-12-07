@@ -50,7 +50,7 @@
     "barChartDescription": "Summary of time entries by time span",
     "pieChartDescription": "Select a specific time entry or range",
     "byrange": "By range",
-    "viewAllTimeEntries": "View all",
+    "viewAllTimeEntries": "View all employees totaltimes and balances",
     "selectTimespan": "Select time span",
     "searchPlaceholder": "Search for a person..."
   },
