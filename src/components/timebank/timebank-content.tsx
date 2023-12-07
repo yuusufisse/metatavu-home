@@ -36,6 +36,7 @@ import {
   timespanAtom
 } from "../../atoms/person";
 import { Link } from "react-router-dom";
+import UserRoleUtils from "../../utils/user-role-utils";
 
 /**
  * Component properties
@@ -63,6 +64,7 @@ const TimebankContent = (props: Props) => {
   const todayOrEarlier = DateTime.fromJSDate(
     dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
   );
+  const adminMode = UserRoleUtils.adminMode();
 
   /**
    * Allows only logged dates or with expected hours to be selected in the date time picker.
@@ -376,19 +378,21 @@ const TimebankContent = (props: Props) => {
           </Container>
         </Card>
       </Grow>
-      <Grow in>
-        <Card sx={{ p: 1 }}>
-          <Grid container>
-            <Grid item xs={12} textAlign={"center"}>
-              <Link to={"/admin/timebank/viewall"}>
-                <Button sx={{ width: "100%", height: "50px" }} variant="contained">
-                  <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
-                </Button>
-              </Link>
+      {adminMode && (
+        <Grow in>
+          <Card sx={{ p: 1 }}>
+            <Grid container>
+              <Grid item xs={12} textAlign={"center"}>
+                <Link to={"/admin/timebank/viewall"}>
+                  <Button sx={{ width: "100%", height: "50px" }} variant="contained">
+                    <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
+                  </Button>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </Card>
-      </Grow>
+          </Card>
+        </Grow>
+      )}
     </>
   );
 };
