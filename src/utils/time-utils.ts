@@ -1,6 +1,4 @@
 import { DateTime, Duration } from "luxon";
-import { useAtomValue } from "jotai";
-import { languageAtom } from "../atoms/language";
 
 /**
  * Format date
@@ -12,11 +10,7 @@ import { languageAtom } from "../atoms/language";
 export const formatDate = (date: DateTime, dateWithTime?: boolean) => {
   if (!date) return "";
 
-  const language = useAtomValue(languageAtom);
-
-  return date
-    .setLocale(language)
-    .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
+  return date.toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
 };
 
 /**
@@ -48,15 +42,12 @@ export const getHours = (minutes: number) =>
  */
 export const formatTimePeriod = (timespan: string[] | undefined) => {
   if (!timespan) return null;
-  const language = useAtomValue(languageAtom);
 
   if (timespan[0].length > 4) {
-    const startDate = DateTime.fromJSDate(new Date(timespan[0]))
-      .setLocale(language)
-      .toLocaleString(DateTime.DATE_SHORT);
-    const endDate = DateTime.fromJSDate(new Date(timespan[1]))
-      .setLocale(language)
-      .toLocaleString(DateTime.DATE_SHORT);
+    const startDate = DateTime.fromJSDate(new Date(timespan[0])).toLocaleString(
+      DateTime.DATE_SHORT
+    );
+    const endDate = DateTime.fromJSDate(new Date(timespan[1])).toLocaleString(DateTime.DATE_SHORT);
     return `${startDate} – ${endDate}`; //All time
   } else if (timespan.length > 2) {
     return `${timespan[0]}/${timespan[2]}`; //Month
