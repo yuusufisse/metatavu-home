@@ -1,5 +1,23 @@
 import { DateTime, Duration } from "luxon";
-import strings from "../localization/strings";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "../atoms/language";
+
+/**
+ * Format date
+ *
+ * @param date datetime object
+ * @param dateWithTime datetime object with time
+ * @returns formatted date time
+ */
+export const formatDate = (date: DateTime, dateWithTime?: boolean) => {
+  if (!date) return "";
+
+  const language = useAtomValue(languageAtom);
+
+  return date
+    .setLocale(language)
+    .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
+};
 
 /**
  * Converts inputted minutes into hours and minutes
@@ -32,12 +50,8 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
   if (!timespan) return null;
 
   if (timespan[0].length > 4) {
-    const startDate = new Date(timespan[0].split("-").join(", ")).toLocaleDateString(
-      strings.localization.time
-    );
-    const endDate = new Date(timespan[1].split("-").join(", ")).toLocaleDateString(
-      strings.localization.time
-    );
+    const startDate = formatDate(DateTime.fromJSDate(new Date(timespan[0])));
+    const endDate = formatDate(DateTime.fromJSDate(new Date(timespan[1])));
     return `${startDate} – ${endDate}`; //All time
   } else if (timespan.length > 2) {
     return `${timespan[0]}/${timespan[2]}`; //Month
