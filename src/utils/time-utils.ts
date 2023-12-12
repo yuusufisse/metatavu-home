@@ -48,10 +48,15 @@ export const getHours = (minutes: number) =>
  */
 export const formatTimePeriod = (timespan: string[] | undefined) => {
   if (!timespan) return null;
+  const language = useAtomValue(languageAtom);
 
   if (timespan[0].length > 4) {
-    const startDate = formatDate(DateTime.fromJSDate(new Date(timespan[0])));
-    const endDate = formatDate(DateTime.fromJSDate(new Date(timespan[1])));
+    const startDate = DateTime.fromJSDate(new Date(timespan[0]))
+      .setLocale(language)
+      .toLocaleString(DateTime.DATE_SHORT);
+    const endDate = DateTime.fromJSDate(new Date(timespan[1]))
+      .setLocale(language)
+      .toLocaleString(DateTime.DATE_SHORT);
     return `${startDate} – ${endDate}`; //All time
   } else if (timespan.length > 2) {
     return `${timespan[0]}/${timespan[2]}`; //Month
