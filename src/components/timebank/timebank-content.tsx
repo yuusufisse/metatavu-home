@@ -85,11 +85,15 @@ const TimebankContent = (props: Props) => {
    */
   const renderOverViewChart = () => {
     if (loading) {
-      return <CircularProgress sx={{ 
-        margin: "auto", 
-        mt: "5%", 
-        mb: "5%" 
-      }} />;
+      return (
+        <CircularProgress
+          sx={{
+            margin: "auto",
+            mt: "5%",
+            mb: "5%"
+          }}
+        />
+      );
     }
     if (!personTotalTime) return null;
 
@@ -188,15 +192,18 @@ const TimebankContent = (props: Props) => {
             {strings.timebank.barChartDescription}
           </Typography>
           <Container sx={{ p: 3 }}>
-            <ListItemText
-              sx={{ 
-                textAlign: "center", 
-                scale: "150%", 
-                mb: 3 
+            <Box
+              sx={{
+                textAlign: "center",
+                scale: "150%",
+                mb: 3
               }}
-              primary={strings.timebank.timeperiod}
-              secondary={formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
-            />
+            >
+              <Typography>{strings.timebank.timeperiod}</Typography>
+              <Typography sx={{ color: "grey" }}>
+                {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
+              </Typography>
+            </Box>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <FormControl
                 sx={{
@@ -223,11 +230,13 @@ const TimebankContent = (props: Props) => {
                 </Select>
               </FormControl>
             </Box>
-            <Box sx={{ 
-              display: "flex", 
-              flexDirection: "row", 
-              justifyItems: "center" 
-              }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyItems: "center"
+              }}
+            >
               {renderOverViewChart()}
             </Box>
           </Container>
@@ -252,10 +261,10 @@ const TimebankContent = (props: Props) => {
           </Typography>
           <Container sx={{ p: 3 }}>
             <ListItemText
-              sx={{ 
-                textAlign: "center", 
-                scale: "150%", 
-                p: 3 
+              sx={{
+                textAlign: "center",
+                scale: "150%",
+                p: 3
               }}
               primary={strings.timebank.logged}
               secondary={
@@ -266,11 +275,13 @@ const TimebankContent = (props: Props) => {
                   : getHoursAndMinutes(Number(personDailyEntry?.logged))
               }
             />
-            <Box sx={{ 
-              display: "flex", 
-              flexDirection: "row", 
-              justifyContent: "center" 
-              }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center"
+              }}
+            >
               {renderDatePickers()}
               <FormControlLabel
                 sx={{ display: "inline" }}
@@ -285,11 +296,13 @@ const TimebankContent = (props: Props) => {
                 }
               />
             </Box>
-            <Box sx={{ 
-              display: "flex", 
-              flexDirection: "row", 
-              justifyItems: "center" 
-              }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyItems: "center"
+              }}
+            >
               {renderDailyEntryOrRangeChart()}
               <List dense sx={{ marginLeft: "5%" }}>
                 <ListItem>
@@ -301,7 +314,10 @@ const TimebankContent = (props: Props) => {
                         ? getHoursAndMinutes(
                             Number(
                               selectedEntries.reduce(
-                                (prev, next) => prev + next.billableProjectTime, 0))
+                                (prev, next) => prev + next.billableProjectTime,
+                                0
+                              )
+                            )
                           )
                         : getHoursAndMinutes(Number(personDailyEntry?.billableProjectTime))
                     }
@@ -316,7 +332,10 @@ const TimebankContent = (props: Props) => {
                         ? getHoursAndMinutes(
                             Number(
                               selectedEntries.reduce(
-                                (prev, next) => prev + next.nonBillableProjectTime, 0))
+                                (prev, next) => prev + next.nonBillableProjectTime,
+                                0
+                              )
+                            )
                           )
                         : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))
                     }
