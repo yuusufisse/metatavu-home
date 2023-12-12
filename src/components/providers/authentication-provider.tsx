@@ -40,7 +40,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     try {
       keycloak.onTokenExpired = () => keycloak.updateToken(5);
 
-      keycloak.onAuthRefreshError = () => keycloak.login({ idpHint: "google" });
+      keycloak.onAuthRefreshError = () => keycloak.login();
       keycloak.onAuthRefreshSuccess = () => {
         updateAuthData();
       };
@@ -63,14 +63,10 @@ const AuthenticationProvider = ({ children }: Props) => {
         keycloak.login();
       };
 
-      const keycloakInitialized = await keycloak.init({
-        onLoad: "check-sso",
+      await keycloak.init({
+        onLoad: "login-required",
         checkLoginIframe: false
       });
-
-      if (!keycloakInitialized) {
-        await keycloak.login({ idpHint: "google" });
-      }
     } catch (error) {
       console.error(error);
     }
