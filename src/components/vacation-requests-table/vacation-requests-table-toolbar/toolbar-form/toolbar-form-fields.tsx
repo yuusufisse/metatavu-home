@@ -100,7 +100,6 @@ const ToolbarFormFields = ({
         }}
         sx={{ marginBottom: "5px" }}
       />
-
       <FormLabel sx={{ marginBottom: "5px" }}>{strings.vacationRequest.days}</FormLabel>
       <DateRangePicker
         dateTimeTomorrow={dateTimeTomorrow}
