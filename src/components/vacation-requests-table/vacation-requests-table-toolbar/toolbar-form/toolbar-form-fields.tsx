@@ -87,7 +87,6 @@ const ToolbarFormFields = ({
           );
         })}
       </Select>
-
       <FormLabel>{strings.vacationRequest.message}</FormLabel>
       <TextField
         required
