@@ -68,15 +68,15 @@ export interface VacationData {
 }
 
 /**
- * Date range picker object.
+ * Type describing date range for overview picker
  */
-export interface Range {
+export interface DateRange {
   start: DateTime;
   end: DateTime;
 }
 
 /**
- * Interface for custom label used in the pie chart.
+ * Interface for custom label used in the pie chart
  */
 export interface CustomLabel {
   value: number;

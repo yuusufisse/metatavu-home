@@ -2,8 +2,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import { DailyEntry } from "../../generated/client";
-import { Range } from "../../types";
 import strings from "../../localization/strings";
+import { DateRange } from "../../types";
 
 /**
  * Component properties
@@ -20,23 +20,22 @@ interface Props {
  * @param props Component properties
  */
 const DateRangePicker = ({ setSelectedEntries, dailyEntries, today }: Props) => {
-
-  const [range, setRange] = useState<Range>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     start: today.minus({ days: 7 }),
     end: today
   });
 
   useEffect(() => {
     getDateRangeEntries();
-  }, [range]);
+  }, [dateRange]);
 
   /**
-   * Gets daily entries within time range
+   * Gets daily entries within time dateRange
    * Filters null entries, commonly weekends.
    */
   const getDateRangeEntries = () => {
-    if (range.start && range.end) {
-      const selectedDays = range.end.diff(range.start, "days").toObject();
+    if (dateRange.start && dateRange.end) {
+      const selectedDays = dateRange.end.diff(dateRange.start, "days").toObject();
       const result = [];
 
       for (let i = 0; selectedDays.days && i <= selectedDays.days; i++) {
@@ -46,7 +45,7 @@ const DateRangePicker = ({ setSelectedEntries, dailyEntries, today }: Props) => 
               item.logged &&
               item.expected &&
               DateTime.fromJSDate(item.date).toISODate() ===
-                range.start?.plus({ days: i }).toISODate()
+                dateRange.start?.plus({ days: i }).toISODate()
           )[0]
         );
       }
@@ -63,10 +62,10 @@ const DateRangePicker = ({ setSelectedEntries, dailyEntries, today }: Props) => 
         }}
         label={strings.timeExpressions.startDate}
         onChange={(dateTime: DateTime | null) =>
-          dateTime && setRange({ ...range, start: dateTime })
+          dateTime && setDateRange({ ...dateRange, start: dateTime })
         }
-        value={range.start}
-        maxDate={range.end?.minus({ days: 1 })}
+        value={dateRange.start}
+        maxDate={dateRange.end?.minus({ days: 1 })}
       />
       <DatePicker
         sx={{
@@ -74,9 +73,11 @@ const DateRangePicker = ({ setSelectedEntries, dailyEntries, today }: Props) => 
           mx: "1%"
         }}
         label={strings.timeExpressions.endDate}
-        onChange={(dateTime: DateTime | null) => dateTime && setRange({ ...range, end: dateTime })}
-        value={range.end}
-        minDate={range.start?.plus({ days: 1 })}
+        onChange={(dateTime: DateTime | null) =>
+          dateTime && setDateRange({ ...dateRange, end: dateTime })
+        }
+        value={dateRange.end}
+        minDate={dateRange.start?.plus({ days: 1 })}
       />
     </>
   );
