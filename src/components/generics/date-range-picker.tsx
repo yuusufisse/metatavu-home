@@ -8,7 +8,7 @@ import strings from "../../localization/strings";
  * Component properties
  */
 interface Props {
-  dateTimeNow: DateTime;
+  dateTimeTomorrow: DateTime;
   setDates: (startDate: DateTime, endDate: DateTime, days: number) => void;
   startDate: DateTime;
   endDate: DateTime;
@@ -21,7 +21,7 @@ interface Props {
  * @param props DateRangePickerProps
  */
 const DateRangePicker = ({
-  dateTimeNow,
+  dateTimeTomorrow,
   setDates,
   endDate,
   setEndDate,
@@ -52,7 +52,7 @@ const DateRangePicker = ({
         sx={{ width: "100%", padding: "0 5px 0 0" }}
         label={strings.vacationRequest.startDate}
         value={startDate}
-        minDate={dateTimeNow}
+        minDate={dateTimeTomorrow}
         onChange={(newValue: DateTime | null) => newValue && handleDateChange(newValue, endDate)}
       />
       <DatePicker

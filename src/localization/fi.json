@@ -90,14 +90,16 @@
     "approved": "Hyväksytty",
     "declined": "Hylätty",
     "vacation": "Loma",
-    "maternityPaternityLeave": "Äitiys/vanhempainvapaa",
+    "maternityPaternityLeave": "Vanhempainvapaa",
     "unpaidTimeOff": "Palkaton vapaa",
     "sickness": "Sairaus",
     "personalDays": "Henkilökohtainen vapaa",
     "childSickness": "Lapsen sairaus",
     "surplusBalance": "Ylimääräinen loma",
     "noMessage": "Ei viestiä",
-    "noStatus": "Ei tilaa"
+    "noStatus": "Ei tilaa",
+    "person": "Henkilö",
+    "noPersonFullName": "Ei nimeä"
   },
   "vacationRequestError": {
     "fetchRequestError": "Lomahakemusten hakeminen epäonnistui",
@@ -107,7 +109,9 @@
     "deleteRequestError": "Lomahakemuksen poistaminen epäonnistui",
     "deleteStatusError": "Lomahakemustilojen poistaminen epäonnistui",
     "updateRequestError": "Lomahakemuksen päivittäminen epäonnistui",
-    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui"
+    "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui",
+    "noVacationRequestsFound": "Lomahakemuksia ei löydetty",
+    "nameNotFound": "Nimeä ei löydetty"
   },
   "form": {
     "submit": "Lähetä",
@@ -115,17 +119,41 @@
   },
   "tableToolbar": {
     "delete": "Poista",
-    "myRequests": "Minun lomahakemukset",
+    "myRequests": "Lomahakemukset",
     "createRequests": "Uusi lomahakemus",
     "editRequests": "Muokkaa lomahakemusta",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
-    "create": "Hae lomaa"
+    "create": "Hae lomaa",
+    "manageRequests": "Hallinnoi lomahakemuksia"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"
   },
   "vacationsCard": {
-    "vacations": "Lomat"
+    "vacations": "Lomat",
+    "noUpcomingVacations": "Ei tulevia lomia",
+    "noPendingVacations": "Ei odottavia lomahakemuksia",
+    "upComingVacations": "Sinulla on {0} tulevaa lomaa",
+    "pendingVacations": "Sinulla on {0} odottavaa lomahakemusta",
+    "nextUpcomingVacation": "Seuraava loma:",
+    "vacationType": "Lomatyyppi:",
+    "applicant": "Hakija:",
+    "timeOfVacation": "Ajankohta:",
+    "status": "Tila:"
+  },
+  "personSelectDropdown": {
+    "label": "Suodata henkilöllä"
+  },
+  "toolbarUpdateStatusButton": {
+    "approve": "Hyväksy",
+    "decline": "Hylkää"
+  },
+  "adminRouteAccess": {
+    "notAdmin": "Sinulla ei ole hallintaoikeuksia",
+    "noAccess": "Ei pääsyä"
+  },
+  "vacationsScreen": {
+    "back": "Takaisin"
   }
 }

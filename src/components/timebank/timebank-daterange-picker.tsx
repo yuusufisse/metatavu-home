@@ -19,8 +19,7 @@ interface Props {
  *
  * @param props Component properties
  */
-const DateRangePicker = (props: Props) => {
-  const { setSelectedEntries, dailyEntries, today } = props;
+const DateRangePicker = ({ setSelectedEntries, dailyEntries, today }: Props) => {
 
   const [range, setRange] = useState<Range>({
     start: today.minus({ days: 7 }),

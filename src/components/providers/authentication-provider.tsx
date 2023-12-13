@@ -40,7 +40,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     try {
       keycloak.onTokenExpired = () => keycloak.updateToken(5);
 
-      keycloak.onAuthRefreshError = () => keycloak.login();
+      keycloak.onAuthRefreshError = () => keycloak.login({ idpHint: "google" });
       keycloak.onAuthRefreshSuccess = () => {
         updateAuthData();
       };
@@ -63,10 +63,14 @@ const AuthenticationProvider = ({ children }: Props) => {
         keycloak.login();
       };
 
-      await keycloak.init({
-        onLoad: "login-required",
+      const keycloakInitialized = await keycloak.init({
+        onLoad: "check-sso",
         checkLoginIframe: false
       });
+
+      if (!keycloakInitialized) {
+        await keycloak.login({ idpHint: "google" });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -75,7 +79,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   /**
    * Sets the logged in timebank person from keycloak ID into global state
    */
-  const getPersonsList = async ()  => {
+  const getPersonsList = async () => {
     const fetchedPersons = await personsApi.listPersons({ active: true });
     setPersons(fetchedPersons);
   };

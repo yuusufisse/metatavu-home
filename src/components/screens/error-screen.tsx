@@ -1,22 +1,29 @@
 import { useRouteError } from "react-router-dom";
 import strings from "../../localization/strings";
+import { Container } from "@mui/material";
+
+/**
+ * Component properties
+ */
+interface Props {
+  title?: string;
+  message?: string;
+}
 
 /**
  * Error page for displaying error status text and message
- *
- * @returns ReactElement
  */
-const ErrorScreen = () => {
+const ErrorScreen = ({ title, message }: Props) => {
   const error: unknown = useRouteError();
 
   return (
-    <div>
-      <h1>{strings.error.oops}</h1>
-      <p>{strings.error.generic}</p>
+    <Container>
+      <h1>{title ?? strings.error.oops}</h1>
+      <p>{message ?? strings.error.generic}</p>
       <p>
         <i>{(error as Error)?.message || (error as { statusText?: string })?.statusText}</i>
       </p>
-    </div>
+    </Container>
   );
 };
 

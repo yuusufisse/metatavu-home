@@ -1,5 +1,5 @@
-import { Card } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { Button, Card, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
@@ -13,31 +13,38 @@ import { errorAtom } from "../../atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
 import { VacationData } from "../../types";
 import strings from "../../localization/strings";
-import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import {
+  allVacationRequestsAtom,
+  allVacationRequestStatusesAtom,
+  vacationRequestsAtom,
+  vacationRequestStatusesAtom
+} from "../../atoms/vacation";
+import UserRoleUtils from "../../utils/user-role-utils";
+import { Link } from "react-router-dom";
+import { KeyboardReturn } from "@mui/icons-material";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Vacation requests screen
  */
 const VacationRequestsScreen = () => {
+  const adminMode = UserRoleUtils.adminMode();
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
-  const [vacationRequests, setVacationRequests] = useAtom(vacationRequestsAtom);
-  const [vacationRequestStatuses, setVacationRequestStatuses] = useState<VacationRequestStatus[]>(
-    []
+  const [vacationRequests, setVacationRequests] = useAtom(
+    adminMode ? allVacationRequestsAtom : vacationRequestsAtom
   );
-  const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
+  const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
+    adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
+  );
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    filterLatestVacationRequestStatuses();
-  }, [vacationRequestStatuses]);
 
   /**
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    if (vacationRequests.length) {
+    if (vacationRequests.length && !latestVacationRequestStatuses.length) {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
@@ -55,8 +62,7 @@ const VacationRequestsScreen = () => {
             });
           })
         );
-        setVacationRequestStatuses(vacationRequestStatuses);
-        setLoading(false);
+        await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
@@ -70,7 +76,9 @@ const VacationRequestsScreen = () => {
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
-  const filterLatestVacationRequestStatuses = async () => {
+  const filterLatestVacationRequestStatuses = async (
+    vacationRequestStatuses: VacationRequestStatus[]
+  ) => {
     if (vacationRequests.length && vacationRequestStatuses.length) {
       const selectedLatestVacationRequestStatuses: VacationRequestStatus[] = [];
 
@@ -96,6 +104,7 @@ const VacationRequestsScreen = () => {
         }
       });
       setLatestVacationRequestStatuses(selectedLatestVacationRequestStatuses);
+      setLoading(false);
     }
   };
 
@@ -105,21 +114,28 @@ const VacationRequestsScreen = () => {
   const fetchVacationsRequests = async () => {
     if (!userProfile?.id) return;
 
-    try {
-      setLoading(true);
-      const fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-        personId: userProfile?.id
-      });
-      setVacationRequests(fetchedVacationRequests);
-      setLoading(false);
-    } catch (error) {
-      setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
+    if (!vacationRequests.length) {
+      try {
+        setLoading(true);
+        let fetchedVacationRequests: VacationRequest[] = [];
+        if (adminMode) {
+          fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
+        } else {
+          fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
+            personId: userProfile?.id
+          });
+        }
+        setVacationRequests(fetchedVacationRequests);
+        setLoading(false);
+      } catch (error) {
+        setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
+      }
     }
   };
 
   useMemo(() => {
     fetchVacationsRequests();
-  }, [userProfile]);
+  }, []);
 
   /**
    * Delete vacation request status
@@ -127,10 +143,10 @@ const VacationRequestsScreen = () => {
    * @param selectedRow selected row
    */
   const deleteVacationRequestStatus = async (selectedRow: GridRowId) => {
-    if (vacationRequestStatuses.length) {
+    if (latestVacationRequestStatuses.length) {
       try {
         setLoading(true);
-        const foundVacationRequestStatus = vacationRequestStatuses.find(
+        const foundVacationRequestStatus = latestVacationRequestStatuses.find(
           (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRow
         );
         if (foundVacationRequestStatus?.id) {
@@ -138,10 +154,10 @@ const VacationRequestsScreen = () => {
             id: foundVacationRequestStatus.id,
             statusId: foundVacationRequestStatus.id
           });
-          const filteredVacationRequestStatuses = vacationRequestStatuses.filter(
+          const filteredVacationRequestStatuses = latestVacationRequestStatuses.filter(
             (vacationRequestStatus) => vacationRequestStatus.id !== foundVacationRequestStatus.id
           );
-          setVacationRequestStatuses(filteredVacationRequestStatuses);
+          setLatestVacationRequestStatuses(filteredVacationRequestStatuses);
           setLoading(false);
         }
       } catch (error) {
@@ -182,20 +198,25 @@ const VacationRequestsScreen = () => {
   /**
    * Create a vacation request status
    *
-   * @param createdRequest created vacation request
+   * @param newStatus new vacation request status
+   * @param selectedRowId selected row ids
    */
-  const createVacationRequestStatus = async (createdRequest: VacationRequest) => {
+  const createVacationRequestStatus = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowId: GridRowId
+  ) => {
     if (!userProfile?.id) return;
 
     try {
       setLoading(true);
-      if (createdRequest.id) {
-        const createdStatus = await vacationRequestStatusApi.createVacationRequestStatus({
-          id: createdRequest.id,
+      const vacationRequestId = selectedRowId as string;
+      const createdVacationRequestStatus =
+        await vacationRequestStatusApi.createVacationRequestStatus({
+          id: vacationRequestId,
           vacationRequestStatus: {
-            vacationRequestId: createdRequest.id,
-            status: VacationRequestStatuses.PENDING,
-            message: createdRequest.message,
+            vacationRequestId: vacationRequestId,
+            status: newStatus,
+            message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
             createdAt: new Date(),
             createdBy: userProfile.id,
             updatedAt: new Date(),
@@ -203,9 +224,9 @@ const VacationRequestsScreen = () => {
           }
         });
 
-        setVacationRequestStatuses([createdStatus, ...vacationRequestStatuses]);
-      }
       setLoading(false);
+
+      return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
@@ -235,7 +256,6 @@ const VacationRequestsScreen = () => {
         }
       });
 
-      createVacationRequestStatus(createdRequest);
       setVacationRequests([createdRequest, ...vacationRequests]);
       setLoading(false);
     } catch (error) {
@@ -282,15 +302,138 @@ const VacationRequestsScreen = () => {
     }
   };
 
+  /**
+   * Get updated vacation requests statuses
+   *
+   * @param newStatus vacation request status
+   * @param selectedRowIds selected row ids
+   * @returns updated vacation request statuses
+   */
+  const getUpdatedVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    const updatedVacationRequestStatuses: VacationRequestStatus[] = [];
+
+    await Promise.all(
+      selectedRowIds.map(async (selectedRowId) => {
+        const vacationRequestStatus = latestVacationRequestStatuses.find(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+        );
+        try {
+          if (vacationRequestStatus?.id) {
+            const updatedVacationRequestStatus =
+              await vacationRequestStatusApi.updateVacationRequestStatus({
+                id: vacationRequestStatus.id,
+                statusId: vacationRequestStatus.id,
+                vacationRequestStatus: {
+                  ...vacationRequestStatus,
+                  status: newStatus
+                }
+              });
+            updatedVacationRequestStatuses.push(updatedVacationRequestStatus);
+          }
+        } catch (error) {
+          setError(`${strings.vacationRequestError.updateStatusError}, ${error}`);
+        }
+      })
+    );
+
+    return updatedVacationRequestStatuses;
+  };
+
+  /**
+   * Get created vacation request statuses
+   *
+   * @param newStatus vacation request status
+   * @param selectedRowIds selected row ids
+   * @returns created vacation request statuses
+   */
+  const getCreatedVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    const createdVacationRequestStatuses: VacationRequestStatus[] = [];
+
+    await Promise.all(
+      selectedRowIds.map(async (selectedRowId) => {
+        const foundVacationRequestStatus = latestVacationRequestStatuses.find(
+          (vacationRequestStatus) => vacationRequestStatus.vacationRequestId === selectedRowId
+        );
+        if (!foundVacationRequestStatus) {
+          const createdVacationRequestStatus = await createVacationRequestStatus(
+            newStatus,
+            selectedRowId
+          );
+          if (createdVacationRequestStatus) {
+            createdVacationRequestStatuses.push(createdVacationRequestStatus);
+          }
+        }
+      })
+    );
+
+    return createdVacationRequestStatuses;
+  };
+
+  /**
+   * Update vacation request statuses
+   *
+   * @param newStatus vacation request status
+   * @param selectedRowIds selected row ids
+   */
+  const updateVacationRequestStatuses = async (
+    newStatus: VacationRequestStatuses,
+    selectedRowIds: GridRowId[]
+  ) => {
+    const updatedVacationRequestStatuses = await getUpdatedVacationRequestStatuses(
+      newStatus,
+      selectedRowIds
+    );
+    const createdVacationRequestStatuses = await getCreatedVacationRequestStatuses(
+      newStatus,
+      selectedRowIds
+    );
+
+    const foundVacationRequestStatuses = latestVacationRequestStatuses.map(
+      (latestVacationRequestStatus) => {
+        const foundUpdatedVacationRequestStatus = updatedVacationRequestStatuses.find(
+          (updatedVacationRequestStatus) =>
+            updatedVacationRequestStatus.id === latestVacationRequestStatus.id
+        );
+        if (foundUpdatedVacationRequestStatus) {
+          return foundUpdatedVacationRequestStatus;
+        }
+        return latestVacationRequestStatus;
+      }
+    );
+
+    const createdAndFoundVacationRequestStatuses = foundVacationRequestStatuses.concat(
+      createdVacationRequestStatuses
+    );
+
+    setLatestVacationRequestStatuses(createdAndFoundVacationRequestStatuses);
+  };
+
   return (
-    <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100" }}>
-      <VacationRequestsTable
-        deleteVacationRequests={deleteVacationRequests}
-        createVacationRequest={createVacationRequest}
-        updateVacationRequest={updateVacationRequest}
-        loading={loading}
-      />
-    </Card>
+    <>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+        <VacationRequestsTable
+          deleteVacationRequests={deleteVacationRequests}
+          createVacationRequest={createVacationRequest}
+          updateVacationRequest={updateVacationRequest}
+          updateVacationRequestStatuses={updateVacationRequestStatuses}
+          loading={loading}
+        />
+      </Card>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
+        <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
+          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+            <KeyboardReturn sx={{ marginRight: "10px" }} />
+            <Typography>{strings.vacationsScreen.back}</Typography>
+          </Button>
+        </Link>
+      </Card>
+    </>
   );
 };
 

@@ -19,8 +19,7 @@ interface Props {
  *
  * @param props component properties
  */
-const TimebankMultiBarChart = (props: Props) => {
-  const { selectedEntries } = props;
+const TimebankMultiBarChart = ({selectedEntries}: Props) => {
   const chartData = selectedEntries.map((entry) => ({
     name: entry.date.toLocaleDateString(strings.localization.time, {
       day: "numeric",
