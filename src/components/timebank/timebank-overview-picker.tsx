@@ -1,6 +1,6 @@
 import { DatePicker, DateView } from "@mui/x-date-pickers";
 import { DateTime, DurationObjectUnits } from "luxon";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { PersonTotalTime, Timespan } from "../../generated/client";
 import strings from "../../localization/strings";
 import { Box, MenuItem, Select } from "@mui/material";
@@ -24,8 +24,7 @@ interface Props {
 /**
  * Overview Range Picker component
  */
-const OverviewRangePicker = (props: Props) => {
-  const { setSelectedTotalEntries, totalTime, today, loading } = props;
+const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loading }: Props) => {
   const dailyEntries = useAtomValue(dailyEntriesAtom);
   const earliestEntry = DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date);
   const timespan = useAtomValue(timespanAtom);
@@ -50,11 +49,6 @@ const OverviewRangePicker = (props: Props) => {
     dateRange.end.weekday
   );
 
-  useMemo(() => {
-    setDateRange(defaultDateRange);
-    setWeekRange(defaultWeekRange);
-  }, [timespan]);
-
   useEffect(() => {
     initializeWeekRange();
 
@@ -64,8 +58,17 @@ const OverviewRangePicker = (props: Props) => {
   }, [totalTime]);
 
   useEffect(() => {
+    setDateRange(defaultDateRange);
+    setWeekRange(defaultWeekRange);
+  }, [timespan]);
+
+  useEffect(() => {
     setSelectedTotalEntries(getOverviewRange());
   }, [weekRange]);
+
+  useEffect(() => {
+    setWeekRange(getWeekRangeWithinBoundaries());
+  }, [dateRange]);
 
   /**
    * Initializes default week values when selecting "By dateRange -> Week"
@@ -180,10 +183,6 @@ const OverviewRangePicker = (props: Props) => {
 
     return newWeekRange;
   };
-
-  useMemo(() => {
-    setWeekRange(getWeekRangeWithinBoundaries());
-  }, [dateRange]);
 
   /**
    * Render start week Select dropdown when week dateRange is active
