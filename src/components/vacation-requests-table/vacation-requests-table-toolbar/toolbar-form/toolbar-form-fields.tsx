@@ -109,7 +109,6 @@ const ToolbarFormFields = ({
         setStartDate={setStartDate}
         setEndDate={setEndDate}
       />
-
       <Button
         disabled={!hasAllPropsDefined(vacationData) || !vacationData.message?.length}
         type="submit"
