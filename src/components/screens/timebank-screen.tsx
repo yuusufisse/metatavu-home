@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Person, Timespan } from "../../generated/client";
-import { CircularProgress, Card, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { CircularProgress, Card } from "@mui/material";
 import { userProfileAtom } from "../../atoms/auth";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
@@ -30,12 +30,11 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  const [selectedEmployee, setSelectedEmployee] = useState<number | null>(
+  const [selectedEmployee] = useState<number | null>(
     userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
   );
 
   useEffect(() => {
-    // Ensure that there is a selected employee before fetching data
     if (selectedEmployee !== null) {
       getPersonTotalTime(selectedEmployee);
     }
@@ -44,16 +43,13 @@ const TimebankScreen = () => {
   useEffect(() => {
     getPersonDailyEntries();
 
-    // Find the selected person based on their ID
     const selectedPerson = persons.find((person) => person.id === selectedEmployee);
 
-    // Check if the selected person is found before calling the function
     if (selectedPerson) {
       getPersonDailyEntriesForPieChart(selectedPerson);
     }
   }, [persons, selectedEmployee]);
 
-  // Save selectedEmployee to localStorage
   useEffect(() => {
     if (selectedEmployee !== null) {
       localStorage.setItem("selectedEmployee", selectedEmployee.toString());
@@ -100,7 +96,7 @@ const TimebankScreen = () => {
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
           fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
-        ); // Gets today's entry or earlier
+        );
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
@@ -143,38 +139,19 @@ const TimebankScreen = () => {
     }
   };
 
-  return (
-    <div>
-      <Card sx={{ p: "1%", display: "flex", justifyContent: "center" }}>
-        <FormControl fullWidth>
-          <InputLabel id="employee-select-label">Select Employee</InputLabel>
-          <Select
-            labelId="employee-select-label"
-            id="employee-select"
-            value={selectedEmployee}
-            onChange={(event) => setSelectedEmployee(Number(event.target.value))}
-            label="Select Employee"
-          >
-            {persons.map((person) => (
-              <MenuItem key={person.id} value={person.id}>
-                {`${person.firstName} ${person.lastName}`}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+return (
+  <div>
+    <div style={{ marginTop: "16px" }} />
+    {!personDailyEntry || !dailyEntries.length || !personTotalTime ? (
+      <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
+        {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
       </Card>
+    ) : (
+      <TimebankContent handleDailyEntryChange={handleDailyEntryChange} loading={loading} />
+    )}
+  </div>
+);
 
-      <div style={{ marginTop: "16px" }} />
-
-      {!personDailyEntry || !dailyEntries.length || !personTotalTime ? (
-        <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
-          {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
-        </Card>
-      ) : (
-        <TimebankContent handleDailyEntryChange={handleDailyEntryChange} loading={loading} />
-      )}
-    </div>
-  );
 };
 
 export default TimebankScreen;
