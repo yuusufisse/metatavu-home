@@ -13,6 +13,7 @@ import { DateTime } from "luxon";
 import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
 import { vacationRequestsAtom, vacationRequestStatusesAtom } from "../../atoms/vacation";
+import { VacationData } from "../../types";
 
 /**
  * Vacations card component
@@ -29,10 +30,29 @@ const VacationsCard = () => {
   const setLatestVacationRequestStatuses = useSetAtom(vacationRequestStatusesAtom);
   const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
+  const [vacationDayList, setVacationDayList] = useState<VacationData[]>([]);
+  const [totalVacationDays, setTotalVacationDays] = useState(0);
+
 
   useEffect(() => {
     filterLatestVacationRequestStatuses();
   }, [vacationRequestStatuses]);
+
+  useEffect(() => {
+  // Fetch and set total vacation days
+  // Example: setTotalVacationDays(userProfile?.totalVacationDays || 0);
+  }, [userProfile]);
+
+  /**
+   * Calculate spent vacation days
+   */
+  const spentVacationDays = useMemo(() => {
+    return vacationRequests.reduce((totalDays, request) => {
+      // Add logic to calculate days based on request start and end dates
+      return totalDays + calculateDays(request.startDate, request.endDate);
+    }, 0);
+  }, [vacationRequests]);
+  const unspentVacationDays = totalVacationDays - spentVacationDays;
 
   /**
    * Fetch vacation request statuses
@@ -118,6 +138,8 @@ const VacationsCard = () => {
     }
   };
 
+
+
   useMemo(() => {
     fetchVacationsRequests();
   }, [userProfile]);
@@ -190,6 +212,9 @@ const VacationsCard = () => {
             </Grid>
             <Grid item xs={11}>
               {renderVacationRequest(vacationRequests, vacationRequestStatuses)}
+              <Typography>
+                Spent: {spentVacationDays} days | Unspent: {unspentVacationDays} days
+              </Typography>
             </Grid>
           </Grid>
         </CardContent>
