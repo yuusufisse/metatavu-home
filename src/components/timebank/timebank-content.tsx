@@ -18,11 +18,11 @@ import {
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
 import { Timespan } from "../../generated/client";
 import TimebankPieChart from "../charts/timebank-piechart";
-import TimebankOverviewChart from "../charts/timebank-overviewchart";
+import TimebankOverviewChart from "../charts/timebank-overview-chart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import strings from "../../localization/strings";
-import TimebankMultiBarChart from "../charts/timebank-multibarchart";
+import TimebankMultiBarChart from "../charts/timebank-multibar-chart";
 import DateRangePicker from "./timebank-daterange-picker";
 import { useState } from "react";
 import { theme } from "../../theme";
