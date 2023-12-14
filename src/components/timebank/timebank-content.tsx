@@ -2,7 +2,6 @@ import {
   Box,
   List,
   ListItem,
-  Select,
   MenuItem,
   FormControlLabel,
   Checkbox,
@@ -12,11 +11,12 @@ import {
   CircularProgress,
   Grow,
   Container,
-  InputLabel,
-  FormControl
+  FormControl,
+  styled,
+  TextField
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
-import { DailyEntry, Timespan } from "../../generated/client";
+import { Timespan } from "../../generated/client";
 import TimebankPieChart from "../charts/timebank-piechart";
 import TimebankOverviewChart from "../charts/timebank-overviewchart";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -33,6 +33,8 @@ import {
   dailyEntriesAtom,
   timespanAtom
 } from "../../atoms/person";
+import { DailyEntryWithIndexSignature } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Component properties
@@ -47,10 +49,8 @@ interface Props {
  *
  * @param props Component properties
  */
-const TimebankContent = (props: Props) => {
-  const { handleDailyEntryChange, loading } = props;
-
-  const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
+const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
+  const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
@@ -58,27 +58,11 @@ const TimebankContent = (props: Props) => {
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
-  const todayOrEarlier = DateTime.fromJSDate(
-    dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
-  );
-
-  /**
-   * Allows only logged dates or with expected hours to be selected in the date time picker.
-   *
-   * @param date DateTime object passed from the date picker
-   */
-  const disableNullEntries = (date: DateTime) => {
-    const loggedDates = dailyEntries.find(
-      (item) =>
-        item.logged &&
-        item.expected &&
-        DateTime.fromJSDate(item.date).toISODate() === date.toISODate()
-    );
-
-    return loggedDates
-      ? !(DateTime.fromJSDate(loggedDates.date).toISODate() === date.toISODate())
-      : true;
-  };
+  const todayOrEarlier = dailyEntries.length
+    ? DateTime.fromJSDate(
+        dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
+      )
+    : DateTime.now();
 
   /**
    * Renders overview chart and list item elements containing total time summaries
@@ -99,7 +83,7 @@ const TimebankContent = (props: Props) => {
 
     return (
       <>
-        <TimebankOverviewChart />
+        <TimebankOverviewChart personTotalTime={personTotalTime} />
         <List dense sx={{ marginLeft: "5%" }}>
           <ListItem>
             <ListItemText
@@ -138,7 +122,9 @@ const TimebankContent = (props: Props) => {
     if (byRange.dailyEntries && selectedEntries) {
       return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
     }
-    return <TimebankPieChart />;
+    if (personDailyEntry) {
+      return <TimebankPieChart personDailyEntry={personDailyEntry} />;
+    }
   };
 
   /**
@@ -155,11 +141,10 @@ const TimebankContent = (props: Props) => {
             marginRight: "1%"
           }}
           label={strings.timebank.selectEntry}
-          onChange={(value) => (value ? handleDailyEntryChange(value) : null)}
-          value={todayOrEarlier}
+          onChange={(value: DateTime | null) => value && handleDailyEntryChange(value)}
+          value={personDailyEntry ? DateTime.fromJSDate(personDailyEntry?.date) : todayOrEarlier}
           minDate={DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)}
           maxDate={DateTime.fromJSDate(dailyEntries[0].date)}
-          shouldDisableDate={disableNullEntries}
         />
       );
     }
@@ -173,24 +158,124 @@ const TimebankContent = (props: Props) => {
     );
   };
 
+  /**
+   * Time entries list items
+   */
+  const timeEntriesListItems = [
+    {
+      color: theme.palette.success.dark,
+      propName: "billableProjectTime"
+    },
+    {
+      color: theme.palette.success.light,
+      propName: "nonBillableProjectTime"
+    },
+    {
+      color: theme.palette.warning.main,
+      propName: "internalTime"
+    },
+    {
+      color: theme.palette.info.main,
+      propName: "expected"
+    }
+  ];
+
+  /**
+   * Render time entries list
+   *
+   * @returns time entries list component
+   */
+  const renderTimeEntriesList = () => (
+    <List dense sx={{ marginLeft: "5%" }}>
+      {timeEntriesListItems.map((item, index) => (
+        <ListItem key={`timeEntriesListItem-${index}`}>
+          <ListItemText
+            sx={{ color: item.color }}
+            primary={strings.timebank[item.propName]}
+            secondary={
+              byRange.dailyEntries && selectedEntries
+                ? getHoursAndMinutes(
+                    selectedEntries.reduce((prev, next) => prev + Number(next[item.propName]), 0)
+                  )
+                : getHoursAndMinutes(Number(personDailyEntry ? personDailyEntry[item.propName] : 0))
+            }
+          />
+        </ListItem>
+      ))}
+    </List>
+  );
+
+  /**
+   * Render timespan select component
+   *
+   * @returns timespan select component
+   */
+  const renderTimespanSelect = () => (
+    <TextField
+      select
+      label={strings.timebank.selectTimespan}
+      sx={{
+        width: "100%"
+      }}
+      value={timespan}
+      onChange={(e) => {
+        setTimespan(e.target.value as Timespan);
+      }}
+    >
+      {Object.keys(Timespan).map((item, index) => {
+        return (
+          <MenuItem key={`timespan-select-menuitem-${index}`} value={item}>
+            {LocalizationUtils.getLocalizedTimespan(item as Timespan)}
+          </MenuItem>
+        );
+      })}
+    </TextField>
+  );
+
+  /**
+   * Timebank card styled component
+   */
+  const TimebankCard = styled(Card)({
+    border: "2px solid #bdbdbd;"
+  });
+
+  /**
+   * Timebank card title component
+   *
+   * @param title title string
+   * @returns timebank card title component
+   */
+  const renderTimebankCardTitle = (title: string) => (
+    <Typography
+      gutterBottom
+      variant="h6"
+      sx={{
+        color: "white",
+        textAlign: "center",
+        backgroundColor: "#bdbdbd",
+        width: "100%",
+        p: 2,
+        fontWeight: "bold"
+      }}
+    >
+      {title}
+    </Typography>
+  );
+
+  /**
+   * Timebank card flex box styled component
+   */
+  const TimebankCardFlexBox = styled(Box)({
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center"
+  });
+
   return (
     <>
       <Grow in>
-        <Card sx={{ border: "2px solid #bdbdbd;" }}>
-          <Typography
-            gutterBottom
-            fontWeight="bold"
-            variant="h6"
-            sx={{
-              color: "white",
-              textAlign: "center",
-              backgroundColor: "#bdbdbd",
-              width: "100%",
-              p: 2
-            }}
-          >
-            {strings.timebank.barChartDescription}
-          </Typography>
+        <TimebankCard>
+          {renderTimebankCardTitle(strings.timebank.barChartDescription)}
           <Container sx={{ p: 3 }}>
             <Box
               sx={{
@@ -212,53 +297,17 @@ const TimebankContent = (props: Props) => {
                   textAlign: "center"
                 }}
               >
-                <InputLabel id="select">{strings.timebank.selectTimespan}</InputLabel>
-                <Select
-                  label="Select a time span"
-                  labelId="select"
-                  sx={{
-                    width: "100%"
-                  }}
-                  value={timespan}
-                  onChange={(e) => {
-                    setTimespan(e.target.value as Timespan);
-                  }}
-                >
-                  <MenuItem value={Timespan.WEEK}>{strings.timeExpressions.week}</MenuItem>
-                  <MenuItem value={Timespan.MONTH}>{strings.timeExpressions.month}</MenuItem>
-                  <MenuItem value={Timespan.ALL_TIME}>{strings.timeExpressions.allTime}</MenuItem>
-                </Select>
+                {renderTimespanSelect()}
               </FormControl>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyItems: "center"
-              }}
-            >
-              {renderOverViewChart()}
-            </Box>
+            <TimebankCardFlexBox>{renderOverViewChart()}</TimebankCardFlexBox>
           </Container>
-        </Card>
+        </TimebankCard>
       </Grow>
       <br />
       <Grow in>
-        <Card sx={{ border: "2px solid #bdbdbd;", mb: 3 }}>
-          <Typography
-            gutterBottom
-            fontWeight="bold"
-            variant="h6"
-            sx={{
-              color: "white",
-              textAlign: "center",
-              backgroundColor: "#bdbdbd",
-              width: "100%",
-              p: 2
-            }}
-          >
-            {strings.timebank.pieChartDescription}
-          </Typography>
+        <TimebankCard>
+          {renderTimebankCardTitle(strings.timebank.pieChartDescription)}
           <Container sx={{ p: 3 }}>
             <ListItemText
               sx={{
@@ -275,13 +324,7 @@ const TimebankContent = (props: Props) => {
                   : getHoursAndMinutes(Number(personDailyEntry?.logged))
               }
             />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center"
-              }}
-            >
+            <TimebankCardFlexBox>
               {renderDatePickers()}
               <FormControlLabel
                 sx={{ display: "inline" }}
@@ -295,84 +338,13 @@ const TimebankContent = (props: Props) => {
                   />
                 }
               />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyItems: "center"
-              }}
-            >
+            </TimebankCardFlexBox>
+            <TimebankCardFlexBox>
               {renderDailyEntryOrRangeChart()}
-              <List dense sx={{ marginLeft: "5%" }}>
-                <ListItem>
-                  <ListItemText
-                    sx={{ color: theme.palette.success.dark }}
-                    primary={strings.timebank.billableProject}
-                    secondary={
-                      byRange.dailyEntries && selectedEntries
-                        ? getHoursAndMinutes(
-                            Number(
-                              selectedEntries.reduce(
-                                (prev, next) => prev + next.billableProjectTime,
-                                0
-                              )
-                            )
-                          )
-                        : getHoursAndMinutes(Number(personDailyEntry?.billableProjectTime))
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    sx={{ color: theme.palette.success.light }}
-                    primary={strings.timebank.nonBillableProject}
-                    secondary={
-                      byRange.dailyEntries && selectedEntries
-                        ? getHoursAndMinutes(
-                            Number(
-                              selectedEntries.reduce(
-                                (prev, next) => prev + next.nonBillableProjectTime,
-                                0
-                              )
-                            )
-                          )
-                        : getHoursAndMinutes(Number(personDailyEntry?.nonBillableProjectTime))
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    sx={{ color: theme.palette.warning.main }}
-                    primary={strings.timebank.internal}
-                    secondary={
-                      byRange.dailyEntries && selectedEntries
-                        ? getHoursAndMinutes(
-                            Number(
-                              selectedEntries.reduce((prev, next) => prev + next.internalTime, 0)
-                            )
-                          )
-                        : getHoursAndMinutes(Number(personDailyEntry?.internalTime))
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    sx={{ color: theme.palette.info.main }}
-                    primary={strings.timebank.expected}
-                    secondary={
-                      byRange.dailyEntries && selectedEntries
-                        ? getHoursAndMinutes(
-                            Number(selectedEntries.reduce((prev, next) => prev + next.expected, 0))
-                          )
-                        : getHoursAndMinutes(Number(personDailyEntry?.expected))
-                    }
-                  />
-                </ListItem>
-              </List>
-            </Box>
+              {renderTimeEntriesList()}
+            </TimebankCardFlexBox>
           </Container>
-        </Card>
+        </TimebankCard>
       </Grow>
     </>
   );

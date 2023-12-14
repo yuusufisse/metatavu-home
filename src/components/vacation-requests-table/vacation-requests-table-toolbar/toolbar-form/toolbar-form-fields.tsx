@@ -1,21 +1,14 @@
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField
-} from "@mui/material";
+import { Button, FormControl, FormLabel, MenuItem, TextField } from "@mui/material";
 import getVacationTypeByString from "../../../../utils/vacation-type-utils";
 import { VacationType } from "../../../../generated/client";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import DateRangePicker from "../../../generics/date-range-picker";
-import { ToolbarFormModes, VacationData } from "../../../../types";
+import { DateRange, ToolbarFormModes, VacationData } from "../../../../types";
 import { DateTime } from "luxon";
 import { hasAllPropsDefined } from "../../../../utils/check-utils";
 import strings from "../../../../localization/strings";
 import LocalizationUtils from "../../../../utils/localization-utils";
+import { getVacationDurationInDays } from "../../../../utils/time-utils";
 
 /**
  * Component properties
@@ -24,11 +17,9 @@ interface Props {
   vacationData: VacationData;
   setVacationData: (vacationDate: VacationData) => void;
   dateTimeTomorrow: DateTime;
-  startDate: DateTime;
-  endDate: DateTime;
-  setStartDate: (startDate: DateTime) => void;
-  setEndDate: (endDate: DateTime) => void;
   toolbarFormMode: ToolbarFormModes;
+  dateRange: DateRange;
+  setDateRange: (dateRange: DateRange) => void;
 }
 
 /**
@@ -40,74 +31,81 @@ const ToolbarFormFields = ({
   vacationData,
   setVacationData,
   dateTimeTomorrow,
-  endDate,
-  setEndDate,
-  setStartDate,
-  startDate,
-  toolbarFormMode
+  toolbarFormMode,
+  dateRange,
+  setDateRange
 }: Props) => {
-  /**
-   * Set dates to vacationData
-   *
-   * @param startDate
-   * @param endDate
-   * @param days
-   */
-  const setDates = (startDate: DateTime, endDate: DateTime, days: number) => {
+  useEffect(() => {
     setVacationData({
       ...vacationData,
-      startDate: startDate,
-      endDate: endDate,
-      days: days
+      startDate: dateRange.start,
+      endDate: dateRange.end,
+      days: getVacationDurationInDays(dateRange.start, dateRange.end)
+    });
+  }, [dateRange]);
+
+  /**
+   * Handle vacation type change
+   *
+   * @param value vacation type string
+   */
+  const handleVacationTypeChange = (value: string) => {
+    const vacationType = getVacationTypeByString(value);
+    if (vacationType) {
+      setVacationData({
+        ...vacationData,
+        type: vacationType
+      });
+    }
+  };
+
+  /**
+   * Handle vacation data change
+   *
+   * @param value message string
+   */
+  const handleVacationDataChange = (value: string) => {
+    setVacationData({
+      ...vacationData,
+      message: value
     });
   };
 
   return (
     <FormControl sx={{ width: "100%" }}>
-      <FormLabel>{strings.vacationRequest.type}</FormLabel>
-      <Select
+      <TextField
+        select
+        label={strings.vacationRequest.type}
         name="type"
         value={String(vacationData.type)}
-        onChange={(event: SelectChangeEvent<string>) => {
-          const vacationType = getVacationTypeByString(event.target.value);
-          if (vacationType) {
-            setVacationData({
-              ...vacationData,
-              type: vacationType
-            });
-          }
+        onChange={(event) => {
+          handleVacationTypeChange(event.target.value);
         }}
         sx={{ marginBottom: "5px", width: "100%" }}
       >
-        {(Object.keys(VacationType) as Array<keyof typeof VacationType>).map((vacationType) => {
+        {Object.keys(VacationType).map((vacationType) => {
           return (
             <MenuItem key={vacationType} value={vacationType}>
-              {LocalizationUtils.getLocalizedVacationRequestType(vacationType)}
+              {LocalizationUtils.getLocalizedVacationRequestType(vacationType as VacationType)}
             </MenuItem>
           );
         })}
-      </Select>
+      </TextField>
       <FormLabel>{strings.vacationRequest.message}</FormLabel>
       <TextField
         required
         error={!vacationData.message?.length}
         value={vacationData.message}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          setVacationData({
-            ...vacationData,
-            message: event.target.value
-          });
+          handleVacationDataChange(event.target.value);
         }}
         sx={{ marginBottom: "5px" }}
       />
       <FormLabel sx={{ marginBottom: "5px" }}>{strings.vacationRequest.days}</FormLabel>
       <DateRangePicker
         dateTimeTomorrow={dateTimeTomorrow}
-        setDates={setDates}
-        startDate={startDate}
-        endDate={endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
       />
       <Button
         disabled={!hasAllPropsDefined(vacationData) || !vacationData.message?.length}

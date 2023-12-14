@@ -68,11 +68,11 @@ const ErrorHandler = ({ children }: Props) => {
         cancelButtonText={"Close"}
         title={"An error has occurred"}
       >
-        {error && (
+        {
           <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
             {error}
           </Typography>
-        )}
+        }
         <Divider />
       </GenericDialog>
     </>

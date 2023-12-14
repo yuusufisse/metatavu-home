@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import { VacationType } from "../../../../generated/client";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import { VacationsDataGridRow, VacationData, ToolbarFormModes } from "../../../../types";
+import { VacationsDataGridRow, VacationData, ToolbarFormModes, DateRange } from "../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
 import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
@@ -42,8 +42,11 @@ const ToolbarForm = ({
   setSelectedRowIds
 }: Props) => {
   const dateTimeTomorrow = DateTime.now().plus({ days: 1 });
-  const [startDate, setStartDate] = useState<DateTime>(dateTimeTomorrow);
-  const [endDate, setEndDate] = useState<DateTime>(dateTimeTomorrow);
+  const defaultDateRange = {
+    start: dateTimeTomorrow,
+    end: dateTimeTomorrow
+  };
+  const [dateRange, setDateRange] = useState<DateRange>(defaultDateRange);
   const defaultVacationData = {
     type: VacationType.VACATION,
     startDate: dateTimeTomorrow,
@@ -61,19 +64,14 @@ const ToolbarForm = ({
    */
   const resetVacationData = () => {
     setVacationData(defaultVacationData);
-    setStartDate(dateTimeTomorrow);
-    setEndDate(dateTimeTomorrow);
+    setDateRange(defaultDateRange);
   };
 
   /**
    * Determine toolbar form mode
    */
   useEffect(() => {
-    determineToolbarFormMode({
-      formOpen: formOpen,
-      selectedRowIds: selectedRowIds,
-      setToolbarFormMode: setToolbarFormMode
-    });
+    determineToolbarFormMode(selectedRowIds, formOpen, setToolbarFormMode);
   }, [selectedRowIds, formOpen]);
 
   /**
@@ -100,8 +98,10 @@ const ToolbarForm = ({
           days: days
         });
         setSelectedVacationRequestId(selectedVacationRequest.id);
-        setStartDate(startDate);
-        setEndDate(endDate);
+        setDateRange({
+          start: startDate,
+          end: endDate
+        });
       }
     }
   };
@@ -146,13 +146,11 @@ const ToolbarForm = ({
           >
             <ToolbarFormFields
               dateTimeTomorrow={dateTimeTomorrow}
-              startDate={startDate}
-              endDate={endDate}
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
               setVacationData={setVacationData}
               vacationData={vacationData}
               toolbarFormMode={toolbarFormMode}
+              dateRange={dateRange}
+              setDateRange={setDateRange}
             />
           </form>
         </Grid>

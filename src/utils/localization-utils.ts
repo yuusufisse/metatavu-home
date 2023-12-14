@@ -1,4 +1,4 @@
-import { VacationRequestStatuses, VacationType } from "../generated/client";
+import { Timespan, VacationRequestStatuses, VacationType } from "../generated/client";
 import strings from "../localization/strings";
 
 /**
@@ -22,7 +22,7 @@ export default class LocalizationUtils {
   /**
    * Get localized vacation request type
    *
-   * @param vacationType vacationType
+   * @param vacationType vacation type
    */
   public static getLocalizedVacationRequestType = (vacationType: VacationType) =>
     ({
@@ -33,4 +33,17 @@ export default class LocalizationUtils {
       [VacationType.SICKNESS]: strings.vacationRequest.sickness,
       [VacationType.CHILD_SICKNESS]: strings.vacationRequest.childSickness
     })[vacationType];
+
+  /**
+   * Get localized timespan type
+   *
+   * @param timespanType timespan type
+   */
+  public static getLocalizedTimespan = (timespanType: Timespan) =>
+    ({
+      [Timespan.ALL_TIME]: strings.timeExpressions.allTime,
+      [Timespan.MONTH]: strings.timeExpressions.month,
+      [Timespan.WEEK]: strings.timeExpressions.week,
+      [Timespan.YEAR]: strings.timeExpressions.year
+    })[timespanType];
 }
