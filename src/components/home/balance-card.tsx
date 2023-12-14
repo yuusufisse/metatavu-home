@@ -11,6 +11,9 @@ import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/pers
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
+import UserRoleUtils from "../../utils/user-role-utils";
+import { theme } from "../../theme";
+import { DateTime } from "luxon";
 
 /**
  * Component for displaying user's balance
@@ -23,6 +26,8 @@ const BalanceCard = () => {
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const adminMode = UserRoleUtils.adminMode();
+  const beforeDate = DateTime.now().minus({ days: 1 });
 
   /**
    * Initialize logged in person's time data.
@@ -36,7 +41,9 @@ const BalanceCard = () => {
       if (loggedInPerson || config.person.id) {
         try {
           const fetchedPerson = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id
+            personId: loggedInPerson?.id || config.person.id,
+            timespan: Timespan.ALL_TIME,
+            before: beforeDate.toJSDate()
           });
           setPersonTotalTime(fetchedPerson[0]);
         } catch (error) {
@@ -63,11 +70,21 @@ const BalanceCard = () => {
    * @param personTotalTime PersonTotalTime
    */
   const renderPersonTotalTime = (personTotalTime: PersonTotalTime | undefined) => {
-    if (!personTotalTime && !loading && persons.length) {
-      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
-    }
-    if (personTotalTime) {
-      return <Typography>{getHoursAndMinutes(personTotalTime.balance)}</Typography>;
+    const balanceColor =
+      personTotalTime && personTotalTime.balance > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
+    
+    if (adminMode) {
+      return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
+    } else if (!personTotalTime && !loading && persons.length) {
+      return (
+        <Typography color={balanceColor}>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
+      );
+    } else if (personTotalTime) {
+      return (
+        <Typography color={balanceColor}>{getHoursAndMinutes(personTotalTime.balance)}</Typography>
+      );
     }
     return <Skeleton />;
   };
@@ -84,11 +101,14 @@ const BalanceCard = () => {
         <CardContent>
           <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
           <Grid container>
-            <Grid item xs={1}>
-              <ScheduleIcon />
+            <Grid item xs={12}>
+              {strings.formatString(strings.timebank.atTheEndOf, beforeDate.toLocaleString())}
+            </Grid>
+            <Grid style={{ marginBottom: 1 }} item xs={1}>
+              <ScheduleIcon style={{ marginTop: 1 }} />
             </Grid>
             <Grid item xs={11}>
-              {renderPersonTotalTime(personTotalTime)}
+              {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
             </Grid>
           </Grid>
         </CardContent>

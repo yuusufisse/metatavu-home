@@ -3,7 +3,7 @@ import AuthenticationProvider from "./components/providers/authentication-provid
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
-import BalanceScreen from "./components/screens/timebank-screen";
+import TimebankScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/language";
 import HomeScreen from "./components/screens/home-screen";
@@ -12,6 +12,10 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
 import ErrorScreen from "./components/screens/error-screen";
+import AdminScreen from "./components/screens/admin-screen";
+import { Settings } from "luxon";
+import { useMemo } from "react";
+import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 
 /**
  * Application component
@@ -19,10 +23,15 @@ import ErrorScreen from "./components/screens/error-screen";
 const App = () => {
   const language = useAtomValue(languageAtom);
 
+  useMemo(() => {
+    Settings.defaultLocale = language;
+  }, [language]);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorScreen />,
       children: [
         {
           path: "/",
@@ -30,13 +39,30 @@ const App = () => {
         },
         {
           path: "/vacations",
-          element: <VacationRequestsScreen />,
-          errorElement: <ErrorScreen />
+          element: <VacationRequestsScreen />
         },
         {
           path: "/timebank",
-          element: <BalanceScreen />,
-          errorElement: <ErrorScreen />
+          element: <TimebankScreen />
+        }
+      ]
+    },
+    {
+      path: "/admin",
+      element: (
+        <RestrictedContentProvider>
+          <Layout />
+        </RestrictedContentProvider>
+      ),
+      errorElement: <ErrorScreen />,
+      children: [
+        {
+          path: "/admin",
+          element: <AdminScreen />
+        },
+        {
+          path: "/admin/vacations",
+          element: <VacationRequestsScreen />
         }
       ]
     }

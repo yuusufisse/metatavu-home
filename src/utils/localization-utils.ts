@@ -1,6 +1,9 @@
 import { VacationRequestStatuses, VacationType } from "../generated/client";
 import strings from "../localization/strings";
 
+/**
+ * Localization Utils class
+ */
 export default class LocalizationUtils {
   /**
    * Get localized vacation request status
