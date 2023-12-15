@@ -364,9 +364,9 @@ const VacationsCard = () => {
         }}
       >
         <CardContent>
-          <h3 style={{ marginTop: 6 }}>
+          <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
-          </h3>
+          </Typography>
           <Grid container>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}

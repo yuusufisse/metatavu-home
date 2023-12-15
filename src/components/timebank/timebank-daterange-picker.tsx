@@ -17,6 +17,7 @@ interface Props {
 /**
  * Date Range Picker component
  *
+ *
  * @param props Component properties
  */
 const DateRangePicker = ({ setSelectedEntries, dailyEntries, today }: Props) => {

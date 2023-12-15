@@ -31,11 +31,11 @@ const ConfirmationHandler = ({ open, setOpen, deleteVacationsData }: Props) => {
       cancelButtonText={strings.confirmationHandler.cancelButtonText}
       title={strings.confirmationHandler.title}
     >
-      {open && (
+      {
         <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
           {strings.confirmationHandler.message}
         </Typography>
-      )}
+      }
       <Divider />
     </GenericDialog>
   );
