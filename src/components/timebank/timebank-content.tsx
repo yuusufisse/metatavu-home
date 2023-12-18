@@ -354,6 +354,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
           </Container>
         </TimebankCard>
       </Grow>
+      <br />
       {adminMode && (
         <Grow in>
           <Card sx={{ p: 1 }}>
