@@ -13,7 +13,6 @@ import {
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
-import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
 import {
   allVacationRequestsAtom,
@@ -28,6 +27,7 @@ import { personsAtom } from "../../atoms/person";
 import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
 import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
+import { formatDate } from "../../utils/time-utils";
 
 /**
  * Vacations card component
@@ -43,7 +43,6 @@ const VacationsCard = () => {
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
-  const language = useAtomValue(languageAtom);
   const [loading, setLoading] = useState(false);
   const persons = useAtomValue(personsAtom);
 
@@ -143,21 +142,6 @@ const VacationsCard = () => {
   useMemo(() => {
     fetchVacationsRequests();
   }, []);
-
-  /**
-   * Format date
-   *
-   * @param date datetime object
-   * @param dateWithTime datetime object with time
-   * @returns formatted date time
-   */
-  function formatDate(date: DateTime, dateWithTime?: boolean) {
-    if (!date) return "";
-
-    return date
-      .setLocale(language)
-      .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
-  }
 
   /**
    * Get pending vacation requests by checking wether it has a status or not
@@ -380,9 +364,9 @@ const VacationsCard = () => {
         }}
       >
         <CardContent>
-          <h3 style={{ marginTop: 6 }}>
+          <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
-          </h3>
+          </Typography>
           <Grid container>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}

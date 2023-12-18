@@ -6,17 +6,22 @@ import {
 } from "../../utils/chart-utils";
 import { Typography } from "@mui/material";
 import strings from "../../localization/strings";
-import { personDailyEntryAtom } from "../../atoms/person";
-import { useAtomValue } from "jotai";
 import { COLORS } from "../constants";
+import { DailyEntry } from "../../generated/client";
+
+/**
+ * Component properties
+ */
+interface Props {
+  personDailyEntry: DailyEntry;
+}
 
 /**
  * Time bank pie chart component
+ *
  * @returns A pie chart containing logged time breakdown of the daily entry
  */
-const TimebankPieChart = () => {
-  const personDailyEntry = useAtomValue(personDailyEntryAtom);
-
+const TimebankPieChart = ({ personDailyEntry }: Props) => {
   if (!personDailyEntry?.logged) {
     return (
       <ResponsiveContainer width={"75%"} height={200}>

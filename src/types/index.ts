@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { Person, PersonTotalTime, VacationType } from "../generated/client";
+import { Person, PersonTotalTime, VacationType,DailyEntry } from "../generated/client";
 import { ReactNode } from "react";
 
 /**
@@ -129,4 +129,30 @@ export interface WorkTimeTotalData {
 export interface VacationInfoListItem {
   name: string;
   value: string | ReactNode;
+}
+
+/**
+ * Type describing daily entry with index signature
+ */
+export interface DailyEntryWithIndexSignature extends DailyEntry {
+  [key: string]: any;
+}
+
+/**
+ * Type describing chart data
+ */
+export interface ChartData {
+  name: string;
+  internal: number;
+  billableProject: number;
+  nonBillableProject: number;
+  expected: number;
+}
+
+/**
+ * Type describing date range
+ */
+export interface DateRange {
+  start: DateTime;
+  end: DateTime;
 }
