@@ -79,20 +79,36 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
   const [dateRange, setDateRange] = useState<DateRangeWithTimePeriod>(
     defaultDateRangeWithTimePeriod
   );
-  const startWeek = getWeekFromISO(
-    dateRange.timePeriod.start?.split(",")[0],
-    dateRange.timePeriod.start?.split(",")[2],
-    dateRange.date.start.weekday
-  );
-  const endWeek = getWeekFromISO(
-    dateRange.timePeriod.end?.split(",")[0],
-    dateRange.timePeriod.end?.split(",")[2],
-    dateRange.date.end.weekday
-  );
 
   useEffect(() => {
     initializeDateRange();
   }, [totalTime]);
+
+  /**
+   * Get start week
+   *
+   * @param dateRange date range object
+   * @returns start week date object
+   */
+  const getStartWeek = (dateRange: DateRangeWithTimePeriod) =>
+    getWeekFromISO(
+      dateRange.timePeriod.start?.split(",")[0],
+      dateRange.timePeriod.start?.split(",")[2],
+      dateRange.date.start.weekday
+    );
+
+  /**
+   * Get end week
+   *
+   * @param dateRange date range object
+   * @returns end week date object
+   */
+  const getEndWeek = (dateRange: DateRangeWithTimePeriod) =>
+    getWeekFromISO(
+      dateRange.timePeriod.end?.split(",")[0],
+      dateRange.timePeriod.end?.split(",")[2],
+      dateRange.date.end.weekday
+    );
 
   /**
    * Initialize date range
@@ -128,6 +144,8 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
    */
   const getOverviewRange = (dateRange: DateRangeWithTimePeriod) => {
     const result = [];
+    const startWeek = getStartWeek(dateRange);
+    const endWeek = getEndWeek(dateRange);
     let selectedRange: DurationObjectUnits;
 
     switch (timespan) {
@@ -227,8 +245,8 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
           dailyEntries={dailyEntries}
           dateRange={dateRange}
           handleDateRangeChange={handleDateRangeChange}
-          endWeek={endWeek}
-          startWeek={startWeek}
+          endWeek={getEndWeek(dateRange)}
+          startWeek={getStartWeek(dateRange)}
         />
       );
     }
@@ -251,75 +269,48 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
     }
     if (!personTotalTime) return null;
 
-    if (byRange.overview) {
-      return (
-        <>
+    return (
+      <>
+        {byRange.overview ? (
           <TimebankOverviewRangeChart selectedTotalEntries={getOverviewRange(dateRange)} />
-          <List dense sx={{ marginLeft: "5%" }}>
-            <ListItem>
-              <ListItemText
-                sx={{
-                  color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
-                    ? theme.palette.error.main
-                    : theme.palette.success.main
-                }}
-                primary={strings.timebank.balance}
-                secondary={getHoursAndMinutes(personTotalTime.balance)}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.logged}
-                secondary={getHoursAndMinutes(personTotalTime.logged)}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.expected}
-                secondary={getHoursAndMinutes(personTotalTime.expected)}
-              />
-            </ListItem>
-          </List>
-        </>
-      );
-    } else {
-      return (
-        <>
+        ) : (
           <TimebankOverviewChart personTotalTime={personTotalTime} />
-          <List dense sx={{ marginLeft: "5%" }}>
+        )}
+        <List dense sx={{ marginLeft: "5%" }}>
+          {byRange.overview && (
             <ListItem>
               <ListItemText
                 primary={strings.timebank.timeperiod}
                 secondary={formatTimePeriod(personTotalTime.timePeriod?.split(","))}
               />
             </ListItem>
-            <ListItem>
-              <ListItemText
-                sx={{
-                  color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
-                    ? theme.palette.error.main
-                    : theme.palette.success.main
-                }}
-                primary={strings.timebank.balance}
-                secondary={getHoursAndMinutes(personTotalTime.balance)}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.logged}
-                secondary={getHoursAndMinutes(personTotalTime.logged)}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={strings.timebank.expected}
-                secondary={getHoursAndMinutes(personTotalTime.expected)}
-              />
-            </ListItem>
-          </List>
-        </>
-      );
-    }
+          )}
+          <ListItem>
+            <ListItemText
+              sx={{
+                color: getHoursAndMinutes(personTotalTime.balance).startsWith("-")
+                  ? theme.palette.error.main
+                  : theme.palette.success.main
+              }}
+              primary={strings.timebank.balance}
+              secondary={getHoursAndMinutes(personTotalTime.balance)}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={strings.timebank.logged}
+              secondary={getHoursAndMinutes(personTotalTime.logged)}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={strings.timebank.expected}
+              secondary={getHoursAndMinutes(personTotalTime.expected)}
+            />
+          </ListItem>
+        </List>
+      </>
+    );
   };
 
   /**
@@ -570,6 +561,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
           </Container>
         </TimebankCard>
       </Grow>
+      <br />
     </>
   );
 };

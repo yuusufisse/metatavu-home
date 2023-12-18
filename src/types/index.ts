@@ -120,7 +120,7 @@ export interface DateRange {
 }
 
 /**
- * Type describing date range with timeperiod
+ * Type describing date range with time period
  */
 export interface DateRangeWithTimePeriod {
   date: {
