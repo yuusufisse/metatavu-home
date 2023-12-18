@@ -50,7 +50,7 @@
     "barChartDescription": "Yhteenveto aikakirjauksista aikavälin mukaan",
     "pieChartDescription": "Valitse yksittäinen aikakirjaus tai aikaväli",
     "byrange": "Aikavälin mukaan",
-    "viewAllTimeEntries": "Henkilöstön aikakirjaukset ja saldot",
+    "viewAllTimeEntries": "Kaikki henkilöstön aikakirjaukset ja saldot",
     "selectTimespan": "Valitse aikaväli",
     "searchPlaceholder": "Hae henkilöä..."
   },
