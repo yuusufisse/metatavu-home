@@ -1,188 +1,43 @@
 import { DatePicker, DateView } from "@mui/x-date-pickers";
-import { DateTime, DurationObjectUnits } from "luxon";
-import { useEffect, useState } from "react";
-import { PersonTotalTime, Timespan } from "../../generated/client";
+import { DateTime } from "luxon";
+import { DailyEntry, PersonTotalTime, Timespan } from "../../generated/client";
 import strings from "../../localization/strings";
 import { Box, MenuItem, Select } from "@mui/material";
 import { useAtomValue } from "jotai";
-import { dailyEntriesAtom, timespanAtom } from "../../atoms/person";
-import { getWeekFromISO } from "../../utils/time-utils";
-import { between } from "../../utils/check-utils";
-import { DateRange } from "../../types";
+import { timespanAtom } from "../../atoms/person";
+import { DateRangeWithTimePeriod } from "../../types";
+import { getEndRangeTimeEntries, getStartRangeTimeEntries } from "../../utils/timebank-utils";
 
 /**
  * Component properties
  */
 interface Props {
   totalTime: PersonTotalTime[];
-  selectedTotalEntries: PersonTotalTime[];
-  setSelectedTotalEntries: (selectedTotalEntries: PersonTotalTime[]) => void;
   today: DateTime;
   loading: boolean;
+  dailyEntries: DailyEntry[];
+  dateRange: DateRangeWithTimePeriod;
+  weekRange?: { start: string; end: string };
+  handleDateRangeChange: (dateRange: DateRangeWithTimePeriod) => void;
+  startWeek: DateTime<true> | DateTime<false>;
+  endWeek: DateTime<true> | DateTime<false>;
 }
 
 /**
  * Overview Range Picker component
  */
-const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loading }: Props) => {
-  const dailyEntries = useAtomValue(dailyEntriesAtom);
+const OverviewRangePicker = ({
+  dailyEntries,
+  totalTime,
+  today,
+  loading,
+  startWeek,
+  endWeek,
+  dateRange,
+  handleDateRangeChange
+}: Props) => {
   const earliestEntry = DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date);
   const timespan = useAtomValue(timespanAtom);
-  const defaultDateRange = {
-    start: today.minus({ days: 7 }),
-    end: today
-  };
-  const defaultWeekRange = {
-    start: "",
-    end: ""
-  };
-  const [dateRange, setDateRange] = useState<DateRange>(defaultDateRange);
-  const [weekRange, setWeekRange] = useState(defaultWeekRange);
-  const startWeek = getWeekFromISO(
-    weekRange.start?.split(",")[0],
-    weekRange.start?.split(",")[2],
-    dateRange.start.weekday
-  );
-  const endWeek = getWeekFromISO(
-    weekRange.end?.split(",")[0],
-    weekRange.end?.split(",")[2],
-    dateRange.end.weekday
-  );
-
-  useEffect(() => {
-    initializeWeekRange();
-
-    return () => {
-      setWeekRange(defaultWeekRange);
-    };
-  }, [totalTime]);
-
-  useEffect(() => {
-    setDateRange(defaultDateRange);
-    setWeekRange(defaultWeekRange);
-  }, [timespan]);
-
-  useEffect(() => {
-    setSelectedTotalEntries(getOverviewRange());
-  }, [weekRange]);
-
-  useEffect(() => {
-    setWeekRange(getWeekRangeWithinBoundaries());
-  }, [dateRange]);
-
-  /**
-   * Initializes default week values when selecting "By dateRange -> Week"
-   *
-   */
-  const initializeWeekRange = () => {
-    if (timespan === Timespan.WEEK) {
-      setWeekRange({
-        start: String(totalTime[3].timePeriod),
-        end: String(totalTime[0].timePeriod)
-      });
-    }
-  };
-
-  /**
-   * Get start dateRange time entries
-   *
-   * @returns start dateRange time entries
-   */
-  const getStartRangeTimeEntries = () =>
-    totalTime.filter(
-      (entry) =>
-        entry.timePeriod?.split(",")[0] === String(dateRange.start.year) &&
-        entry.timePeriod?.split(",")[2] !== "0" &&
-        getWeekFromISO(
-          entry.timePeriod?.split(",")[0],
-          entry.timePeriod?.split(",")[2],
-          dateRange.start.weekday
-        ) < endWeek
-    );
-
-  /**
-   * Get end dateRange time entries
-   *
-   * @returns end dateRange time entries
-   */
-  const getEndRangeTimeEntries = () =>
-    totalTime.filter(
-      (entry) =>
-        entry.timePeriod?.split(",")[0] === String(dateRange.end.year) &&
-        entry.timePeriod?.split(",")[2] !== "0" &&
-        getWeekFromISO(
-          entry.timePeriod?.split(",")[0],
-          entry.timePeriod?.split(",")[2],
-          dateRange.start.weekday
-        ) > startWeek
-    );
-
-  /**
-   * Get week dateRange boundaries
-   *
-   * @returns week dateRange boundaries
-   */
-  const getWeekRangeBoundaries = () => {
-    const startRangeTimeEntries = getStartRangeTimeEntries();
-    const endRangeTimeEntries = getEndRangeTimeEntries();
-    let startRangeWeekNumbers = [];
-    let endRangeWeekNumbers = [];
-    const weekRangeBoundaries = {
-      start: { min: 1, max: 1 },
-      end: { min: 1, max: 1 }
-    };
-
-    startRangeWeekNumbers = startRangeTimeEntries.map((startRangeTimeEntry) =>
-      Number(startRangeTimeEntry.timePeriod?.split(",")[2])
-    );
-
-    endRangeWeekNumbers = endRangeTimeEntries.map((endRangeTimeEntry) =>
-      Number(endRangeTimeEntry.timePeriod?.split(",")[2])
-    );
-
-    if (startRangeWeekNumbers.length) {
-      const startMax = startRangeWeekNumbers.reduce((a, b) => (a > b ? a : b));
-      const startMin = startRangeWeekNumbers.reduce((a, b) => (a > b ? b : a));
-      weekRangeBoundaries.start.max = startMax;
-      weekRangeBoundaries.start.min = startMin;
-    }
-
-    if (endRangeWeekNumbers.length) {
-      const endMax = endRangeWeekNumbers.reduce((a, b) => (a > b ? a : b));
-      const endMin = endRangeWeekNumbers.reduce((a, b) => (a > b ? b : a));
-      weekRangeBoundaries.end.max = endMax;
-      weekRangeBoundaries.end.min = endMin;
-    }
-
-    return weekRangeBoundaries;
-  };
-
-  /**
-   * Get week range within boundaries
-   */
-  const getWeekRangeWithinBoundaries = () => {
-    const weekRangeBoundaries = getWeekRangeBoundaries();
-    const rangeStartWeekNumber = between(
-      dateRange.start.weekNumber,
-      weekRangeBoundaries.start.min,
-      weekRangeBoundaries.start.max
-    )
-      ? dateRange.start.weekNumber
-      : weekRangeBoundaries.start.max;
-    const rangeEndWeekNumber = between(
-      dateRange.end.weekNumber,
-      weekRangeBoundaries.end.min,
-      weekRangeBoundaries.end.max
-    )
-      ? dateRange.end.weekNumber
-      : weekRangeBoundaries.end.min;
-    const newWeekRange = {
-      start: `${dateRange.start.year},${dateRange.start.month},${rangeStartWeekNumber}`,
-      end: `${dateRange.end.year},${dateRange.end.month},${rangeEndWeekNumber}`
-    };
-
-    return newWeekRange;
-  };
 
   /**
    * Render start week Select dropdown when week dateRange is active
@@ -190,18 +45,19 @@ const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loadin
   const renderStartWeekSelect = () => {
     if (timespan !== Timespan.WEEK) return;
 
-    const startRangeTimeEntries = getStartRangeTimeEntries();
+    const startRangeTimeEntries = getStartRangeTimeEntries(totalTime, endWeek, dateRange);
 
     return (
       <Select
         label="Start week"
         sx={{ width: "8%", ml: "5px" }}
-        value={weekRange.start}
+        value={dateRange.timePeriod.start.split(",").length === 3 ? dateRange.timePeriod.start : ""}
         onChange={(e) => {
           const weekStart = String(e.target.value);
-          if (totalTime.some((entry) => entry.timePeriod === weekStart)) {
-            setWeekRange({ ...weekRange, start: weekStart });
-          }
+          handleDateRangeChange({
+            ...dateRange,
+            timePeriod: { ...dateRange.timePeriod, start: weekStart }
+          });
         }}
       >
         {startRangeTimeEntries.map((entry) => (
@@ -219,15 +75,18 @@ const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loadin
   const renderEndWeekSelect = () => {
     if (timespan !== Timespan.WEEK) return;
 
-    const endRangeTimeEntries = getEndRangeTimeEntries();
+    const endRangeTimeEntries = getEndRangeTimeEntries(totalTime, startWeek, dateRange);
 
     return (
       <Select
         label="End week"
         sx={{ width: "8%", ml: "5px" }}
-        value={weekRange.end}
+        value={dateRange.timePeriod.end.split(",").length === 3 ? dateRange.timePeriod.end : ""}
         onChange={(e) => {
-          setWeekRange({ ...weekRange, end: String(e.target.value) });
+          handleDateRangeChange({
+            ...dateRange,
+            timePeriod: { ...dateRange.timePeriod, end: String(e.target.value) }
+          });
         }}
       >
         {endRangeTimeEntries.map((entry) => (
@@ -240,56 +99,7 @@ const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loadin
   };
 
   /**
-   * Gets total time from the selected time span.
-   */
-  const getOverviewRange = () => {
-    const result = [];
-    let selectedRange: DurationObjectUnits;
-
-    switch (timespan) {
-      case Timespan.WEEK: {
-        selectedRange = endWeek.diff(startWeek, "weeks").toObject();
-
-        for (let i = 0; selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks)); i++) {
-          const week = `${startWeek.plus({ weeks: i }).get("year")},${startWeek
-            .plus({ weeks: i })
-            .get("month")},${startWeek.plus({ weeks: i }).get("weekNumber")}`;
-
-          result.push(totalTime.find((item) => item.timePeriod === week));
-        }
-      }
-      break;
-      case Timespan.MONTH:
-        selectedRange = dateRange.end.diff(dateRange.start, "months").toObject();
-        for (
-          let i = 0;
-          selectedRange.months && i <= Math.trunc(Number(selectedRange.months));
-          i++
-        ) {
-          const month = `${dateRange.start?.plus({ months: i }).get("year")},${dateRange.start
-            ?.plus({ months: i })
-            .get("month")}`;
-
-          result.push(totalTime.find((item) => item.timePeriod === month));
-        }
-        break;
-      case Timespan.YEAR:
-        selectedRange = dateRange.end.diff(dateRange.start, "year").toObject();
-        for (let i = 0; selectedRange.years && i <= Math.trunc(Number(selectedRange.years)); i++) {
-          const year = `${dateRange.start?.plus({ years: i }).get("year")}`;
-          result.push(totalTime.find((item) => item.timePeriod === year));
-        }
-        break;
-      default:
-        break;
-    }
-
-    return result.filter(Boolean) as PersonTotalTime[];
-  };
-
-  /**
    * Changes date picker views based on selected time span
-   *
    */
   const viewRenderer = (): DateView[] => {
     switch (timespan) {
@@ -311,11 +121,12 @@ const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loadin
         label={strings.timeExpressions.startDate}
         views={viewRenderer()}
         onChange={(startDate: DateTime | null) => {
-          startDate && setDateRange({ ...dateRange, start: startDate });
+          startDate &&
+            handleDateRangeChange({ ...dateRange, date: { ...dateRange.date, start: startDate } });
         }}
-        value={dateRange.start}
+        value={dateRange.date.start}
         minDate={earliestEntry}
-        maxDate={dateRange.end}
+        maxDate={dateRange.date.end}
       />
       {renderStartWeekSelect()}
       <DatePicker
@@ -324,10 +135,13 @@ const OverviewRangePicker = ({ setSelectedTotalEntries, totalTime, today, loadin
         label={strings.timeExpressions.endDate}
         views={viewRenderer()}
         onChange={(endDate: DateTime | null) => {
-          endDate && setDateRange({ ...dateRange, end: endDate });
+          endDate &&
+            handleDateRangeChange({ ...dateRange, date: { ...dateRange.date, end: endDate } });
         }}
-        value={dateRange.start > dateRange.end ? dateRange.start : dateRange.end}
-        minDate={dateRange.start}
+        value={
+          dateRange.date.start > dateRange.date.end ? dateRange.date.start : dateRange.date.end
+        }
+        minDate={dateRange.date.start}
         maxDate={today}
       />
       {renderEndWeekSelect()}

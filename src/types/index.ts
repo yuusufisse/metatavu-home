@@ -68,14 +68,6 @@ export interface VacationData {
 }
 
 /**
- * Type describing date range for overview picker
- */
-export interface DateRange {
-  start: DateTime;
-  end: DateTime;
-}
-
-/**
  * Interface for custom label used in the pie chart
  */
 export interface CustomLabel {
@@ -125,4 +117,15 @@ export interface ChartData {
 export interface DateRange {
   start: DateTime;
   end: DateTime;
+}
+
+/**
+ * Type describing date range with timeperiod
+ */
+export interface DateRangeWithTimePeriod {
+  date: {
+    start: DateTime;
+    end: DateTime;
+  };
+  timePeriod: { start: string; end: string };
 }

@@ -15,16 +15,16 @@ import {
   TextField,
   Grow
 } from "@mui/material";
-import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
+import { formatTimePeriod, getHoursAndMinutes, getWeekFromISO } from "../../utils/time-utils";
 import { PersonTotalTime, Timespan } from "../../generated/client";
 import TimebankPieChart from "../charts/timebank-piechart";
 import TimebankOverviewChart from "../charts/timebank-overview-chart";
 import { DatePicker } from "@mui/x-date-pickers";
-import { DateTime } from "luxon";
+import { DateTime, DurationObjectUnits } from "luxon";
 import strings from "../../localization/strings";
 import TimebankMultiBarChart from "../charts/timebank-multibar-chart";
 import DateRangePicker from "./timebank-daterange-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { theme } from "../../theme";
 import { useAtom, useAtomValue } from "jotai";
 import {
@@ -36,8 +36,9 @@ import {
 } from "../../atoms/person";
 import OverviewRangePicker from "./timebank-overview-picker";
 import TimebankOverviewRangeChart from "../charts/timebank-overviewrangechart";
-import { DailyEntryWithIndexSignature } from "../../types";
+import { DailyEntryWithIndexSignature, DateRangeWithTimePeriod } from "../../types";
 import LocalizationUtils from "../../utils/localization-utils";
+import { getEndRangeTimeEntries, getStartRangeTimeEntries } from "../../utils/timebank-utils";
 
 /**
  * Component properties
@@ -62,13 +63,154 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
-  const [selectedTotalEntries, setSelectedTotalEntries] = useState<PersonTotalTime[]>([]);
   const totalTime = useAtomValue(totalTimeAtom);
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
         dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
       )
     : DateTime.now();
+  const defaultDateRangeWithTimePeriod = {
+    date: {
+      start: todayOrEarlier.minus({ days: 7 }),
+      end: todayOrEarlier
+    },
+    timePeriod: { start: "", end: "" }
+  };
+  const [dateRange, setDateRange] = useState<DateRangeWithTimePeriod>(
+    defaultDateRangeWithTimePeriod
+  );
+  const startWeek = getWeekFromISO(
+    dateRange.timePeriod.start?.split(",")[0],
+    dateRange.timePeriod.start?.split(",")[2],
+    dateRange.date.start.weekday
+  );
+  const endWeek = getWeekFromISO(
+    dateRange.timePeriod.end?.split(",")[0],
+    dateRange.timePeriod.end?.split(",")[2],
+    dateRange.date.end.weekday
+  );
+
+  useEffect(() => {
+    initializeDateRange();
+  }, [totalTime]);
+
+  /**
+   * Initialize date range
+   */
+  const initializeDateRange = () => {
+    let timePeriodStart: string | undefined;
+    let timePeriodEnd: string | undefined;
+    if (totalTime.length > 1) {
+      timePeriodStart = totalTime[1].timePeriod;
+      timePeriodEnd = totalTime[0].timePeriod;
+    }
+    if (timePeriodStart && timePeriodEnd && timespan === Timespan.WEEK) {
+      setDateRange({
+        date: {
+          start: DateTime.now().set({
+            year: Number(timePeriodStart.split(",")[0]),
+            month: Number(timePeriodStart.split(",")[1]),
+            day: dateRange.date.start.day
+          }),
+          end: DateTime.now().set({
+            year: Number(timePeriodEnd.split(",")[0]),
+            month: Number(timePeriodEnd.split(",")[1]),
+            day: dateRange.date.end.day
+          })
+        },
+        timePeriod: { start: timePeriodStart, end: timePeriodEnd }
+      });
+    }
+  };
+
+  /**
+   * Gets total time from the selected time span.
+   */
+  const getOverviewRange = (dateRange: DateRangeWithTimePeriod) => {
+    const result = [];
+    let selectedRange: DurationObjectUnits;
+
+    switch (timespan) {
+      case Timespan.WEEK: {
+        selectedRange = endWeek.diff(startWeek, "weeks").toObject();
+
+        for (let i = 0; selectedRange.weeks && i <= Math.trunc(Number(selectedRange.weeks)); i++) {
+          const week = `${startWeek.plus({ weeks: i }).get("year")},${startWeek
+            .plus({ weeks: i })
+            .get("month")},${startWeek.plus({ weeks: i }).get("weekNumber")}`;
+
+          result.push(totalTime.find((item) => item.timePeriod === week));
+        }
+      }
+      break;
+      case Timespan.MONTH:
+        selectedRange = dateRange.date.end.diff(dateRange.date.start, "months").toObject();
+        for (
+          let i = 0;
+          selectedRange.months && i <= Math.trunc(Number(selectedRange.months));
+          i++
+        ) {
+          const month = `${dateRange.date.start
+            ?.plus({ months: i })
+            .get("year")},${dateRange.date.start?.plus({ months: i }).get("month")}`;
+
+          result.push(totalTime.find((item) => item.timePeriod === month));
+        }
+        break;
+      case Timespan.YEAR:
+        selectedRange = dateRange.date.end.diff(dateRange.date.start, "year").toObject();
+        for (let i = 0; selectedRange.years && i <= Math.trunc(Number(selectedRange.years)); i++) {
+          const year = `${dateRange.date.start?.plus({ years: i }).get("year")}`;
+          result.push(totalTime.find((item) => item.timePeriod === year));
+        }
+        break;
+      default:
+        break;
+    }
+
+    return result.filter(Boolean) as PersonTotalTime[];
+  };
+
+  /**
+   * Handle date range change
+   *
+   * @param dateRange date range object
+   */
+  const handleDateRangeChange = (dateRange: DateRangeWithTimePeriod) => {
+    let newDateRange: DateRangeWithTimePeriod = dateRange;
+    const startWeek = getWeekFromISO(
+      dateRange.timePeriod.start?.split(",")[0],
+      dateRange.timePeriod.start?.split(",")[2],
+      dateRange.date.start.weekday
+    );
+    const endWeek = getWeekFromISO(
+      dateRange.timePeriod.end?.split(",")[0],
+      dateRange.timePeriod.end?.split(",")[2],
+      dateRange.date.end.weekday
+    );
+    const startRangeTimeEntries = getStartRangeTimeEntries(totalTime, endWeek, dateRange);
+    const endRangeTimeEntries = getEndRangeTimeEntries(totalTime, startWeek, dateRange);
+
+    newDateRange = {
+      ...dateRange,
+      timePeriod: {
+        start:
+          startRangeTimeEntries.find(
+            (entry) => entry.timePeriod?.split(",")[2] === dateRange.timePeriod.start.split(",")[2]
+          )?.timePeriod ||
+          (timespan === Timespan.WEEK && startRangeTimeEntries[1].timePeriod) ||
+          "",
+        end:
+          endRangeTimeEntries.find(
+            (entry) => entry.timePeriod?.split(",")[2] === dateRange.timePeriod.end.split(",")[2]
+          )?.timePeriod ||
+          (timespan === Timespan.WEEK && endRangeTimeEntries[0].timePeriod) ||
+          ""
+      }
+    };
+
+    setDateRange(newDateRange);
+  };
 
   /**
    * Render overview range picker component
@@ -80,10 +222,13 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
       return (
         <OverviewRangePicker
           totalTime={totalTime}
-          selectedTotalEntries={selectedTotalEntries}
-          setSelectedTotalEntries={setSelectedTotalEntries}
           today={todayOrEarlier}
           loading={loading}
+          dailyEntries={dailyEntries}
+          dateRange={dateRange}
+          handleDateRangeChange={handleDateRangeChange}
+          endWeek={endWeek}
+          startWeek={startWeek}
         />
       );
     }
@@ -109,7 +254,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
     if (byRange.overview) {
       return (
         <>
-          <TimebankOverviewRangeChart selectedTotalEntries={selectedTotalEntries} />
+          <TimebankOverviewRangeChart selectedTotalEntries={getOverviewRange(dateRange)} />
           <List dense sx={{ marginLeft: "5%" }}>
             <ListItem>
               <ListItemText
@@ -287,6 +432,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
       }}
     >
       {Object.keys(Timespan).map((item, index) => {
+        if (byRange.overview && item === Timespan.ALL_TIME) return;
         return (
           <MenuItem key={`timespan-select-menuitem-${index}`} value={item}>
             {LocalizationUtils.getLocalizedTimespan(item as Timespan)}
@@ -363,10 +509,23 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
               >
                 {renderTimespanSelect()}
               </FormControl>
+              <FormControlLabel
+                label={strings.timebank.byrange}
+                control={
+                  <Checkbox
+                    checked={byRange.overview}
+                    disabled={loading}
+                    onClick={() => {
+                      setByRange({ ...byRange, overview: byRange.overview ? false : true });
+                      setTimespan(Timespan.MONTH);
+                    }}
+                  />
+                }
+              />
             </Box>
-            <TimebankCardFlexBox>{renderOverviewOrRangeChart()}</TimebankCardFlexBox>
             <Box width="100%">{renderOverviewRangePicker()}</Box>
           </Container>
+          <TimebankCardFlexBox>{renderOverviewOrRangeChart()}</TimebankCardFlexBox>
         </TimebankCard>
       </Grow>
       <br />
