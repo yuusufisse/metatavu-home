@@ -2,13 +2,20 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import VacationRequestsScreen from "./components/screens/vacation-requests-screen";
+import TimebankScreen from "./components/screens/timebank-screen";
 import { useAtomValue } from "jotai";
-import { languageAtom } from "./atoms/languageAtom";
-import HomeScreen from "./components/screens/home/home-screen";
+import { languageAtom } from "./atoms/language";
+import HomeScreen from "./components/screens/home-screen";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import Layout from "./components/layout/layout";
 import ErrorHandler from "./components/contexts/error-handler";
+import ErrorScreen from "./components/screens/error-screen";
+import AdminScreen from "./components/screens/admin-screen";
 import { Settings } from "luxon";
 import { useMemo } from "react";
+import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 
 /**
  * Application component
@@ -24,23 +31,52 @@ const App = () => {
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorScreen />,
       children: [
         {
           path: "/",
           element: <HomeScreen />
+        },
+        {
+          path: "/vacations",
+          element: <VacationRequestsScreen />
+        },
+        {
+          path: "/timebank",
+          element: <TimebankScreen />
+        }
+      ]
+    },
+    {
+      path: "/admin",
+      element: (
+        <RestrictedContentProvider>
+          <Layout />
+        </RestrictedContentProvider>
+      ),
+      errorElement: <ErrorScreen />,
+      children: [
+        {
+          path: "/admin",
+          element: <AdminScreen />
+        },
+        {
+          path: "/admin/vacations",
+          element: <VacationRequestsScreen />
         }
       ]
     }
   ]);
-
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <ErrorHandler>
           <AuthenticationProvider>
-            <CssBaseline>
-              <RouterProvider router={router} />
-            </CssBaseline>
+            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={language}>
+              <CssBaseline>
+                <RouterProvider router={router} />
+              </CssBaseline>
+            </LocalizationProvider>
           </AuthenticationProvider>
         </ErrorHandler>
       </ThemeProvider>

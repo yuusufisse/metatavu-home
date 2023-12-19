@@ -1,4 +1,4 @@
-import { DialogContent, Divider, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { useAtom } from "jotai";
 import { ReactNode, useMemo } from "react";
 import { errorAtom } from "../../atoms/error";
@@ -68,14 +68,11 @@ const ErrorHandler = ({ children }: Props) => {
         cancelButtonText={"Close"}
         title={"An error has occurred"}
       >
-        <DialogContent id="error-dialog-description">
-          {error && (
-            <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
-              {error}
-            </Typography>
-          )}
-          <code style={{ fontSize: "12px" }}>{error || ""}</code>
-        </DialogContent>
+        {
+          <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
+            {error}
+          </Typography>
+        }
         <Divider />
       </GenericDialog>
     </>

@@ -20,6 +20,7 @@ import NavItems from "./navitems";
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
   /**
    * Handles opening user menu
    *
