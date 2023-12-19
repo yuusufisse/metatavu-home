@@ -68,7 +68,7 @@ export interface VacationData {
 }
 
 /**
- * Interface for custom label used in the pie chart
+ * Interface for custom label used in the pie chart.
  */
 export interface CustomLabel {
   value: number;
