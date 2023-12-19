@@ -19,8 +19,8 @@ interface Props {
   dateRange: DateRangeWithTimePeriod;
   weekRange?: { start: string; end: string };
   handleDateRangeChange: (dateRange: DateRangeWithTimePeriod) => void;
-  startWeek: DateTime<true> | DateTime<false>;
-  endWeek: DateTime<true> | DateTime<false>;
+  startWeek: DateTime;
+  endWeek: DateTime;
 }
 
 /**
@@ -51,7 +51,11 @@ const OverviewRangePicker = ({
       <Select
         label="Start week"
         sx={{ width: "8%", ml: "5px" }}
-        value={dateRange.timePeriod.start.split(",").length === 3 ? dateRange.timePeriod.start : ""}
+        value={
+          dateRange.timePeriod.start.split(",").length !== 3 || !startRangeTimeEntries.length
+            ? ""
+            : dateRange.timePeriod.start
+        }
         onChange={(e) => {
           const weekStart = String(e.target.value);
           handleDateRangeChange({
@@ -81,7 +85,11 @@ const OverviewRangePicker = ({
       <Select
         label="End week"
         sx={{ width: "8%", ml: "5px" }}
-        value={dateRange.timePeriod.end.split(",").length === 3 ? dateRange.timePeriod.end : ""}
+        value={
+          dateRange.timePeriod.end.split(",").length !== 3 || !endRangeTimeEntries.length
+            ? ""
+            : dateRange.timePeriod.end
+        }
         onChange={(e) => {
           handleDateRangeChange({
             ...dateRange,
