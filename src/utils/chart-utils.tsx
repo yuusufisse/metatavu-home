@@ -50,8 +50,10 @@ export const renderCustomizedLabel = (props: CustomLabel) =>
  * @param props props, such as displayed data (payload), passed from the parent (chart)
  * @returns JSX element as a tooltip
  */
-export const renderCustomizedTooltipPieChart = (props: TooltipProps<ValueType, NameType>) => {
-  const { active, payload } = props;
+export const renderCustomizedTooltipPieChart = ({
+  active,
+  payload
+}: TooltipProps<ValueType, NameType>) => {
   if (!active || !payload || !payload.length) {
     return null;
   }
@@ -109,9 +111,10 @@ const renderCustomizedTooltipRow = (name: string, time: number, color: string) =
  * @param props props, such as chart values, passed from the parent (chart)
  * @returns JSX element as a tooltip
  */
-export const renderCustomizedTooltipBarChart = (props: TooltipProps<ValueType, NameType>) => {
-  const { active, payload } = props;
-
+export const renderCustomizedTooltipBarChart = ({
+  active,
+  payload
+}: TooltipProps<ValueType, NameType>) => {
   if (!active || !payload || !payload.length || !payload[0].payload) {
     return null;
   }

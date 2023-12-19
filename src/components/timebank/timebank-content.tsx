@@ -24,7 +24,7 @@ import { DateTime } from "luxon";
 import strings from "../../localization/strings";
 import TimebankMultiBarChart from "../charts/timebank-multibar-chart";
 import DateRangePicker from "./timebank-daterange-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { theme } from "../../theme";
 import { useAtom, useAtomValue } from "jotai";
 import {
@@ -33,7 +33,7 @@ import {
   dailyEntriesAtom,
   timespanAtom
 } from "../../atoms/person";
-import { DailyEntryWithIndexSignature } from "../../types";
+import { DailyEntryWithIndexSignature, DateRange } from "../../types";
 import LocalizationUtils from "../../utils/localization-utils";
 
 /**
@@ -63,6 +63,50 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
         dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
       )
     : DateTime.now();
+  const [dateRangePickerRange, setDateRangePickerRange] = useState<DateRange>({
+    start: todayOrEarlier.minus({ days: 7 }),
+    end: todayOrEarlier
+  });
+
+  useEffect(() => {
+    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
+  }, [byRange.dailyEntries]);
+
+  /**
+   * Gets daily entries within time range
+   *
+   * @param dateRangePickerRange date range picker range
+   * @returns date range entries
+   */
+  const getDateRangeEntries = (range: DateRange) => {
+    if (range.start && range.end) {
+      const selectedDays = range.end.diff(range.start, "days").toObject();
+      const result = [];
+
+      for (let i = 0; selectedDays.days && i <= selectedDays.days; i++) {
+        result.push(
+          dailyEntries.filter(
+            (item) =>
+              item.logged &&
+              item.expected &&
+              DateTime.fromJSDate(item.date).toISODate() ===
+                range.start?.plus({ days: i }).toISODate()
+          )[0]
+        );
+      }
+      return result.filter((item) => item);
+    }
+  };
+
+  /**
+   * Handle date range change
+   *
+   * @param dateRangePickerRange date range picker range
+   */
+  const handleDateRangeChange = (dateRangePickerRange: DateRange) => {
+    setDateRangePickerRange(dateRangePickerRange);
+    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
+  };
 
   /**
    * Renders overview chart and list item elements containing total time summaries
@@ -150,11 +194,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
     }
 
     return (
-      <DateRangePicker
-        dailyEntries={dailyEntries}
-        setSelectedEntries={setSelectedEntries}
-        today={todayOrEarlier}
-      />
+      <DateRangePicker range={dateRangePickerRange} handleDateRangeChange={handleDateRangeChange} />
     );
   };
 
