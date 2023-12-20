@@ -9,7 +9,8 @@ import { errorAtom } from "../../atoms/error";
 import {
   VacationRequest,
   VacationRequestStatus,
-  VacationRequestStatuses
+  VacationRequestStatuses,
+  Person
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
@@ -28,6 +29,8 @@ import { getVacationRequestPersonFullName } from "../../utils/vacation-request-u
 import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
+import { theme } from "../../theme";
+
 
 /**
  * Vacations card component
@@ -78,6 +81,10 @@ const VacationsCard = () => {
   useMemo(() => {
     fetchVacationRequestStatuses();
   }, [vacationRequests]);
+
+
+
+
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
@@ -143,6 +150,45 @@ const VacationsCard = () => {
     fetchVacationsRequests();
   }, []);
 
+
+
+  const renderVacations = (person: Person | undefined) => {
+    console.log(person);
+    const spentVacationsColor =
+    person && person.spentVacations > 0
+      ? theme.palette.success.main
+      : theme.palette.error.main;
+
+      const unspentVacationsColor =
+      person && person.unspentVacations > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
+
+    if (!person && !loading) {
+      return (
+        <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
+      );
+    } else if (person) {
+      return (
+        <Box>
+          <Typography> 
+            {strings.vacationsCard.spentVacations}
+            <span style={{ color: spentVacationsColor }}>
+            {person.spentVacations}
+            </span>
+          </Typography>
+          <Typography>         
+            {strings.vacationsCard.unspentVacations}
+            <span style={{ color: unspentVacationsColor }}>
+            {person.unspentVacations}
+            </span>
+          </Typography>
+        </Box>
+      );
+    }
+  };
+  
+
   /**
    * Get pending vacation requests by checking wether it has a status or not
    *
@@ -199,6 +245,7 @@ const VacationsCard = () => {
       </Box>
     </Grid>
   );
+
 
   /**
    * Render the earliest upcoming vacation request
@@ -368,6 +415,7 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
+            {renderVacations(persons[0])}
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
           </Grid>

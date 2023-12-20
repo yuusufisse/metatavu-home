@@ -1,10 +1,11 @@
-import { Button, Card, Typography } from "@mui/material";
+import { Button, Card, Typography, Box } from "@mui/material";
 import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
   VacationRequestStatus,
-  VacationRequestStatuses
+  VacationRequestStatuses,
+  Person
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -23,6 +24,10 @@ import UserRoleUtils from "../../utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
+import { theme } from "../../theme";
+import { personsAtom } from "../../atoms/person";
+
+
 
 /**
  * Vacation requests screen
@@ -39,6 +44,8 @@ const VacationRequestsScreen = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
+  const persons = useAtomValue(personsAtom);
+
 
   /**
    * Fetch vacation request statuses
@@ -73,6 +80,40 @@ const VacationRequestsScreen = () => {
     fetchVacationRequestStatuses();
   }, [vacationRequests]);
 
+  const renderVacations = (person: Person | undefined) => {
+    const spentVacationsColor =
+    person && person.spentVacations > 0
+      ? theme.palette.success.main
+      : theme.palette.error.main;
+
+      const unspentVacationsColor =
+      person && person.unspentVacations > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
+
+    if (!person && !loading && persons.length) {
+      return (
+        <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
+      );
+    } else if (person) {
+      return (
+        <Box>
+          <Typography> 
+              {strings.vacationsCard.spentVacations}
+            <span style={{ color: spentVacationsColor }}>
+            {person.spentVacations}
+            </span>
+          </Typography>
+          <Typography>         
+              {strings.vacationsCard.unspentVacations}
+            <span style={{ color: unspentVacationsColor }}>
+            {person.unspentVacations}
+            </span>
+          </Typography>
+        </Box>
+      );
+    }
+  };
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
@@ -417,6 +458,7 @@ const VacationRequestsScreen = () => {
   return (
     <>
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+        {renderVacations(persons[0])}
         <VacationRequestsTable
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
