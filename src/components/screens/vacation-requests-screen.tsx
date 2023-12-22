@@ -26,8 +26,7 @@ import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
 import { theme } from "../../theme";
 import { personsAtom } from "../../atoms/person";
-
-
+import config from "../../app/config";
 
 /**
  * Vacation requests screen
@@ -45,7 +44,9 @@ const VacationRequestsScreen = () => {
   );
   const [loading, setLoading] = useState(false);
   const persons = useAtomValue(personsAtom);
-
+  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
+  const { personsApi } = useApi();
+  const setPersons = useSetAtom(personsAtom);
 
   /**
    * Fetch vacation request statuses
@@ -80,40 +81,58 @@ const VacationRequestsScreen = () => {
     fetchVacationRequestStatuses();
   }, [vacationRequests]);
 
+    /**
+   * Initialize logged in person data.
+   */
+  const getPersonVacations = async () => {
+    if (persons.length) {
+      setLoading(true);
+      if (loggedInPerson || config.person.id) setLoading(false);
+      {
+        const fetchedPersons = await personsApi.listPersons({ active: true });
+        setPersons(fetchedPersons);
+      }
+    }
+  };
+
+  useMemo(() => {
+    if (!persons) {
+      getPersonVacations();
+    }
+  }, [persons]);
+
+  /**
+   * Display persons vacation days
+   */
   const renderVacations = (person: Person | undefined) => {
     const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+      person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
-      const unspentVacationsColor =
-      person && person.unspentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
+    const unspentVacationsColor =
+      person && person.unspentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
     if (!person && !loading && persons.length) {
-      return (
-        <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
-      );
+      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
       return (
-        <Box>
-          <Typography> 
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: "40%" }}>
+            <Typography>
               {strings.vacationsCard.spentVacations}
-            <span style={{ color: spentVacationsColor }}>
-            {person.spentVacations}
-            </span>
-          </Typography>
-          <Typography>         
+              <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
+            </Typography>
+          </Box>
+          <Box>
+            <Typography>
               {strings.vacationsCard.unspentVacations}
-            <span style={{ color: unspentVacationsColor }}>
-            {person.unspentVacations}
-            </span>
-          </Typography>
+              <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
+            </Typography>
+          </Box>
         </Box>
       );
     }
   };
+
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
    */
@@ -251,22 +270,19 @@ const VacationRequestsScreen = () => {
     try {
       setLoading(true);
       const vacationRequestId = selectedRowId as string;
-      const createdVacationRequestStatus =
-        await vacationRequestStatusApi.createVacationRequestStatus({
-          id: vacationRequestId,
-          vacationRequestStatus: {
-            vacationRequestId: vacationRequestId,
-            status: newStatus,
-            message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
-            createdAt: new Date(),
-            createdBy: userProfile.id,
-            updatedAt: new Date(),
-            updatedBy: userProfile.id
-          }
-        });
-
+      const createdVacationRequestStatus = await vacationRequestStatusApi.createVacationRequestStatus({
+        id: vacationRequestId,
+        vacationRequestStatus: {
+          vacationRequestId: vacationRequestId,
+          status: newStatus,
+          message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
+          createdAt: new Date(),
+          createdBy: userProfile.id,
+          updatedAt: new Date(),
+          updatedBy: userProfile.id
+        }
+      });
       setLoading(false);
-
       return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
@@ -296,7 +312,6 @@ const VacationRequestsScreen = () => {
           days: vacationData.days
         }
       });
-
       setVacationRequests([createdRequest, ...vacationRequests]);
       setLoading(false);
     } catch (error) {
@@ -334,7 +349,6 @@ const VacationRequestsScreen = () => {
         const updatedVacationRequests = vacationRequests.map((vacationRequest) =>
           vacationRequest.id === updatedRequest.id ? updatedRequest : vacationRequest
         );
-
         setVacationRequests(updatedVacationRequests);
       }
       setLoading(false);
@@ -451,14 +465,12 @@ const VacationRequestsScreen = () => {
     const createdAndFoundVacationRequestStatuses = foundVacationRequestStatuses.concat(
       createdVacationRequestStatuses
     );
-
     setLatestVacationRequestStatuses(createdAndFoundVacationRequestStatuses);
   };
 
   return (
     <>
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
-        {renderVacations(persons[0])}
         <VacationRequestsTable
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
@@ -466,6 +478,9 @@ const VacationRequestsScreen = () => {
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
         />
+        {renderVacations(
+          persons.find((person) => person.id === loggedInPerson?.id || config.person.id)
+        )}
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>

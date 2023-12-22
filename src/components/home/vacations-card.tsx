@@ -30,7 +30,7 @@ import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
 import { theme } from "../../theme";
-
+import config from "../../app/config";
 
 /**
  * Vacations card component
@@ -48,6 +48,9 @@ const VacationsCard = () => {
   );
   const [loading, setLoading] = useState(false);
   const persons = useAtomValue(personsAtom);
+  const { personsApi } = useApi();
+  const setPersons = useSetAtom(personsAtom);
+  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
 
   /**
    * Fetch vacation request statuses
@@ -81,10 +84,6 @@ const VacationsCard = () => {
   useMemo(() => {
     fetchVacationRequestStatuses();
   }, [vacationRequests]);
-
-
-
-
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
@@ -150,50 +149,59 @@ const VacationsCard = () => {
     fetchVacationsRequests();
   }, []);
 
+  /**
+   * Initialize logged in person's data.
+   */
+  const getPersonVacations = async () => {
+    if (persons.length) {
+      setLoading(true);
+      if (loggedInPerson || config.person.id) setLoading(false);
+      {
+        const fetchedPersons = await personsApi.listPersons({ active: true });
+        setPersons(fetchedPersons);
+      }
+    }
+  };
 
+  useMemo(() => {
+    if (!persons) {
+      getPersonVacations();
+    }
+  }, [persons]);
 
+  /**
+   * display persons vacation days
+   */
   const renderVacations = (person: Person | undefined) => {
-    console.log(person);
     const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+      person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
-      const unspentVacationsColor =
-      person && person.unspentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
+    const unspentVacationsColor =
+      person && person.unspentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
     if (!person && !loading) {
-      return (
-        <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
-      );
+      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
       return (
-        <Box>
-          <Typography> 
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Typography>
             {strings.vacationsCard.spentVacations}
-            <span style={{ color: spentVacationsColor }}>
-            {person.spentVacations}
-            </span>
+            <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
           </Typography>
-          <Typography>         
+          <Typography>
             {strings.vacationsCard.unspentVacations}
-            <span style={{ color: unspentVacationsColor }}>
-            {person.unspentVacations}
-            </span>
+            <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
           </Typography>
         </Box>
       );
     }
   };
   
-
   /**
    * Get pending vacation requests by checking wether it has a status or not
    *
    * @returns pending vacation requests
-   */
+   *    */
   const getPendingVacationRequests = () => {
     const pendingVacationRequests = vacationRequests
       .filter(
@@ -245,7 +253,6 @@ const VacationsCard = () => {
       </Box>
     </Grid>
   );
-
 
   /**
    * Render the earliest upcoming vacation request
@@ -415,7 +422,9 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
-            {renderVacations(persons[0])}
+            {renderVacations(
+              persons.find((person) => person.id === loggedInPerson?.id || config.person.id)
+            )}
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
           </Grid>
