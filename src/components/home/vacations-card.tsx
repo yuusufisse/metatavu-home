@@ -47,9 +47,8 @@ const VacationsCard = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const persons = useAtomValue(personsAtom);
+  const [persons, setPersons] = useAtom(personsAtom);
   const { personsApi } = useApi();
-  const setPersons = useSetAtom(personsAtom);
   const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
 
   /**
