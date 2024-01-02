@@ -47,9 +47,8 @@ const VacationsCard = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const persons = useAtomValue(personsAtom);
-  const { personsApi } = useApi();
-  const setPersons = useSetAtom(personsAtom);
+  const [persons, setPersons] = useAtom(personsAtom);
+  const { personsApi } = useApi();  
   const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
 
   /**
@@ -152,7 +151,7 @@ const VacationsCard = () => {
   /**
    * Initialize logged in person's data.
    */
-  const getPersonVacations = async () => {
+  const getPersons = async () => {
     if (persons.length) {
       setLoading(true);
       if (loggedInPerson || config.person.id) setLoading(false);
@@ -164,15 +163,14 @@ const VacationsCard = () => {
   };
 
   useMemo(() => {
-    if (!persons) {
-      getPersonVacations();
-    }
+    getPersons();
   }, [persons]);
 
   /**
    * display persons vacation days
+   * @param person representing the individual's vacation details.
    */
-  const renderVacations = (person: Person | undefined) => {
+  const renderVacationDays = (person: Person | undefined) => {
     const spentVacationsColor =
       person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
@@ -188,7 +186,7 @@ const VacationsCard = () => {
             {strings.vacationsCard.spentVacations}
             <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
           </Typography>
-          <Typography>
+          <Typography sx={{ display: "block" }}>
             {strings.vacationsCard.unspentVacations}
             <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
           </Typography>
@@ -422,7 +420,7 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
-            {renderVacations(
+            {renderVacationDays(
               persons.find((person) => person.id === loggedInPerson?.id || config.person.id)
             )}
             {renderUpcomingOrPendingVacationRequestsCount()}

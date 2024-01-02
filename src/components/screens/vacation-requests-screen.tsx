@@ -43,10 +43,9 @@ const VacationRequestsScreen = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const persons = useAtomValue(personsAtom);
+  const [persons, setPersons] = useAtom(personsAtom);
   const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
   const { personsApi } = useApi();
-  const setPersons = useSetAtom(personsAtom);
 
   /**
    * Fetch vacation request statuses
@@ -84,7 +83,7 @@ const VacationRequestsScreen = () => {
     /**
    * Initialize logged in person data.
    */
-  const getPersonVacations = async () => {
+  const getPersons = async () => {
     if (persons.length) {
       setLoading(true);
       if (loggedInPerson || config.person.id) setLoading(false);
@@ -96,15 +95,14 @@ const VacationRequestsScreen = () => {
   };
 
   useMemo(() => {
-    if (!persons) {
-      getPersonVacations();
-    }
+    getPersons();
   }, [persons]);
 
   /**
    * Display persons vacation days
+   * @param person representing the individual's vacation details.
    */
-  const renderVacations = (person: Person | undefined) => {
+  const renderVacationDays = (person: Person | undefined) => {
     const spentVacationsColor =
       person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
@@ -478,7 +476,7 @@ const VacationRequestsScreen = () => {
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
         />
-        {renderVacations(
+        {renderVacationDays(
           persons.find((person) => person.id === loggedInPerson?.id || config.person.id)
         )}
       </Card>
