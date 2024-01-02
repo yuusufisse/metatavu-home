@@ -48,7 +48,7 @@ const VacationsCard = () => {
   );
   const [loading, setLoading] = useState(false);
   const [persons, setPersons] = useAtom(personsAtom);
-  const { personsApi } = useApi();  
+  const { personsApi } = useApi();
   const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
 
   /**
@@ -168,6 +168,7 @@ const VacationsCard = () => {
 
   /**
    * display persons vacation days
+   *
    * @param person representing the individual's vacation details.
    */
   const renderVacationDays = (person: Person | undefined) => {
@@ -181,12 +182,12 @@ const VacationsCard = () => {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
       return (
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography>
             {strings.vacationsCard.spentVacations}
             <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
           </Typography>
-          <Typography sx={{ display: "block" }}>
+          <Typography>
             {strings.vacationsCard.unspentVacations}
             <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
           </Typography>
@@ -199,7 +200,8 @@ const VacationsCard = () => {
    * Get pending vacation requests by checking wether it has a status or not
    *
    * @returns pending vacation requests
-   *    */
+   *
+   */
   const getPendingVacationRequests = () => {
     const pendingVacationRequests = vacationRequests
       .filter(
