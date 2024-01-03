@@ -155,10 +155,8 @@ const VacationsCard = () => {
     if (!persons.length) {
       setLoading(true);
       if (loggedInPerson || config.person.id) setLoading(false);
-      {
-        const fetchedPersons = await personsApi.listPersons({ active: true });
-        setPersons(fetchedPersons);
-      }
+      const fetchedPersons = await personsApi.listPersons({ active: true });
+      setPersons(fetchedPersons);
     }
   };
 
@@ -173,29 +171,35 @@ const VacationsCard = () => {
    */
   const renderVacationDays = (person: Person | undefined) => {
     const spentVacationsColor =
-      person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
+      person && person.spentVacations > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
 
     const unspentVacationsColor =
-      person && person.unspentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
+      person && person.unspentVacations > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
 
     if (!person && !loading) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
       return (
-        <>
-          <Grid item xs={12}>
-            <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
-              <Typography>
+        <Grid item xs={12}>
+          <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
+            <Typography>
+              <span style={{ width: "250px", display: "inline-block" }}>
                 {strings.vacationsCard.spentVacations}
-                <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
-              </Typography>
-              <Typography>
+              </span>
+              <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
+            </Typography>
+            <Typography>
+              <span style={{ width: "250px", display: "inline-block" }}>
                 {strings.vacationsCard.unspentVacations}
-                <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
-              </Typography>
-            </Box>
-          </Grid>
-        </>
+              </span>
+              <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
+            </Typography>
+          </Box>
+        </Grid>
       );
     }
   };
