@@ -22,6 +22,7 @@ import { errorAtom } from "../../atoms/error";
 import { Person, PersonTotalTime, Timespan } from "../../generated/client";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Search } from "@mui/icons-material";
+import { COLORS } from "../constants";
 
 /**
  * Timebank view all screen component
@@ -57,13 +58,13 @@ const TimebankViewAllScreen = () => {
     }
 
     const sectionName = {
-      [WorkTimeCategory.BILLABLE_PROJECT]: strings.timebank.billableProject,
-      [WorkTimeCategory.NON_BILLABLE_PROJECT]: strings.timebank.nonBillableProject,
-      [WorkTimeCategory.INTERNAL]: strings.timebank.internal
+      [WorkTimeCategory.BILLABLE_PROJECT]: strings.timebank.billableProjectTime,
+      [WorkTimeCategory.NON_BILLABLE_PROJECT]: strings.timebank.nonBillableProjectTime,
+      [WorkTimeCategory.INTERNAL]: strings.timebank.internalTime
     }[selectedData.name];
 
     return (
-      <Box style={{ backgroundColor: "rgba(0, 0, 0)" }}>
+      <Box style={{ backgroundColor: "rgba(0, 0, 0)", opacity: "70%" }}>
         <Typography
           variant="h6"
           style={{
@@ -78,15 +79,15 @@ const TimebankViewAllScreen = () => {
   };
 
   /**
-   * Renders piechart
+   * Render piechart component
+   *
+   * @param personWithTotalTime person with total time object
+   * @param legend legend boolean
    */
   const renderPieChart = (personWithTotalTime: PersonWithTotalTime, legend: boolean) => {
     const { person, personTotalTime } = personWithTotalTime;
 
-    if (!person || !personTotalTime) {
-      console.log("No");
-      return null;
-    }
+    if (!person || !personTotalTime) return null;
 
     const workTimeData: WorkTimeTotalData[] = [
       { name: WorkTimeCategory.BILLABLE_PROJECT, balance: personTotalTime.billableProjectTime },
@@ -96,8 +97,6 @@ const TimebankViewAllScreen = () => {
       },
       { name: WorkTimeCategory.INTERNAL, balance: personTotalTime.internalTime }
     ];
-
-    const COLORS = [theme.palette.success.main, theme.palette.warning.main];
 
     return (
       <ResponsiveContainer width={"75%"} height={150}>

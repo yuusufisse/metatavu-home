@@ -90,7 +90,10 @@ const BalanceCard = () => {
   };
 
   return (
-    <Link to={adminMode ? "/admin/timebank" : "/timebank"} style={{ textDecoration: "none" }}>
+    <Link
+      to={adminMode ? "/admin/timebank/viewall" : "/timebank"}
+      style={{ textDecoration: "none" }}
+    >
       <Card
         sx={{
           "&:hover": {
@@ -98,22 +101,31 @@ const BalanceCard = () => {
           }
         }}
       >
-        <CardContent>
-          <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
-            {strings.timebank.balance}
-          </Typography>
-          <Grid container>
-            <Grid item xs={12}>
-              {strings.formatString(strings.timebank.atTheEndOf, yesterday.toLocaleString())}
+        {adminMode ? (
+          <CardContent>
+            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+              {strings.timebank.employeeBalances}
+            </Typography>
+            <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
+          </CardContent>
+        ) : (
+          <CardContent>
+            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+              {strings.timebank.balance}
+            </Typography>
+            <Grid container>
+              <Grid item xs={12}>
+                {strings.formatString(strings.timebank.atTheEndOf, yesterday.toLocaleString())}
+              </Grid>
+              <Grid style={{ marginBottom: 1 }} item xs={1}>
+                <ScheduleIcon style={{ marginTop: 1 }} />
+              </Grid>
+              <Grid item xs={11}>
+                {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+              </Grid>
             </Grid>
-            <Grid style={{ marginBottom: 1 }} item xs={1}>
-              <ScheduleIcon style={{ marginTop: 1 }} />
-            </Grid>
-            <Grid item xs={11}>
-              {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
-            </Grid>
-          </Grid>
-        </CardContent>
+          </CardContent>
+        )}
       </Card>
     </Link>
   );

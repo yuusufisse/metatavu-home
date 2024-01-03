@@ -76,6 +76,7 @@ export interface Localized extends LocalizedStringsMethods {
     selectTimespan: string;
     atTheEndOf: string;
     searchPlaceholder: string;
+    employeeBalances: string;
   };
   /**
    * General time-related expressions

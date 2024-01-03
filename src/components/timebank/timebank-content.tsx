@@ -9,8 +9,6 @@ import {
   Typography,
   Card,
   CircularProgress,
-  Grid,
-  Button,
   Grow,
   Container,
   FormControl,
@@ -35,8 +33,6 @@ import {
   dailyEntriesAtom,
   timespanAtom
 } from "../../atoms/person";
-import { Link } from "react-router-dom";
-import UserRoleUtils from "../../utils/user-role-utils";
 import { DailyEntryWithIndexSignature, DateRange } from "../../types";
 import LocalizationUtils from "../../utils/localization-utils";
 
@@ -62,7 +58,6 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
-  const adminMode = UserRoleUtils.adminMode();
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
         dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
@@ -395,21 +390,6 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
         </TimebankCard>
       </Grow>
       <br />
-      {adminMode && (
-        <Grow in>
-          <Card sx={{ p: 1 }}>
-            <Grid container>
-              <Grid item xs={12} textAlign={"center"}>
-                <Link to={"/admin/timebank/viewall"}>
-                  <Button sx={{ width: "100%", height: "50px" }} variant="contained">
-                    <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
-                  </Button>
-                </Link>
-              </Grid>
-            </Grid>
-          </Card>
-        </Grow>
-      )}
     </>
   );
 };

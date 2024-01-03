@@ -52,7 +52,8 @@
     "byrange": "Aikavälin mukaan",
     "viewAllTimeEntries": "Kaikki henkilöstön aikakirjaukset ja saldot",
     "selectTimespan": "Valitse aikaväli",
-    "searchPlaceholder": "Hae henkilöä..."
+    "searchPlaceholder": "Hae henkilöä...",
+    "employeeBalances": "Henkilöstön aikakirjaukset ja saldot"
   },
   "timeExpressions": {
     "monday": "Maanantai",
