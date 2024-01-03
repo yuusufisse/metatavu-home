@@ -49,7 +49,9 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const [persons, setPersons] = useAtom(personsAtom);
   const { personsApi } = useApi();
-  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
+  const loggedInPerson = persons.find(
+    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+  );
 
   /**
    * Fetch vacation request statuses
@@ -356,7 +358,6 @@ const VacationsCard = () => {
         </>
       );
     }
-
     return;
   };
 
@@ -429,9 +430,7 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
-            {renderVacationDays(
-              persons.find((person) => person.id === loggedInPerson?.id || config.person.id)
-            )}
+            {renderVacationDays(loggedInPerson)}
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
           </Grid>
