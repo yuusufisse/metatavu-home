@@ -5,17 +5,15 @@ import NavBar from "./navbar";
 /**
  * Layout component
  */
-const Layout = () => {
-  return (
-    <>
-      <Container>
-        <NavBar />
-      </Container>
-      <Container sx={{ marginTop: 4 }}>
-        <Outlet />
-      </Container>
-    </>
-  );
-};
+const Layout = () => (
+  <>
+    <Container>
+      <NavBar />
+    </Container>
+    <Container sx={{ marginTop: 4 }}>
+      <Outlet />
+    </Container>
+  </>
+);
 
 export default Layout;

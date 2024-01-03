@@ -56,13 +56,14 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to timebank
    */
   timebank: {
+    [key: string]: string;
     balance: string;
     yourBalanceIs: string;
     logged: string;
     expected: string;
-    billableProject: string;
-    nonBillableProject: string;
-    internal: string;
+    billableProjectTime: string;
+    nonBillableProjectTime: string;
+    internalTime: string;
     billableHours: string;
     timeperiod: string;
     noData: string;
@@ -71,6 +72,8 @@ export interface Localized extends LocalizedStringsMethods {
     barChartDescription: string;
     pieChartDescription: string;
     byrange: string;
+    selectTimespan: string;
+    atTheEndOf: string;
   };
   /**
    * General time-related expressions
@@ -129,6 +132,8 @@ export interface Localized extends LocalizedStringsMethods {
     childSickness: string;
     noMessage: string;
     noStatus: string;
+    person: string;
+    noPersonFullName: string;
   };
   /**
    * Translations related to vacation requests errors
@@ -142,6 +147,8 @@ export interface Localized extends LocalizedStringsMethods {
     deleteStatusError: string;
     updateRequestError: string;
     updateStatusError: string;
+    noVacationRequestsFound: string;
+    nameNotFound: string;
   };
   /**
    * Translations related to form
@@ -161,6 +168,7 @@ export interface Localized extends LocalizedStringsMethods {
     edit: string;
     cancel: string;
     create: string;
+    manageRequests: string;
   };
   /**
    * Translations related to data grid
@@ -173,6 +181,41 @@ export interface Localized extends LocalizedStringsMethods {
    */
   vacationsCard: {
     vacations: string;
+    noUpcomingVacations: string;
+    noPendingVacations: string;
+    upComingVacations: string;
+    pendingVacations: string;
+    nextUpcomingVacation: string;
+    vacationType: string;
+    applicant: string;
+    timeOfVacation: string;
+    status: string;
+  };
+  /**
+   * Translation related to person select dropdown
+   */
+  personSelectDropdown: {
+    label: string;
+  };
+  /**
+   * Translations related to toolbar update status button
+   */
+  toolbarUpdateStatusButton: {
+    approve: string;
+    decline: string;
+  };
+  /**
+   * Translation related to admin route access
+   */
+  adminRouteAccess: {
+    notAdmin: string;
+    noAccess: string;
+  };
+  /**
+   * Translation related to vacations screen
+   */
+  vacationsScreen: {
+    back: string;
   };
   /**
    * Translations related to sync dialog

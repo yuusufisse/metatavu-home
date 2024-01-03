@@ -21,6 +21,7 @@ import SyncButton from "./sync-button";
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
   /**
    * Handles opening user menu
    *

@@ -3,24 +3,17 @@ import { ToolbarFormModes } from "../types";
 import strings from "../localization/strings";
 
 /**
- * DetermineToolbarFormMode properties
- */
-interface DetermineToolbarFormModeProps {
-  selectedRowIds: GridRowId[];
-  formOpen: boolean;
-  setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
-}
-
-/**
  * Determine toolbar form mode
  *
- * @param props utility properties
+ * @param selectedRowIds selected row ids
+ * @param formOpen form open boolean
+ * @param setToolbarFormMode set toolbar form mode function
  */
-export const determineToolbarFormMode = ({
-  formOpen,
-  selectedRowIds,
-  setToolbarFormMode
-}: DetermineToolbarFormModeProps) => {
+export const determineToolbarFormMode = (
+  selectedRowIds: GridRowId[],
+  formOpen: boolean,
+  setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void
+) => {
   if (selectedRowIds) {
     switch (true) {
       case selectedRowIds.length === 0 && formOpen:

@@ -2,12 +2,13 @@ import { Box, Grid } from "@mui/material";
 import { VacationType } from "../../../../generated/client";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import { DataGridRow, VacationData, ToolbarFormModes } from "../../../../types";
+import { VacationsDataGridRow, VacationData, ToolbarFormModes, DateRange } from "../../../../types";
 import { GridRowId } from "@mui/x-data-grid";
 import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import ToolbarFormFields from "./toolbar-form-fields";
-import { vacationRequestsAtom } from "../../../../atoms/vacation";
+import { allVacationRequestsAtom, vacationRequestsAtom } from "../../../../atoms/vacation";
+import UserRoleUtils from "../../../../utils/user-role-utils";
 
 /**
  * Component properties
@@ -18,7 +19,7 @@ interface Props {
   updateVacationRequest: (vacationData: VacationData, vacationRequestId: string) => Promise<void>;
   createVacationRequest: (vacationData: VacationData) => Promise<void>;
   selectedRowIds: GridRowId[];
-  rows: DataGridRow[];
+  rows: VacationsDataGridRow[];
   toolbarFormMode: ToolbarFormModes;
   setToolbarFormMode: (toolbarFormMode: ToolbarFormModes) => void;
   setSelectedRowIds: (selectedRowIds: GridRowId[]) => void;
@@ -40,38 +41,37 @@ const ToolbarForm = ({
   setToolbarFormMode,
   setSelectedRowIds
 }: Props) => {
-  const dateTimeNow = DateTime.now();
-  const [startDate, setStartDate] = useState<DateTime>(dateTimeNow);
-  const [endDate, setEndDate] = useState<DateTime>(dateTimeNow);
+  const dateTimeTomorrow = DateTime.now().plus({ days: 1 });
+  const defaultDateRange = {
+    start: dateTimeTomorrow,
+    end: dateTimeTomorrow
+  };
+  const [dateRange, setDateRange] = useState<DateRange>(defaultDateRange);
   const defaultVacationData = {
     type: VacationType.VACATION,
-    startDate: dateTimeNow,
-    endDate: dateTimeNow,
+    startDate: dateTimeTomorrow,
+    endDate: dateTimeTomorrow,
     message: "",
     days: 1
   };
   const [vacationData, setVacationData] = useState<VacationData>(defaultVacationData);
   const [selectedVacationRequestId, setSelectedVacationRequestId] = useState("");
-  const vacationRequests = useAtomValue(vacationRequestsAtom);
+  const adminMode = UserRoleUtils.adminMode();
+  const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
 
   /**
    * Reset vacation data
    */
   const resetVacationData = () => {
     setVacationData(defaultVacationData);
-    setStartDate(dateTimeNow);
-    setEndDate(dateTimeNow);
+    setDateRange(defaultDateRange);
   };
 
   /**
    * Determine toolbar form mode
    */
   useEffect(() => {
-    determineToolbarFormMode({
-      formOpen: formOpen,
-      selectedRowIds: selectedRowIds,
-      setToolbarFormMode: setToolbarFormMode
-    });
+    determineToolbarFormMode(selectedRowIds, formOpen, setToolbarFormMode);
   }, [selectedRowIds, formOpen]);
 
   /**
@@ -98,8 +98,10 @@ const ToolbarForm = ({
           days: days
         });
         setSelectedVacationRequestId(selectedVacationRequest.id);
-        setStartDate(startDate);
-        setEndDate(endDate);
+        setDateRange({
+          start: startDate,
+          end: endDate
+        });
       }
     }
   };
@@ -143,14 +145,12 @@ const ToolbarForm = ({
             }}
           >
             <ToolbarFormFields
-              dateTimeNow={dateTimeNow}
-              startDate={startDate}
-              endDate={endDate}
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
+              dateTimeTomorrow={dateTimeTomorrow}
               setVacationData={setVacationData}
               vacationData={vacationData}
               toolbarFormMode={toolbarFormMode}
+              dateRange={dateRange}
+              setDateRange={setDateRange}
             />
           </form>
         </Grid>

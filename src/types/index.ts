@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
-import { VacationType } from "../generated/client";
+import { DailyEntry, VacationType } from "../generated/client";
+import { ReactNode } from "react";
 
 /**
  * Enum describing table form modes
@@ -21,16 +22,17 @@ export type ButtonIconProps = {};
 export type Language = "fi" | "en-gb";
 
 /**
- * Type describing row for data grid table
+ * Type describing row for vacations data grid table
  */
-export interface DataGridRow {
+export interface VacationsDataGridRow {
   id: string | undefined;
   type: VacationType | string;
+  personFullName: string;
   updatedAt: string | DateTime;
   startDate: string | DateTime;
   endDate: string | DateTime;
   days: number;
-  message: string | undefined;
+  message: string;
   status: string;
 }
 
@@ -66,14 +68,6 @@ export interface VacationData {
 }
 
 /**
- * Date range picker object.
- */
-export interface Range {
-  start: DateTime | null;
-  end: DateTime | null;
-}
-
-/**
  * Interface for custom label used in the pie chart.
  */
 export interface CustomLabel {
@@ -89,4 +83,38 @@ export enum Worktime {
   NonBillable = "nonBillableProject",
   Internal = "internal",
   Expected = "expected"
+}
+
+/**
+ * Type describing vacation info list item
+ */
+export interface VacationInfoListItem {
+  name: string;
+  value: string | ReactNode;
+}
+
+/**
+ * Type describing daily entry with index signature
+ */
+export interface DailyEntryWithIndexSignature extends DailyEntry {
+  [key: string]: any;
+}
+
+/**
+ * Type describing chart data
+ */
+export interface ChartData {
+  name: string;
+  internal: number;
+  billableProject: number;
+  nonBillableProject: number;
+  expected: number;
+}
+
+/**
+ * Type describing date range
+ */
+export interface DateRange {
+  start: DateTime;
+  end: DateTime;
 }
