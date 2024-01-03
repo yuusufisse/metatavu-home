@@ -183,10 +183,7 @@ const VacationsCard = () => {
     } else if (person) {
       return (
         <>
-          <Grid item xs={1}>
-            {" "}
-          </Grid>
-          <Grid item xs={11}>
+          <Grid item xs={12}>
             <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
               <Typography>
                 {strings.vacationsCard.spentVacations}
