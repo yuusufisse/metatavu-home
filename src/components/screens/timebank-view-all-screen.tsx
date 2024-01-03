@@ -35,9 +35,9 @@ const TimebankViewAllScreen = () => {
   const [persons, setPersons] = useAtom(personsAtom);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [displayedPersonsWithTotalTime, setDisplayedPersonsWithTotalTime] = useState<
-    PersonWithTotalTime[]
-  >([]);
+  const [displayedPersonsTotalTime, setDisplayedPersonsTotalTime] = useState<PersonWithTotalTime[]>(
+    []
+  );
 
   /**
    * Renders the customized tooltip for charts
@@ -160,16 +160,16 @@ const TimebankViewAllScreen = () => {
         setPersons(fetchedPersons);
       }
 
-      const personTotalsTimeList: PersonWithTotalTime[] = persons.map((_person) => ({
-        person: _person
-      }));
-
-      const populatedPersonTotalsTimeList = await Promise.all(
-        personTotalsTimeList.map(populatePersonTotalTimeData)
+      const personsTimeTotals = await Promise.all(
+        persons
+          .map((person) => ({
+            person: person
+          }))
+          .map(populatePersonTotalTimeData)
       );
 
-      setPersonsWithTotalTime(populatedPersonTotalsTimeList);
-      setDisplayedPersonsWithTotalTime(populatedPersonTotalsTimeList);
+      setPersonsWithTotalTime(personsTimeTotals);
+      setDisplayedPersonsTotalTime(personsTimeTotals);
     } catch (error) {
       setError(`${error} ${strings.error.fetchFailedGeneral}`);
     }
@@ -214,31 +214,38 @@ const TimebankViewAllScreen = () => {
     setSearchInput(newSearchInput);
 
     if (newSearchInput === "") {
-      setDisplayedPersonsWithTotalTime(personsWithTotalTime);
+      setDisplayedPersonsTotalTime(personsWithTotalTime);
       return;
     }
 
-    const newDisplayedPersonsWithTotalTime = personsWithTotalTime.filter((personsWithTotalTime) =>
+    const newDisplayedPersonsTotalTime = personsWithTotalTime.filter((personsWithTotalTime) =>
       `${personsWithTotalTime.person.firstName} ${personsWithTotalTime.person.lastName}`
         .toLowerCase()
         .includes(newSearchInput.toLowerCase())
     );
 
-    setDisplayedPersonsWithTotalTime(newDisplayedPersonsWithTotalTime);
+    setDisplayedPersonsTotalTime(newDisplayedPersonsTotalTime);
   };
+
+  /**
+   * Get balance color
+   *
+   * @param personTotalTime person total time object
+   * @returns color string
+   */
+  const getBalanceColor = (personTotalTime: PersonTotalTime) =>
+    personTotalTime.balance > 0 ? theme.palette.success.main : theme.palette.error.main;
 
   return (
     <>
       <Card sx={{ marginBottom: 2 }}>{renderSearch()}</Card>
       <Grid container spacing={2} textAlign={"center"} marginBottom={20}>
-        {!loading ? (
-          displayedPersonsWithTotalTime.map((personWithTotalTime, idx) => {
-            const balanceColor =
-              personWithTotalTime.personTotalTime && personWithTotalTime.personTotalTime.balance > 0
-                ? theme.palette.success.main
-                : theme.palette.error.main;
+        {loading ? (
+          <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />
+        ) : (
+          displayedPersonsTotalTime.map((personWithTotalTime) => {
             return (
-              <Grid item xs={12} sm={6} md={4} key={`person-totaltime-card-${idx}`}>
+              <Grid item xs={12} sm={6} md={4} key={personWithTotalTime.person.id}>
                 <Card
                   sx={{
                     display: "flex",
@@ -262,7 +269,10 @@ const TimebankViewAllScreen = () => {
                   {renderPieChart(personWithTotalTime, false)}
                   <Box sx={{ marginTop: "60px" }}>
                     {personWithTotalTime.personTotalTime && (
-                      <Typography fontSize={22} color={balanceColor}>
+                      <Typography
+                        fontSize={22}
+                        color={getBalanceColor(personWithTotalTime.personTotalTime)}
+                      >
                         {getHoursAndMinutes(personWithTotalTime.personTotalTime.balance)}
                       </Typography>
                     )}
@@ -271,8 +281,6 @@ const TimebankViewAllScreen = () => {
               </Grid>
             );
           })
-        ) : (
-          <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />
         )}
       </Grid>
     </>
