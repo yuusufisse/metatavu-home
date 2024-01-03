@@ -18,7 +18,7 @@ const SyncButton = () => {
   const { synchronizeApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const yesterday = DateTime.now().minus({ days: 1 });
-  const [syncStartDate, setSyncStartDate] = useState(yesterday);
+  const [syncStartDate, setSyncStartDate] = useState<DateTime<boolean>>(yesterday);
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
@@ -71,7 +71,6 @@ const SyncButton = () => {
 
     if (dailyEntryDates.length) {
       setSyncStartDate(DateTime.max(...dailyEntryDates));
-      console.log("latest: ", DateTime.max(...dailyEntryDates));
     }
   };
 
