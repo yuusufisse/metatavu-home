@@ -152,7 +152,7 @@ const VacationsCard = () => {
    * Initialize logged in person's data.
    */
   const getPersons = async () => {
-    if (persons.length) {
+    if (!persons.length) {
       setLoading(true);
       if (loggedInPerson || config.person.id) setLoading(false);
       {
@@ -167,9 +167,9 @@ const VacationsCard = () => {
   }, [persons]);
 
   /**
-   * display persons vacation days
+   * Display persons vacation days
    *
-   * @param person representing the individual's vacation details.
+   * @param Person timebank person
    */
   const renderVacationDays = (person: Person | undefined) => {
     const spentVacationsColor =
@@ -182,25 +182,31 @@ const VacationsCard = () => {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
       return (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography>
-            {strings.vacationsCard.spentVacations}
-            <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
-          </Typography>
-          <Typography>
-            {strings.vacationsCard.unspentVacations}
-            <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
-          </Typography>
-        </Box>
+        <>
+          <Grid item xs={1}>
+            {" "}
+          </Grid>
+          <Grid item xs={11}>
+            <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
+              <Typography>
+                {strings.vacationsCard.spentVacations}
+                <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
+              </Typography>
+              <Typography>
+                {strings.vacationsCard.unspentVacations}
+                <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
+              </Typography>
+            </Box>
+          </Grid>
+        </>
       );
     }
   };
-  
+
   /**
    * Get pending vacation requests by checking wether it has a status or not
    *
    * @returns pending vacation requests
-   *
    */
   const getPendingVacationRequests = () => {
     const pendingVacationRequests = vacationRequests
