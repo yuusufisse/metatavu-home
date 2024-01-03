@@ -50,6 +50,7 @@ const SyncDialog = ({
       <DatePicker
         label={strings.syncDialog.label}
         maxDate={DateTime.now()}
+        minDate={DateTime.now().set({ year: 2021, month: 7, day: 31 })}
         value={syncStartDate}
         onChange={(newValue: DateTime | null) => newValue && setSyncStartDate(newValue)}
       />
