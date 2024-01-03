@@ -50,7 +50,7 @@ const NavBar = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <NavItems />
-            <SyncButton />
+            {import.meta.env.DEV && <SyncButton />}
             <LocalizationButtons />
             <Box>
               <Tooltip title={strings.header.openUserMenu}>
