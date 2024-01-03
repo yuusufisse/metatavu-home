@@ -18,7 +18,7 @@ const SyncButton = () => {
   const { synchronizeApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const yesterday = DateTime.now().minus({ days: 1 });
-  const [syncStartDate, setSyncStartDate] = useState<DateTime<boolean>>(yesterday);
+  const [syncStartDate, setSyncStartDate] = useState<DateTime<true> | DateTime<false>>(yesterday);
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
