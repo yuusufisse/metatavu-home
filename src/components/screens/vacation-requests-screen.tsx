@@ -44,7 +44,9 @@ const VacationRequestsScreen = () => {
   );
   const [loading, setLoading] = useState(false);
   const [persons, setPersons] = useAtom(personsAtom);
-  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
+  const loggedInPerson = persons.find(
+    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+  );
   const { personsApi } = useApi();
 
   /**
@@ -87,10 +89,8 @@ const VacationRequestsScreen = () => {
     if (persons.length) {
       setLoading(true);
       if (loggedInPerson || config.person.id) setLoading(false);
-      {
-        const fetchedPersons = await personsApi.listPersons({ active: true });
-        setPersons(fetchedPersons);
-      }
+      const fetchedPersons = await personsApi.listPersons({ active: true });
+      setPersons(fetchedPersons);
     }
   };
 
@@ -100,7 +100,7 @@ const VacationRequestsScreen = () => {
 
   /**
    * Display persons vacation days
-   * @param person representing the individual's vacation details.
+   * @param Person timebank person
    */
   const renderVacationDays = (person: Person | undefined) => {
     const spentVacationsColor =
@@ -113,7 +113,7 @@ const VacationRequestsScreen = () => {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
       return (
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 1.5 }}>
           <Box sx={{ width: "40%" }}>
             <Typography>
               {strings.vacationsCard.spentVacations}
@@ -268,7 +268,8 @@ const VacationRequestsScreen = () => {
     try {
       setLoading(true);
       const vacationRequestId = selectedRowId as string;
-      const createdVacationRequestStatus = await vacationRequestStatusApi.createVacationRequestStatus({
+      const createdVacationRequestStatus =
+      await vacationRequestStatusApi.createVacationRequestStatus({
         id: vacationRequestId,
         vacationRequestStatus: {
           vacationRequestId: vacationRequestId,
@@ -476,9 +477,7 @@ const VacationRequestsScreen = () => {
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
         />
-        {renderVacationDays(
-          persons.find((person) => person.id === loggedInPerson?.id || config.person.id)
-        )}
+        {renderVacationDays(loggedInPerson)}
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
