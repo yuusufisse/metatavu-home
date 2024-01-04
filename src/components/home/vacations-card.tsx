@@ -32,7 +32,6 @@ import { formatDate } from "../../utils/time-utils";
 import config from "../../app/config";
 import { renderVacationDays } from "../../utils/vacation-days-utils";
 
-
 /**
  * Vacations card component
  */
