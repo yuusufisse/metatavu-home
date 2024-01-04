@@ -166,8 +166,6 @@ const VacationsCard = () => {
     getPersons();
   }, [persons]);
 
-
-
   /**
    * Get pending vacation requests by checking wether it has a status or not
    *
