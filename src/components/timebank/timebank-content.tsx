@@ -594,7 +594,10 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
                   <Checkbox
                     checked={byRange.dailyEntries}
                     onClick={() =>
-                      setByRange({ ...byRange, dailyEntries: byRange.dailyEntries ? false : true })
+                      setByRange({
+                        ...byRange,
+                        dailyEntries: byRange.dailyEntries ? false : true
+                      })
                     }
                   />
                 }
