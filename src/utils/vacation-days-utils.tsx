@@ -11,41 +11,41 @@ import { useAtom } from "jotai";
  * @param Person timebank person
  */
 export const renderVacationDays = (person: Person | undefined) => {
-  const loading = useState(true);
-  const persons = useAtom(personsAtom);
+const loading = useState(true);
+const persons = useAtom(personsAtom);
 
-  const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+const spentVacationsColor =
+person && person.spentVacations > 0
+    ? theme.palette.success.main
+    : theme.palette.error.main;
 
-  const unspentVacationsColor =
-    person && person.unspentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+const unspentVacationsColor =
+person && person.unspentVacations > 0
+    ? theme.palette.success.main
+    : theme.palette.error.main;
 
-  if (!person && !loading && persons.length) {
-    return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
-  } else if (person) {
-    return (
-      <>
-        <Box>
-          <Typography>
-            {strings.vacationsCard.spentVacations}
-            <span style={{ color: spentVacationsColor }}>
-              {person.spentVacations}
-            </span>
-          </Typography>
-        </Box>
-        <Box>
-          <Typography>
-            {strings.vacationsCard.unspentVacations}
-            <span style={{ color: unspentVacationsColor }}>
-              {person.unspentVacations}
-            </span>
-          </Typography>
-        </Box>
-      </>
-    );
-  }
+if (!person && !loading && persons.length) {
+return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
+} else if (person) {
+return (
+    <>
+    <Box>
+        <Typography>
+        {strings.vacationsCard.spentVacations}
+        <span style={{ color: spentVacationsColor }}>
+            {person.spentVacations}
+        </span>
+        </Typography>
+    </Box>
+    <Box>
+        <Typography>
+        {strings.vacationsCard.unspentVacations}
+        <span style={{ color: unspentVacationsColor }}>
+            {person.unspentVacations}
+        </span>
+        </Typography>
+    </Box>
+    </>
+);
+}
 };
