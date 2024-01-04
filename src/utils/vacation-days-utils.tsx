@@ -10,21 +10,21 @@ import { useAtom } from "jotai";
  * Display persons vacation days
  * @param Person timebank person
  */
-export const renderVacationDays = (person: Person | undefined) => {
+export const renderVacationDays = (person: Person) => {
 const loading = useState(true);
 const persons = useAtom(personsAtom);
 
 const spentVacationsColor =
-    person && person.spentVacations > 0
+    person.spentVacations > 0
         ? theme.palette.success.main
         : theme.palette.error.main;
 
 const unspentVacationsColor =
-    person && person.unspentVacations > 0
+    person.unspentVacations > 0
         ? theme.palette.success.main
         : theme.palette.error.main;
 
-if (!person && !loading && persons.length) {
+if (!loading && persons.length) {
     return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
         return (

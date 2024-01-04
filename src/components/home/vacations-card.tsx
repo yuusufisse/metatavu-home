@@ -391,7 +391,7 @@ const VacationsCard = () => {
           </Typography>
           <Grid container>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              {renderVacationDays(loggedInPerson)}
+              {loggedInPerson && renderVacationDays(loggedInPerson)}
             </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}

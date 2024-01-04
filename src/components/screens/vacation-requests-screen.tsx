@@ -445,7 +445,7 @@ const VacationRequestsScreen = () => {
           loading={loading}
         />
         <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-          {renderVacationDays(loggedInPerson)}
+          {loggedInPerson && renderVacationDays(loggedInPerson)}
         </Box>
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
