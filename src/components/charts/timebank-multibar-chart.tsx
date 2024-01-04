@@ -5,7 +5,7 @@ import strings from "../../localization/strings";
 import { getHours } from "../../utils/time-utils";
 import { Typography } from "@mui/material";
 import { renderCustomizedTooltipBarChart } from "../../utils/chart-utils";
-import { Worktime } from "../../types";
+import { ChartData, Worktime } from "../../types";
 
 /**
  * Component properties
@@ -19,9 +19,8 @@ interface Props {
  *
  * @param props component properties
  */
-const TimebankMultiBarChart = (props: Props) => {
-  const { selectedEntries } = props;
-  const chartData = selectedEntries.map((entry) => ({
+const TimebankMultiBarChart = ({ selectedEntries }: Props) => {
+  const chartData: ChartData[] = selectedEntries.map((entry) => ({
     name: entry.date.toLocaleDateString(strings.localization.time, {
       day: "numeric",
       month: "numeric"
@@ -66,21 +65,21 @@ const TimebankMultiBarChart = (props: Props) => {
         <Legend />
         <Bar
           dataKey={Worktime.Billable}
-          name={strings.timebank.billableProject}
+          name={strings.timebank.billableProjectTime}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.success.dark}
         />
         <Bar
           dataKey={Worktime.NonBillable}
-          name={strings.timebank.nonBillableProject}
+          name={strings.timebank.nonBillableProjectTime}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.success.light}
         />
         <Bar
           dataKey={Worktime.Internal}
-          name={strings.timebank.internal}
+          name={strings.timebank.internalTime}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.warning.main}

@@ -79,7 +79,7 @@ const TimebankScreen = () => {
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
           fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
-        ); // Gets today's entry or earlier
+        );
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
@@ -94,9 +94,7 @@ const TimebankScreen = () => {
   const handleDailyEntryChange = (selectedDate: DateTime) => {
     if (selectedDate) {
       setPersonDailyEntry(
-        dailyEntries.find(
-          (item) => DateTime.fromJSDate(item.date).toISODate() === selectedDate?.toISODate()
-        )
+        dailyEntries.find((item) => DateTime.fromJSDate(item.date).day === selectedDate.day)
       );
     }
   };

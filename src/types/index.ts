@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { VacationType } from "../generated/client";
+import { Person, PersonTotalTime, VacationType,DailyEntry } from "../generated/client";
 import { ReactNode } from "react";
 
 /**
@@ -68,14 +68,6 @@ export interface VacationData {
 }
 
 /**
- * Date range picker object.
- */
-export interface Range {
-  start: DateTime | null;
-  end: DateTime | null;
-}
-
-/**
  * Interface for custom label used in the pie chart.
  */
 export interface CustomLabel {
@@ -94,9 +86,65 @@ export enum Worktime {
 }
 
 /**
+ * Interface for person with total time
+ */
+export interface PersonWithTotalTime {
+  person: Person;
+  personTotalTime?: PersonTotalTime;
+}
+
+/**
+ * Enum for work time category
+ */
+export enum WorkTimeCategory {
+  BILLABLE_PROJECT = "Billable Project",
+  NON_BILLABLE_PROJECT = "Non Billable Project",
+  INTERNAL = "Internal",
+  EXPECTED = "Expected",
+  BALANCE = "Balance",
+  LOGGED = "Logged"
+}
+
+/**
+ * Type for work time data
+ */
+export interface WorkTimeTotalData {
+  name: WorkTimeCategory;
+  balance: number;
+  logged?: number;
+  expected?: number;
+}
+
+/**
  * Type describing vacation info list item
  */
 export interface VacationInfoListItem {
   name: string;
   value: string | ReactNode;
+}
+
+/**
+ * Type describing daily entry with index signature
+ */
+export interface DailyEntryWithIndexSignature extends DailyEntry {
+  [key: string]: any;
+}
+
+/**
+ * Type describing chart data
+ */
+export interface ChartData {
+  name: string;
+  internal: number;
+  billableProject: number;
+  nonBillableProject: number;
+  expected: number;
+}
+
+/**
+ * Type describing date range
+ */
+export interface DateRange {
+  start: DateTime;
+  end: DateTime;
 }
