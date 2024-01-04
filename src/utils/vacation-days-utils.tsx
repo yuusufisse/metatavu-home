@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 
 /**
  * Display persons vacation days
+ *
  * @param Person timebank person
  */
 export const renderVacationDays = (person: Person | undefined) => {
