@@ -6,14 +6,14 @@ import { useState } from "react";
 import { personsAtom } from "../atoms/person";
 import { useAtom } from "jotai";
 
-const loading = useState(false);
-const persons = useAtom(personsAtom);
-
 /**
  * Display persons vacation days
  * @param Person timebank person
  */
 export const renderVacationDays = (person: Person | undefined) => {
+  const loading = useState(true);
+  const persons = useAtom(personsAtom);
+
   const spentVacationsColor =
     person && person.spentVacations > 0
       ? theme.palette.success.main
@@ -29,7 +29,7 @@ export const renderVacationDays = (person: Person | undefined) => {
   } else if (person) {
     return (
       <>
-        <Box sx={{ width: "40%" }}>
+        <Box>
           <Typography>
             {strings.vacationsCard.spentVacations}
             <span style={{ color: spentVacationsColor }}>
