@@ -171,7 +171,7 @@ const TimebankViewAllScreen = () => {
       setPersonsWithTotalTime(personsTimeTotals);
       setDisplayedPersonsTotalTime(personsTimeTotals);
     } catch (error) {
-      setError(`${error} ${strings.error.fetchFailedGeneral}`);
+      setError(`${error} ${strings.error.personsFetch}`);
     }
 
     setLoading(false);
@@ -241,7 +241,26 @@ const TimebankViewAllScreen = () => {
       <Card sx={{ marginBottom: 2 }}>{renderSearch()}</Card>
       <Grid container spacing={2} textAlign={"center"} marginBottom={20}>
         {loading ? (
-          <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+              marginTop: 10
+            }}
+          >
+            <Box>
+              <Typography>{strings.placeHolder.pleaseWait}</Typography>
+            </Box>
+            <Box
+              sx={{
+                marginTop: 2
+              }}
+            >
+              <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />
+            </Box>
+          </Box>
         ) : (
           displayedPersonsTotalTime.map((personWithTotalTime) => {
             return (
@@ -260,6 +279,7 @@ const TimebankViewAllScreen = () => {
                   <Box sx={{ padding: "10px", marginBottom: "60px" }}>
                     <Typography variant="h4">{`${personWithTotalTime.person.firstName} ${personWithTotalTime.person.lastName}`}</Typography>
                     <Typography>
+                      {strings.viewAll.startDate}
                       {personWithTotalTime.person.startDate &&
                         DateTime.fromFormat(personWithTotalTime.person.startDate, "yyyy-M-d")
                           .setLocale(language)
@@ -267,7 +287,10 @@ const TimebankViewAllScreen = () => {
                     </Typography>
                   </Box>
                   {renderPieChart(personWithTotalTime, false)}
-                  <Box sx={{ marginTop: "60px" }}>
+                  <Box sx={{ display: "flex", justifyContent: "center", marginTop: "60px" }}>
+                    <Typography fontSize={22} marginRight={1}>
+                      {strings.viewAll.balance}
+                    </Typography>
                     {personWithTotalTime.personTotalTime && (
                       <Typography
                         fontSize={22}
