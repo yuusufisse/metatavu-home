@@ -86,7 +86,7 @@ const VacationRequestsScreen = () => {
    * Initialize logged in person data.
    */
   const getPersons = async () => {
-    if (persons.length) {
+    if (!persons.length) {
       setLoading(true);
       if (loggedInPerson || config.person.id) setLoading(false);
       const fetchedPersons = await personsApi.listPersons({ active: true });
@@ -104,10 +104,14 @@ const VacationRequestsScreen = () => {
    */
   const renderVacationDays = (person: Person | undefined) => {
     const spentVacationsColor =
-      person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
+      person && person.spentVacations > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
 
     const unspentVacationsColor =
-      person && person.unspentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
+      person && person.unspentVacations > 0
+        ? theme.palette.success.main
+        : theme.palette.error.main;
 
     if (!person && !loading && persons.length) {
       return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
