@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box} from "@mui/material";
 import { theme } from "../theme";
 import { Person } from "../generated/client";
 import strings from "../localization/strings";
@@ -28,24 +28,16 @@ if (!loading && persons.length) {
     return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
     } else if (person) {
         return (
-            <>
-            <Box>
-                <Typography>
-                {strings.vacationsCard.spentVacations}
-                <span style={{ color: spentVacationsColor }}>
-                    {person.spentVacations}
-                </span>
-                </Typography>
-            </Box>
-            <Box>
-                <Typography>
-                {strings.vacationsCard.unspentVacations}
-                <span style={{ color: unspentVacationsColor }}>
-                    {person.unspentVacations}
-                </span>
-                </Typography>
-            </Box>
-            </>
+        <>
+        <Box>
+            {strings.vacationsCard.spentVacations}
+            <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
+        </Box>
+        <Box sx={{mb: 2}}>
+            {strings.vacationsCard.unspentVacations}
+            <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
+        </Box>
+        </>
         );
     }
 };

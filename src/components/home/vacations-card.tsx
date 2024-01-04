@@ -390,7 +390,7 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </Typography>
           <Grid container>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
               {loggedInPerson && renderVacationDays(loggedInPerson)}
             </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
