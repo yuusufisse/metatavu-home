@@ -58,6 +58,8 @@ const TimebankScreen = () => {
 
   /**
    * Gets person's total time data.
+   * 
+   * @param selectedPersonId selected person id
    */
   const getPersonTotalTime = async (selectedPersonId: number) => {
     if (selectedPersonId) {
@@ -105,6 +107,7 @@ const TimebankScreen = () => {
 
   /**
    * Gets daily entries for the selected employee for the pie chart.
+   * 
    * @param selectedPerson daily entries
    */
   const getPersonDailyEntriesForPieChart = async (selectedPerson: Person) => {
