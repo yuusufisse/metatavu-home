@@ -57,6 +57,31 @@
     "searchPlaceholder": "Search for a person...",
     "employeeBalances": "Employee time totals and balances"
   },
+  "errors": {
+    "fetchFailedGeneral": "There was an error fetching data",
+    "fetchFailedNoEntriesGeneral": "No time entries found"
+  },
+  "error": {
+    "oops": "Oops!",
+    "generic": "Unexpected error has occurred",
+    "totalTimeFetch": "Retrieving total time data has failed",
+    "totalTimeNotFound": "Could not find total time data",
+    "dailyEntriesFetch": "Retrieving daily entries has failed",
+    "dailyEntriesNotFound": "Could not find daily entries",
+    "fetchFailedGeneral": "There was an error fetching data",
+    "fetchFailedNoEntriesGeneral": "No time entries found"
+  },
+  "syncDialog": {
+    "cancel": "Cancel",
+    "sync": "Sync",
+    "title": "Select date",
+    "label": "Sync from"
+  },
+  "syncButton": {
+    "success": "Synchronization was successful!",
+    "sync": "Sync",
+    "error": "Synchronizing has failed"
+  },
   "timeExpressions": {
     "monday": "Monday",
     "tuesday": "Tuesday",

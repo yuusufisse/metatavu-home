@@ -229,6 +229,23 @@ export interface Localized extends LocalizedStringsMethods {
     startDate: string;
     balance: string;
   };
+  /**
+   * Translations related to sync dialog
+   */
+  syncDialog: {
+    cancel: string;
+    sync: string;
+    title: string;
+    label: string;
+  };
+  /**
+   * Translations related to sync button
+   */
+  syncButton: {
+    success: string;
+    sync: string;
+    error: string;
+  };
 }
 
 /**

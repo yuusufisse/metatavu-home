@@ -57,6 +57,21 @@
     "searchPlaceholder": "Hae henkilöä...",
     "employeeBalances": "Henkilöstön aikakirjaukset ja saldot"
   },
+  "errors": {
+    "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+  },
+  "syncDialog": {
+    "cancel": "Peruuta",
+    "sync": "Synkronoi",
+    "title": "Valitse päivämäärä",
+    "label": "Synkronoi valitusta päivästä"
+  },
+  "syncButton": {
+    "success": "Synkronoitu onnistuneesti!",
+    "sync": "Sync",
+    "error": "Synkronointi epäonnistui"
+  },
   "timeExpressions": {
     "monday": "Maanantai",
     "tuesday": "Tiistai",
