@@ -29,8 +29,9 @@ import { getVacationRequestPersonFullName } from "../../utils/vacation-request-u
 import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
-import { theme } from "../../theme";
 import config from "../../app/config";
+import { renderVacationDays } from "../../utils/vacation-days-utils";
+
 
 /**
  * Vacations card component
@@ -166,45 +167,7 @@ const VacationsCard = () => {
     getPersons();
   }, [persons]);
 
-  /**
-   * Display persons vacation days
-   *
-   * @param Person timebank person
-   */
-  const renderVacationDays = (person: Person | undefined) => {
-    const spentVacationsColor =
-      person && person.spentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
 
-    const unspentVacationsColor =
-      person && person.unspentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
-
-    if (!person && !loading) {
-      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
-    } else if (person) {
-      return (
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", flexDirection: "column", mb: 3 }}>
-            <Typography>
-              <span style={{ width: "250px", display: "inline-block" }}>
-                {strings.vacationsCard.spentVacations}
-              </span>
-              <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
-            </Typography>
-            <Typography>
-              <span style={{ width: "250px", display: "inline-block" }}>
-                {strings.vacationsCard.unspentVacations}
-              </span>
-              <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
-            </Typography>
-          </Box>
-        </Grid>
-      );
-    }
-  };
 
   /**
    * Get pending vacation requests by checking wether it has a status or not
@@ -430,7 +393,9 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </h3>
           <Grid container>
-            {renderVacationDays(loggedInPerson)}
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              {renderVacationDays(loggedInPerson)}
+            </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
           </Grid>

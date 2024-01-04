@@ -24,9 +24,9 @@ import UserRoleUtils from "../../utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
-import { theme } from "../../theme";
 import { personsAtom } from "../../atoms/person";
 import config from "../../app/config";
+import { renderVacationDays } from "../../utils/vacation-days-utils";
 
 /**
  * Vacation requests screen
@@ -97,43 +97,6 @@ const VacationRequestsScreen = () => {
   useMemo(() => {
     getPersons();
   }, [persons]);
-
-  /**
-   * Display persons vacation days
-   * @param Person timebank person
-   */
-  const renderVacationDays = (person: Person | undefined) => {
-    const spentVacationsColor =
-      person && person.spentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
-
-    const unspentVacationsColor =
-      person && person.unspentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
-
-    if (!person && !loading && persons.length) {
-      return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
-    } else if (person) {
-      return (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 1.5 }}>
-          <Box sx={{ width: "40%" }}>
-            <Typography>
-              {strings.vacationsCard.spentVacations}
-              <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography>
-              {strings.vacationsCard.unspentVacations}
-              <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
-            </Typography>
-          </Box>
-        </Box>
-      );
-    }
-  };
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
@@ -481,7 +444,9 @@ const VacationRequestsScreen = () => {
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
         />
-        {renderVacationDays(loggedInPerson)}
+        <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+          {renderVacationDays(loggedInPerson)}
+        </Box>
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
