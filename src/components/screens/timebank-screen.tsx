@@ -30,9 +30,9 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  const [selectedEmployee] = useState<number | null>(
-    userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
-  );
+  const selectedEmployee = userProfile?.id
+    ? Number(localStorage.getItem("selectedEmployee") || userProfile.id)
+    : null;
 
   useEffect(() => {
     if (selectedEmployee !== null) {
@@ -105,6 +105,7 @@ const TimebankScreen = () => {
 
   /**
    * Gets daily entries for the selected employee for the pie chart.
+   * @param selectedPerson daily entries
    */
   const getPersonDailyEntriesForPieChart = async (selectedPerson: Person) => {
     if (selectedPerson) {

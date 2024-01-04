@@ -64,7 +64,7 @@ const TimebankContent = (props: Props) => {
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
   const adminMode = UserRoleUtils.adminMode();
-  const [selectedEmployee, setSelectedEmployee] = useState<number | null>(
+  const [selectedEmployee, setSelectedEmployee] = useState(
     userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
   );
   const todayOrEarlier = DateTime.fromJSDate(
