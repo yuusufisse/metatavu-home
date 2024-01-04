@@ -17,8 +17,8 @@ import { userProfileAtom } from "../../atoms/auth";
 const SyncButton = () => {
   const { synchronizeApi } = useApi();
   const setError = useSetAtom(errorAtom);
-  const yesterday = DateTime.now().minus({ days: 1 });
-  const [syncStartDate, setSyncStartDate] = useState<DateTime<true> | DateTime<false>>(yesterday);
+  const yesterday: DateTime = DateTime.now().minus({ days: 1 });
+  const [syncStartDate, setSyncStartDate] = useState(yesterday);
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
