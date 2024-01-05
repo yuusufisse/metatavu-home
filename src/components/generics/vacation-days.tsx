@@ -9,20 +9,21 @@ import { useAtom } from "jotai";
  * Display persons vacation days
  * @param Person timebank person
  */
-export const renderVacationDays = (person: Person) => {
+export const renderVacationDays = (person: Person | undefined) => {
   const persons = useAtom(personsAtom);
+  const loading = true;
 
   const spentVacationsColor =
-    person.spentVacations > 0
+    person && person.spentVacations > 0
       ? theme.palette.success.main
       : theme.palette.error.main;
 
   const unspentVacationsColor =
-    person.unspentVacations > 0
+    person && person.unspentVacations > 0
       ? theme.palette.success.main
       : theme.palette.error.main;
 
-  if (persons.length) {
+  if (!loading && persons.length) {
     return <Typography>{strings.error.personsFetch}</Typography>;
   } else if (person) {
     return (
@@ -31,7 +32,7 @@ export const renderVacationDays = (person: Person) => {
           {strings.vacationsCard.spentVacations}
           <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
         </Box>
-        <Box sx={{ mb: 2 }}>
+        <Box>
           {strings.vacationsCard.unspentVacations}
           <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
         </Box>
