@@ -1,8 +1,7 @@
-import { Typography, Box} from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { theme } from "../../theme";
 import { Person } from "../../generated/client";
 import strings from "../../localization/strings";
-import { useState } from "react";
 import { personsAtom } from "../../atoms/person";
 import { useAtom } from "jotai";
 
@@ -11,33 +10,32 @@ import { useAtom } from "jotai";
  * @param Person timebank person
  */
 export const renderVacationDays = (person: Person) => {
-const loading = useState(true);
-const persons = useAtom(personsAtom);
+  const persons = useAtom(personsAtom);
 
-const spentVacationsColor =
+  const spentVacationsColor =
     person.spentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
+      ? theme.palette.success.main
+      : theme.palette.error.main;
 
-const unspentVacationsColor =
+  const unspentVacationsColor =
     person.unspentVacations > 0
-        ? theme.palette.success.main
-        : theme.palette.error.main;
+      ? theme.palette.success.main
+      : theme.palette.error.main;
 
-if (!loading && persons.length) {
-    return <Typography>{strings.error.fetchFailedNoEntriesGeneral}</Typography>;
-    } else if (person) {
-        return (
-        <>
+  if (persons.length) {
+    return <Typography>{strings.error.personsFetch}</Typography>;
+  } else if (person) {
+    return (
+      <>
         <Box>
-            {strings.vacationsCard.spentVacations}
-            <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
+          {strings.vacationsCard.spentVacations}
+          <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
         </Box>
-        <Box sx={{mb: 2}}>
-            {strings.vacationsCard.unspentVacations}
-            <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
+        <Box sx={{ mb: 2 }}>
+          {strings.vacationsCard.unspentVacations}
+          <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
         </Box>
-        </>
-        );
-    }
+      </>
+    );
+  }
 };
