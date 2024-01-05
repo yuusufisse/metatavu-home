@@ -2,15 +2,12 @@ import { Typography, Box } from "@mui/material";
 import { theme } from "../../theme";
 import { Person } from "../../generated/client";
 import strings from "../../localization/strings";
-import { personsAtom } from "../../atoms/person";
-import { useAtom } from "jotai";
 
 /**
  * Display persons vacation days
  * @param Person timebank person
  */
-export const renderVacationDays = (person: Person | undefined) => {
-  const persons = useAtom(personsAtom);
+export const renderVacationDays = (person: Person) => {
   const loading = true;
 
   const spentVacationsColor =
@@ -23,7 +20,7 @@ export const renderVacationDays = (person: Person | undefined) => {
       ? theme.palette.success.main
       : theme.palette.error.main;
 
-  if (!loading && persons.length) {
+  if (!loading) {
     return <Typography>{strings.error.personsFetch}</Typography>;
   } else if (person) {
     return (
