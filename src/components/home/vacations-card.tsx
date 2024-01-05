@@ -30,7 +30,7 @@ import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
 import config from "../../app/config";
-import { renderVacationDays } from "../../utils/vacation-days-utils";
+import { renderVacationDays } from "../generics/vacation-days";
 
 /**
  * Vacations card component

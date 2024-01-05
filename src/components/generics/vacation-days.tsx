@@ -1,9 +1,9 @@
 import { Typography, Box} from "@mui/material";
-import { theme } from "../theme";
-import { Person } from "../generated/client";
-import strings from "../localization/strings";
+import { theme } from "../../theme";
+import { Person } from "../../generated/client";
+import strings from "../../localization/strings";
 import { useState } from "react";
-import { personsAtom } from "../atoms/person";
+import { personsAtom } from "../../atoms/person";
 import { useAtom } from "jotai";
 
 /**

@@ -26,7 +26,7 @@ import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
 import { personsAtom } from "../../atoms/person";
 import config from "../../app/config";
-import { renderVacationDays } from "../../utils/vacation-days-utils";
+import { renderVacationDays } from "../generics/vacation-days";
 
 /**
  * Vacation requests screen
