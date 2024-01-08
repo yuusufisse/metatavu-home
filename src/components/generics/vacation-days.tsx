@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import { theme } from "../../theme";
 import { Person } from "../../generated/client";
 import strings from "../../localization/strings";
@@ -25,14 +25,12 @@ export const renderVacationDays = (person: Person) => {
   } else if (person) {
     return (
       <>
-        <Box>
-          {strings.vacationsCard.spentVacations}
-          <span style={{ color: spentVacationsColor }}>{person.spentVacations}</span>
-        </Box>
-        <Box>
-          {strings.vacationsCard.unspentVacations}
-          <span style={{ color: unspentVacationsColor }}>{person.unspentVacations}</span>
-        </Box>
+        <Grid container>
+          <Grid xs={6.5}>{strings.vacationsCard.spentVacations}</Grid>
+          <Typography color={spentVacationsColor}>{person.spentVacations}</Typography>
+          <Grid xs={6.5}>{strings.vacationsCard.unspentVacations}</Grid>
+          <Typography color={unspentVacationsColor}>{person.unspentVacations}</Typography>
+        </Grid>
       </>
     );
   }
