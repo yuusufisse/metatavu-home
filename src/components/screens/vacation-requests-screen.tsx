@@ -26,7 +26,7 @@ import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
 import { personsAtom } from "../../atoms/person";
 import config from "../../app/config";
-import { renderVacationDays } from "../generics/vacation-days";
+import { renderVacationDaysText } from "../generics/vacation-days";
 
 /**
  * Vacation requests screen
@@ -43,11 +43,10 @@ const VacationRequestsScreen = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const [persons, setPersons] = useAtom(personsAtom);
+  const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
     (person: Person) => person.keycloakId === userProfile?.id || config.person.id
   );
-  const { personsApi } = useApi();
 
   /**
    * Fetch vacation request statuses
@@ -81,22 +80,6 @@ const VacationRequestsScreen = () => {
   useMemo(() => {
     fetchVacationRequestStatuses();
   }, [vacationRequests]);
-
-    /**
-   * Initialize logged in person data.
-   */
-  const getPersons = async () => {
-    if (!persons.length) {
-      setLoading(true);
-      if (loggedInPerson || config.person.id) setLoading(false);
-      const fetchedPersons = await personsApi.listPersons({ active: true });
-      setPersons(fetchedPersons);
-    }
-  };
-
-  useMemo(() => {
-    getPersons();
-  }, [persons]);
 
   /**
    * Filter latest vacation request statuses, so there would be only one status(the latest one) for each request showed on the UI
@@ -445,8 +428,8 @@ const VacationRequestsScreen = () => {
           loading={loading}
         />
         <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
-          {loggedInPerson && renderVacationDays(loggedInPerson)}
-        </Box>
+          {loggedInPerson && renderVacationDaysText(loggedInPerson)}
+        </Box>    
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
