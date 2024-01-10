@@ -30,7 +30,7 @@ import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
 import config from "../../app/config";
-import { renderVacationDays } from "../generics/vacation-days";
+import { renderVacationDaysText } from "../generics/vacation-days";
 
 /**
  * Vacations card component
@@ -47,8 +47,7 @@ const VacationsCard = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const [persons, setPersons] = useAtom(personsAtom);
-  const { personsApi } = useApi();
+  const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
     (person: Person) => person.keycloakId === userProfile?.id || config.person.id
   );
@@ -149,22 +148,6 @@ const VacationsCard = () => {
   useMemo(() => {
     fetchVacationsRequests();
   }, []);
-
-  /**
-   * Initialize logged in person's data.
-   */
-  const getPersons = async () => {
-    if (!persons.length) {
-      setLoading(true);
-      if (loggedInPerson || config.person.id) setLoading(false);
-      const fetchedPersons = await personsApi.listPersons({ active: true });
-      setPersons(fetchedPersons);
-    }
-  };
-
-  useMemo(() => {
-    getPersons();
-  }, [persons]);
 
   /**
    * Get pending vacation requests by checking wether it has a status or not
@@ -391,7 +374,7 @@ const VacationsCard = () => {
           </Typography>
           <Grid container>
             <Box sx={{ width: "100%", display: "flex", flexDirection: "column", mb: 2 }}>
-              {loggedInPerson && renderVacationDays(loggedInPerson)}
+              {loggedInPerson && renderVacationDaysText(loggedInPerson)}
             </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
