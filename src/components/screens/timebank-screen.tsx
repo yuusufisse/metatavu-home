@@ -30,16 +30,31 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  const [selectedEmployee] = useState(
-    Number(localStorage.getItem("selectedEmployee") || userProfile?.id)
-  );
+  // const [selectedEmployee] = useState(
+  //   Number(localStorage.getItem("selectedEmployee") || userProfile?.id)
+  // );
+  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
+
+  console.log("logged in person", loggedInPerson)
+
+
+  const [ selectedEmployee, setSelectedEmployee ] = useState(loggedInPerson?.id);
+
 
   useEffect(() => {
-      getPersonTotalTime(selectedEmployee);
+    if (selectedEmployee) {
+      console.log("Selected Employee UE running");
+      getSelectedPersonTotalTime(selectedEmployee);
+    } else {
+      getPersonTotalTime();
+    }
   }, [selectedEmployee, timespan]);
 
   useEffect(() => {
     getPersonDailyEntries();
+
+    console.log("Persons", persons);
+    console.log("selectedEmployee", selectedEmployee);
 
     const selectedPerson = persons.find((person) => person.id === selectedEmployee);
 
@@ -48,18 +63,19 @@ const TimebankScreen = () => {
     }
   }, [persons, selectedEmployee]);
 
-  useEffect(() => {
-    if (selectedEmployee !== null) {
-      localStorage.setItem("selectedEmployee", selectedEmployee.toString());
-    }
-  }, [selectedEmployee]);
+  // useEffect(() => {
+  //   if (selectedEmployee !== null) {
+  //     localStorage.setItem("selectedEmployee", selectedEmployee.toString());
+  //   }
+  // }, [selectedEmployee]);
 
   /**
-   * Gets person's total time data.
+   * Gets  selectedPerson's total time data.
    *
    * @param selectedPersonId selected person id
    */
-  const getPersonTotalTime = async (selectedPersonId: number) => {
+  const getSelectedPersonTotalTime = async (selectedPersonId: number) => {
+    console.log("in the getPerson Total Time", selectedEmployee);
     if (selectedEmployee) {
       if (selectedPersonId) {
         setLoading(true);
@@ -77,6 +93,31 @@ const TimebankScreen = () => {
           } catch (error) {
             setError(`${strings.error.totalTimeFetch}, ${error}`);
           }
+        }
+      }
+    }
+    setLoading(false);
+  };
+
+  /**
+   * Gets person's total time data.
+   */
+  const getPersonTotalTime = async () => {
+    if (persons.length) {
+      setLoading(true);
+      const loggedInPerson = persons.find(
+        (person: Person) => person.keycloakId === userProfile?.id
+      );
+      if (loggedInPerson || config.person.id) {
+        try {
+          const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+            personId: loggedInPerson?.id || config.person.id,
+            timespan: timespan || Timespan.ALL_TIME,
+            before: new Date()
+          });
+          setPersonTotalTime(fetchedPersonTotalTime[0]);
+        } catch (error) {
+          setError(`${strings.error.totalTimeFetch}, ${error}`);
         }
       }
     }
@@ -107,7 +148,7 @@ const TimebankScreen = () => {
 
   /**
    * Gets daily entries for the selected employee for the pie chart.
-   * 
+   *
    * @param selectedPerson daily entries
    */
   const getPersonDailyEntriesForPieChart = async (selectedPerson: Person) => {
@@ -132,7 +173,7 @@ const TimebankScreen = () => {
    * @param selectedDate selected date from DatePicker
    */
   const handleDailyEntryChange = (selectedDate: DateTime) => {
-    if (selectedDate && selectedEmployee !== null && typeof selectedEmployee === "object") {
+    if (selectedDate && selectedEmployee !== null) {
       setPersonDailyEntry(
         dailyEntries.find(
           (item) =>
@@ -151,7 +192,12 @@ return (
         {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
       </Card>
     ) : (
-      <TimebankContent handleDailyEntryChange={handleDailyEntryChange} loading={loading} />
+      <TimebankContent
+        handleDailyEntryChange={handleDailyEntryChange}
+        loading={loading}
+        selectedEmployee={selectedEmployee}
+        setSelectedEmployee={setSelectedEmployee}
+      />
     )}
   </div>
 );

@@ -35,7 +35,7 @@ import {
   personsAtom
 } from "../../atoms/person";
 import UserRoleUtils from "../../utils/user-role-utils";
-import { userProfileAtom } from "../../atoms/auth";
+// import { userProfileAtom } from "../../atoms/auth";
 
 /**
  * Component properties
@@ -43,6 +43,8 @@ import { userProfileAtom } from "../../atoms/auth";
 interface Props {
   handleDailyEntryChange: (selectedDate: DateTime) => void;
   loading: boolean;
+  selectedEmployee: number | undefined;
+  setSelectedEmployee: (selectedEmployee?: number) => void;
 }
 
 /**
@@ -51,8 +53,8 @@ interface Props {
  * @param props Component properties
  */
 const TimebankContent = (props: Props) => {
-  const userProfile = useAtomValue(userProfileAtom);
-  const { handleDailyEntryChange, loading } = props;
+  // const userProfile = useAtomValue(userProfileAtom);
+  const { handleDailyEntryChange, loading, selectedEmployee, setSelectedEmployee } = props;
 
   const [selectedEntries, setSelectedEntries] = useState<DailyEntry[]>([]);
   const [byRange, setByRange] = useState({
@@ -64,9 +66,9 @@ const TimebankContent = (props: Props) => {
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
   const adminMode = UserRoleUtils.adminMode();
-  const [selectedEmployee, setSelectedEmployee] = useState(
-    userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
-  );
+  // const [selectedEmployee, setSelectedEmployee] = useState(
+  //   userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
+  // );
   const todayOrEarlier = DateTime.fromJSDate(
     dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
   );
