@@ -22,21 +22,21 @@ export const renderVacationDaysText = (person: Person) => {
   if (person) {
     return (
       <Grid>
-        <Grid container>
-          <Grid item style={{ flex: 0.55 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={6}>
             {strings.vacationsCard.spentVacations}
           </Grid>
-          <Typography color={spentVacationsColor}>
-            {person.spentVacations}
-          </Typography>
+          <Grid item xs={6}>
+            <Typography color={spentVacationsColor}>{person.spentVacations}</Typography>
+          </Grid>
         </Grid>
-        <Grid container>
-          <Grid item style={{ flex: 0.55 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={6}>
             {strings.vacationsCard.unspentVacations}
           </Grid>
-          <Typography color={unspentVacationsColor}>
-            {person.unspentVacations}
-          </Typography>
+          <Grid item xs={6}>
+            <Typography color={unspentVacationsColor}>{person.unspentVacations}</Typography>
+          </Grid>
         </Grid>
       </Grid>
     );

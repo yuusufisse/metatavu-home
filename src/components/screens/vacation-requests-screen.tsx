@@ -427,7 +427,7 @@ const VacationRequestsScreen = () => {
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
         />
-        <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
+        <Box sx={{ justifyContent: "space-around", mt: 2 }}>
           {loggedInPerson && renderVacationDaysText(loggedInPerson)}
         </Box>    
       </Card>
