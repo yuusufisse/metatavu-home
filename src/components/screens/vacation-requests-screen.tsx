@@ -26,7 +26,7 @@ import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
 import { personsAtom } from "../../atoms/person";
 import config from "../../app/config";
-import { renderVacationDaysText } from "../generics/vacation-days";
+import { renderVacationDaysTextScreen } from "../generics/vacation-days";
 
 /**
  * Vacation requests screen
@@ -219,18 +219,18 @@ const VacationRequestsScreen = () => {
       setLoading(true);
       const vacationRequestId = selectedRowId as string;
       const createdVacationRequestStatus =
-      await vacationRequestStatusApi.createVacationRequestStatus({
-        id: vacationRequestId,
-        vacationRequestStatus: {
-          vacationRequestId: vacationRequestId,
-          status: newStatus,
-          message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
-          createdAt: new Date(),
-          createdBy: userProfile.id,
-          updatedAt: new Date(),
-          updatedBy: userProfile.id
-        }
-      });
+        await vacationRequestStatusApi.createVacationRequestStatus({
+          id: vacationRequestId,
+          vacationRequestStatus: {
+            vacationRequestId: vacationRequestId,
+            status: newStatus,
+            message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
+            createdAt: new Date(),
+            createdBy: userProfile.id,
+            updatedAt: new Date(),
+            updatedBy: userProfile.id
+          }
+        });
       setLoading(false);
       return createdVacationRequestStatus;
     } catch (error) {
@@ -420,6 +420,11 @@ const VacationRequestsScreen = () => {
   return (
     <>
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+        <Box>
+          {loggedInPerson && renderVacationDaysTextScreen(loggedInPerson)}
+        </Box>
+      </Card>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
@@ -427,9 +432,6 @@ const VacationRequestsScreen = () => {
           updateVacationRequestStatuses={updateVacationRequestStatuses}
           loading={loading}
         />
-        <Box sx={{ justifyContent: "space-around", mt: 2 }}>
-          {loggedInPerson && renderVacationDaysText(loggedInPerson)}
-        </Box>    
       </Card>
       <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
