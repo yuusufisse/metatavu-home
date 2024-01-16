@@ -28,10 +28,10 @@ import { useEffect, useState } from "react";
 import { theme } from "../../theme";
 import { useAtom, useAtomValue } from "jotai";
 import {
-  personTotalTimeAtom,
   personDailyEntryAtom,
   dailyEntriesAtom,
-  timespanAtom
+  timespanAtom,
+  timebankScreenPersonTotalTimeAtom
 } from "../../atoms/person";
 import { DailyEntryWithIndexSignature, DateRange } from "../../types";
 import LocalizationUtils from "../../utils/localization-utils";
@@ -54,7 +54,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
-  const personTotalTime = useAtomValue(personTotalTimeAtom);
+  const personTotalTime = useAtomValue(timebankScreenPersonTotalTimeAtom);
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
