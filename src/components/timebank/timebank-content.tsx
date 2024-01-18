@@ -68,7 +68,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading, selectedEmployee, se
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
-  const adminMode = UserRoleUtils.adminMode();
+  const isAdmin = UserRoleUtils.isAdmin();
   // const [selectedEmployee, setSelectedEmployee] = useState(
   //   userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
   // );
@@ -327,7 +327,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading, selectedEmployee, se
 
   return (
     <>
-      {adminMode && (
+      {isAdmin && (
       <Grow in>
         <Card sx={{ p: "1%", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
           <FormControl fullWidth>
