@@ -1,30 +1,12 @@
 import { GridColDef } from "@mui/x-data-grid";
 import strings from "../../localization/strings";
-import { DateTime } from "luxon";
-import { useAtomValue } from "jotai";
-import { languageAtom } from "../../atoms/language";
 import LocalizationUtils from "../../utils/localization-utils";
+import { formatDate } from "../../utils/time-utils";
 
 /**
  * Vacation requests table columns component
  */
 const VacationRequestsTableColumns = () => {
-  const language = useAtomValue(languageAtom);
-
-  /**
-   * Format date
-   *
-   * @param date datetime object
-   * @param dateWithTime datetime object with time
-   * @returns formatted date time
-   */
-  const formatDate = (date: DateTime, dateWithTime?: boolean) => {
-    if (!date) return "";
-    return date
-      .setLocale(language)
-      .toLocaleString(dateWithTime ? DateTime.DATETIME_SHORT : undefined);
-  };
-
   /**
    * Define columns for data grid
    */

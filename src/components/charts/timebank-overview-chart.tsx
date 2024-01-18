@@ -3,16 +3,20 @@ import { renderCustomizedTooltipBarChart, totalTimeToChart } from "../../utils/c
 import { theme } from "../../theme";
 import strings from "../../localization/strings";
 import { getHours } from "../../utils/time-utils";
-import { personTotalTimeAtom } from "../../atoms/person";
-import { useAtomValue } from "jotai";
 import { Worktime } from "../../types";
+import { PersonTotalTime } from "../../generated/client";
+
+/**
+ * Component properties
+ */
+interface Props {
+  personTotalTime: PersonTotalTime;
+}
 
 /**
  * Time bank overview chart component
  */
-const TimebankOverviewChart = () => {
-  // rome-ignore lint/style/noNonNullAssertion: personTotalTime is validated in the parent component with conditional return
-  const personTotalTime = useAtomValue(personTotalTimeAtom)!;
+const TimebankOverviewChart = ({ personTotalTime }: Props) => {
   const chartData = totalTimeToChart(personTotalTime);
 
   return (
@@ -39,21 +43,21 @@ const TimebankOverviewChart = () => {
         <Legend />
         <Bar
           dataKey={Worktime.Billable}
-          name={strings.timebank.billableProject}
+          name={strings.timebank.billableProjectTime}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.success.dark}
         />
         <Bar
           dataKey={Worktime.NonBillable}
-          name={strings.timebank.nonBillableProject}
+          name={strings.timebank.nonBillableProjectTime}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.success.light}
         />
         <Bar
           dataKey={Worktime.Internal}
-          name={strings.timebank.internal}
+          name={strings.timebank.internalTime}
           barSize={60}
           stackId="stackedBar"
           fill={theme.palette.warning.main}

@@ -14,9 +14,9 @@ import { CustomLabel } from "../types";
  * @returns an array of elements each representing a section in the pie chart
  */
 export const dailyEntryToChart = (dailyEntry: DailyEntry) => [
-  { name: strings.timebank.billableProject, dataKey: dailyEntry.billableProjectTime },
-  { name: strings.timebank.nonBillableProject, dataKey: dailyEntry.nonBillableProjectTime },
-  { name: strings.timebank.internal, dataKey: dailyEntry.internalTime }
+  { name: strings.timebank.billableProjectTime, dataKey: dailyEntry.billableProjectTime },
+  { name: strings.timebank.nonBillableProjectTime, dataKey: dailyEntry.nonBillableProjectTime },
+  { name: strings.timebank.internalTime, dataKey: dailyEntry.internalTime }
 ];
 
 /**
@@ -39,7 +39,7 @@ export const totalTimeToChart = (personTotalTime: PersonTotalTime) => [
  * Renders custom labels in the pie chart
  *
  * @param props Props from the pie chart data, such as name and value
- * @returns string
+ * @returns custom label string
  */
 export const renderCustomizedLabel = (props: CustomLabel) =>
   `${props.name} ${getHoursAndMinutes(props.value)}`;
@@ -50,8 +50,10 @@ export const renderCustomizedLabel = (props: CustomLabel) =>
  * @param props props, such as displayed data (payload), passed from the parent (chart)
  * @returns JSX element as a tooltip
  */
-export const renderCustomizedTooltipPieChart = (props: TooltipProps<ValueType, NameType>) => {
-  const { active, payload } = props;
+export const renderCustomizedTooltipPieChart = ({
+  active,
+  payload
+}: TooltipProps<ValueType, NameType>) => {
   if (!active || !payload || !payload.length) {
     return null;
   }
@@ -63,9 +65,9 @@ export const renderCustomizedTooltipPieChart = (props: TooltipProps<ValueType, N
   }
 
   const sectionName = {
-    [strings.timebank.billableProject]: strings.timebank.billableProject,
-    [strings.timebank.nonBillableProject]: strings.timebank.nonBillableProject,
-    [strings.timebank.internal]: strings.timebank.internal
+    [strings.timebank.billableProjectTime]: strings.timebank.billableProjectTime,
+    [strings.timebank.nonBillableProjectTime]: strings.timebank.nonBillableProjectTime,
+    [strings.timebank.internalTime]: strings.timebank.internalTime
   }[selectedData.name];
 
   return (
@@ -109,9 +111,10 @@ const renderCustomizedTooltipRow = (name: string, time: number, color: string) =
  * @param props props, such as chart values, passed from the parent (chart)
  * @returns JSX element as a tooltip
  */
-export const renderCustomizedTooltipBarChart = (props: TooltipProps<ValueType, NameType>) => {
-  const { active, payload } = props;
-
+export const renderCustomizedTooltipBarChart = ({
+  active,
+  payload
+}: TooltipProps<ValueType, NameType>) => {
   if (!active || !payload || !payload.length || !payload[0].payload) {
     return null;
   }
@@ -136,19 +139,19 @@ export const renderCustomizedTooltipBarChart = (props: TooltipProps<ValueType, N
       </Typography>
       {billableProject &&
         renderCustomizedTooltipRow(
-          strings.timebank.billableProject,
+          strings.timebank.billableProjectTime,
           billableProject as number,
           theme.palette.success.main
         )}
       {nonBillableProject &&
         renderCustomizedTooltipRow(
-          strings.timebank.nonBillableProject,
+          strings.timebank.nonBillableProjectTime,
           nonBillableProject as number,
           theme.palette.success.main
         )}
       {internal &&
         renderCustomizedTooltipRow(
-          strings.timebank.internal,
+          strings.timebank.internalTime,
           internal as number,
           theme.palette.warning.main
         )}

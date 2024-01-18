@@ -10,16 +10,16 @@ interface Props {
 }
 
 /**
- * Skeleton table item component
+ * Skeleton table row component
  *
  * @param props component properties
  */
-const SkeletonTableItem = ({ idx, column }: Props) => {
+const SkeletonTableRow = ({ idx, column }: Props) => {
   const marginRight = 20;
   return (
     <Skeleton
       variant={"text"}
-      key={`skeleton-text${idx}`}
+      key={`skeleton-text-${idx}`}
       sx={{
         height: "20px",
         width: `${column.width ? column.width - marginRight : column.width}px`,
@@ -29,4 +29,4 @@ const SkeletonTableItem = ({ idx, column }: Props) => {
   );
 };
 
-export default SkeletonTableItem;
+export default SkeletonTableRow;

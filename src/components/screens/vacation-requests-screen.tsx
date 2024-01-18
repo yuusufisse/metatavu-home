@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, Grow, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
@@ -415,25 +415,29 @@ const VacationRequestsScreen = () => {
   };
 
   return (
-    <>
-      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
-        <VacationRequestsTable
-          deleteVacationRequests={deleteVacationRequests}
-          createVacationRequest={createVacationRequest}
-          updateVacationRequest={updateVacationRequest}
-          updateVacationRequestStatuses={updateVacationRequestStatuses}
-          loading={loading}
-        />
-      </Card>
-      <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
-        <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
-          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
-            <KeyboardReturn sx={{ marginRight: "10px" }} />
-            <Typography>{strings.vacationsScreen.back}</Typography>
-          </Button>
-        </Link>
-      </Card>
-    </>
+    <Grow in>
+      <Box>
+        <Card
+          sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}
+        >
+          <VacationRequestsTable
+            deleteVacationRequests={deleteVacationRequests}
+            createVacationRequest={createVacationRequest}
+            updateVacationRequest={updateVacationRequest}
+            updateVacationRequestStatuses={updateVacationRequestStatuses}
+            loading={loading}
+          />
+        </Card>
+        <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
+          <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
+            <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+              <KeyboardReturn sx={{ marginRight: "10px" }} />
+              <Typography>{strings.vacationsScreen.back}</Typography>
+            </Button>
+          </Link>
+        </Card>
+      </Box>
+    </Grow>
   );
 };
 

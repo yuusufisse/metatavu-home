@@ -4,7 +4,7 @@ import strings from "../../localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { Person, PersonTotalTime, Timespan } from "../../generated/client";
 import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/person";
@@ -27,7 +27,7 @@ const BalanceCard = () => {
   const [loading, setLoading] = useState(false);
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const adminMode = UserRoleUtils.adminMode();
-  const beforeDate = DateTime.now().minus({ days: 1 });
+  const yesterday = DateTime.now().minus({ days: 1 });
 
   /**
    * Initialize logged in person's time data.
@@ -43,7 +43,7 @@ const BalanceCard = () => {
           const fetchedPerson = await personsApi.listPersonTotalTime({
             personId: loggedInPerson?.id || config.person.id,
             timespan: Timespan.ALL_TIME,
-            before: beforeDate.toJSDate()
+            before: yesterday.toJSDate()
           });
           setPersonTotalTime(fetchedPerson[0]);
         } catch (error) {
@@ -57,7 +57,7 @@ const BalanceCard = () => {
   /**
    * Get person total time if it is undefined or set to "all time"
    */
-  useMemo(() => {
+  useEffect(() => {
     if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
       setTimespan(Timespan.ALL_TIME);
       getPersons();
@@ -74,7 +74,7 @@ const BalanceCard = () => {
       personTotalTime && personTotalTime.balance > 0
         ? theme.palette.success.main
         : theme.palette.error.main;
-    
+
     if (adminMode) {
       return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
     } else if (!personTotalTime && !loading && persons.length) {
@@ -90,7 +90,10 @@ const BalanceCard = () => {
   };
 
   return (
-    <Link to={ adminMode ? "/admin/timebank" : "/timebank"} style={{ textDecoration: "none" }}>
+    <Link
+      to={adminMode ? "/admin/timebank/viewall" : "/timebank"}
+      style={{ textDecoration: "none" }}
+    >
       <Card
         sx={{
           "&:hover": {
@@ -98,20 +101,31 @@ const BalanceCard = () => {
           }
         }}
       >
-        <CardContent>
-          <h3 style={{ marginTop: 6 }}>{strings.timebank.balance}</h3>
-          <Grid container>
-            <Grid item xs={12}>
-              {strings.formatString(strings.timebank.atTheEndOf, beforeDate.toLocaleString())}
+        {adminMode ? (
+          <CardContent>
+            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+              {strings.timebank.employeeBalances}
+            </Typography>
+            <Typography variant="body1">{strings.timebank.viewAllTimeEntries}</Typography>
+          </CardContent>
+        ) : (
+          <CardContent>
+            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+              {strings.timebank.balance}
+            </Typography>
+            <Grid container>
+              <Grid item xs={12}>
+                {strings.formatString(strings.timebank.atTheEndOf, yesterday.toLocaleString())}
+              </Grid>
+              <Grid style={{ marginBottom: 1 }} item xs={1}>
+                <ScheduleIcon style={{ marginTop: 1 }} />
+              </Grid>
+              <Grid item xs={11}>
+                {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
+              </Grid>
             </Grid>
-            <Grid style={{ marginBottom: 1 }} item xs={1}>
-              <ScheduleIcon style={{ marginTop: 1 }} />
-            </Grid>
-            <Grid item xs={11}>
-              {loading ? <Skeleton /> : renderPersonTotalTime(personTotalTime)}
-            </Grid>
-          </Grid>
-        </CardContent>
+          </CardContent>
+        )}
       </Card>
     </Link>
   );

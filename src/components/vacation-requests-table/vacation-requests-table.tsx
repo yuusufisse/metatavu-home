@@ -2,7 +2,6 @@ import { DataGrid, GridRowId, GridRowSelectionModel } from "@mui/x-data-grid";
 import { useMemo, useRef, useState } from "react";
 import { Box, styled } from "@mui/material";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
-import VacationRequestsTableRows from "./vacation-requests-table-rows";
 import { VacationsDataGridRow, VacationData } from "../../types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
 import { languageAtom } from "../../atoms/language";
@@ -16,9 +15,18 @@ import {
   vacationRequestsAtom,
   vacationRequestStatusesAtom
 } from "../../atoms/vacation";
-import { VacationRequestStatuses } from "../../generated/client";
+import {
+  VacationRequest,
+  VacationRequestStatus,
+  VacationRequestStatuses
+} from "../../generated/client";
 import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
 import UserRoleUtils from "../../utils/user-role-utils";
+import { DateTime } from "luxon";
+import LocalizationUtils from "../../utils/localization-utils";
+import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
+import { personsAtom } from "../../atoms/person";
+import { userProfileAtom } from "../../atoms/auth";
 
 /**
  * Component properties
@@ -57,13 +65,75 @@ const VacationRequestsTable = ({
   const containerRef = useRef(null);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRowIds, setSelectedRowIds] = useState<GridRowSelectionModel>([]);
-  const createDataGridRows = VacationRequestsTableRows();
   const [rows, setRows] = useState<VacationsDataGridRow[]>([]);
   const language = useAtomValue(languageAtom);
   const columns = VacationRequestsTableColumns();
+  const persons = useAtomValue(personsAtom);
+  const userProfile = useAtomValue(userProfileAtom);
   const dataGridHeight = 700;
   const dataGridRowHeight = 52;
   const dataGridColumnHeaderHeight = 56;
+
+  /**
+   * Create a single vacation request data grid row
+   *
+   * @param vacationRequest vacation request
+   * @returns dataGridRow
+   */
+  const createDataGridRow = (vacationRequest: VacationRequest) => {
+    const row: VacationsDataGridRow = {
+      id: vacationRequest.id,
+      type: LocalizationUtils.getLocalizedVacationRequestType(vacationRequest.type),
+      personFullName: vacationRequest.personId ?? strings.vacationRequest.noPersonFullName,
+      updatedAt: DateTime.fromJSDate(vacationRequest.updatedAt),
+      startDate: DateTime.fromJSDate(vacationRequest.startDate),
+      endDate: DateTime.fromJSDate(vacationRequest.endDate),
+      days: vacationRequest.days,
+      message: strings.vacationRequest.noMessage,
+      status: VacationRequestStatuses.PENDING
+    };
+
+    return row;
+  };
+
+  /**
+   * Create vacation requests data grid rows
+   *
+   * @param vacationRequest vacation request
+   * @param vacationRequestStatuses vacation request statuses
+   */
+  const createDataGridRows = (
+    vacationRequests: VacationRequest[],
+    vacationRequestStatuses: VacationRequestStatus[]
+  ) => {
+    const rows: VacationsDataGridRow[] = [];
+    if (vacationRequests.length) {
+      vacationRequests.forEach((vacationRequest) => {
+        const row = createDataGridRow(vacationRequest);
+
+        vacationRequestStatuses.forEach((vacationRequestStatus) => {
+          if (vacationRequest.id === vacationRequestStatus.vacationRequestId) {
+            row.status = vacationRequestStatus.status;
+          }
+        });
+
+        if (vacationRequest.message.length) {
+          row.message = vacationRequest.message;
+        }
+
+        if (vacationRequest.personId) {
+          row.personFullName = getVacationRequestPersonFullName(
+            vacationRequest,
+            persons,
+            userProfile
+          );
+        }
+
+        rows.push(row);
+      });
+    }
+    return rows;
+  };
 
   useMemo(() => {
     setSelectedRowIds([]);

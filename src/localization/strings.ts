@@ -11,6 +11,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   placeHolder: {
     notYetImplemented: string;
+    pleaseWait: string;
   };
   label: {
     currentLocaleLabel: string;
@@ -39,6 +40,7 @@ export interface Localized extends LocalizedStringsMethods {
     generic: string;
     totalTimeFetch: string;
     totalTimeNotFound: string;
+    personsFetch: string;
     dailyEntriesFetch: string;
     dailyEntriesNotFound: string;
     fetchFailedGeneral: string;
@@ -56,13 +58,14 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to timebank
    */
   timebank: {
+    [key: string]: string;
     balance: string;
     yourBalanceIs: string;
     logged: string;
     expected: string;
-    billableProject: string;
-    nonBillableProject: string;
-    internal: string;
+    billableProjectTime: string;
+    nonBillableProjectTime: string;
+    internalTime: string;
     billableHours: string;
     timeperiod: string;
     noData: string;
@@ -71,8 +74,11 @@ export interface Localized extends LocalizedStringsMethods {
     barChartDescription: string;
     pieChartDescription: string;
     byrange: string;
+    viewAllTimeEntries: string;
     selectTimespan: string;
     atTheEndOf: string;
+    searchPlaceholder: string;
+    employeeBalances: string;
   };
   /**
    * General time-related expressions
@@ -215,6 +221,30 @@ export interface Localized extends LocalizedStringsMethods {
    */
   vacationsScreen: {
     back: string;
+  };
+  /**
+   * Translation related to view all screen
+   */
+  viewAll: {
+    startDate: string;
+    balance: string;
+  };
+  /**
+   * Translations related to sync dialog
+   */
+  syncDialog: {
+    cancel: string;
+    sync: string;
+    title: string;
+    label: string;
+  };
+  /**
+   * Translations related to sync button
+   */
+  syncButton: {
+    success: string;
+    sync: string;
+    error: string;
   };
 }
 
