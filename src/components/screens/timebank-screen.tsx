@@ -18,7 +18,7 @@ import strings from "../../localization/strings";
 import config from "../../app/config";
 
 /**
- * Time bank screen component.
+ * Timebank screen component.
  */
 const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
@@ -30,20 +30,11 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(timebankScreenPersonTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  // const [selectedEmployee] = useState(
-  //   Number(localStorage.getItem("selectedEmployee") || userProfile?.id)
-  // );
   const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
-
-  console.log("logged in person", loggedInPerson)
-
-
-  const [ selectedEmployee, setSelectedEmployee ] = useState(loggedInPerson?.id);
-
+  const [selectedEmployee, setSelectedEmployee] = useState(loggedInPerson?.id);
 
   useEffect(() => {
     if (selectedEmployee) {
-      console.log("Selected Employee UE running");
       getSelectedPersonTotalTime(selectedEmployee);
     } else {
       getPersonTotalTime();
@@ -52,10 +43,6 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     getPersonDailyEntries();
-
-    console.log("Persons", persons);
-    console.log("selectedEmployee", selectedEmployee);
-
     const selectedPerson = persons.find((person) => person.id === selectedEmployee);
 
     if (selectedPerson) {
@@ -63,19 +50,12 @@ const TimebankScreen = () => {
     }
   }, [persons, selectedEmployee]);
 
-  // useEffect(() => {
-  //   if (selectedEmployee !== null) {
-  //     localStorage.setItem("selectedEmployee", selectedEmployee.toString());
-  //   }
-  // }, [selectedEmployee]);
-
   /**
    * Gets  selectedPerson's total time data.
    *
    * @param selectedPersonId selected person id
    */
   const getSelectedPersonTotalTime = async (selectedPersonId: number) => {
-    console.log("in the getPerson Total Time", selectedEmployee);
     if (selectedEmployee) {
       if (selectedPersonId) {
         setLoading(true);
@@ -184,24 +164,23 @@ const TimebankScreen = () => {
     }
   };
 
-return (
-  <div>
-    <div style={{ marginTop: "16px" }} />
-    {!personDailyEntry || !dailyEntries.length || !personTotalTime ? (
-      <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
-        {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
-      </Card>
-    ) : (
-      <TimebankContent
-        handleDailyEntryChange={handleDailyEntryChange}
-        loading={loading}
-        selectedEmployee={selectedEmployee}
-        setSelectedEmployee={setSelectedEmployee}
-      />
-    )}
-  </div>
-);
-
+  return (
+    <div>
+      <div style={{ marginTop: "16px" }} />
+      {!personDailyEntry || !dailyEntries.length || !personTotalTime ? (
+        <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
+          {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
+        </Card>
+      ) : (
+        <TimebankContent
+          handleDailyEntryChange={handleDailyEntryChange}
+          loading={loading}
+          selectedEmployee={selectedEmployee}
+          setSelectedEmployee={setSelectedEmployee}
+        />
+      )}
+    </div>
+  );
 };
 
 export default TimebankScreen;

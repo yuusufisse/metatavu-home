@@ -37,7 +37,6 @@ import {
   timebankScreenPersonTotalTimeAtom
 } from "../../atoms/person";
 import UserRoleUtils from "../../utils/user-role-utils";
-// import { userProfileAtom } from "../../atoms/auth";
 import { DailyEntryWithIndexSignature, DateRange } from "../../types";
 import LocalizationUtils from "../../utils/localization-utils";
 
@@ -57,8 +56,6 @@ interface Props {
  * @param props Component properties
  */
 const TimebankContent = ({ handleDailyEntryChange, loading, selectedEmployee, setSelectedEmployee } : Props) => {
-  // const userProfile = useAtomValue(userProfileAtom);
-
   const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
   const [byRange, setByRange] = useState({
     dailyEntries: false
@@ -69,9 +66,6 @@ const TimebankContent = ({ handleDailyEntryChange, loading, selectedEmployee, se
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
   const isAdmin = UserRoleUtils.isAdmin();
-  // const [selectedEmployee, setSelectedEmployee] = useState(
-  //   userProfile?.id ? Number(localStorage.getItem("selectedEmployee") || userProfile.id) : null
-  // );
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
         dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
