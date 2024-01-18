@@ -1,7 +1,9 @@
-import { Typography, Grid } from "@mui/material";
-import { theme } from "../../theme";
+import { Typography } from "@mui/material";
+// import { theme } from "../../theme";
 import { Person } from "../../generated/client";
 import strings from "../../localization/strings";
+
+// TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
 
 /**
  * Display persons vacation days
@@ -9,44 +11,45 @@ import strings from "../../localization/strings";
  * @param Person timebank person
  */
 export const renderVacationDaysTextCard = (person: Person) => {
-  const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+  // const spentVacationsColor =
+    //   person && person.spentVacations > 0
+    //     ? theme.palette.success.main
+    //     : theme.palette.error.main;
 
-  const unspentVacationsColor =
-    person && person.unspentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+    // const unspentVacationsColor =
+    //   person && person.unspentVacations > 0
+    //     ? theme.palette.success.main
+    //     : theme.palette.error.main;
 
-  if (person) {
-    return (
-      <Grid>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={6}>
-            {strings.vacationsCard.spentVacations}
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={spentVacationsColor}>
-              {person.spentVacations}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={6}>
-            {strings.vacationsCard.unspentVacations}
-          </Grid>
-          <Grid item xs={6}>
-            <Typography color={unspentVacationsColor}>
-              {person.unspentVacations}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
-  } else {
-    return <Typography>{strings.error.personsFetch}</Typography>;
-  }
+    if (person) {
+    //   return (
+        //     <Grid>
+        //       <Grid container spacing={2} alignItems="center">
+        //         <Grid item xs={6}>
+        //           {strings.vacationsCard.spentVacations}
+        //         </Grid>
+        //         <Grid item xs={6}>
+        //           <Typography color={spentVacationsColor}>
+        //             {person.spentVacations}
+        //           </Typography>
+        //         </Grid>
+        //       </Grid>
+        //       <Grid container spacing={2} alignItems="center">
+        //         <Grid item xs={6}>
+        //           {strings.vacationsCard.unspentVacations}
+        //         </Grid>
+        //         <Grid item xs={6}>
+        //           <Typography color={unspentVacationsColor}>
+        //             {person.unspentVacations}
+        //           </Typography>
+        //         </Grid>
+        //       </Grid>
+        //     </Grid>
+        //   );
+        // } else {
+        //   return <Typography>{strings.error.personsFetch}</Typography>;
+        return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
+    }
 };
 
 /**
@@ -55,35 +58,36 @@ export const renderVacationDaysTextCard = (person: Person) => {
  * @param Person timebank person
  */
 export const renderVacationDaysTextScreen = (person: Person) => {
-  const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+  // const spentVacationsColor =
+  //   person && person.spentVacations > 0
+  //     ? theme.palette.success.main
+  //     : theme.palette.error.main;
 
-  const unspentVacationsColor =
-    person && person.unspentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+  // const unspentVacationsColor =
+  //   person && person.unspentVacations > 0
+  //     ? theme.palette.success.main
+  //     : theme.palette.error.main;
 
   if (person) {
-    return (
-      <Grid container justifyContent="space-around">
-        <Grid item style={{ display: "flex", alignItems: "center" }}>
-          {strings.vacationsCard.spentVacations}
-          <Typography color={spentVacationsColor} style={{ marginLeft: "8px" }}>
-            {person.spentVacations}
-          </Typography>
-        </Grid>
+  //   return (
+  //     <Grid container justifyContent="space-around">
+  //       <Grid item style={{ display: "flex", alignItems: "center" }}>
+  //         {strings.vacationsCard.spentVacations}
+  //         <Typography color={spentVacationsColor} style={{ marginLeft: "8px" }}>
+  //           {person.spentVacations}
+  //         </Typography>
+  //       </Grid>
 
-        <Grid item style={{ display: "flex", alignItems: "center" }}>
-          {strings.vacationsCard.unspentVacations}
-          <Typography color={unspentVacationsColor} style={{ marginLeft: "8px" }}>
-            {person.unspentVacations}
-          </Typography>
-        </Grid>
-      </Grid>
-    );
-  } else {
-    return <Typography>{strings.error.personsFetch}</Typography>;
+  //       <Grid item style={{ display: "flex", alignItems: "center" }}>
+  //         {strings.vacationsCard.unspentVacations}
+  //         <Typography color={unspentVacationsColor} style={{ marginLeft: "8px" }}>
+  //           {person.unspentVacations}
+  //         </Typography>
+  //       </Grid>
+  //     </Grid>
+  //   );
+  // } else {
+  //  return <Typography>{strings.error.personsFetch}</Typography>;
+  return <Typography>{strings.placeHolder.notYetImplemented}</Typography>
   }
 };
