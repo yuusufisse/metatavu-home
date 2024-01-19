@@ -55,7 +55,12 @@ interface Props {
  *
  * @param props Component properties
  */
-const TimebankContent = ({ handleDailyEntryChange, loading, selectedEmployee, setSelectedEmployee } : Props) => {
+const TimebankContent = ({
+  handleDailyEntryChange,
+  loading,
+  selectedEmployee,
+  setSelectedEmployee
+}: Props) => {
   const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
   const [byRange, setByRange] = useState({
     dailyEntries: false
@@ -322,27 +327,27 @@ const TimebankContent = ({ handleDailyEntryChange, loading, selectedEmployee, se
   return (
     <>
       {isAdmin && (
-      <Grow in>
-        <Card sx={{ p: "1%", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
-          <FormControl fullWidth>
-            <InputLabel id="employee-select-label">Select Employee</InputLabel>
-            <Select
-              labelId="employee-select-label"
-              id="employee-select"
-              value={selectedEmployee}
-              onChange={(event) => setSelectedEmployee(Number(event.target.value))}
-              label="Select Employee"
-            >
-              {persons.map((person) => (
-                <MenuItem key={person.id} value={person.id}>
-                  {`${person.firstName} ${person.lastName}`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Card>
-      </Grow>
-    )}
+        <Grow in>
+          <Card sx={{ p: "1%", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+            <FormControl fullWidth>
+              <InputLabel id="employee-select-label">Select Employee</InputLabel>
+              <Select
+                labelId="employee-select-label"
+                id="employee-select"
+                value={selectedEmployee}
+                onChange={(event) => setSelectedEmployee(Number(event.target.value))}
+                label="Select Employee"
+              >
+                {persons.map((person) => (
+                  <MenuItem key={person.id} value={person.id}>
+                    {`${person.firstName} ${person.lastName}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Card>
+        </Grow>
+      )}
       <Grow in>
         <TimebankCard>
           {renderTimebankCardTitle(strings.timebank.barChartDescription)}
