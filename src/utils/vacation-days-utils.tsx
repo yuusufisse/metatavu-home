@@ -1,7 +1,8 @@
-import { Typography } from "@mui/material";
-// import { theme } from "../../theme";
-import { Person } from "../../generated/client";
-import strings from "../../localization/strings";
+// import { Grid, Typography } from "@mui/material";
+// import { theme } from "../theme";
+import { Person } from "../generated/client";
+// import strings from "../localization/strings";
+// import strings from "../../localization/strings";
 
 // TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
 
@@ -10,19 +11,19 @@ import strings from "../../localization/strings";
  *
  * @param Person timebank person
  */
-export const renderVacationDaysTextCard = (person: Person) => {
+export const renderVacationDaysTextForCard = (person: Person) => {
   // const spentVacationsColor =
-    //   person && person.spentVacations > 0
-    //     ? theme.palette.success.main
-    //     : theme.palette.error.main;
+  //     person && person.spentVacations > 0
+  //       ? theme.palette.success.main
+  //       : theme.palette.error.main;
 
-    // const unspentVacationsColor =
-    //   person && person.unspentVacations > 0
-    //     ? theme.palette.success.main
-    //     : theme.palette.error.main;
+  //   const unspentVacationsColor =
+  //     person && person.unspentVacations > 0
+  //       ? theme.palette.success.main
+  //       : theme.palette.error.main;
 
     if (person) {
-    //   return (
+      // return (
         //     <Grid>
         //       <Grid container spacing={2} alignItems="center">
         //         <Grid item xs={6}>
@@ -48,7 +49,7 @@ export const renderVacationDaysTextCard = (person: Person) => {
         //   );
         // } else {
         //   return <Typography>{strings.error.personsFetch}</Typography>;
-        return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
+        return undefined;
     }
 };
 
@@ -57,7 +58,7 @@ export const renderVacationDaysTextCard = (person: Person) => {
  *
  * @param Person timebank person
  */
-export const renderVacationDaysTextScreen = (person: Person) => {
+export const renderVacationDaysTextForScreen = (person: Person) => {
   // const spentVacationsColor =
   //   person && person.spentVacations > 0
   //     ? theme.palette.success.main
@@ -88,6 +89,6 @@ export const renderVacationDaysTextScreen = (person: Person) => {
   //   );
   // } else {
   //  return <Typography>{strings.error.personsFetch}</Typography>;
-  return <Typography>{strings.placeHolder.notYetImplemented}</Typography>
+    return undefined;
   }
 };

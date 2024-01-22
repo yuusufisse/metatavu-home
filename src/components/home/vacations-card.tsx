@@ -30,7 +30,7 @@ import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
 import config from "../../app/config";
-import { renderVacationDaysTextCard } from "../generics/vacation-days";
+import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
 
 /**
  * Vacations card component
@@ -374,7 +374,7 @@ const VacationsCard = () => {
           </Typography>
           <Grid container>
             <Box sx={{ width: "100%", display: "flex", flexDirection: "column", mb: 2 }}>
-              {loggedInPerson && renderVacationDaysTextCard(loggedInPerson)}
+              {loggedInPerson && renderVacationDaysTextForCard(loggedInPerson)}
             </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}

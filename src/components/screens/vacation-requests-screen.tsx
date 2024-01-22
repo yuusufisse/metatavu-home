@@ -1,4 +1,4 @@
-import { Button, Card, Typography, Box } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
@@ -26,7 +26,7 @@ import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
 import { personsAtom } from "../../atoms/person";
 import config from "../../app/config";
-import { renderVacationDaysTextScreen } from "../generics/vacation-days";
+import { renderVacationDaysTextForScreen } from "../../utils/vacation-days-utils";
 
 /**
  * Vacation requests screen
@@ -419,11 +419,12 @@ const VacationRequestsScreen = () => {
 
   return (
     <>
-      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
-        <Box>
-          {loggedInPerson && renderVacationDaysTextScreen(loggedInPerson)}
-        </Box>
-      </Card>
+    {/* TODO: Uncomment when the vacations-days-utils have been updated */}
+      {/* <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}> */}
+        {/* <Box> */}
+          {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
+        {/* </Box> */}
+      {/* </Card> */}
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
           deleteVacationRequests={deleteVacationRequests}
