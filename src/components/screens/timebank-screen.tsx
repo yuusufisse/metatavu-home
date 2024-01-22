@@ -61,9 +61,6 @@ const TimebankScreen = () => {
     if (selectedEmployee) {
       if (selectedPersonId) {
         setLoading(true);
-        const loggedInPerson = persons.find(
-          (person: Person) => person.keycloakId === userProfile?.id
-        );
         if (loggedInPerson || config.person.id) {
           try {
             const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
@@ -87,9 +84,6 @@ const TimebankScreen = () => {
   const getPersonTotalTime = async () => {
     if (persons.length) {
       setLoading(true);
-      const loggedInPerson = persons.find(
-        (person: Person) => person.keycloakId === userProfile?.id
-      );
       if (loggedInPerson || config.person.id) {
         try {
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
@@ -112,7 +106,6 @@ const TimebankScreen = () => {
   const getPersonDailyEntries = async () => {
     if (!persons.length || !userProfile) return null;
 
-    const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
     if (loggedInPerson || config.person.id) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
