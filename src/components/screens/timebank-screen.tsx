@@ -30,7 +30,9 @@ const TimebankScreen = () => {
   const [personTotalTime, setPersonTotalTime] = useAtom(timebankScreenPersonTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  const loggedInPerson = persons.find((person: Person) => person.keycloakId === userProfile?.id);
+  const loggedInPerson = persons.find(
+    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+  );
   const [selectedEmployee, setSelectedEmployee] = useState(loggedInPerson?.id);
 
   useEffect(() => {
@@ -132,10 +134,10 @@ const TimebankScreen = () => {
    * @param selectedPerson daily entries
    */
   const getPersonDailyEntriesForPieChart = async (selectedPerson: Person) => {
-    if (selectedPerson) {
+    if (selectedPerson || config.person.id) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: selectedPerson.id
+          personId: selectedPerson.id || config.person.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
