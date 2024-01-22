@@ -1,10 +1,11 @@
-import { Box, Button, Card, Grow, Typography } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import {
   VacationRequest,
   VacationRequestStatus,
-  VacationRequestStatuses
+  VacationRequestStatuses,
+  Person
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -23,6 +24,9 @@ import UserRoleUtils from "../../utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "../../utils/localization-utils";
+import { personsAtom } from "../../atoms/person";
+import config from "../../app/config";
+import { renderVacationDaysTextForScreen } from "../../utils/vacation-days-utils";
 
 /**
  * Vacation requests screen
@@ -39,6 +43,10 @@ const VacationRequestsScreen = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
+  const [persons] = useAtom(personsAtom);
+  const loggedInPerson = persons.find(
+    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+  );
 
   /**
    * Fetch vacation request statuses
@@ -223,9 +231,7 @@ const VacationRequestsScreen = () => {
             updatedBy: userProfile.id
           }
         });
-
       setLoading(false);
-
       return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
@@ -255,7 +261,6 @@ const VacationRequestsScreen = () => {
           days: vacationData.days
         }
       });
-
       setVacationRequests([createdRequest, ...vacationRequests]);
       setLoading(false);
     } catch (error) {
@@ -293,7 +298,6 @@ const VacationRequestsScreen = () => {
         const updatedVacationRequests = vacationRequests.map((vacationRequest) =>
           vacationRequest.id === updatedRequest.id ? updatedRequest : vacationRequest
         );
-
         setVacationRequests(updatedVacationRequests);
       }
       setLoading(false);
@@ -410,34 +414,35 @@ const VacationRequestsScreen = () => {
     const createdAndFoundVacationRequestStatuses = foundVacationRequestStatuses.concat(
       createdVacationRequestStatuses
     );
-
     setLatestVacationRequestStatuses(createdAndFoundVacationRequestStatuses);
   };
 
   return (
-    <Grow in>
-      <Box>
-        <Card
-          sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}
-        >
-          <VacationRequestsTable
-            deleteVacationRequests={deleteVacationRequests}
-            createVacationRequest={createVacationRequest}
-            updateVacationRequest={updateVacationRequest}
-            updateVacationRequestStatuses={updateVacationRequestStatuses}
-            loading={loading}
-          />
-        </Card>
-        <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
-          <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
-            <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
-              <KeyboardReturn sx={{ marginRight: "10px" }} />
-              <Typography>{strings.vacationsScreen.back}</Typography>
-            </Button>
-          </Link>
-        </Card>
-      </Box>
-    </Grow>
+    <>
+    {/* TODO: Uncomment when the vacations-days-utils have been updated */}
+      {/* <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}> */}
+        {/* <Box> */}
+          {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
+        {/* </Box> */}
+      {/* </Card> */}
+      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+        <VacationRequestsTable
+          deleteVacationRequests={deleteVacationRequests}
+          createVacationRequest={createVacationRequest}
+          updateVacationRequest={updateVacationRequest}
+          updateVacationRequestStatuses={updateVacationRequestStatuses}
+          loading={loading}
+        />
+      </Card>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%" }}>
+        <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
+          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+            <KeyboardReturn sx={{ marginRight: "10px" }} />
+            <Typography>{strings.vacationsScreen.back}</Typography>
+          </Button>
+        </Link>
+      </Card>
+    </>
   );
 };
 
