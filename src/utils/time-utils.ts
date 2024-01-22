@@ -50,10 +50,12 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
       return `${timespan[0]}`; // Year
     case 2:
       return timespan[0].length > 4
-        ? `${DateTime.fromJSDate(new Date(timespan[0])).toLocaleString(DateTime.DATE_SHORT)} – ${DateTime.fromJSDate(new Date(timespan[1])).toLocaleString(DateTime.DATE_SHORT)}` // All time
-        : `${timespan[0]}/${timespan[1]}`; // Week
+        ? `${DateTime.fromJSDate(new Date(timespan[0])).toLocaleString(
+            DateTime.DATE_SHORT
+          )} – ${DateTime.fromJSDate(new Date(timespan[1])).toLocaleString(DateTime.DATE_SHORT)}` // All time
+        : `${timespan[0]}/${timespan[1]}`; // Month
     case 3:
-      return `${timespan[0]}/${timespan[2]}`; // Month
+      return `${timespan[0]}/${timespan[2]}`; // Week
     default:
       return null;
   }
