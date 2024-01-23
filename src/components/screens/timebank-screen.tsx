@@ -59,16 +59,16 @@ const TimebankScreen = () => {
    */
   const getSelectedPersonTotalTime = async (selectedPersonId: number) => {
     setLoading(true);
-      try {
-        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-          personId: selectedPersonId,
-          timespan: timespan || Timespan.ALL_TIME,
-          before: DateTime.now().minus({ days: 1 }).toJSDate()
-        });
-        setPersonTotalTime(fetchedPersonTotalTime[0]);
-      } catch (error) {
-        setError(`${strings.error.totalTimeFetch}, ${error}`);
-      }
+    try {
+      const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+        personId: selectedPersonId,
+        timespan: timespan || Timespan.ALL_TIME,
+        before: DateTime.now().minus({ days: 1 }).toJSDate()
+      });
+      setPersonTotalTime(fetchedPersonTotalTime[0]);
+    } catch (error) {
+      setError(`${strings.error.totalTimeFetch}, ${error}`);
+    }
     setLoading(false);
   };
 
@@ -141,15 +141,23 @@ const TimebankScreen = () => {
    *
    * @param selectedDate selected date from DatePicker
    */
-  const handleDailyEntryChange = (selectedDate: DateTime) => {
+  const handleDailyEntryChange = async (selectedDate: DateTime) => {
     if (selectedDate && selectedEmployee !== null) {
-      setPersonDailyEntry(
-        dailyEntries.find(
-          (item) =>
-            item.person === selectedEmployee &&
-            DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
-        )
-      );
+      try {
+        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+          personId: selectedEmployee
+        });
+        setDailyEntries(fetchedDailyEntries);
+        setPersonDailyEntry(
+          fetchedDailyEntries.find(
+            (item) =>
+              item.person === selectedEmployee &&
+              DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
+          )
+        );
+      } catch (error) {
+        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
+      }
     }
   };
 
