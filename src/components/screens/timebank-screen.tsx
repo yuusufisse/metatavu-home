@@ -31,7 +31,7 @@ const TimebankScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+    (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
   );
   const [selectedEmployee, setSelectedEmployee] = useState(loggedInPerson?.id);
 
@@ -58,23 +58,17 @@ const TimebankScreen = () => {
    * @param selectedPersonId selected person id
    */
   const getSelectedPersonTotalTime = async (selectedPersonId: number) => {
-    if (selectedEmployee) {
-      if (selectedPersonId) {
-        setLoading(true);
-        if (loggedInPerson || config.person.id) {
-          try {
-            const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-              personId: selectedPersonId,
-              timespan: timespan || Timespan.ALL_TIME,
-              before: new Date()
-            });
-            setPersonTotalTime(fetchedPersonTotalTime[0]);
-          } catch (error) {
-            setError(`${strings.error.totalTimeFetch}, ${error}`);
-          }
-        }
+    setLoading(true);
+      try {
+        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+          personId: selectedPersonId,
+          timespan: timespan || Timespan.ALL_TIME,
+          before: DateTime.now().minus({ days: 1 }).toJSDate()
+        });
+        setPersonTotalTime(fetchedPersonTotalTime[0]);
+      } catch (error) {
+        setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
-    }
     setLoading(false);
   };
 

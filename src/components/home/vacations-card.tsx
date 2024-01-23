@@ -49,9 +49,9 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+    (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
   );
-
+  
   /**
    * Fetch vacation request statuses
    */
@@ -134,7 +134,7 @@ const VacationsCard = () => {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: userProfile?.id
+            personId: loggedInPerson?.keycloakId
           });
         }
         setVacationRequests(fetchedVacationRequests);

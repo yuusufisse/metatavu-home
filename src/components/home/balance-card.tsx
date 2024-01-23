@@ -36,12 +36,12 @@ const BalanceCard = () => {
     if (persons.length) {
       setLoading(true);
       const loggedInPerson = persons.find(
-        (person: Person) => person.keycloakId === userProfile?.id
+        (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
       );
-      if (loggedInPerson || config.person.id) {
+      if (loggedInPerson) {
         try {
           const fetchedPerson = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id,
+            personId: loggedInPerson?.id,
             timespan: Timespan.ALL_TIME,
             before: yesterday.toJSDate()
           });
