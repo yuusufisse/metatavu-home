@@ -78,10 +78,10 @@ const TimebankScreen = () => {
   const getPersonTotalTime = async () => {
     if (persons.length) {
       setLoading(true);
-      if (loggedInPerson || config.person.id) {
+      if (loggedInPerson) {
         try {
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id || config.person.id,
+            personId: loggedInPerson?.id,
             timespan: timespan || Timespan.ALL_TIME,
             before: DateTime.now().minus({ days: 1 }).toJSDate()
           });
@@ -100,10 +100,10 @@ const TimebankScreen = () => {
   const getPersonDailyEntries = async () => {
     if (!persons.length || !userProfile) return null;
 
-    if (loggedInPerson || config.person.id) {
+    if (loggedInPerson) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson?.id || config.person.id
+          personId: loggedInPerson?.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
@@ -121,10 +121,10 @@ const TimebankScreen = () => {
    * @param selectedPerson daily entries
    */
   const getPersonDailyEntriesForPieChart = async (selectedPerson: Person) => {
-    if (selectedPerson || config.person.id) {
+    if (selectedPerson) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: selectedPerson.id || config.person.id
+          personId: selectedPerson.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
