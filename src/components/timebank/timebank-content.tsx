@@ -539,7 +539,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <FormControl
                 sx={{
-                  width: "50%",
+                  width: "40%",
                   marginRight: "1%",
                   textAlign: "center"
                 }}
