@@ -7,9 +7,9 @@ import { errorAtom } from "../../atoms/error";
 import {
   dailyEntriesAtom,
   personDailyEntryAtom,
-  personTotalTimeAtom,
   personsAtom,
   totalTimeAtom,
+  timebankScreenPersonTotalTimeAtom,
   timespanAtom
 } from "../../atoms/person";
 import { useApi } from "../../hooks/use-api";
@@ -28,7 +28,7 @@ const TimebankScreen = () => {
   const { personsApi, dailyEntriesApi } = useApi();
   const persons = useAtomValue(personsAtom);
   const [loading, setLoading] = useState(false);
-  const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const [personTotalTime, setPersonTotalTime] = useAtom(timebankScreenPersonTotalTimeAtom);
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const setTotalTime = useSetAtom(totalTimeAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
@@ -55,7 +55,7 @@ const TimebankScreen = () => {
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
             personId: loggedInPerson?.id || config.person.id,
             timespan: timespan || Timespan.ALL_TIME,
-            before: new Date()
+            before: DateTime.now().minus({ days: 1 }).toJSDate()
           });
           setTotalTime(fetchedPersonTotalTime);
           setPersonTotalTime(fetchedPersonTotalTime[0]);

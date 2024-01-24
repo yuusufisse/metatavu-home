@@ -9,7 +9,8 @@ import { errorAtom } from "../../atoms/error";
 import {
   VacationRequest,
   VacationRequestStatus,
-  VacationRequestStatuses
+  VacationRequestStatuses,
+  Person
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
@@ -28,6 +29,8 @@ import { getVacationRequestPersonFullName } from "../../utils/vacation-request-u
 import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
+import config from "../../app/config";
+import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
 
 /**
  * Vacations card component
@@ -44,7 +47,10 @@ const VacationsCard = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const persons = useAtomValue(personsAtom);
+  const [persons] = useAtom(personsAtom);
+  const loggedInPerson = persons.find(
+    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+  );
 
   /**
    * Fetch vacation request statuses
@@ -295,7 +301,6 @@ const VacationsCard = () => {
         </>
       );
     }
-
     return;
   };
 
@@ -368,6 +373,9 @@ const VacationsCard = () => {
             {adminMode ? strings.tableToolbar.manageRequests : strings.tableToolbar.myRequests}
           </Typography>
           <Grid container>
+            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", mb: 2 }}>
+              {loggedInPerson && renderVacationDaysTextForCard(loggedInPerson)}
+            </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
           </Grid>

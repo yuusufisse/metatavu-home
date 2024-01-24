@@ -28,11 +28,11 @@ import { useEffect, useState } from "react";
 import { theme } from "../../theme";
 import { useAtom, useAtomValue } from "jotai";
 import {
-  personTotalTimeAtom,
   personDailyEntryAtom,
   dailyEntriesAtom,
   timespanAtom,
-  totalTimeAtom
+  totalTimeAtom,
+  timebankScreenPersonTotalTimeAtom
 } from "../../atoms/person";
 import OverviewRangePicker from "./timebank-overview-picker";
 import TimebankOverviewRangeChart from "../charts/timebank-overviewrangechart";
@@ -59,7 +59,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
     overview: false,
     dailyEntries: false
   });
-  const personTotalTime = useAtomValue(personTotalTimeAtom);
+  const personTotalTime = useAtomValue(timebankScreenPersonTotalTimeAtom);
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
