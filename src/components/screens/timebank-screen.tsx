@@ -42,7 +42,7 @@ const TimebankScreen = () => {
     } else {
       getPersonTotalTime();
     }
-  }, [selectedEmployee, timespan]);
+  }, [persons, selectedEmployee, timespan]);
 
   useEffect(() => {
     getPersonDailyEntries();
@@ -98,12 +98,12 @@ const TimebankScreen = () => {
    * Gets the logged in person's daily entries.
    */
   const getPersonDailyEntries = async () => {
-    if (!persons.length || !userProfile) return null;
+    if (!persons.length) return null;
 
-    if (selectedEmployee) {
+    if (loggedInPerson) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: selectedEmployee
+          personId: loggedInPerson?.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
@@ -172,7 +172,7 @@ const TimebankScreen = () => {
         <TimebankContent
           handleDailyEntryChange={handleDailyEntryChange}
           loading={loading}
-          selectedEmployee={selectedEmployee}
+          selectedEmployee={selectedEmployee || loggedInPerson?.id}
           setSelectedEmployee={setSelectedEmployee}
         />
       )}
