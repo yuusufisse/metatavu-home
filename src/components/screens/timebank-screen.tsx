@@ -34,6 +34,7 @@ const TimebankScreen = () => {
     (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
   );
   const [selectedEmployee, setSelectedEmployee] = useState(loggedInPerson?.id);
+  const selectedPerson = persons.find((person) => person.id === selectedEmployee);
 
   useEffect(() => {
     if (selectedEmployee) {
@@ -45,7 +46,6 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     getPersonDailyEntries();
-    const selectedPerson = persons.find((person) => person.id === selectedEmployee);
 
     if (selectedPerson) {
       getPersonDailyEntriesForPieChart(selectedPerson);
@@ -100,10 +100,10 @@ const TimebankScreen = () => {
   const getPersonDailyEntries = async () => {
     if (!persons.length || !userProfile) return null;
 
-    if (loggedInPerson) {
+    if (selectedEmployee) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson?.id
+          personId: selectedEmployee
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
