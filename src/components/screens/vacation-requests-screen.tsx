@@ -45,7 +45,7 @@ const VacationRequestsScreen = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+    (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
   );
 
   /**
