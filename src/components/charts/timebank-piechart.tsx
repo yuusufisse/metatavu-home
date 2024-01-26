@@ -40,26 +40,15 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
           cx="50%"
           cy="50%"
           outerRadius={50}
-
           label={(entry) => {
-          if (entry.dataKey == 0) {
-            return null; // do not render any label if dataKey is 0
-          } else if (entry.dataKey !== "") {
-            // rendering for non-empty dataKey
-            return renderCustomizedLabel(entry);
-          }
-        }}
-        
-        labelLine={false}
-          /* 
-          labelLine={(entry) => {
-            if (entry.dataKey !== "") {
-              return renderCustomizedLabel(entry); // Enable labelline
+            if (!entry.dataKey) {
+              return null; // do not render any label if dataKey is 0 or empty
+            } else {
+              // rendering for non-empty dataKey
+              return renderCustomizedLabel(entry);
             }
-          return null;
-          }} 
-          */
-
+          }}
+        labelLine={false}
         >     
           {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index]} />
@@ -70,6 +59,4 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
     </ResponsiveContainer>
   );
 };
-
-
 export default TimebankPieChart;
