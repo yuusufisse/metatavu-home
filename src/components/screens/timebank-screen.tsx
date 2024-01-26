@@ -46,9 +46,9 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     getPersonDailyEntries();
-  }, []);
+  }, [persons]);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (selectedPerson) {
       getPersonDailyEntriesForPieChart(selectedPerson);
     }
@@ -78,8 +78,9 @@ const TimebankScreen = () => {
    * Gets person's total time data.
    */
   const getPersonTotalTime = async () => {
+    if (persons.length) {
       setLoading(true);
-      if (loggedInPerson && persons.length) {
+      if (loggedInPerson) {
         try {
           const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
             personId: loggedInPerson?.id,
@@ -91,6 +92,7 @@ const TimebankScreen = () => {
           setError(`${strings.error.totalTimeFetch}, ${error}`);
         }
     }
+  }
     setLoading(false);
   };
 
@@ -98,7 +100,7 @@ const TimebankScreen = () => {
    * Gets the logged in person's daily entries.
    */
   const getPersonDailyEntries = async () => {
-    if (loggedInPerson && !persons.length) {
+    if (loggedInPerson) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
           personId: loggedInPerson?.id
