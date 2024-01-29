@@ -156,7 +156,8 @@ export const renderCustomizedTooltipBarChart = ({
           theme.palette.warning.main
         )}
       {expected &&
-        renderCustomizedTooltipRow(strings.timebank.expected,
+        renderCustomizedTooltipRow(
+          strings.timebank.expected,
           expected as number,
           theme.palette.info.main
         )}

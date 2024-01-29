@@ -42,9 +42,8 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
           outerRadius={50}
           label={(entry) => {
             if (!entry.dataKey) {
-              return null; // do not render any label if dataKey is 0 or empty
+              return null; 
             } else {
-              // rendering for non-empty dataKey
               return renderCustomizedLabel(entry);
             }
           }}
