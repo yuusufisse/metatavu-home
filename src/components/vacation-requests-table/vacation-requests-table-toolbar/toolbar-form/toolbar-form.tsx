@@ -115,10 +115,9 @@ const ToolbarForm = ({
     }
   }, [toolbarFormMode]);
 
-  // Set dateTimeTomorrow based on vacation type
   const isSicknessOrChildSickness =
-    vacationData.type === VacationType.SICKNESS || vacationData.type === VacationType.CHILD_SICKNESS;
-    const dateTimeTomorrow = isSicknessOrChildSickness
+  vacationData.type === VacationType.SICKNESS || vacationData.type === VacationType.CHILD_SICKNESS;
+  const dateTimeTomorrow = isSicknessOrChildSickness
     ? DateTime.now().minus({ years: 1 })
     : DateTime.now().plus({ days: 1 });
 
