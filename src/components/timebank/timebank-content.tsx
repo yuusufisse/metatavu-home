@@ -176,11 +176,24 @@ const TimebankContent = ({
    * @returns JSX.Element consisting of either chart component
    */
   const renderDailyEntryOrRangeChart = () => {
+    if (loading){
+      return <CircularProgress sx={{ margin: "auto",mt: "5%",mb: "5%" }} />;
+    }       
     if (byRange.dailyEntries && selectedEntries) {
-      return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
+      return (
+        <>
+          <TimebankMultiBarChart selectedEntries={selectedEntries} />
+          {renderTimeEntryTypesList()}
+        </>
+      )
     }
     if (personDailyEntry) {
-      return <TimebankPieChart personDailyEntry={personDailyEntry} />;
+      return (
+        <>
+          <TimebankPieChart personDailyEntry={personDailyEntry} /> 
+          {renderTimeEntryTypesList()}
+        </>
+      )
     }
   };
 
@@ -238,7 +251,7 @@ const TimebankContent = ({
    *
    * @returns time entries list component
    */
-  const renderTimeEntriesList = () => (
+  const renderTimeEntryTypesList = () => (
     <List dense sx={{ marginLeft: "5%" }}>
       {timeEntriesListItems.map((item, index) => (
         <ListItem key={`timeEntriesListItem-${index}`}>
@@ -388,7 +401,9 @@ const TimebankContent = ({
               sx={{
                 textAlign: "center",
                 scale: "150%",
-                p: 3
+                pb: 3,
+                pr: 3,
+                pl: 3
               }}
               primary={strings.timebank.logged}
               secondary={
@@ -417,9 +432,8 @@ const TimebankContent = ({
                 }
               />
             </TimebankCardFlexBox>
-            <TimebankCardFlexBox>
-              {renderDailyEntryOrRangeChart()}
-              {renderTimeEntriesList()}
+            <TimebankCardFlexBox>              
+                {renderDailyEntryOrRangeChart()}
             </TimebankCardFlexBox>
           </Container>
         </TimebankCard>
