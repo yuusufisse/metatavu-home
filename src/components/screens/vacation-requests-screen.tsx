@@ -130,7 +130,7 @@ const VacationRequestsScreen = () => {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: userProfile?.id
+            personId: loggedInPerson?.keycloakId
           });
         }
         setVacationRequests(fetchedVacationRequests);
@@ -213,7 +213,7 @@ const VacationRequestsScreen = () => {
     newStatus: VacationRequestStatuses,
     selectedRowId: GridRowId
   ) => {
-    if (userProfile?.id !== loggedInPerson?.keycloakId) return;
+    if (!loggedInPerson?.keycloakId) return;
 
     try {
       setLoading(true);
@@ -226,9 +226,9 @@ const VacationRequestsScreen = () => {
             status: newStatus,
             message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
             createdAt: new Date(),
-            createdBy: loggedInPerson?.keycloakId,
+            createdBy: loggedInPerson.keycloakId,
             updatedAt: new Date(),
-            updatedBy: loggedInPerson?.keycloakId
+            updatedBy: loggedInPerson.keycloakId
           }
         });
       setLoading(false);
@@ -244,14 +244,12 @@ const VacationRequestsScreen = () => {
    * @param vacationData vacation data
    */
   const createVacationRequest = async (vacationData: VacationData) => {
-    if (loggedInPerson?.keycloakId) return;
+    if (!loggedInPerson?.keycloakId) return;
 
     try {
       setLoading(true);
       const createdRequest = await vacationRequestsApi.createVacationRequest({
         vacationRequest: {
-          personId: loggedInPerson?.keycloakId,
-          createdBy: loggedInPerson?.keycloakId,
           startDate: vacationData.startDate.toJSDate(),
           endDate: vacationData.endDate.toJSDate(),
           type: vacationData.type,

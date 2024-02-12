@@ -124,7 +124,7 @@ const VacationsCard = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
-    if (!userProfile?.id) return;
+    if (!loggedInPerson?.id) return;
 
     if (!vacationRequests.length) {
       try {
@@ -132,9 +132,9 @@ const VacationsCard = () => {
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
-          } else {
+        } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: userProfile?.id
+            personId: loggedInPerson?.keycloakId
           });
         }
         setVacationRequests(fetchedVacationRequests);
