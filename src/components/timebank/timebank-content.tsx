@@ -163,11 +163,24 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
    * @returns JSX.Element consisting of either chart component
    */
   const renderDailyEntryOrRangeChart = () => {
+    if (loading){
+      return <CircularProgress sx={{ margin: "auto",mt: "5%",mb: "5%" }} />;
+    }       
     if (byRange.dailyEntries && selectedEntries) {
-      return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
+      return (
+        <>
+          <TimebankMultiBarChart selectedEntries={selectedEntries} />
+          {renderTimeEntryTypesList()}
+        </>
+      )
     }
     if (personDailyEntry) {
-      return <TimebankPieChart personDailyEntry={personDailyEntry} />;
+      return (
+        <>
+          <TimebankPieChart personDailyEntry={personDailyEntry} /> 
+          {renderTimeEntryTypesList()}
+        </>
+      )
     }
   };
 
@@ -353,7 +366,9 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
               sx={{
                 textAlign: "center",
                 scale: "150%",
-                p: 3
+                pb: 3,
+                pr: 3,
+                pl: 3
               }}
               primary={strings.timebank.logged}
               secondary={
@@ -382,9 +397,8 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
                 }
               />
             </TimebankCardFlexBox>
-            <TimebankCardFlexBox>
-              {renderDailyEntryOrRangeChart()}
-              {renderTimeEntriesList()}
+            <TimebankCardFlexBox>              
+                {renderDailyEntryOrRangeChart()}
             </TimebankCardFlexBox>
           </Container>
         </TimebankCard>
