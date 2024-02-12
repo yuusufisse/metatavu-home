@@ -128,7 +128,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
     return (
       <>
         <TimebankOverviewChart personTotalTime={personTotalTime} />
-        <List style={{width:"12%", minWidth:"110px"}} dense sx={{ marginLeft: "5%" }}>
+        <List style={{ width:"12%", minWidth:"110px" }} dense sx={{ marginLeft: "5%" }}>
           <ListItem>
             <ListItemText
               sx={{
