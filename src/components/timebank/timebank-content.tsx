@@ -165,7 +165,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
   const renderDailyEntryOrRangeChart = () => {
     if (loading){
       return <CircularProgress sx={{ margin: "auto",mt: "5%",mb: "5%" }} />;
-    }       
+    }
     if (byRange.dailyEntries && selectedEntries) {
       return (
         <>
@@ -177,7 +177,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
     if (personDailyEntry) {
       return (
         <>
-          <TimebankPieChart personDailyEntry={personDailyEntry} /> 
+          <TimebankPieChart personDailyEntry={personDailyEntry} />
           {renderTimeEntryTypesList()}
         </>
       )
@@ -238,7 +238,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
    *
    * @returns time entries list component
    */
-  const renderTimeEntriesList = () => (
+  const renderTimeEntryTypesList = () => (
     <List style={{ width:"12%", minWidth:"110px" }}dense sx={{ marginLeft: "5%" }}>
       {timeEntriesListItems.map((item, index) => (
         <ListItem key={`timeEntriesListItem-${index}`}>
@@ -385,7 +385,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
                 style={{ width:"20%" }}
                 label={strings.timebank.byrange}
                 control={
-                  <Checkbox                    
+                  <Checkbox
                     checked={byRange.dailyEntries}
                     onClick={() =>
                       setByRange({
@@ -397,7 +397,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
                 }
               />
             </TimebankCardFlexBox>
-            <TimebankCardFlexBox>              
+            <TimebankCardFlexBox>
                 {renderDailyEntryOrRangeChart()}
             </TimebankCardFlexBox>
           </Container>
