@@ -49,7 +49,7 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
+    (person: Person) => person.id === config.person.forecastOverride || person.keycloakId === userProfile?.id
   );
   
   /**
@@ -132,9 +132,9 @@ const VacationsCard = () => {
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
-        } else {
+          } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: loggedInPerson?.keycloakId
+            personId: userProfile?.id
           });
         }
         setVacationRequests(fetchedVacationRequests);

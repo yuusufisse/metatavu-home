@@ -36,7 +36,7 @@ const BalanceCard = () => {
     if (persons.length) {
       setLoading(true);
       const loggedInPerson = persons.find(
-        (person: Person) => person.id === config.person.id || person.keycloakId === userProfile?.id
+        (person: Person) => person.id === config.person.forecastOverride || person.keycloakId === userProfile?.id
       );
       if (loggedInPerson) {
         try {
