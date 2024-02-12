@@ -164,16 +164,21 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
    */
   const renderDailyEntryOrRangeChart = () => {
     if (loading){
-    return <CircularProgress sx={{ margin: "auto",mt: "5%",mb: "5%" }}  /> 
+      return <CircularProgress sx={{ margin: "auto",mt: "5%",mb: "5%" }} />;
     }       
     if (byRange.dailyEntries && selectedEntries) {
-      return <TimebankMultiBarChart selectedEntries={selectedEntries} />;
+      return (
+        <>
+          <TimebankMultiBarChart selectedEntries={selectedEntries} />
+          {renderTimeEntryTypesList()}
+        </>
+      )
     }
     if (personDailyEntry) {
       return (
         <>
-        <TimebankPieChart personDailyEntry={personDailyEntry} /> 
-        {renderTimeEntriesList()}
+          <TimebankPieChart personDailyEntry={personDailyEntry} /> 
+          {renderTimeEntryTypesList()}
         </>
       )
     }
@@ -233,7 +238,7 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
    *
    * @returns time entries list component
    */
-  const renderTimeEntriesList = () => (
+  const renderTimeEntryTypesList = () => (
     <List dense sx={{ marginLeft: "5%" }}>
       {timeEntriesListItems.map((item, index) => (
         <ListItem key={`timeEntriesListItem-${index}`}>
