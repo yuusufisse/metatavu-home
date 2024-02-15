@@ -56,7 +56,7 @@ const SyncButton = () => {
           );
 
           dailyEntries = await dailyEntriesApi.listDailyEntries({
-            personId: loggedInPerson?.id || config.person.forecastOverride
+            personId: loggedInPerson?.id || config.person.forecastUserIdOverride
           });
           setDailyEntries(dailyEntries);
         } catch (error) {

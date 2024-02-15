@@ -45,7 +45,7 @@ const VacationRequestsScreen = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastOverride || person.keycloakId === userProfile?.id
+    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
   /**
@@ -120,7 +120,7 @@ const VacationRequestsScreen = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
-    if (!loggedInPerson?.id) return;
+    if (!loggedInPerson) return;
 
     if (!vacationRequests.length) {
       try {
@@ -213,7 +213,7 @@ const VacationRequestsScreen = () => {
     newStatus: VacationRequestStatuses,
     selectedRowId: GridRowId
   ) => {
-    if (!loggedInPerson?.keycloakId) return;
+    if (!loggedInPerson) return;
 
     try {
       setLoading(true);
@@ -244,7 +244,7 @@ const VacationRequestsScreen = () => {
    * @param vacationData vacation data
    */
   const createVacationRequest = async (vacationData: VacationData) => {
-    if (!loggedInPerson?.keycloakId) return;
+    if (!loggedInPerson) return;
 
     try {
       setLoading(true);
@@ -273,7 +273,7 @@ const VacationRequestsScreen = () => {
    * @param vacationRequestId vacation request id
    */
   const updateVacationRequest = async (vacationData: VacationData, vacationRequestId: string) => {
-    if (!loggedInPerson?.keycloakId) return;
+    if (!loggedInPerson) return;
 
     try {
       setLoading(true);

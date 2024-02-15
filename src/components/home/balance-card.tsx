@@ -33,25 +33,23 @@ const BalanceCard = () => {
    * Initialize logged in person's time data.
    */
   const getPersons = async () => {
-    if (persons.length) {
-      setLoading(true);
-      const loggedInPerson = persons.find(
-        (person: Person) => person.id === config.person.forecastOverride || person.keycloakId === userProfile?.id
-      );
-      if (loggedInPerson) {
-        try {
-          const fetchedPerson = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id,
-            timespan: Timespan.ALL_TIME,
-            before: yesterday.toJSDate()
-          });
-          setPersonTotalTime(fetchedPerson[0]);
-        } catch (error) {
-          setError(`${strings.error.fetchFailedGeneral}, ${error}`);
-        }
+    setLoading(true);
+    const loggedInPerson = persons.find(
+      (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    );
+    if (loggedInPerson) {
+      try {
+        const fetchedPerson = await personsApi.listPersonTotalTime({
+          personId: loggedInPerson?.id,
+          timespan: Timespan.ALL_TIME,
+          before: yesterday.toJSDate()
+        });
+        setPersonTotalTime(fetchedPerson[0]);
+      } catch (error) {
+        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   /**
@@ -77,7 +75,7 @@ const BalanceCard = () => {
 
     if (adminMode) {
       return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
-    } else if (!personTotalTime && !loading && persons.length) {
+    } else if (!personTotalTime && !loading) {
       return (
         <Typography color={balanceColor}>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
       );

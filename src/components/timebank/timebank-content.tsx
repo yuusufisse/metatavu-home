@@ -46,8 +46,8 @@ import LocalizationUtils from "../../utils/localization-utils";
 interface Props {
   handleDailyEntryChange: (selectedDate: DateTime) => void;
   loading: boolean;
-  selectedEmployee: number | undefined;
-  setSelectedEmployee: (selectedEmployee?: number) => void;
+  selectedEmployeeId: number | undefined;
+  setSelectedEmployeeId: (selectedEmployeeId?: number) => void;
 }
 
 /**
@@ -58,8 +58,8 @@ interface Props {
 const TimebankContent = ({
   handleDailyEntryChange,
   loading,
-  selectedEmployee,
-  setSelectedEmployee
+  selectedEmployeeId,
+  setSelectedEmployeeId
 }: Props) => {
   const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
   const [byRange, setByRange] = useState({
@@ -343,13 +343,13 @@ const TimebankContent = ({
         <Grow in>
           <Card sx={{ p: "1%", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
             <FormControl fullWidth>
-              <InputLabel id="employee-select-label">Select Employee</InputLabel>
+              <InputLabel id="employee-select-label">{strings.employeeSelect.employeeSelectlabel}</InputLabel>
               <Select
                 labelId="employee-select-label"
                 id="employee-select"
-                value={selectedEmployee}
-                onChange={(event) => setSelectedEmployee(Number(event.target.value))}
-                label="Select Employee"
+                value={selectedEmployeeId}
+                onChange={(event) => setSelectedEmployeeId(Number(event.target.value))}
+                label={strings.employeeSelect.employeeSelectlabel}
               >
                 {persons.map((person) => (
                   <MenuItem key={person.id} value={person.id}>

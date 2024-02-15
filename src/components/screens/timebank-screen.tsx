@@ -31,18 +31,16 @@ const TimebankScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastOverride || person.keycloakId === userProfile?.id
+    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-  const [selectedEmployee, setSelectedEmployee] = useState(loggedInPerson?.id);
-  const selectedPerson = persons.find((person) => person.id === selectedEmployee);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(loggedInPerson?.id);
+  const selectedPerson = persons.find((person) => person.id === selectedEmployeeId);
 
   useEffect(() => {
-    if (selectedEmployee) {
-      getSelectedPersonTotalTime(selectedEmployee);
-    } else {
-      getPersonTotalTime();
+    if (selectedEmployeeId) {
+      getPersonTotalTime(selectedEmployeeId);
     }
-  }, [persons, selectedEmployee, timespan]);
+  }, [persons, selectedEmployeeId, timespan]);
 
   useEffect(() => {
     getPersonDailyEntries();
@@ -52,47 +50,31 @@ const TimebankScreen = () => {
     if (selectedPerson) {
       getPersonDailyEntriesForPieChart(selectedPerson);
     }
-  }, [persons, selectedEmployee]);
+  }, [persons, selectedEmployeeId]);
 
   /**
    * Gets  selectedPerson's total time data.
    *
    * @param selectedPersonId selected person id
    */
-  const getSelectedPersonTotalTime = async (selectedPersonId: number) => {
-    setLoading(true);
-    try {
-      const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-        personId: selectedPersonId,
-        timespan: timespan || Timespan.ALL_TIME,
-        before: DateTime.now().minus({ days: 1 }).toJSDate()
-      });
-      setPersonTotalTime(fetchedPersonTotalTime[0]);
-    } catch (error) {
-      setError(`${strings.error.totalTimeFetch}, ${error}`);
-    }
-    setLoading(false);
-  };
 
   /**
    * Gets person's total time data.
    */
-  const getPersonTotalTime = async () => {
-    if (persons.length) {
-      setLoading(true);
-      if (loggedInPerson) {
-        try {
-          const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
-            personId: loggedInPerson?.id,
-            timespan: timespan || Timespan.ALL_TIME,
-            before: DateTime.now().minus({ days: 1 }).toJSDate()
-          });
-          setPersonTotalTime(fetchedPersonTotalTime[0]);
-        } catch (error) {
-          setError(`${strings.error.totalTimeFetch}, ${error}`);
-        }
-    }
-  }
+  const getPersonTotalTime = async (selectedPersonId: number) => {
+    setLoading(true);
+    if (selectedPersonId) {
+      try {
+        const fetchedPersonTotalTime = await personsApi.listPersonTotalTime({
+          personId: selectedPersonId,
+          timespan: timespan || Timespan.ALL_TIME,
+          before: DateTime.now().minus({ days: 1 }).toJSDate()
+        });
+      setPersonTotalTime(fetchedPersonTotalTime[0]);
+      } catch (error) {
+        setError(`${strings.error.totalTimeFetch}, ${error}`);
+      }
+    } 
     setLoading(false);
   };
 
@@ -103,7 +85,7 @@ const TimebankScreen = () => {
     if (loggedInPerson) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson?.id
+          personId: loggedInPerson.id
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
@@ -142,29 +124,27 @@ const TimebankScreen = () => {
    * @param selectedDate selected date from DatePicker
    */
   const handleDailyEntryChange = async (selectedDate: DateTime) => {
-    if (selectedDate && selectedEmployee !== null) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: selectedEmployee
+          personId: selectedEmployeeId
         });
         setDailyEntries(fetchedDailyEntries);
         setPersonDailyEntry(
           fetchedDailyEntries.find(
             (item) =>
-              item.person === selectedEmployee &&
+              item.person === selectedEmployeeId &&
               DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
           )
         );
       } catch (error) {
-        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
-      }
+        setError(`${strings.error.dailyEntriesFetch}, ${error}`);    
     }
   };
 
   return (
     <div>
       <div style={{ marginTop: "16px" }} />
-      {!personDailyEntry || !dailyEntries.length || !personTotalTime ? (
+      {!personDailyEntry || !selectedEmployeeId || !dailyEntries.length || !personTotalTime ? (
         <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
           {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
         </Card>
@@ -172,8 +152,8 @@ const TimebankScreen = () => {
         <TimebankContent
           handleDailyEntryChange={handleDailyEntryChange}
           loading={loading}
-          selectedEmployee={selectedEmployee || loggedInPerson?.id}
-          setSelectedEmployee={setSelectedEmployee}
+          selectedEmployeeId={selectedEmployeeId}
+          setSelectedEmployeeId={setSelectedEmployeeId}
         />
       )}
     </div>

@@ -248,6 +248,12 @@ export interface Localized extends LocalizedStringsMethods {
     sync: string;
     error: string;
   };
+  /**
+   * Translations related to employee's selection
+   */
+  employeeSelect: {
+    employeeSelectlabel: string;
+  };
 }
 
 /**

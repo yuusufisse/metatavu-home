@@ -49,7 +49,7 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastOverride || person.keycloakId === userProfile?.id
+    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
   
   /**
@@ -124,7 +124,7 @@ const VacationsCard = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
-    if (!loggedInPerson?.id) return;
+    if (!loggedInPerson) return;
 
     if (!vacationRequests.length) {
       try {
@@ -134,7 +134,7 @@ const VacationsCard = () => {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: loggedInPerson?.keycloakId
+            personId: loggedInPerson.keycloakId
           });
         }
         setVacationRequests(fetchedVacationRequests);
