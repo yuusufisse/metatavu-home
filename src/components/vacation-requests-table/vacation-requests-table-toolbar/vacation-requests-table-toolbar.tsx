@@ -123,7 +123,8 @@ const TableToolbar = ({
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
-          {selectedRowIds?.length === 1 && (
+          {selectedRowIds?.length === 1 &&
+          rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !== VacationRequestStatuses.APPROVED &&
             <ToolbarGridItem item sm={adminMode ? 3 : 6} xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
@@ -132,7 +133,19 @@ const TableToolbar = ({
                 setValue={setFormOpen}
               />
             </ToolbarGridItem>
-          )}
+          }
+          {selectedRowIds?.length === 1 && 
+          rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status === VacationRequestStatuses.APPROVED &&
+            <ToolbarGridItem sm={adminMode ? 3 : 6} item xs={6}>
+              <FormToggleButton
+                title={strings.tableToolbar.edit}
+                ButtonIcon={Edit}
+                value={formOpen}
+                setValue={setFormOpen}               
+                disabled={adminMode ? false : true}               
+              />
+            </ToolbarGridItem>
+          }
           {adminMode && (
             <>
               <ToolbarGridItem item sm={3} xs={6}>
