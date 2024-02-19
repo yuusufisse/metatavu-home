@@ -500,7 +500,6 @@ const VacationRequestsScreen = () => {
       for (let i = startIndex; i <= vacationDayEnd; i++){
         if (workingWeek[i-1]) addDay+=1;
       }
-      console.log(addDay);
       return weeks * 6 + addDay;
     }
 
