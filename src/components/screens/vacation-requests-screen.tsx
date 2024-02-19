@@ -425,15 +425,15 @@ const VacationRequestsScreen = () => {
    *
    * @param loggedInPerson person data
    */
-  const getWorkingWeek = (loggedInPerson : any) : boolean [] => {
-    let workingWeek = [false,false,false,false,false,false,false];
-    if (loggedInPerson?.monday !== 0) workingWeek[0] = true;
-    if (loggedInPerson?.tuesday !== 0) workingWeek[1] = true;
-    if (loggedInPerson?.wednesday !== 0) workingWeek[2] = true;
-    if (loggedInPerson?.thursday !== 0) workingWeek[3] = true;
-    if (loggedInPerson?.friday !== 0) workingWeek[4] = true;
-    if (loggedInPerson?.saturday !== 0) workingWeek[5] = true;
-    if (loggedInPerson?.sunday !== 0) workingWeek[6] = true;
+  const getWorkingWeek = (loggedInPerson: any): boolean[] => {
+    const workingWeek = [false, false, false, false, false, false, false];
+    const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  
+    for (let i = 0; i < daysOfWeek.length; i++) {
+      if (loggedInPerson?.[daysOfWeek[i]] !== 0) {
+        workingWeek[i] = true;
+      }
+    }
     return workingWeek;
   }
 
@@ -475,7 +475,6 @@ const VacationRequestsScreen = () => {
     if (vacationDayEnd < startWeek) vacationDayEnd = endWeek;
     if (vacationDayStart < startWeek) vacationDayStart = startWeek;
       
-
     if (vacationDayStart === vacationDayEnd){
       if (endWeek - startWeek === 0) return weeks * 6 + 6;
       if (vacationDayStart === startWeek) return weeks * 6 + 1;
