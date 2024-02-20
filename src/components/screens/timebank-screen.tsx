@@ -43,6 +43,12 @@ const TimebankScreen = () => {
   }, [persons, selectedEmployeeId, timespan]);
 
   useEffect(() => {
+    if (loggedInPerson) {
+    setSelectedEmployeeId(loggedInPerson.id);
+    }
+    }, [loggedInPerson]);
+
+  useEffect(() => {
     getPersonDailyEntries();
   }, [persons]);
 
@@ -146,7 +152,7 @@ const TimebankScreen = () => {
       <div style={{ marginTop: "16px" }} />
       {!personDailyEntry || !selectedEmployeeId || !dailyEntries.length || !personTotalTime ? (
         <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
-          {loading ? <CircularProgress sx={{ scale: "150%" }} /> : null}
+          { loading && <CircularProgress sx={{ scale: "150%" }} /> }
         </Card>
       ) : (
         <TimebankContent
