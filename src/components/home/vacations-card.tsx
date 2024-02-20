@@ -51,7 +51,7 @@ const VacationsCard = () => {
   const loggedInPerson = persons.find(
     (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-  
+
   /**
    * Fetch vacation request statuses
    */
@@ -147,7 +147,7 @@ const VacationsCard = () => {
 
   useMemo(() => {
     fetchVacationsRequests();
-  }, []);
+  }, [loggedInPerson]);
 
   /**
    * Get pending vacation requests by checking wether it has a status or not

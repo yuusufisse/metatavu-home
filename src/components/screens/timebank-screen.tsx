@@ -44,7 +44,7 @@ const TimebankScreen = () => {
 
   useEffect(() => {
     if (loggedInPerson) {
-    setSelectedEmployeeId(loggedInPerson.id);
+      setSelectedEmployeeId(loggedInPerson.id);
     }
     }, [loggedInPerson]);
 
@@ -52,7 +52,7 @@ const TimebankScreen = () => {
     getPersonDailyEntries();
   }, [persons]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (selectedPerson) {
       getPersonDailyEntriesForPieChart(selectedPerson);
     }
@@ -80,7 +80,7 @@ const TimebankScreen = () => {
       } catch (error) {
         setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
-    } 
+    }
     setLoading(false);
   };
 
@@ -143,7 +143,7 @@ const TimebankScreen = () => {
           )
         );
       } catch (error) {
-        setError(`${strings.error.dailyEntriesFetch}, ${error}`);    
+        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
   };
 
