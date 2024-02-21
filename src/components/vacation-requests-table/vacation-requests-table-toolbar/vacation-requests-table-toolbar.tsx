@@ -77,6 +77,7 @@ const TableToolbar = ({
    *
    * @param selectedRowIds selected row ids
    */
+  const disableEdit = selectedRowIds?.length === 1 && rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !== VacationRequestStatuses.PENDING
   const toggleToolbarOpenOnSelectedRowIds = (selectedRowIds: GridRowId[]) => {
     if (selectedRowIds) {
       setToolbarOpen(true);
@@ -123,8 +124,7 @@ const TableToolbar = ({
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
-          {selectedRowIds?.length === 1 &&
-          rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !== VacationRequestStatuses.APPROVED &&
+          {!disableEdit &&          
             <ToolbarGridItem item sm={adminMode ? 3 : 6} xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
@@ -134,15 +134,14 @@ const TableToolbar = ({
               />
             </ToolbarGridItem>
           }
-          {selectedRowIds?.length === 1 && 
-          rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status === VacationRequestStatuses.APPROVED &&
+          {disableEdit &&
             <ToolbarGridItem sm={adminMode ? 3 : 6} item xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
                 ButtonIcon={Edit}
                 value={formOpen}
                 setValue={setFormOpen}               
-                disabled={adminMode ? false : true}               
+                disabled={true}               
               />
             </ToolbarGridItem>
           }
