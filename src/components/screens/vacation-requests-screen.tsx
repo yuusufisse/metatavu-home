@@ -52,9 +52,9 @@ const VacationRequestsScreen = () => {
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
+    setLoading(true);
     if (vacationRequests.length && !latestVacationRequestStatuses.length) {
       try {
-        setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
 
         await Promise.all(
@@ -74,6 +74,7 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
+        setLoading(false);
     }
   };
 
@@ -120,11 +121,11 @@ const VacationRequestsScreen = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
+    setLoading(true);
     if (!loggedInPerson) return;
 
     if (!vacationRequests.length) {
       try {
-        setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
@@ -134,10 +135,10 @@ const VacationRequestsScreen = () => {
           });
         }
         setVacationRequests(fetchedVacationRequests);
-        setLoading(false);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
+        setLoading(false);
     }
   };
 
@@ -166,11 +167,11 @@ const VacationRequestsScreen = () => {
             (vacationRequestStatus) => vacationRequestStatus.id !== foundVacationRequestStatus.id
           );
           setLatestVacationRequestStatuses(filteredVacationRequestStatuses);
-          setLoading(false);
         }
       } catch (error) {
         setError(`${strings.vacationRequestError.deleteStatusError}, ${error}`);
       }
+        setLoading(false);
     }
   };
 
