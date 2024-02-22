@@ -138,7 +138,6 @@ const VacationsCard = () => {
           });
         }
         setVacationRequests(fetchedVacationRequests);
-        setLoading(false);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }

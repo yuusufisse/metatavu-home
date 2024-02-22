@@ -52,9 +52,9 @@ const VacationRequestsScreen = () => {
    * Fetch vacation request statuses
    */
   const fetchVacationRequestStatuses = async () => {
-    setLoading(true);
     if (vacationRequests.length && !latestVacationRequestStatuses.length) {
       try {
+        setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
 
         await Promise.all(
@@ -74,7 +74,7 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -138,7 +138,7 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -171,7 +171,7 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.deleteStatusError}, ${error}`);
       }
-        setLoading(false);
+      setLoading(false);
     }
   };
 
