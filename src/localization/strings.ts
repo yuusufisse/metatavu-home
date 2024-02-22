@@ -81,6 +81,12 @@ export interface Localized extends LocalizedStringsMethods {
     employeeBalances: string;
   };
   /**
+   * Translations related to sprint view
+   */
+  sprint: {
+    sprintview: string;
+  };
+  /**
    * General time-related expressions
    */
   timeExpressions: {

@@ -57,6 +57,9 @@
     "searchPlaceholder": "Hae henkilöä...",
     "employeeBalances": "Henkilöstön aikakirjaukset ja saldot"
   },
+  "sprint": {
+    "sprintview": "Sprintinäkymä"
+  },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
