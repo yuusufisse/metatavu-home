@@ -124,11 +124,11 @@ const VacationsCard = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
+    setLoading(true);
     if (!loggedInPerson) return;
 
     if (!vacationRequests.length) {
       try {
-        setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
@@ -138,11 +138,11 @@ const VacationsCard = () => {
           });
         }
         setVacationRequests(fetchedVacationRequests);
-        setLoading(false);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
     }
+    setLoading(false);
   };
 
   useMemo(() => {

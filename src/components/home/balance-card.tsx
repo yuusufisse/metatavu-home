@@ -75,7 +75,7 @@ const BalanceCard = () => {
 
     if (adminMode) {
       return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
-    } else if (!personTotalTime && !loading) {
+    } else if (!personTotalTime && !loading && persons.length) {
       return (
         <Typography color={balanceColor}>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
       );
