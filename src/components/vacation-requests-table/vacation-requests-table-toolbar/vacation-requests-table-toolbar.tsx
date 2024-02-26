@@ -60,6 +60,7 @@ const TableToolbar = ({
   const language = useAtomValue(languageAtom);
   const adminMode = UserRoleUtils.adminMode();
   const { pathname } = useLocation();
+  const disableEditButton = rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !== VacationRequestStatuses.PENDING;
 
   useEffect(() => {
     setTitle(getToolbarTitle(toolbarFormMode));
@@ -77,7 +78,6 @@ const TableToolbar = ({
    *
    * @param selectedRowIds selected row ids
    */
-  const disableEdit = selectedRowIds?.length === 1 && rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !== VacationRequestStatuses.PENDING
   const toggleToolbarOpenOnSelectedRowIds = (selectedRowIds: GridRowId[]) => {
     if (selectedRowIds) {
       setToolbarOpen(true);
@@ -124,24 +124,14 @@ const TableToolbar = ({
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
-          {!disableEdit &&          
+          {selectedRowIds?.length === 1  &&          
             <ToolbarGridItem item sm={adminMode ? 3 : 6} xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
                 ButtonIcon={Edit}
                 value={formOpen}
                 setValue={setFormOpen}
-              />
-            </ToolbarGridItem>
-          }
-          {disableEdit &&
-            <ToolbarGridItem sm={adminMode ? 3 : 6} item xs={6}>
-              <FormToggleButton
-                title={strings.tableToolbar.edit}
-                ButtonIcon={Edit}
-                value={formOpen}
-                setValue={setFormOpen}               
-                disabled={true}               
+                disabled={disableEditButton}
               />
             </ToolbarGridItem>
           }
