@@ -5,7 +5,7 @@ import strings from "../../localization/strings";
  */
 const SprintViewScreen = () => {
   return (
-    <h1>{strings.sprint.sprintviewScreen}</h1>
+    <h1>{ strings.sprint.sprintviewScreen }</h1>
   );
 };
 
