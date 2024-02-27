@@ -13,7 +13,9 @@ import {
   Container,
   FormControl,
   styled,
-  TextField
+  TextField,
+  InputLabel,
+  Select
 } from "@mui/material";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
 import { Timespan } from "../../generated/client";
@@ -31,8 +33,10 @@ import {
   personDailyEntryAtom,
   dailyEntriesAtom,
   timespanAtom,
+  personsAtom,
   timebankScreenPersonTotalTimeAtom
 } from "../../atoms/person";
+import UserRoleUtils from "../../utils/user-role-utils";
 import { DailyEntryWithIndexSignature, DateRange } from "../../types";
 import LocalizationUtils from "../../utils/localization-utils";
 
@@ -42,6 +46,8 @@ import LocalizationUtils from "../../utils/localization-utils";
 interface Props {
   handleDailyEntryChange: (selectedDate: DateTime) => void;
   loading: boolean;
+  selectedEmployeeId: number | undefined;
+  setSelectedEmployeeId: (selectedEmployeeId?: number) => void;
 }
 
 /**
@@ -49,15 +55,22 @@ interface Props {
  *
  * @param props Component properties
  */
-const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
+const TimebankContent = ({
+  handleDailyEntryChange,
+  loading,
+  selectedEmployeeId,
+  setSelectedEmployeeId
+}: Props) => {
   const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
   const personTotalTime = useAtomValue(timebankScreenPersonTotalTimeAtom);
+  const persons = useAtomValue(personsAtom);
   const [timespan, setTimespan] = useAtom(timespanAtom);
   const personDailyEntry = useAtomValue(personDailyEntryAtom);
   const dailyEntries = useAtomValue(dailyEntriesAtom);
+  const isAdmin = UserRoleUtils.isAdmin();
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
         dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date
@@ -326,6 +339,28 @@ const TimebankContent = ({ handleDailyEntryChange, loading }: Props) => {
 
   return (
     <>
+      {isAdmin && (
+        <Grow in>
+          <Card sx={{ p: "1%", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+            <FormControl fullWidth>
+              <InputLabel id="employee-select-label">{strings.employeeSelect.employeeSelectlabel}</InputLabel>
+              <Select
+                labelId="employee-select-label"
+                id="employee-select"
+                value={selectedEmployeeId}
+                onChange={(event) => setSelectedEmployeeId(Number(event.target.value))}
+                label={strings.employeeSelect.employeeSelectlabel}
+              >
+                {persons.map((person) => (
+                  <MenuItem key={person.id} value={person.id}>
+                    {`${person.firstName} ${person.lastName}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Card>
+        </Grow>
+      )}
       <Grow in>
         <TimebankCard>
           {renderTimebankCardTitle(strings.timebank.barChartDescription)}

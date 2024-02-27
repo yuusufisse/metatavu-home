@@ -184,5 +184,8 @@
   "viewAll": {
     "startDate": "Start Date: ",
     "balance": "Balance: "
+  },
+  "employeeSelect": {
+    "employeeSelectlabel": "Select employee"
   }
 }

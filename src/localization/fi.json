@@ -184,5 +184,8 @@
   "viewAll": {
     "startDate": "Aloituspäivä: ",
     "balance": "Saldo: "
+  },
+  "employeeSelect": {
+    "employeeSelectlabel": "Valitse työntekijä"
   }
 }
