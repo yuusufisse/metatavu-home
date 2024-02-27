@@ -57,6 +57,10 @@
     "searchPlaceholder": "Search for a person...",
     "employeeBalances": "Employee time totals and balances"
   },
+  "sprint": {
+    "sprintview": "Sprint view",
+    "sprintviewScreen": "Sprint view Screen"
+  },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
     "fetchFailedNoEntriesGeneral": "No time entries found"
