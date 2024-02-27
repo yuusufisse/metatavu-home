@@ -85,6 +85,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   sprint: {
     sprintview: string;
+    sprintviewScreen: string
   };
   /**
    * General time-related expressions

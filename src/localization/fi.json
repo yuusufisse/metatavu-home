@@ -58,7 +58,8 @@
     "employeeBalances": "Henkilöstön aikakirjaukset ja saldot"
   },
   "sprint": {
-    "sprintview": "Sprintinäkymä"
+    "sprintview": "Sprintinäkymä",
+    "sprintviewScreen": "Sprintinäkymä näyttö"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
