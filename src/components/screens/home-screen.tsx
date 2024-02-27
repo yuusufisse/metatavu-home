@@ -11,7 +11,7 @@ const HomeScreen = () => {
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
         <BalanceCard />
-        <Grid item xs={12} style={{marginTop: "16px"}}>
+        <Grid item xs={12} style={{ marginTop: "16px" }}>
           <SprintViewCard />
         </Grid>
       </Grid>
