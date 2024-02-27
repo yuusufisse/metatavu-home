@@ -1,4 +1,3 @@
-
 /**
  * Sprint View screen component
  */
