@@ -5,6 +5,7 @@ import UserRoleUtils from "../../utils/user-role-utils";
 
 const SprintViewCard = () => {
     const adminMode = UserRoleUtils.adminMode();
+    
     return (
         <Link
           to={adminMode ? "/admin/sprintview" : "/sprintview"}
