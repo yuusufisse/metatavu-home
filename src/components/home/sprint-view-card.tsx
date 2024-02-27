@@ -23,17 +23,25 @@ const SprintViewCard = () => {
       >
         {adminMode ? (
           <CardContent>
-            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+            <Typography 
+              variant="h6" 
+              fontWeight={"bold"} 
+              style={{ marginTop: 6, marginBottom: 3 }}
+            >
               {strings.sprint.sprintview}
             </Typography>
-            <Typography variant="body1">{strings.placeHolder.notYetImplemented}</Typography>
+            <Typography variant="body1">{ strings.placeHolder.notYetImplemented }</Typography>
           </CardContent>
         ) : (
           <CardContent>
-            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+            <Typography 
+              variant="h6" 
+              fontWeight={"bold"} 
+              style={{ marginTop: 6, marginBottom: 3 }}
+            >
               {strings.sprint.sprintview}
             </Typography>
-            <Typography variant="body1">{strings.placeHolder.notYetImplemented}</Typography>
+            <Typography variant="body1">{ strings.placeHolder.notYetImplemented }</Typography>
           </CardContent>
         )}
       </Card>
