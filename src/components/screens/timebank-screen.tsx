@@ -46,7 +46,7 @@ const TimebankScreen = () => {
     if (loggedInPerson) {
       setSelectedEmployeeId(loggedInPerson.id);
     }
-    }, [loggedInPerson]);
+  }, [loggedInPerson]);
 
   useEffect(() => {
     getPersonDailyEntries();
