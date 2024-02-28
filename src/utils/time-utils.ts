@@ -111,30 +111,15 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
     return 1;
   }
 
-  if (vacationDayStart > endWeek && vacationDayEnd > endWeek || vacationDayEnd < startWeek && vacationDayStart < startWeek){
-    if (vacationDayEnd > vacationDayStart) return weeks * 6;
-    if (vacationDayEnd === vacationDayStart) return weeks * 6;
-    return weeks * 6 + 6;
-  }
-
-  if (vacationDayStart > endWeek && vacationDayEnd < startWeek) return weeks * 6;
-  
-  if (vacationDayEnd > endWeek) vacationDayEnd = endWeek;
-  if (vacationDayStart > endWeek) vacationDayStart = startWeek;
-  if (vacationDayEnd < startWeek) vacationDayEnd = endWeek;
-  if (vacationDayStart < startWeek) vacationDayStart = startWeek;
-    
   if (vacationDayStart === vacationDayEnd){
     if (endWeek - startWeek === 0) return weeks * 6 + 6;
+    if (!workingWeek[vacationDayEnd-1]) return weeks * 6;
     return weeks * 6 + 1;
   }
 
   if (vacationDayEnd > vacationDayStart){
     let addDay = 0;
-    let startIndex = vacationDayStart;
-    if (weeks > 0) startIndex+=1;
-    if (vacationDayEnd === endWeek && weeks > 0 && workingWeek[vacationDayStart-1]) addDay += 1;
-    for (let i = startIndex; i <= vacationDayEnd; i++){
+    for (let i = vacationDayStart; i <= vacationDayEnd; i++){
       if (workingWeek[i-1]) addDay+=1;
     }
     if (addDay === workDays) addDay = 6;
@@ -142,7 +127,6 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
   }
 
   let addDay = 0;
-  if (vacationDayEnd === vacationDayStart) weeks -= 1;
   for (let i = vacationDayStart; i <= endWeek; i++){
     if (workingWeek[i-1]) addDay+=1;
   }
