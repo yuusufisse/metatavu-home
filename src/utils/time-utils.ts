@@ -101,14 +101,15 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
 
   const startWeek = getStartDayWorkingWeek(workingWeek);
   const endWeek = getEndDayWorkingWeek(workingWeek);
+  const workDays = workingWeek.filter(workDay => workDay).length;
 
   if (startWeek === 0) return 0;
 
+  if (days === 0 && !workingWeek[vacationDayStart-1]) return 0;
   if (days === 0 && workingWeek[vacationDayStart-1]) {
-    if (endWeek - startWeek === 0) return 6;
+    if (endWeek === startWeek) return 6;
     return 1;
   }
-  if (days === 0 && !workingWeek[vacationDayStart-1]) return 0;
 
   if (vacationDayStart > endWeek && vacationDayEnd > endWeek || vacationDayEnd < startWeek && vacationDayStart < startWeek){
     if (vacationDayEnd > vacationDayStart) return weeks * 6;
@@ -125,20 +126,9 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
     
   if (vacationDayStart === vacationDayEnd){
     if (endWeek - startWeek === 0) return weeks * 6 + 6;
-    if (vacationDayStart === startWeek) return weeks * 6 + 1;
-    if (vacationDayEnd === endWeek) return weeks * 6 + 1;
-    return weeks * 6;
+    return weeks * 6 + 1;
   }
 
-  if (vacationDayStart === startWeek){
-    if (vacationDayEnd === endWeek ) return weeks * 6 + 6;
-    let addDay = 0;
-    for (let i = vacationDayStart; i <= vacationDayEnd; i++){
-      if (workingWeek[i-1]) addDay+=1;
-    }
-    return weeks * 6 + addDay;
-  }
-  
   if (vacationDayEnd > vacationDayStart){
     let addDay = 0;
     let startIndex = vacationDayStart;
@@ -147,6 +137,7 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
     for (let i = startIndex; i <= vacationDayEnd; i++){
       if (workingWeek[i-1]) addDay+=1;
     }
+    if (addDay === workDays) addDay = 6;
     return weeks * 6 + addDay;
   }
 
@@ -158,6 +149,7 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
   for (let i = startWeek; i <= vacationDayEnd; i++){
     if (workingWeek[i-1]) addDay+=1;
   }
+  if (addDay === workDays) addDay = 6;
   return weeks * 6 + addDay;
 }
 
