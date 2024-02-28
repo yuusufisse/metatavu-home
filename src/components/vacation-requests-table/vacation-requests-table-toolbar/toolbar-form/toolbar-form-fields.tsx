@@ -88,7 +88,7 @@ const ToolbarFormFields = ({
    *
    * @param loggedInPerson person data
    */
-  const getWorkingWeek = (loggedInPerson: Person | undefined) => {
+  const getWorkingWeek = (loggedInPerson?: Person) => {
     const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const workingWeek = new Array(daysOfWeek.length).fill(false);
     if (!loggedInPerson) return workingWeek;

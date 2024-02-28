@@ -142,7 +142,7 @@ export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacation
  *
  * @param workingWeek list of working days
  */
-const getStartDayWorkingWeek = (workingWeek : boolean []) : number => {
+const getStartDayWorkingWeek = (workingWeek: boolean[]) => {
   let i = 0;
   while (true) {
     if (i>6) break;
@@ -157,7 +157,7 @@ const getStartDayWorkingWeek = (workingWeek : boolean []) : number => {
  *
  * @param workingWeek list of working days
  */
-const getEndDayWorkingWeek = (workingWeek : boolean []) : number => {
+const getEndDayWorkingWeek = (workingWeek: boolean[]) => {
   let i = 6;
   while (true) {
     if (i<0) break;
