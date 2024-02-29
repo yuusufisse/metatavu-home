@@ -14,6 +14,7 @@ import config from "../../../../app/config";
 import { userProfileAtom } from "../../../../atoms/auth";
 import { personsAtom } from "../../../../atoms/person";
 import { Person } from "../../../../generated/client";
+import { daysOfWeek } from "../../../constants";
 
 /**
  * Component properties
@@ -85,10 +86,9 @@ const ToolbarFormFields = ({
   /**
    * Get a list of working days
    *
-   * @param loggedInPerson person data
+   * @param loggedInPerson Person
    */
   const getWorkingWeek = (loggedInPerson?: Person) => {
-    const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const workingWeek = new Array(daysOfWeek.length).fill(false);
     if (!loggedInPerson) return workingWeek;
     
