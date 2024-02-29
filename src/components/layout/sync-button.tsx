@@ -29,46 +29,55 @@ const SyncButton = () => {
   const personTotalTime = useAtomValue(personTotalTimeAtom);
 
   /**
+   * fetching persons and daily entries
+   */
+  const fetchPersonsAndEntries = async () => {
+    let tempPersons: Person[] = persons;
+    let fetchedDailyEntries: DailyEntry[] = [];
+  
+    if (!persons.length) {
+      try {
+        tempPersons = await personsApi.listPersons({});
+        setPersons(tempPersons);
+      } catch (error) {
+        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+      }
+    }
+  
+    if (tempPersons.length && personTotalTime) {
+      try {
+        const loggedInPerson = persons.find(
+          (person: Person) => person.keycloakId === userProfile?.id
+        );
+  
+        fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+          personId: loggedInPerson?.id || config.person.forecastUserIdOverride
+        });
+        setDailyEntries(fetchedDailyEntries);
+      } catch (error) {
+        setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
+      }
+    }
+  
+    return fetchedDailyEntries;
+  };
+  
+  /**
    * Get latest daily entry date
    */
   const getLatestDailyEntryDate = async () => {
     let dailyEntryDates: DateTime[] = [];
-
+  
     if (dailyEntries.length) {
       dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
     } else {
-      let tempPersons: Person[] = persons;
-      let dailyEntries: DailyEntry[] = [];
-
-      if (!persons.length) {
-        try {
-          tempPersons = await personsApi.listPersons({});
-          setPersons(tempPersons);
-        } catch (error) {
-          setError(`${strings.error.fetchFailedGeneral}, ${error}`);
-        }
-      }
-
-      if (tempPersons.length && personTotalTime) {
-        try {
-          const loggedInPerson = persons.find(
-            (person: Person) => person.keycloakId === userProfile?.id
-          );
-
-          dailyEntries = await dailyEntriesApi.listDailyEntries({
-            personId: loggedInPerson?.id || config.person.forecastUserIdOverride
-          });
-          setDailyEntries(dailyEntries);
-        } catch (error) {
-          setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
-        }
-      }
-
-      if (dailyEntries.length) {
-        dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
+      const fetchedDailyEntries = await fetchPersonsAndEntries();
+  
+      if (fetchedDailyEntries.length) {
+        dailyEntryDates = fetchedDailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
       }
     }
-
+  
     if (dailyEntryDates.length) {
       setSyncStartDate(DateTime.max(...dailyEntryDates));
     }

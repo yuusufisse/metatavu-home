@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { personsAtom, personsWithTotalTimeAtom } from "../../atoms/person";
+import { personsAtom } from "../../atoms/person";
 import {
   Box,
   Card,
@@ -19,7 +19,7 @@ import { ValueType, NameType } from "recharts/types/component/DefaultTooltipCont
 import strings from "../../localization/strings";
 import { useApi } from "../../hooks/use-api";
 import { errorAtom } from "../../atoms/error";
-import { Person, PersonTotalTime, Timespan } from "../../generated/client";
+import { PersonTotalTime, Timespan } from "../../generated/client";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { COLORS } from "../constants";
@@ -31,13 +31,11 @@ const TimebankViewAllScreen = () => {
   const { personsApi } = useApi();
   const language = useAtomValue(languageAtom);
   const setError = useSetAtom(errorAtom);
-  const [personsWithTotalTime, setPersonsWithTotalTime] = useAtom(personsWithTotalTimeAtom);
-  const [persons, setPersons] = useAtom(personsAtom);
+  const [personsWithTotalTime, setPersonsWithTotalTime] = useState<PersonWithTotalTime[]>([]);
+  const [persons] = useAtom(personsAtom);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [displayedPersonsTotalTime, setDisplayedPersonsTotalTime] = useState<PersonWithTotalTime[]>(
-    []
-  );
+  const [displayedPersonsTotalTime, setDisplayedPersonsTotalTime] = useState<PersonWithTotalTime[]>([]);
 
   /**
    * Renders the customized tooltip for charts
@@ -151,15 +149,6 @@ const TimebankViewAllScreen = () => {
     setLoading(true);
 
     try {
-      let fetchedPersons: Person[] = persons;
-
-      if (!fetchedPersons.length) {
-        fetchedPersons = await personsApi.listPersons({
-          active: true
-        });
-        setPersons(fetchedPersons);
-      }
-
       const personsTimeTotals = await Promise.all(
         persons
           .map((person) => ({
@@ -179,7 +168,7 @@ const TimebankViewAllScreen = () => {
 
   useEffect(() => {
     fetchPersonsAndPersonsTotalTime();
-  }, []);
+  }, [persons]);
 
   /**
    * Renders the search

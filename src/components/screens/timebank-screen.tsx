@@ -56,7 +56,7 @@ const TimebankScreen = () => {
     if (selectedPerson) {
       getPersonDailyEntriesForPieChart(selectedPerson);
     }
-  }, [persons, selectedEmployeeId]);
+  }, [persons, selectedPerson]);
 
   /**
    * Gets  selectedPerson's total time data.
