@@ -27,7 +27,6 @@ import LocalizationUtils from "../../utils/localization-utils";
 import { personsAtom } from "../../atoms/person";
 import config from "../../app/config";
 import { renderVacationDaysTextForScreen } from "../../utils/vacation-days-utils";
-import { DateTime } from "luxon";
 
 /**
  * Vacation requests screen
