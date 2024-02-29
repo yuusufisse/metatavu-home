@@ -43,7 +43,7 @@ const ToolbarFormFields = ({
   const userProfile = useAtomValue(userProfileAtom);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.keycloakId === userProfile?.id || config.person.forecastUserIdOverride
+    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
   useEffect(() => {
