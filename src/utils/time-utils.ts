@@ -93,48 +93,17 @@ export const getVacationDurationInDays = (startDate: DateTime, endDate: DateTime
  * @param workingWeek list of working days
  */
 export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacationEndDate: DateTime, workingWeek: boolean[]) => {
-  let vacationDayStart = vacationStartDate.weekday;
-  let vacationDayEnd = vacationEndDate.weekday;
+  const vacationDayStart = vacationStartDate.weekday;
+  const vacationDayEnd = vacationEndDate.weekday;
   const diff = vacationEndDate.diff(vacationStartDate, ["days"]);
   const days = Number(Math.round(diff.days));
-  let weeks = Math.floor(days/7);
-
+  const weeks = Math.floor(days/7);
   const startWeek = getStartDayWorkingWeek(workingWeek);
   const endWeek = getEndDayWorkingWeek(workingWeek);
-  const workDays = workingWeek.filter(workDay => workDay).length;
 
   if (startWeek === 0) return 0;
-
-  if (days === 0 && !workingWeek[vacationDayStart-1]) return 0;
-  if (days === 0 && workingWeek[vacationDayStart-1]) {
-    if (endWeek === startWeek) return 6;
-    return 1;
-  }
-
-  if (vacationDayStart === vacationDayEnd){
-    if (endWeek - startWeek === 0) return weeks * 6 + 6;
-    if (!workingWeek[vacationDayEnd-1]) return weeks * 6;
-    return weeks * 6 + 1;
-  }
-
-  if (vacationDayEnd > vacationDayStart){
-    let addDay = 0;
-    for (let i = vacationDayStart; i <= vacationDayEnd; i++){
-      if (workingWeek[i-1]) addDay+=1;
-    }
-    if (addDay === workDays) addDay = 6;
-    return weeks * 6 + addDay;
-  }
-
-  let addDay = 0;
-  for (let i = vacationDayStart; i <= endWeek; i++){
-    if (workingWeek[i-1]) addDay+=1;
-  }
-  for (let i = startWeek; i <= vacationDayEnd; i++){
-    if (workingWeek[i-1]) addDay+=1;
-  }
-  if (addDay === workDays) addDay = 6;
-  return weeks * 6 + addDay;
+  if (days === 0) return ifASingleDayChosen(workingWeek[vacationDayStart-1], startWeek, endWeek);
+  return ifADayRangeChosen(workingWeek, vacationDayStart, vacationDayEnd, startWeek, endWeek, weeks);
 }
 
 /**
@@ -165,4 +134,55 @@ const getEndDayWorkingWeek = (workingWeek: boolean[]) => {
     i--;
   }
   return 0;
+}
+
+/**
+ * Get vacation days if one day is chosen
+ *
+ * @param workDay represents if person works in a week day
+ * @param startWeek index of a start week day
+ * @param endWeek index of the end week
+ */
+const ifASingleDayChosen = (workDay: boolean, startWeek: number, endWeek: number) => {
+  if (!workDay) return 0;
+  if (endWeek === startWeek) return 6;
+  return 1;
+}
+
+/**
+ * Get vacation days if multiple days are chosen
+ *
+ * @param workingWeek represents the working week
+ * @param vacationDayStart start week index of vacation
+ * @param vacationDayEnd end week index of vacation
+ * @param startWeek index of a start week day
+ * @param endWeek index of the end week
+ * @param weeks number of weeks
+ */
+const ifADayRangeChosen = (workingWeek: boolean[], vacationDayStart: number, vacationDayEnd: number, startWeek: number, endWeek: number, weeks: number) => {
+  const workDays = workingWeek.filter(workDay => workDay).length;
+  if (vacationDayStart === vacationDayEnd){
+    if (endWeek - startWeek === 0) return weeks * 6 + 6;
+    if (!workingWeek[vacationDayEnd-1]) return weeks * 6;
+    return weeks * 6 + 1;
+  }
+
+  if (vacationDayEnd > vacationDayStart){
+    let addDay = 0;
+    for (let i = vacationDayStart; i <= vacationDayEnd; i++){
+      if (workingWeek[i-1]) addDay+=1;
+    }
+    if (addDay === workDays) addDay = 6;
+    return weeks * 6 + addDay;
+  }
+
+  let addDay = 0;
+  for (let i = vacationDayStart; i <= endWeek; i++){
+    if (workingWeek[i-1]) addDay+=1;
+  }
+  for (let i = startWeek; i <= vacationDayEnd; i++){
+    if (workingWeek[i-1]) addDay+=1;
+  }
+  if (addDay === workDays) addDay = 6;
+  return weeks * 6 + addDay;
 }

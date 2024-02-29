@@ -11,7 +11,6 @@ import LocalizationUtils from "../../../../utils/localization-utils";
 import { calculateTotalVacationDays } from "../../../../utils/time-utils";
 import { useAtom, useAtomValue } from "jotai";
 import config from "../../../../app/config";
-import UserRoleUtils from "../../../../utils/user-role-utils";
 import { userProfileAtom } from "../../../../atoms/auth";
 import { personsAtom } from "../../../../atoms/person";
 import { Person } from "../../../../generated/client";
