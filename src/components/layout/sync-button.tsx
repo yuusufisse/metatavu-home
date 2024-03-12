@@ -1,16 +1,15 @@
 import { Button, Box, LinearProgress, Snackbar, Alert } from "@mui/material";
 import { DateTime } from "luxon";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState, useEffect  } from "react";
 import { useApi } from "../../hooks/use-api";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import SyncDialog from "../contexts/sync-handler";
 import strings from "../../localization/strings";
 import { dailyEntriesAtom, personTotalTimeAtom, personsAtom } from "../../atoms/person";
-import { DailyEntry, Person } from "../../generated/client";
+import { Person } from "../../generated/client";
 import config from "../../app/config";
 import { userProfileAtom } from "../../atoms/auth";
-
 /**
  * Sync button component
  */
@@ -28,29 +27,35 @@ const SyncButton = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const personTotalTime = useAtomValue(personTotalTimeAtom);
 
+  useEffect(() => {
+    fetchDailyEntries();
+  },[persons]);
+
   /**
-   * fetching persons and daily entries
+   * fetching persons 
    */
-  const fetchPersonsAndEntries = async () => {
-    let tempPersons: Person[] = persons;
-    let fetchedDailyEntries: DailyEntry[] = [];
-  
-    if (!persons.length) {
+  const fetchPersons = async () => {
+    if (!persons) {
       try {
-        tempPersons = await personsApi.listPersons({});
+        const tempPersons = await personsApi.listPersons({});
         setPersons(tempPersons);
       } catch (error) {
         setError(`${strings.error.fetchFailedGeneral}, ${error}`);
       }
     }
-  
-    if (tempPersons.length && personTotalTime) {
+  }
+
+  /**
+   * fetching daily entries
+   */
+  const fetchDailyEntries = async () => {
+    await fetchPersons();
+    if (persons && personTotalTime) {
       try {
         const loggedInPerson = persons.find(
           (person: Person) => person.keycloakId === userProfile?.id
         );
-  
-        fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
           personId: loggedInPerson?.id || config.person.forecastUserIdOverride
         });
         setDailyEntries(fetchedDailyEntries);
@@ -58,20 +63,18 @@ const SyncButton = () => {
         setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
       }
     }
-  
-    return fetchedDailyEntries;
-  };
+  }
   
   /**
-   * Get latest daily entry date
+   * Update latest daily entry date
    */
-  const getLatestDailyEntryDate = async () => {
+  const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
   
     if (dailyEntries.length) {
       dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
     } else {
-      const fetchedDailyEntries = await fetchPersonsAndEntries();
+      const fetchedDailyEntries = dailyEntries;
   
       if (fetchedDailyEntries.length) {
         dailyEntryDates = fetchedDailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
@@ -120,7 +123,7 @@ const SyncButton = () => {
    * Event handler for sync button click
    */
   const handleSyncButtonClick = () => {
-    getLatestDailyEntryDate().then(() => {
+    updateSyncFromDailyEntries().then(() => {
       setSyncHandlerOpen(true);
     });
   };
