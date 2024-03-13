@@ -1,10 +1,8 @@
 import React from "react";
-import mockData from "../oncall-calendars/mockData.json";
 import { DateCalendar, PickersDay, PickersDayProps } from "@mui/x-date-pickers";
 import { Badge } from "@mui/material";
 import { DateTime } from "luxon";
 
-const onCallData = mockData;
 
 // const renderCalendarView = () => {
 //     if (onCallData) return onCallData.map()
