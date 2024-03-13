@@ -30,7 +30,8 @@ import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
 import { VacationInfoListItem } from "../../types";
 import { formatDate } from "../../utils/time-utils";
 import config from "../../app/config";
-import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
+// TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
+// import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
 
 /**
  * Vacations card component
@@ -49,7 +50,7 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.keycloakId === userProfile?.id || config.person.id
+    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
   /**
@@ -124,30 +125,30 @@ const VacationsCard = () => {
    * Fetch vacation requests
    */
   const fetchVacationsRequests = async () => {
-    if (!userProfile?.id) return;
+    setLoading(true);
+    if (!loggedInPerson) return;
 
     if (!vacationRequests.length) {
       try {
-        setLoading(true);
         let fetchedVacationRequests: VacationRequest[] = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: userProfile?.id
+            personId: loggedInPerson.keycloakId
           });
         }
         setVacationRequests(fetchedVacationRequests);
-        setLoading(false);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
     }
+    setLoading(false);
   };
 
   useMemo(() => {
     fetchVacationsRequests();
-  }, []);
+  }, [loggedInPerson]);
 
   /**
    * Get pending vacation requests by checking wether it has a status or not
@@ -374,7 +375,8 @@ const VacationsCard = () => {
           </Typography>
           <Grid container>
             <Box sx={{ width: "100%", display: "flex", flexDirection: "column", mb: 2 }}>
-              {loggedInPerson && renderVacationDaysTextForCard(loggedInPerson)}
+              {/* TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code. */}
+              {/* {loggedInPerson && renderVacationDaysTextForCard(loggedInPerson)} */}
             </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}

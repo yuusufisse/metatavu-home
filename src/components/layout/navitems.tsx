@@ -91,7 +91,7 @@ const NavItems = () => {
             <MenuItem
               component={Link}
               to={"/admin"}
-              key={`${strings.header.timebank}mobile2`}
+              key="adminMenuItem"
               onClick={handleNavItemClick}
             >
               {strings.header.admin}

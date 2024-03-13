@@ -17,6 +17,7 @@ import AdminScreen from "./components/screens/admin-screen";
 import { Settings } from "luxon";
 import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
+import SprintViewScreen from "./components/screens/sprint-view-screen";
 import OnCallCalendarScreen from "./components/screens/on-call-calendar-screen";
 
 /**
@@ -48,6 +49,10 @@ const App = () => {
           element: <TimebankScreen />
         },
         {
+          path: "/sprintview",
+          element: <SprintViewScreen />
+        },
+        {
           path: "/oncall",
           element: <OnCallCalendarScreen />
         }
@@ -73,6 +78,10 @@ const App = () => {
         {
           path: "/admin/timebank/viewall",
           element: <TimebankViewAllScreen />
+        },
+        {
+          path: "/admin/sprintview",
+          element: <SprintViewScreen />
         }
       ]
     }
