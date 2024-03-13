@@ -8,11 +8,6 @@ import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
 
-
-// const renderCalendarView = () => {
-//     if (onCallData) return onCallData.map()
-// }
-
 function ServerDay(props: PickersDayProps<DateTime> & { highlightedDays?: number[] }) {
   const { day, outsideCurrentMonth, ...other } = props;
 
