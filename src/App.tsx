@@ -17,6 +17,7 @@ import AdminScreen from "./components/screens/admin-screen";
 import { Settings } from "luxon";
 import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
+import OnCallCalendarScreen from "./components/screens/on-call-calendar-screen";
 
 /**
  * Application component
@@ -45,6 +46,10 @@ const App = () => {
         {
           path: "/timebank",
           element: <TimebankScreen />
+        },
+        {
+          path: "/oncall",
+          element: <OnCallCalendarScreen />
         }
       ]
     },
