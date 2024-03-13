@@ -148,3 +148,13 @@ export interface DateRange {
   start: DateTime;
   end: DateTime;
 }
+
+/**
+ * Type describing on call entry for a week
+ */
+export interface OnCallEntry {
+  Year: string;
+  Week: string;
+  Paid: boolean;
+}
+

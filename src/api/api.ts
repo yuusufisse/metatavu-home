@@ -8,6 +8,7 @@ import {
   VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
+import { OnCallApi } from "../generated/client/apis/OnCallApi";
 
 /**
  * Generic type that accepts parameters within the @ConfigurationParameters interface
@@ -45,6 +46,7 @@ export const getApiClient = (accessToken?: string) => {
     personsApi: new PersonsApi(getConfiguration()),
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
-    vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())
+    vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration()),
+    onCallApi: new OnCallApi(getConfiguration())
   };
 };
