@@ -40,6 +40,7 @@ const getConfigurationFactory =
    */
 export const getApiClient = (accessToken?: string) => {
   const getConfiguration = getConfigurationFactory(Configuration, config.api.baseUrl, accessToken);
+  const getLambdaConfiguration = getConfigurationFactory(Configuration, config.lambdas.url, accessToken);
 
   return {
     dailyEntriesApi: new DailyEntriesApi(getConfiguration()),
@@ -47,6 +48,6 @@ export const getApiClient = (accessToken?: string) => {
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
     vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration()),
-    onCallApi: new OnCallApi(getConfiguration())
+    onCallApi: new OnCallApi(getLambdaConfiguration())
   };
 };
