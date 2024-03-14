@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import strings from "../../localization/strings";
 import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -12,104 +12,144 @@ import { userProfileAtom } from "../../atoms/auth";
 import { Allocations } from "../../generated/homeLambdasClient/models/Allocations";
 import { Projects } from "../../generated/homeLambdasClient/models/Projects";
 import { Tasks } from "../../generated/homeLambdasClient/models/Tasks";
+import { TimeEntries } from "../../generated/homeLambdasClient/models/TimeEntries";
 
 const SprintViewScreen = () => {
-  const { allocationsApi, projectsApi, tasksApi } = useLambdasApi();
-  const persons = useAtomValue(personsAtom);
+  const { allocationsApi, projectsApi, tasksApi, timeEntriesApi } = useLambdasApi();
+  const persons: Person[] = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const loggedInPerson = persons.find(
     (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-
+  
   const [allocations, setAllocations] = useState<Allocations[]>([]);
   const [projects, setProjects] = useState<Projects[]>([]);
   const [tasks, setTasks] = useState<Tasks[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [timeEntries, setTimeEntries] = useState<TimeEntries[]>([]);
   const [minimizedProjects, setMinimizedProjects] = useState<number[]>([]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        await Promise.all([getPersonAllocations(), getProjects(), getTasks()]);
-      } finally {
-        setLoading(false);
+        // Fetch person allocations
+        const allocationsData = await getPersonAllocations();
+        setAllocations(allocationsData);
+        
+        // Fetch projects
+        const projectsData = await getProjects();
+        setProjects(projectsData);
+        
+        // Fetch tasks
+        const tasksData = await getTasks();
+        setTasks(tasksData);
+        
+        // Fetch time entries
+        const timeEntriesData = await getTimeEntries();
+        setTimeEntries(timeEntriesData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
   }, [loggedInPerson]);
 
   const getProjects = async () => {
-    if (loggedInPerson) {
-      try {
-        const fetchedProjects = await projectsApi.listProjects({
-          startDate: new Date()
-        });
-
-        const mappedProjects: Projects[] = fetchedProjects.map((project: Projects) => ({
-          id: project.id,
-          name: project.name
-        }));
-        setProjects(mappedProjects);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    }
-  };
-
-  const getPersonAllocations = async () => {
+    if (!loggedInPerson) return [];
+  
     try {
       const fetchedAllocations = await allocationsApi.listAllocations({
         startDate: new Date(),
       });
-
-      const mappedAllocations: Allocations[] = fetchedAllocations.map((allocation) => ({
-        id: allocation.id,
-        project: allocation.project,
-        person: allocation.person,
-        monday: allocation.monday,
-        tuesday: allocation.tuesday,
-        wednesday: allocation.wednesday,
-        thursday: allocation.thursday,
-        friday: allocation.friday,
-      }));
-
-      mappedAllocations.forEach((row) => {
-        const totalMinutes = row.monday + row.tuesday + row.wednesday + row.thursday + row.friday;
-        console.log("Total Minutes:", totalMinutes);
+      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
   
-        // Perform additional calculations or set the value as needed
-        // For example, set the totalMinutes value to the row
-        row.totalMinutes = totalMinutes;
-      });
 
-      setAllocations(mappedAllocations);
+      console.log("in projects, allocations", filteredAllocations);
+  
+      const fetchedProjects = await Promise.all(filteredAllocations.map(async (allocation) => {
+        try {
+          const fetchedProjects = await projectsApi.listProjects({
+            startDate: new Date()
+          });
+          const filteredProjects = fetchedProjects.filter(project => project.id === allocation.project);
+          console.log("filtered projects", filteredProjects)
+          return filteredProjects;
+        } catch (error) {
+          console.error('Error fetching time entries for project:', error);
+          return [];
+        }
+      }));
+  
+      const mergedProjects = fetchedProjects.flat();
+      console.log("projects in projects", mergedProjects)
+      setProjects(prevState => [...prevState, ...mergedProjects]);
+      return mergedProjects;
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      return [];
+    }
+  };
+
+  const getPersonAllocations = async () => {
+    if (!loggedInPerson) return [];
+  
+    try {
+      const fetchedAllocations = await allocationsApi.listAllocations({
+        startDate: new Date(),
+      });
+  
+      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
+      console.log("in allocations", filteredAllocations);
+      return filteredAllocations;
     } catch (error) {
       console.error("Error fetching allocations:", error);
+      return []; // Ensure that an empty array is returned in case of an error
     }
   };
 
   const getTasks = async () => {
-    if (loggedInPerson) {
-      try {
-        const fetchedTasks = await tasksApi.listProjectTasks({
-          projectId: 0
-        });
+    if (!loggedInPerson) return [];
+  
+    try {
+      const fetchedTasks = await tasksApi.listProjectTasks({
+        projectId: 0
+      });
+  
+      const filteredTasks = fetchedTasks.filter(task => task.assignedPersons.includes(loggedInPerson.id));
+  
+      
+      return filteredTasks;
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      return [];
+    }
+  };
 
-        const mappedTasks: Tasks[] = fetchedTasks.map((task: Tasks) => ({
-          id: task.id,
-          title: task.title,
-          assignees: task.assignedPersons,
-          projectId: task.projectId,
-          priority: task.highPriority,
-          estimate: task.estimate,
-          remaining: task.remaining     
-        }));
-        setTasks(mappedTasks);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
+  const getTimeEntries = async () => {
+    if (!loggedInPerson || !projects.length) return [];
+  
+    try {
+      const timeEntriesData = await Promise.all(projects.map(async (project) => {
+        if (!project.id) return [];
+  
+        try {
+          const fetchedTimeEntries = await timeEntriesApi.listProjectTimeEntries({
+            projectId: project.id
+          });
+  
+          return fetchedTimeEntries;
+        } catch (error) {
+          console.error('Error fetching time entries for project', error);
+          return [];
+        }
+      }));
+      
+      const flattenedTimeEntries = timeEntriesData.flat();
+      console.log("time entries",timeEntriesData);
+      return flattenedTimeEntries;
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      return [];
     }
   };
 
@@ -123,66 +163,83 @@ const SprintViewScreen = () => {
     });
   };
 
-  const allocationColumns = ["Project Name", "Allocation", "Time Entries", "Allocations Left"];
-  const projectColumns = ["Task Title", "Assigned Persons", "Status", "High Priority", "End Date"];
-
-  /* const calculateTotalHours = (allocation: Allocations) => {
-    
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
+  const calculateTotalHours = useMemo(
+    () => (allocation: Allocations | undefined) => {
+      if (!allocation) {
+        return {
+          total: '0h 0min',
+          timeEntries: '0h 0min',
+          allocationsLeft: '0h 0min',
+        };
+      }
   
-    const relatedTimeEntries = mockTimeEntries.filter(entry => entry.project === row.project);
-
-    const timeRegistered = relatedTimeEntries.reduce((total, entry) => total + entry.time_registered, 0);
-    const allocationsLeft = totalMinutes - timeRegistered;
+      const totalMinutes =
+        (allocation.monday || 0) +
+        (allocation.tuesday || 0) +
+        (allocation.wednesday || 0) +
+        (allocation.thursday || 0) +
+        (allocation.friday || 0);
   
-    const timeRegisteredHours = Math.floor(timeRegistered / 60);
-    const timeRegisteredMinutes = timeRegistered % 60;
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
   
-    const leftHours = Math.floor(allocationsLeft / 60);
-    const leftMinutes = allocationsLeft % 60;
+      const relevantTimeEntries = timeEntries.filter(
+        (entry) => entry.project === allocation.project
+      );
   
-    return {
-      total: totalMinutes,
-      timeEntries: timeRegistered,
-      allocationsLeft: allocationsLeft,
-    };
-  }; */
+      const timeRegistered = relevantTimeEntries.reduce((total, entry) => total + entry.timeRegistered, 0);
+  
+      const allocationsLeft = totalMinutes - timeRegistered;
+      const leftHours = Math.floor(allocationsLeft / 60);
+      const leftMinutes = allocationsLeft % 60;
+  
+      return {
+        total: `${hours}h ${minutes}min`,
+        timeEntries: `${Math.floor(timeRegistered / 60)}h ${
+          timeRegistered % 60
+        }min`,
+        allocationsLeft: `${leftHours}h ${leftMinutes}min`,
+      };
+    },
+    [timeEntries]
+  );
 
   const filteredTasks = (projectId: number) => {
     return tasks.filter((task) => task.projectId === projectId);
   };
 
+  const filteredTimeEntries = (projectId: number) => {
+    return timeEntries.filter(entry => entry.project === projectId);
+  };
+
   return (
     <>
       <h1>{strings.sprint.sprintviewScreen}</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <Card sx={{ margin: 0, width: '100%', marginBottom: '16px' }}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead style={{ backgroundColor: '#e0e0e0', fontWeight: 'bold' }}>
-                <TableRow>
-                  {allocationColumns.map((column) => (
-                    <TableCell key={column}>{column}</TableCell>
-                  ))}
+
+      <Card sx={{ margin: 0, width: '100%', marginBottom: '16px' }}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead style={{ backgroundColor: '#e0e0e0', fontWeight: 'bold' }}>
+              <TableRow>
+                <TableCell>My allocations</TableCell>
+                <TableCell>Allocation</TableCell>
+                <TableCell>Time Entries</TableCell>
+                <TableCell>Allocations Left</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allocations.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{projects.find(project => project.id === row.project)?.name}</TableCell>
+                  <TableCell>{calculateTotalHours(row).total}</TableCell>
+                  <TableCell>{filteredTimeEntries(row.project).reduce((acc, entry) => acc + entry.timeRegistered, 0)}</TableCell>
+                  <TableCell>{calculateTotalHours(row).allocationsLeft}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {allocations.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{projects.find(project => project.id === row.project)?.name}</TableCell>
-                    <TableCell>{calculateTotalHours(row).total}</TableCell>
-                    <TableCell>{calculateTotalHours(row).timeEntries}</TableCell>
-                    <TableCell>{calculateTotalHours(row).allocationsLeft}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
-      )}
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Card>
       {projects.map((project) => (
         <Card key={project.id} style={{ marginBottom: '16px' }}>
           <TableContainer component={Paper}>
@@ -195,22 +252,33 @@ const SprintViewScreen = () => {
                     </IconButton>
                     <span>{project.name}</span>
                   </TableCell>
-                  {projectColumns.map((column) => (
-                    <TableCell key={column}>{column}</TableCell>
-                  ))}
+                  <TableCell>Assignees</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Priority</TableCell>
+                  <TableCell>Estimate</TableCell>
+                  <TableCell>Time Entries</TableCell>
                 </TableRow>
               </TableHead>
               {!minimizedProjects.includes(project.id) && (
                 <TableBody>
-                  {filteredTasks(project.id).map((task) => (
-                    <TableRow key={task.id}>
-                      <TableCell>{task.title}</TableCell>
-                      <TableCell>{task.assignees}</TableCell>
-                      <TableCell>{project.status}</TableCell>
-                      <TableCell>{task.priority}</TableCell>
-                      <TableCell>{task.remaining}</TableCell>
-                    </TableRow>
-                  ))}
+                  {filteredTasks(project.id).map((task) => {
+                    const relevantTimeEntries = filteredTimeEntries(project.id);
+                    const relevantTimeEntry = relevantTimeEntries.find(entry => entry.task === task.id);
+                    const estimateHours = Math.floor(task.estimate / 60);
+                    const estimateMinutes = task.estimate % 60;
+                    const formattedEstimate = `${estimateHours}h ${estimateMinutes}min`;
+                    const timeRegistered = relevantTimeEntry ? relevantTimeEntry.timeRegistered : '-';
+                    return (
+                      <TableRow key={task.id}>
+                        <TableCell>{task.title}</TableCell>
+                        <TableCell>{task.assignedPersons}</TableCell>
+                        <TableCell>{project.status}</TableCell>
+                        <TableCell>{task.highPriority}</TableCell>
+                        <TableCell>{formattedEstimate}</TableCell>
+                        <TableCell>{timeRegistered}</TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               )}
             </Table>
