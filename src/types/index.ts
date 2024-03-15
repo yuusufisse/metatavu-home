@@ -152,9 +152,10 @@ export interface DateRange {
 /**
  * Type describing on call entry for a week
  */
-export interface OnCallEntry {
-  Year: string;
-  Week: string;
-  Paid: boolean;
+export interface OnCallCalendarEntry {
+  date: string;
+  person: string;
+  paid: boolean;
+  badgeColor: string;
 }
 
