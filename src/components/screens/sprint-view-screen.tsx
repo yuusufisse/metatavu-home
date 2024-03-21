@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import strings from "../../localization/strings";
-import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import { Card, IconButton } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useLambdasApi } from "../../hooks/use-api";
@@ -13,6 +13,7 @@ import { Allocations } from "../../generated/homeLambdasClient/models/Allocation
 import { Projects } from "../../generated/homeLambdasClient/models/Projects";
 import { Tasks } from "../../generated/homeLambdasClient/models/Tasks";
 import { TimeEntries } from "../../generated/homeLambdasClient/models/TimeEntries";
+import { DataGrid } from '@mui/x-data-grid';
 
 const SprintViewScreen = () => {
   const { allocationsApi, projectsApi, tasksApi, timeEntriesApi } = useLambdasApi();
@@ -46,6 +47,7 @@ const SprintViewScreen = () => {
         // Fetch time entries
         const timeEntriesData = await getTimeEntries();
         setTimeEntries(timeEntriesData);
+        //allocations.forEach(row => calculateTotalHours(row));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -54,39 +56,32 @@ const SprintViewScreen = () => {
     fetchData();
   }, [loggedInPerson]);
 
+  const handleError = (error: any, message: string) => {
+    console.error(message, error);
+    return [];
+  };
+
   const getProjects = async () => {
     if (!loggedInPerson) return [];
-  
-    try {
-      const fetchedAllocations = await allocationsApi.listAllocations({
-        startDate: new Date(),
-      });
-      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
-  
 
-      console.log("in projects, allocations", filteredAllocations);
-  
+    try {
+      const fetchedAllocations = await allocationsApi.listAllocations({ startDate: new Date() });
+      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
+
       const fetchedProjects = await Promise.all(filteredAllocations.map(async (allocation) => {
         try {
-          const fetchedProjects = await projectsApi.listProjects({
-            startDate: new Date()
-          });
-          const filteredProjects = fetchedProjects.filter(project => project.id === allocation.project);
-          console.log("filtered projects", filteredProjects)
-          return filteredProjects;
+          const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
+          return fetchedProjects.filter(project => project.id === allocation.project);
         } catch (error) {
-          console.error('Error fetching time entries for project:', error);
-          return [];
+          return handleError(error, 'Error fetching time entries for project:');
         }
       }));
-  
-      const mergedProjects = fetchedProjects.flat();
-      console.log("projects in projects", mergedProjects)
+
+      const mergedProjects = fetchedProjects.flatMap(project => project);
       setProjects(prevState => [...prevState, ...mergedProjects]);
       return mergedProjects;
     } catch (error) {
-      console.error("Error fetching projects:", error);
-      return [];
+      return handleError(error, "Error fetching projects:");
     }
   };
 
@@ -99,7 +94,6 @@ const SprintViewScreen = () => {
       });
   
       const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
-      console.log("in allocations", filteredAllocations);
       return filteredAllocations;
     } catch (error) {
       console.error("Error fetching allocations:", error);
@@ -115,10 +109,7 @@ const SprintViewScreen = () => {
         projectId: 0
       });
   
-      const filteredTasks = fetchedTasks.filter(task => task.assignedPersons.includes(loggedInPerson.id));
-  
-      
-      return filteredTasks;
+      return fetchedTasks.filter(task => task.assignedPersons.includes(loggedInPerson.id));
     } catch (error) {
       console.error("Error fetching tasks:", error);
       return [];
@@ -126,165 +117,127 @@ const SprintViewScreen = () => {
   };
 
   const getTimeEntries = async () => {
-    if (!loggedInPerson || !projects.length) return [];
+    if (!loggedInPerson) return [];
   
     try {
-      const timeEntriesData = await Promise.all(projects.map(async (project) => {
-        if (!project.id) return [];
+      const fetchedAllocations = await allocationsApi.listAllocations({ startDate: new Date() });
+      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
   
+      const fetchedTimeEntries = await Promise.all(filteredAllocations.map(async (allocation) => {
         try {
-          const fetchedTimeEntries = await timeEntriesApi.listProjectTimeEntries({
-            projectId: project.id
-          });
-  
+          const fetchedTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project });
           return fetchedTimeEntries;
         } catch (error) {
-          console.error('Error fetching time entries for project', error);
-          return [];
+          throw new Error(`Error fetching time entries for allocation ${allocation.id}: ${error}`);
         }
       }));
-      
-      const flattenedTimeEntries = timeEntriesData.flat();
-      console.log("time entries",timeEntriesData);
-      return flattenedTimeEntries;
+  
+      const mergedEntries = fetchedTimeEntries.flatMap(entries => entries);
+      return mergedEntries;
     } catch (error) {
-      console.error("Error fetching projects:", error);
-      return [];
+      throw new Error(`Error fetching time entries: ${error}`);
     }
   };
 
+  
+
   const toggleMinimizeProject = (projectId: number) => {
-    setMinimizedProjects((prevMinimizedProjects) => {
-      if (prevMinimizedProjects.includes(projectId)) {
-        return prevMinimizedProjects.filter((id) => id !== projectId);
-      } else {
-        return [...prevMinimizedProjects, projectId];
-      }
-    });
+    setMinimizedProjects(prevMinimizedProjects =>
+      prevMinimizedProjects.includes(projectId)
+        ? prevMinimizedProjects.filter(id => id !== projectId)
+        : [...prevMinimizedProjects, projectId]
+    );
   };
 
-  const calculateTotalHours = useMemo(
-    () => (allocation: Allocations | undefined) => {
-      if (!allocation) {
-        return {
-          total: '0h 0min',
-          timeEntries: '0h 0min',
-          allocationsLeft: '0h 0min',
-        };
-      }
+  const calculateTotalHours = useMemo(() => (allocation: Allocations, estimate: number) => {
+    const totalMinutes =
+      (allocation.monday || 0) + 
+      (allocation.tuesday || 0) + 
+      (allocation.wednesday || 0) + 
+      (allocation.thursday || 0) + 
+      (allocation.friday || 0);
   
-      const totalMinutes =
-        (allocation.monday || 0) +
-        (allocation.tuesday || 0) +
-        (allocation.wednesday || 0) +
-        (allocation.thursday || 0) +
-        (allocation.friday || 0);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
   
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
+    const relevantTimeEntries = timeEntries.filter(entry => entry.project === allocation.project);
+    const timeRegistered = relevantTimeEntries.reduce((total, entry) => total + entry.timeRegistered, 0);
   
-      const relevantTimeEntries = timeEntries.filter(
-        (entry) => entry.project === allocation.project
-      );
+    const allocationsLeft = totalMinutes - timeRegistered;
+    const leftHours = Math.floor(allocationsLeft / 60);
+    const leftMinutes = allocationsLeft % 60;
   
-      const timeRegistered = relevantTimeEntries.reduce((total, entry) => total + entry.timeRegistered, 0);
+    const estimateHours = Math.floor(estimate / 60);
+    const estimateMinutes = estimate % 60;
   
-      const allocationsLeft = totalMinutes - timeRegistered;
-      const leftHours = Math.floor(allocationsLeft / 60);
-      const leftMinutes = allocationsLeft % 60;
-  
-      return {
-        total: `${hours}h ${minutes}min`,
-        timeEntries: `${Math.floor(timeRegistered / 60)}h ${
-          timeRegistered % 60
-        }min`,
-        allocationsLeft: `${leftHours}h ${leftMinutes}min`,
-      };
-    },
-    [timeEntries]
-  );
+    return {
+      total: `${hours}h ${minutes}min`,
+      timeEntries: `${Math.floor(timeRegistered / 60)}h ${timeRegistered % 60}min`,
+      allocationsLeft: `${leftHours}h ${leftMinutes}min`,
+      estimate: `${estimateHours}h ${estimateMinutes}min`
+    };
+  }, [timeEntries]);
 
   const filteredTasks = (projectId: number) => {
     return tasks.filter((task) => task.projectId === projectId);
   };
 
-  const filteredTimeEntries = (projectId: number) => {
-    return timeEntries.filter(entry => entry.project === projectId);
-  };
-
   return (
     <>
       <h1>{strings.sprint.sprintviewScreen}</h1>
-
+  
       <Card sx={{ margin: 0, width: '100%', marginBottom: '16px' }}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead style={{ backgroundColor: '#e0e0e0', fontWeight: 'bold' }}>
-              <TableRow>
-                <TableCell>My allocations</TableCell>
-                <TableCell>Allocation</TableCell>
-                <TableCell>Time Entries</TableCell>
-                <TableCell>Allocations Left</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allocations.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{projects.find(project => project.id === row.project)?.name}</TableCell>
-                  <TableCell>{calculateTotalHours(row).total}</TableCell>
-                  <TableCell>{filteredTimeEntries(row.project).reduce((acc, entry) => acc + entry.timeRegistered, 0)}</TableCell>
-                  <TableCell>{calculateTotalHours(row).allocationsLeft}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DataGrid
+          rows={allocations}
+          columns={[
+            { field: 'projectName', headerName: 'My allocations', flex: 1, valueGetter: (params) => projects.find(project => project.id === params.row.project)?.name },
+            { field: 'allocation', headerName: 'Allocation', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).total },
+            { field: 'timeEntries', headerName: 'Time Entries', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).timeEntries },
+            { field: 'allocationsLeft', headerName: 'Allocations Left', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).allocationsLeft },
+          ]}
+        />
       </Card>
+  
       {projects.map((project) => (
-        <Card key={project.id} style={{ marginBottom: '16px' }}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead style={{ backgroundColor: '#e0e0e0', fontWeight: 'bold' }}>
-                <TableRow>
-                  <TableCell style={{ width: '500px' }}>
-                    <IconButton onClick={() => toggleMinimizeProject(project.id)}>
-                      {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                    <span>{project.name}</span>
-                  </TableCell>
-                  <TableCell>Assignees</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Priority</TableCell>
-                  <TableCell>Estimate</TableCell>
-                  <TableCell>Time Entries</TableCell>
-                </TableRow>
-              </TableHead>
-              {!minimizedProjects.includes(project.id) && (
-                <TableBody>
-                  {filteredTasks(project.id).map((task) => {
-                    const relevantTimeEntries = filteredTimeEntries(project.id);
-                    const relevantTimeEntry = relevantTimeEntries.find(entry => entry.task === task.id);
-                    const estimateHours = Math.floor(task.estimate / 60);
-                    const estimateMinutes = task.estimate % 60;
-                    const formattedEstimate = `${estimateHours}h ${estimateMinutes}min`;
-                    const timeRegistered = relevantTimeEntry ? relevantTimeEntry.timeRegistered : '-';
-                    return (
-                      <TableRow key={task.id}>
-                        <TableCell>{task.title}</TableCell>
-                        <TableCell>{task.assignedPersons}</TableCell>
-                        <TableCell>{project.status}</TableCell>
-                        <TableCell>{task.highPriority}</TableCell>
-                        <TableCell>{formattedEstimate}</TableCell>
-                        <TableCell>{timeRegistered}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              )}
-            </Table>
-          </TableContainer>
-        </Card>
-      ))}
+  <Card key={project.id} style={{ marginBottom: '16px' }}>
+    <IconButton onClick={() => toggleMinimizeProject(project.id)}>
+      {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+    </IconButton>
+    <span>{project.name}</span>
+    {!minimizedProjects.includes(project.id) && (
+      <DataGrid
+        rows={filteredTasks(project.id).map(task => ({
+          id: task.id,
+          title: task.title,
+          assignedPersons: task.assignedPersons ? task.assignedPersons.join(', ') : '-',
+          status: project.status,
+          priority: task.highPriority ? 'High' : 'Normal',
+          estimate: calculateTotalHours(task, task.estimate).estimate,
+          timeEntries: (() => {
+            const totalMinutes = timeEntries
+              .filter(entry => entry.task === task.id)
+              .map(entry => entry.timeRegistered)
+              .reduce((total, time) => total + time, 0);
+
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+
+            return `${hours}h ${minutes}min`;
+          })(),
+        }))}
+        columns={[
+          { field: 'title', headerName: 'Task Title', flex: 1 },
+          { field: 'assignedPersons', headerName: 'Assignees', flex: 1 },
+          { field: 'status', headerName: 'Status', flex: 1 },
+          { field: 'priority', headerName: 'Priority', flex: 1 },
+          { field: 'estimate', headerName: 'Estimate', flex: 1 },
+          { field: 'timeEntries', headerName: 'Time Entries', flex: 1 },
+        ]}
+        headerClassName={{ backgroundColor: '#e0e0e0', fontWeight: 'bold' }}
+      />
+    )}
+  </Card>
+))}
     </>
   );
 };
