@@ -186,11 +186,11 @@ const SprintViewScreen = () => {
     <>
       <h1>{strings.sprint.sprintviewScreen}</h1>
   
-      <Card sx={{ margin: 0, width: '100%', marginBottom: '16px' }}>
+      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <DataGrid
           rows={allocations}
           columns={[
-            { field: 'projectName', headerName: 'My allocations', flex: 1, valueGetter: (params) => projects.find(project => project.id === params.row.project)?.name },
+            { field: 'projectName', headerName: 'My allocations', flex: 2, valueGetter: (params) => projects.find(project => project.id === params.row.project)?.name },
             { field: 'allocation', headerName: 'Allocation', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).total },
             { field: 'timeEntries', headerName: 'Time Entries', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).timeEntries },
             { field: 'allocationsLeft', headerName: 'Allocations Left', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).allocationsLeft },
@@ -199,45 +199,44 @@ const SprintViewScreen = () => {
       </Card>
   
       {projects.map((project) => (
-  <Card key={project.id} style={{ marginBottom: '16px' }}>
-    <IconButton onClick={() => toggleMinimizeProject(project.id)}>
-      {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-    </IconButton>
-    <span>{project.name}</span>
-    {!minimizedProjects.includes(project.id) && (
-      <DataGrid
-        rows={filteredTasks(project.id).map(task => ({
-          id: task.id,
-          title: task.title,
-          assignedPersons: task.assignedPersons ? task.assignedPersons.join(', ') : '-',
-          status: project.status,
-          priority: task.highPriority ? 'High' : 'Normal',
-          estimate: calculateTotalHours(task, task.estimate).estimate,
-          timeEntries: (() => {
-            const totalMinutes = timeEntries
-              .filter(entry => entry.task === task.id)
-              .map(entry => entry.timeRegistered)
-              .reduce((total, time) => total + time, 0);
+        <Card key={project.id} sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+          <IconButton onClick={() => toggleMinimizeProject(project.id)}>
+            {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+          <span>{project.name}</span>
+          {minimizedProjects.includes(project.id) && (
+            <DataGrid
+              rows={filteredTasks(project.id).map(task => ({
+                id: task.id,
+                title: task.title,
+                assignedPersons: task.assignedPersons ? task.assignedPersons.join(', ') : '-',
+                status: project.status,
+                priority: task.highPriority ? 'High' : 'Normal',
+                estimate: calculateTotalHours(task, task.estimate).estimate,
+                timeEntries: (() => {
+                  const totalMinutes = timeEntries
+                    .filter(entry => entry.task === task.id)
+                    .map(entry => entry.timeRegistered)
+                    .reduce((total, time) => total + time, 0);
 
-            const hours = Math.floor(totalMinutes / 60);
-            const minutes = totalMinutes % 60;
+                  const hours = Math.floor(totalMinutes / 60);
+                  const minutes = totalMinutes % 60;
 
-            return `${hours}h ${minutes}min`;
-          })(),
-        }))}
-        columns={[
-          { field: 'title', headerName: 'Task Title', flex: 1 },
-          { field: 'assignedPersons', headerName: 'Assignees', flex: 1 },
-          { field: 'status', headerName: 'Status', flex: 1 },
-          { field: 'priority', headerName: 'Priority', flex: 1 },
-          { field: 'estimate', headerName: 'Estimate', flex: 1 },
-          { field: 'timeEntries', headerName: 'Time Entries', flex: 1 },
-        ]}
-        headerClassName={{ backgroundColor: '#e0e0e0', fontWeight: 'bold' }}
-      />
-    )}
-  </Card>
-))}
+                  return `${hours}h ${minutes}min`;
+                })(),
+              }))}
+              columns={[
+                { field: 'title', headerName: project.name, flex: 3 },
+                { field: 'assignedPersons', headerName: 'Assignees', flex: 1 },
+                { field: 'status', headerName: 'Status', flex: 1 },
+                { field: 'priority', headerName: 'Priority', flex: 1 },
+                { field: 'estimate', headerName: 'Estimate', flex: 1 },
+                { field: 'timeEntries', headerName: 'Time Entries', flex: 1 },
+              ]}
+            />
+          )}
+        </Card>
+      ))}
     </>
   );
 };
