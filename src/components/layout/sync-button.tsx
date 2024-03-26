@@ -25,11 +25,14 @@ const SyncButton = () => {
   const [persons, setPersons] = useAtom(personsAtom);
   const { personsApi, dailyEntriesApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
-  const personTotalTime = useAtomValue(personTotalTimeAtom);
+
+  useEffect(() => {
+    fetchPersons();
+  },[]);
 
   useEffect(() => {
     fetchDailyEntries();
-  },[persons]);
+  },[]);
 
   /**
    * fetching persons 
@@ -49,19 +52,16 @@ const SyncButton = () => {
    * fetching daily entries
    */
   const fetchDailyEntries = async () => {
-    await fetchPersons();
-    if (persons && personTotalTime) {
-      try {
-        const loggedInPerson = persons.find(
-          (person: Person) => person.keycloakId === userProfile?.id
-        );
-        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: loggedInPerson?.id || config.person.forecastUserIdOverride
-        });
-        setDailyEntries(fetchedDailyEntries);
-      } catch (error) {
-        setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
-      }
+    try {
+      const loggedInPerson = persons.find(
+        (person: Person) => person.keycloakId === userProfile?.id
+      );
+      const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+        personId: loggedInPerson?.id || config.person.forecastUserIdOverride
+      });
+      setDailyEntries(fetchedDailyEntries);
+    } catch (error) {
+      setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
   }
   
