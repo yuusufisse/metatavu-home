@@ -3,11 +3,10 @@ import { DateTime } from "luxon";
 import { SyntheticEvent, useState, useEffect  } from "react";
 import { useApi } from "../../hooks/use-api";
 import { errorAtom } from "../../atoms/error";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import SyncDialog from "../contexts/sync-handler";
 import strings from "../../localization/strings";
-import { dailyEntriesAtom, personTotalTimeAtom, personsAtom } from "../../atoms/person";
-import { Person } from "../../generated/client";
+import { DailyEntry, Person } from "../../generated/client";
 import config from "../../app/config";
 import { userProfileAtom } from "../../atoms/auth";
 /**
@@ -21,16 +20,13 @@ const SyncButton = () => {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
-  const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
-  const [persons, setPersons] = useAtom(personsAtom);
+  const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
+  const [persons, setPersons] = useState<Person[]>();
   const { personsApi, dailyEntriesApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
 
   useEffect(() => {
     fetchPersons();
-  },[]);
-
-  useEffect(() => {
     fetchDailyEntries();
   },[]);
 
@@ -38,13 +34,11 @@ const SyncButton = () => {
    * fetching persons 
    */
   const fetchPersons = async () => {
-    if (!persons) {
-      try {
-        const tempPersons = await personsApi.listPersons({});
-        setPersons(tempPersons);
-      } catch (error) {
-        setError(`${strings.error.fetchFailedGeneral}, ${error}`);
-      }
+    try {
+      const tempPersons = await personsApi.listPersons({});
+      setPersons(tempPersons);
+    } catch (error) {
+      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
     }
   }
 
@@ -53,7 +47,7 @@ const SyncButton = () => {
    */
   const fetchDailyEntries = async () => {
     try {
-      const loggedInPerson = persons.find(
+      const loggedInPerson = persons?.find(
         (person: Person) => person.keycloakId === userProfile?.id
       );
       const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
@@ -71,12 +65,12 @@ const SyncButton = () => {
   const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
   
-    if (dailyEntries.length) {
+    if (dailyEntries?.length) {
       dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
     } else {
       const fetchedDailyEntries = dailyEntries;
   
-      if (fetchedDailyEntries.length) {
+      if (fetchedDailyEntries?.length) {
         dailyEntryDates = fetchedDailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
       }
     }
