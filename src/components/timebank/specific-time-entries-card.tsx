@@ -16,7 +16,7 @@ import { theme } from "../../theme"
 import { errorAtom } from "../../atoms/error"
 
 interface Props {
-  selectedEmployeeId: number
+  selectedEmployeeId?: number
 }
 
 const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
@@ -53,7 +53,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
   /**
    * Gets the logged in person's daily entries.
    */
-  const getPersonDailyEntries = async (selectedEmployeeId: number) => {
+  const getPersonDailyEntries = async (selectedEmployeeId?: number) => {
     if (selectedEmployeeId) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
@@ -243,7 +243,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
             secondary={
               byRange.dailyEntries
                 ? getHoursAndMinutes(
-                    Number(selectedEntries?.reduce((prev, next) => prev + next.logged, 0 || 0) )
+                    Number(selectedEntries?.reduce((prev, next) => prev + next.logged, 0))
                   )
                 : getHoursAndMinutes(Number(personDailyEntry?.logged)||0)
             }

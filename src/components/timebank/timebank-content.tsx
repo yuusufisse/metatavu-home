@@ -57,9 +57,9 @@ const TimebankContent = ({
           </Card>
         </Grow>
       )}
-      <SummaryTimEntriesCard selectedEmployeeId={selectedEmployeeId || 0}/>
+      <SummaryTimEntriesCard selectedEmployeeId={selectedEmployeeId}/>
       <br />
-      <SpecificTimeEntriesCard selectedEmployeeId={selectedEmployeeId || 0}/> 
+      <SpecificTimeEntriesCard selectedEmployeeId={selectedEmployeeId}/> 
       <br />
     </>
   );

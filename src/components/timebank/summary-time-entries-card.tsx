@@ -14,7 +14,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 
 interface Props {
-  selectedEmployeeId: number
+  selectedEmployeeId?: number
 }
 
 const SummaryTimEntriesCard = ({selectedEmployeeId}:Props) => {
