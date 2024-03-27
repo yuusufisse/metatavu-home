@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { Person, PersonTotalTime, VacationType,DailyEntry } from "../generated/client";
+import { Person, PersonTotalTime, VacationType, DailyEntry } from "../generated/client";
 import { ReactNode } from "react";
 
 /**
@@ -153,9 +153,8 @@ export interface DateRange {
  * Type describing on call entry for a week
  */
 export interface OnCallCalendarEntry {
-  date: string;
+  date: string | null;
   person: string;
   paid: boolean;
   badgeColor: string;
 }
-
