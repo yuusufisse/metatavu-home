@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { OnCall } from "../../generated/client";
 import { useAtomValue } from "jotai";
 import { oncallAtom } from "../../atoms/oncall";
 import { Checkbox } from "@mui/material";
+import { OnCallCalendarEntry } from "../../types";
 
 /**
  * Component properties
  */
 interface Props {
   selectedYear: number;
+  updatePaidStatus: (entry: OnCallCalendarEntry) => void;
 }
 
 const OnCallListView = ({ selectedYear }: Props) => {
   const onCallData = useAtomValue(oncallAtom);
-  console.log(onCallData);
 
   return (
     <div>

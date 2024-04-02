@@ -144,7 +144,7 @@ const OnCallCalendarScreen = () => {
         />
       );
 
-    return <OnCallListView selectedYear={selectedYear}/>;
+    return <OnCallListView selectedYear={selectedYear} />;
   };
 
   const selectEntryToUpdate = (onCallEntries: OnCallCalendarEntry[], date: DateTime) => {
