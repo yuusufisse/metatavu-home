@@ -122,7 +122,7 @@ const TimebankViewAllScreen = () => {
    *
    * @param person person with total time data
    */
-  const populatePersonTotalTimeData = async (
+  const getPersonTotalTimeData = async (
     person: PersonWithTotalTime
   ): Promise<PersonWithTotalTime> => {
     let totalTime: PersonTotalTime[] = [];
@@ -154,7 +154,7 @@ const TimebankViewAllScreen = () => {
           .map((person) => ({
             person: person
           }))
-          .map(populatePersonTotalTimeData)
+          .map(getPersonTotalTimeData)
       );
 
       setPersonsWithTotalTime(personsTimeTotals);
