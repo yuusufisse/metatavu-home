@@ -47,7 +47,6 @@ const SprintViewScreen = () => {
         // Fetch time entries
         const timeEntriesData = await getTimeEntries();
         setTimeEntries(timeEntriesData);
-        //allocations.forEach(row => calculateTotalHours(row));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -93,8 +92,7 @@ const SprintViewScreen = () => {
         startDate: new Date(),
       });
   
-      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
-      return filteredAllocations;
+      return fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
     } catch (error) {
       console.error("Error fetching allocations:", error);
       return []; // Ensure that an empty array is returned in case of an error
@@ -125,15 +123,13 @@ const SprintViewScreen = () => {
   
       const fetchedTimeEntries = await Promise.all(filteredAllocations.map(async (allocation) => {
         try {
-          const fetchedTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project });
-          return fetchedTimeEntries;
+          return await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project });
         } catch (error) {
           throw new Error(`Error fetching time entries for allocation ${allocation.id}: ${error}`);
         }
       }));
   
-      const mergedEntries = fetchedTimeEntries.flatMap(entries => entries);
-      return mergedEntries;
+      return fetchedTimeEntries.flatMap(entries => entries);
     } catch (error) {
       throw new Error(`Error fetching time entries: ${error}`);
     }
@@ -198,45 +194,49 @@ const SprintViewScreen = () => {
         />
       </Card>
   
-      {projects.map((project) => (
-        <Card key={project.id} sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
-          <IconButton onClick={() => toggleMinimizeProject(project.id)}>
-            {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-          <span>{project.name}</span>
-          {minimizedProjects.includes(project.id) && (
-            <DataGrid
-              rows={filteredTasks(project.id).map(task => ({
-                id: task.id,
-                title: task.title,
-                assignedPersons: task.assignedPersons ? task.assignedPersons.join(', ') : '-',
-                status: project.status,
-                priority: task.highPriority ? 'High' : 'Normal',
-                estimate: calculateTotalHours(task, task.estimate).estimate,
-                timeEntries: (() => {
-                  const totalMinutes = timeEntries
-                    .filter(entry => entry.task === task.id)
-                    .map(entry => entry.timeRegistered)
-                    .reduce((total, time) => total + time, 0);
+      {projects.map((project) => {
+        const timeEntriesData = filteredTasks(project.id).map(task => {
+          const totalMinutes = timeEntries
+            .filter(entry => entry.task === task.id)
+            .map(entry => entry.timeRegistered)
+            .reduce((total, time) => total + time, 0);
 
-                  const hours = Math.floor(totalMinutes / 60);
-                  const minutes = totalMinutes % 60;
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = totalMinutes % 60;
 
-                  return `${hours}h ${minutes}min`;
-                })(),
-              }))}
-              columns={[
-                { field: 'title', headerName: project.name, flex: 3 },
-                { field: 'assignedPersons', headerName: 'Assignees', flex: 1 },
-                { field: 'status', headerName: 'Status', flex: 1 },
-                { field: 'priority', headerName: 'Priority', flex: 1 },
-                { field: 'estimate', headerName: 'Estimate', flex: 1 },
-                { field: 'timeEntries', headerName: 'Time Entries', flex: 1 },
-              ]}
-            />
-          )}
-        </Card>
-      ))}
+          return {
+            id: task.id,
+            title: task.title,
+            assignedPersons: task.assignedPersons ? task.assignedPersons.join(', ') : '-',
+            status: project.status,
+            priority: task.highPriority ? 'High' : 'Normal',
+            estimate: calculateTotalHours(task, task.estimate).estimate,
+            timeEntries: `${hours}h ${minutes}min`,
+          };
+        });
+
+        return (
+          <Card key={project.id} sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
+            <IconButton onClick={() => toggleMinimizeProject(project.id)}>
+              {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+            <span>{project.name}</span>
+            {minimizedProjects.includes(project.id) && (
+              <DataGrid
+                rows={timeEntriesData}
+                columns={[
+                  { field: 'title', headerName: project.name, flex: 3 },
+                  { field: 'assignedPersons', headerName: 'Assignees', flex: 1 },
+                  { field: 'status', headerName: 'Status', flex: 1 },
+                  { field: 'priority', headerName: 'Priority', flex: 1 },
+                  { field: 'estimate', headerName: 'Estimate', flex: 1 },
+                  { field: 'timeEntries', headerName: 'Time Entries', flex: 1 },
+                ]}
+              />
+            )}
+          </Card>
+        );
+      })}
     </>
   );
 };
