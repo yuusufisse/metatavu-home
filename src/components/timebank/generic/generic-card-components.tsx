@@ -14,7 +14,7 @@ export const TimebankCard = styled(Card)({
  * @param title title string
  * @returns timebank card title component
  */
-export const renderTimebankCardTitle = (title: string) => (
+export const TimebankCardTitle = (title: string) => (
   <Typography
     gutterBottom
     variant="h6"

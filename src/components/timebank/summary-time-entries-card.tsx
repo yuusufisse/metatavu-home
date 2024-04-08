@@ -1,5 +1,5 @@
 import { Grow, Container, Box, Typography, FormControl, TextField, MenuItem, CircularProgress, List, ListItem, ListItemText } from "@mui/material"
-import {TimebankCard, TimebankCardFlexBox, renderTimebankCardTitle} from "./common-card-elements"
+import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
 import strings from "../../localization/strings";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
 import { Timespan } from "../../generated/client";
@@ -13,24 +13,35 @@ import { personTotalTimeAtom } from "../../atoms/person";
 import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 
+/**
+ * Component properties
+ */
 interface Props {
   selectedEmployeeId?: number
 }
 
-const SummaryTimEntriesCard = ({selectedEmployeeId}:Props) => {
-  const [timespan, setTimespan] = useState<Timespan>("ALL_TIME");
+/**
+ * Component that contains card with the summary of time entries chart
+ *
+ * @param props Component properties
+ */
+const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
+  const [timespan, setTimespan] = useState<Timespan>(Timespan.ALL_TIME);
   const [loading, setLoading] = useState(false);
   const { personsApi } = useApi();
   const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
   const setError = useSetAtom(errorAtom);
+
   useEffect(() => {
     if (selectedEmployeeId) {
       getPersonTotalTime(selectedEmployeeId);
     }
-  }, [selectedEmployeeId,timespan]);
+  }, [selectedEmployeeId, timespan]);
 
   /**
    * Gets person's total time data.
+   * 
+   * @param selectedPersonId selected person id
    */
   const getPersonTotalTime = async (selectedPersonId: number) => {
     setLoading(true);
@@ -77,8 +88,8 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}:Props) => {
   );
 
   /**
- * Renders overview chart and list item elements containing total time summaries
- */
+  * Renders overview chart and list item elements containing total time summaries
+  */
   const renderOverViewChart = () => {
     if (loading) {
       return (
@@ -126,39 +137,37 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}:Props) => {
   };
 
   return (
-    <>
-      <Grow in>
-        <TimebankCard>
-          {renderTimebankCardTitle(strings.timebank.barChartDescription)}
-          <Container sx={{ p: 3 }}>
-            <Box
+    <Grow in>
+      <TimebankCard>
+        {TimebankCardTitle(strings.timebank.barChartDescription)}
+        <Container sx={{ p: 3 }}>
+          <Box
+            sx={{
+              textAlign: "center",
+              scale: "150%",
+              mb: 3
+            }}
+          >
+            <Typography>{strings.timebank.timeperiod}</Typography>
+            <Typography sx={{ color: "grey" }}>
+              {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <FormControl
               sx={{
-                textAlign: "center",
-                scale: "150%",
-                mb: 3
+                width: "50%",
+                marginRight: "1%",
+                textAlign: "center"
               }}
             >
-              <Typography>{strings.timebank.timeperiod}</Typography>
-              <Typography sx={{ color: "grey" }}>
-                {formatTimePeriod(personTotalTime?.timePeriod?.split(","))}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <FormControl
-                sx={{
-                  width: "50%",
-                  marginRight: "1%",
-                  textAlign: "center"
-                }}
-              >
-                {renderTimespanSelect()}
-              </FormControl>
-            </Box>
-            <TimebankCardFlexBox>{renderOverViewChart()}</TimebankCardFlexBox>
-          </Container>
-        </TimebankCard>
-      </Grow>
-    </>
+              {renderTimespanSelect()}
+            </FormControl>
+          </Box>
+          <TimebankCardFlexBox>{renderOverViewChart()}</TimebankCardFlexBox>
+        </Container>
+      </TimebankCard>
+    </Grow>
   )
 }
 

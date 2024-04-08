@@ -1,13 +1,6 @@
 import config from "../app/config";
-import {
-  Configuration,
-  ConfigurationParameters,
-  DailyEntriesApi,
-  PersonsApi,
-  SynchronizeApi,
-  VacationRequestsApi,
-  VacationRequestStatusApi
-} from "../generated/client";
+import { Configuration, ConfigurationParameters, DailyEntriesApi, PersonsApi, SynchronizeApi, VacationRequestsApi, VacationRequestStatusApi } from "../generated/client";
+import { AllocationsApi, Configuration as HomeLambdasConfiguration, ConfigurationParameters as HomeLambdasConfigurationParameters, ProjectsApi, TasksApi, TimeEntriesApi} from "../generated/homeLambdasClient"
 
 /**
  * Generic type that accepts parameters within the @ConfigurationParameters interface
@@ -23,8 +16,11 @@ type ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
  * @returns ConfigConstructor instance set up with params
  */
 const getConfigurationFactory =
-  <T>(ConfigConstructor: ConfigConstructor<T>, basePath: string, accessToken?: string) =>
-  () => {
+  <T extends {}>(
+    ConfigConstructor: ConfigConstructor<T>, 
+    basePath: string, 
+    accessToken?: string
+  ) => () => {
     return new ConfigConstructor({
       basePath: basePath,
       accessToken: accessToken
@@ -46,5 +42,22 @@ export const getApiClient = (accessToken?: string) => {
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
     vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())
+  };
+};
+
+/**
+* Metatavu Home Lambda API client with request functions to several endpoints 
+* 
+* @param accessToken Access token required for authentication
+* @returns Configured API request functions
+*/
+export const getLambdasClient  = (accessToken?: string) => {
+  const getConfigurationLambdas = getConfigurationFactory(Configuration, config.lambdas.baseUrl, accessToken);
+
+  return {
+      allocationsApi: new AllocationsApi(getConfiguration()),
+      projectsApi: new ProjectsApi(getConfiguration()),
+      tasksApi: new TasksApi(getConfiguration()),
+      timeEntriesApi: new TimeEntriesApi(getConfiguration())
   };
 };

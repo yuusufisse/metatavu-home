@@ -1,5 +1,5 @@
 import { Grow, Container, CircularProgress, List, ListItem, ListItemText, FormControlLabel, Checkbox } from "@mui/material"
-import {TimebankCard, TimebankCardFlexBox, renderTimebankCardTitle} from "./common-card-elements"
+import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
 import strings from "../../localization/strings"
 import { getHoursAndMinutes } from "../../utils/time-utils"
 import TimebankMultiBarChart from "../charts/timebank-multibar-chart"
@@ -15,11 +15,19 @@ import { useApi } from "../../hooks/use-api"
 import { theme } from "../../theme"
 import { errorAtom } from "../../atoms/error"
 
+/**
+ * Component properties
+ */
 interface Props {
   selectedEmployeeId?: number
 }
 
-const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
+/**
+ * Component that contains card with the specific time entry or range charts
+ *
+ * @param props Component properties
+ */
+const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
   const [loading, setLoading] = useState(false);
   const setError = useSetAtom(errorAtom);
   const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
@@ -40,20 +48,14 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await getPersonDailyEntries(selectedEmployeeId);
-      setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
-      setLoading(false);
-    }
-    fetchData();
-    
-  }, [selectedEmployeeId,byRange.dailyEntries]);
+    getPersonDailyEntries(selectedEmployeeId);
+  }, [selectedEmployeeId, byRange.dailyEntries]);
 
   /**
    * Gets the logged in person's daily entries.
    */
   const getPersonDailyEntries = async (selectedEmployeeId?: number) => {
+    setLoading(true);
     if (selectedEmployeeId) {
       try {
         const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
@@ -67,6 +69,8 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
     }
+    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
+    setLoading(false);
   };
 
   /**
@@ -229,7 +233,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}:Props) => {
   return (
     <Grow in>
       <TimebankCard>
-        {renderTimebankCardTitle(strings.timebank.pieChartDescription)}
+        {TimebankCardTitle(strings.timebank.pieChartDescription)}
         <Container sx={{ p: 3 }}>
           <ListItemText
             sx={{
