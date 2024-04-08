@@ -76,7 +76,7 @@ const TimebankScreen = () => {
           timespan: timespan || Timespan.ALL_TIME,
           before: DateTime.now().minus({ days: 1 }).toJSDate()
         });
-      setPersonTotalTime(fetchedPersonTotalTime[0]);
+        setPersonTotalTime(fetchedPersonTotalTime[0]);
       } catch (error) {
         setError(`${strings.error.totalTimeFetch}, ${error}`);
       }
@@ -130,20 +130,16 @@ const TimebankScreen = () => {
    * @param selectedDate selected date from DatePicker
    */
   const handleDailyEntryChange = async (selectedDate: DateTime) => {
-      try {
-        const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-          personId: selectedEmployeeId
-        });
-        setDailyEntries(fetchedDailyEntries);
-        setPersonDailyEntry(
-          fetchedDailyEntries.find(
-            (item) =>
-              item.person === selectedEmployeeId &&
-              DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
-          )
-        );
-      } catch (error) {
-        setError(`${strings.error.dailyEntriesFetch}, ${error}`);
+    try {
+      const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
+        personId: selectedEmployeeId
+      });
+      setDailyEntries(fetchedDailyEntries);
+      setPersonDailyEntry(
+        fetchedDailyEntries.find((item) => item.person === selectedEmployeeId && DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate())
+      );
+    } catch (error) {
+      setError(`${strings.error.dailyEntriesFetch}, ${error}`);
     }
   };
 

@@ -47,7 +47,7 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
               return renderCustomizedLabel(entry);
             }
           }}
-        labelLine={false}
+          labelLine={false}
         >     
           {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index]} />
