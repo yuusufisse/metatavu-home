@@ -418,12 +418,7 @@ const VacationRequestsScreen = () => {
 
   return (
     <>
-    {/* TODO: Uncomment when the vacations-days-utils have been updated */}
-      {/* <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}> */}
-        {/* <Box> */}
-          {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
-        {/* </Box> */}
-      {/* </Card> */}
+      {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
           deleteVacationRequests={deleteVacationRequests}

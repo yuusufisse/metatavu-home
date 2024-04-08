@@ -115,6 +115,9 @@ const ToolbarForm = ({
     }
   }, [toolbarFormMode]);
 
+  /**
+ * Checks if the vacation type is either sickness or childsickness.
+ */
   const isSicknessOrChildSickness =
   vacationData.type === VacationType.SICKNESS || vacationData.type === VacationType.CHILD_SICKNESS;
   const dateTimeTomorrow = isSicknessOrChildSickness
