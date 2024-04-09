@@ -166,9 +166,10 @@ const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: 
 }
 
 /**
- * Get vacation days if week number is integer
+ * Get vacation days based on the number of weeks, considering if it starts from a working day
  *
  * @param startsFromWorkingDay represents if choosen start date is the starting of work week
+ * @param weeks number of actual weeks
  */
 const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: number) => {
   if (!startsFromWorkingDay) return weeks * 6;
@@ -176,7 +177,7 @@ const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: 
 }
 
 /**
- * Calculate number of working days in range of week indexes
+ * Calculate number of working days within a range of week indexes
  *
  * @param startWeekIndex represents start week date of range
  * @param endWeekIndex represents end week date of range
