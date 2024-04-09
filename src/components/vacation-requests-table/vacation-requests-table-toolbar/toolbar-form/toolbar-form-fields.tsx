@@ -1,6 +1,5 @@
 import { Button, FormControl, FormLabel, MenuItem, TextField } from "@mui/material";
 import getVacationTypeByString from "../../../../utils/vacation-type-utils";
-import { VacationType } from "../../../../generated/client";
 import { ChangeEvent, useEffect } from "react";
 import DateRangePicker from "../../../generics/date-range-picker";
 import { DateRange, ToolbarFormModes, VacationData } from "../../../../types";
@@ -13,7 +12,7 @@ import { useAtom, useAtomValue } from "jotai";
 import config from "../../../../app/config";
 import { userProfileAtom } from "../../../../atoms/auth";
 import { personsAtom } from "../../../../atoms/person";
-import { Person } from "../../../../generated/client";
+import { VacationType, Person } from "../../../../generated/client";
 import { daysOfWeek } from "../../../constants";
 
 /**

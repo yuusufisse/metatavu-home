@@ -150,30 +150,42 @@ const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: 
   const startsFromWorkingDay = workingWeek[vacationDayStart-1];
 
   if (vacationDayStart === vacationDayEnd) {
-    if (!startsFromWorkingDay) return weeks * 6;
-    // vacation starts and ends on working day
-    return weeks * 6 + 1;
+    return calculateVacationDurationInWeeks(startsFromWorkingDay, weeks);
   }
 
   if (vacationDayEnd > vacationDayStart) {
-    let takenWorkingDays = 0;
-    // calculate the number of vacation days from start till the end of vacation if the number of weeks is not an integer
-    for (let i = vacationDayStart; i <= vacationDayEnd; i++){
-      if (workingWeek[i-1]) takenWorkingDays+=1;
-    }
+    let takenWorkingDays = countWorkingWeekDaysInRange(vacationDayStart, vacationDayEnd, workingWeek);
     if (takenWorkingDays === workDays) takenWorkingDays = 6;
     return weeks * 6 + takenWorkingDays;
   }
 
-  let takenWorkingDays = 0;
-  // calculate the number of vacation days from start vacation day till the end of working week if the number of weeks is not an integer
-  for (let i = vacationDayStart; i <= endWeek; i++){
-    if (workingWeek[i-1]) takenWorkingDays+=1;
-  }
-  // calculate the number of vacation days from start working week till the end of vacation if the number of weeks is not an integer
-  for (let i = startWeek; i <= vacationDayEnd; i++){
-    if (workingWeek[i-1]) takenWorkingDays+=1;
-  }
+  let takenWorkingDays = countWorkingWeekDaysInRange(vacationDayStart, endWeek, workingWeek) + 
+  countWorkingWeekDaysInRange(startWeek, vacationDayEnd, workingWeek);
   if (takenWorkingDays === workDays) takenWorkingDays = 6;
   return weeks * 6 + takenWorkingDays;
+}
+
+/**
+ * Get vacation days if week number is integer
+ *
+ * @param startsFromWorkingDay represents if choosen start date is the starting of work week
+ */
+const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: number) => {
+  if (!startsFromWorkingDay) return weeks * 6;
+  return weeks * 6 + 1;
+}
+
+/**
+ * Calculate number of working days in range of week indexes
+ *
+ * @param startWeekIndex represents start week date of range
+ * @param endWeekIndex represents end week date of range
+ * @param workingWeek list of booleans representing which days are working days
+ */
+const countWorkingWeekDaysInRange = (startWeekIndex: number, endWeekIndex: number, workingWeek: boolean[]) => {
+  let takenWorkingDays = 0;
+  for (let i = startWeekIndex; i <= endWeekIndex; i++){
+    if (workingWeek[i-1]) takenWorkingDays+=1;
+  }
+  return takenWorkingDays;
 }
