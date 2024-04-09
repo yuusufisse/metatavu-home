@@ -23,7 +23,6 @@ const env = cleanEnv(import.meta.env, {
   VITE_KEYCLOAK_CLIENT_ID: str(),
   VITE_API_BASE_URL: url(),
   VITE_FORECAST_USER_ID_OVERRIDE: num({ default: undefined }),
-  VITE_PIPEDRIVE_URL: url(),
   VITE_HOME_LAMBDAS_BASE_URL: url()
 });
 
