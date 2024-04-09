@@ -65,27 +65,6 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
 };
 
 /**
- * Get time difference in days
- *
- * @param startDate start date
- * @param endDate end date
- * @returns days
- */
-export const getVacationDurationInDays = (startDate: DateTime, endDate: DateTime) => {
-  let days;
-  if (startDate && endDate) {
-    const diff = endDate.diff(startDate, ["days"]);
-    days = Number(Math.round(diff.days));
-  }
-  if ((days && days < 1) || !days) {
-    days = 1;
-  } else {
-    days += 1;
-  }
-  return days;
-};
-
-/**
  * Calculates vacation days
  *
  * @param vacationDayStart DateTime vacation start date
@@ -150,15 +129,18 @@ const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: 
   const startsFromWorkingDay = workingWeek[vacationDayStart-1];
 
   if (vacationDayStart === vacationDayEnd) {
+    // if number of weeks is an integer
     return calculateVacationDurationInWeeks(startsFromWorkingDay, weeks);
   }
 
   if (vacationDayEnd > vacationDayStart) {
+    // calculate the number of vacation days from start till the end of vacation if the number of weeks is not an integer
     let takenWorkingDays = countWorkingWeekDaysInRange(vacationDayStart, vacationDayEnd, workingWeek);
     if (takenWorkingDays === workDays) takenWorkingDays = 6;
     return weeks * 6 + takenWorkingDays;
   }
 
+  // calculate the number of vacation days from start vacation day till the end of working week and from start working week till the end of vacation if the number of weeks is not an integer
   let takenWorkingDays = countWorkingWeekDaysInRange(vacationDayStart, endWeek, workingWeek) + 
   countWorkingWeekDaysInRange(startWeek, vacationDayEnd, workingWeek);
   if (takenWorkingDays === workDays) takenWorkingDays = 6;
@@ -168,8 +150,8 @@ const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: 
 /**
  * Get vacation days based on the number of weeks, considering if it starts from a working day
  *
- * @param startsFromWorkingDay represents if choosen start date is the starting of work week
- * @param weeks number of actual weeks
+ * @param startsFromWorkingDay represents if the choosen start date is a working day
+ * @param weeks number of weeks
  */
 const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: number) => {
   if (!startsFromWorkingDay) return weeks * 6;
