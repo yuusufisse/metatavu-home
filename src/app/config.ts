@@ -23,7 +23,7 @@ const env = cleanEnv(import.meta.env, {
   VITE_KEYCLOAK_CLIENT_ID: str(),
   VITE_API_BASE_URL: url(),
   VITE_FORECAST_USER_ID_OVERRIDE: num({ default: undefined }),
-  VITE_PIPEDRIVE_URL: url()
+  VITE_HOME_LAMBDAS_BASE_URL: url()
 });
 
 const config: Config = {
@@ -36,7 +36,7 @@ const config: Config = {
     baseUrl: env.VITE_API_BASE_URL
   },
   lambdas: {
-    baseUrl: env.VITE_PIPEDRIVE_URL
+    baseUrl: env.VITE_HOME_LAMBDAS_BASE_URL
   },
   person: {
     forecastUserIdOverride: env.VITE_FORECAST_USER_ID_OVERRIDE
