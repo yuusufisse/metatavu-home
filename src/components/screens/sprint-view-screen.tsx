@@ -30,7 +30,7 @@ const SprintViewScreen = () => {
   const [projects, setProjects] = useState<Projects[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [myTasks, showMyTasks] = useState<boolean>(true);
+  const [myTasks, setMyTasks] = useState<boolean>(true);
   const [filter, setFilter] = useState<string>("");
 
   /**
@@ -186,7 +186,7 @@ const SprintViewScreen = () => {
    * Featute for task filtering 
    */
   const handleOnClick = () => {
-    showMyTasks(!myTasks);
+    setMyTasks(!myTasks);
     setFilter("");
   }
   
@@ -257,9 +257,9 @@ const SprintViewScreen = () => {
             {strings.sprint.unAllocated}<span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}> {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
             </Box>
           </Card>
-          {projects.map((project) => {
+          {projects.map((project, index) => {
             return (
-            <TaskTable project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
+            <TaskTable key={index} project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
             )
           }
           )}
