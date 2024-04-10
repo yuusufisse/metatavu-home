@@ -257,9 +257,9 @@ const SprintViewScreen = () => {
             {strings.sprint.unAllocated}<span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}> {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
             </Box>
           </Card>
-          {projects.map((project, index) => {
+          {projects.map((project) => {
             return (
-            <TaskTable key={index} project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
+            <TaskTable key={project.id} project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
             )
           }
           )}
