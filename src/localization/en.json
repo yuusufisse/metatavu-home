@@ -59,7 +59,23 @@
   },
   "sprint": {
     "sprintview": "Sprint view",
-    "sprintviewScreen": "Sprint view Screen"
+    "myAllocation": "My allocations",
+    "allocation": "Allocation",
+    "timeEntries": "Time Entries",
+    "allocationLeft": "Allocations Left",
+    "assigned": "Assignee",
+    "taskStatus": "Status",
+    "taskPriority": "Priority",
+    "estimatedTime": "Estimate",
+    "taskName": "Tasks",
+    "showMyTasks": "My tasks",
+    "onHold": "On hold",
+    "inProgress": "In progress",
+    "allTasks" : "All tasks",
+    "notFound" : "No result found",
+    "projectName": "Project",
+    "search": "Search for a task, project or assignee",
+    "unAllocated": "Unallocated Time:"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",

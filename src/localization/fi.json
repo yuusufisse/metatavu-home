@@ -59,7 +59,23 @@
   },
   "sprint": {
     "sprintview": "Sprintinäkymä",
-    "sprintviewScreen": "Sprintinäkymä näyttö"
+    "myAllocation": "Minun allokointi",
+    "allocation": "Allokointi ",
+    "timeEntries": "Aikamerkinnät",
+    "allocationLeft": "Jäljellä oleva alkoatio",
+    "assigned": "Luovutuksensaaja",
+    "taskStatus": "Tila",
+    "taskPriority": "Prioriteetti",
+    "estimatedTime": "Arvio",
+    "taskName": "Tehtävä",
+    "showMyTasks": "Tehtäväni ",
+    "onHold": "Odotuksessa",
+    "inProgress": "Käynnissä",
+    "allTasks" : "Kaikki tehtävät",
+    "notFound" : "Tulosta ei löytynyt",
+    "projectName": "Projekti",
+    "search": "Hae tehtävää, projektia tai vastaanottajaa",
+    "unAllocated": "Kohdistamaton aika:"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",

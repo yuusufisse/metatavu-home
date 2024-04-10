@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import strings from "../../localization/strings";
-import { Card, IconButton } from '@mui/material';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useState, useEffect } from 'react';
+import { Card,FormControl, InputLabel, MenuItem, Select, CircularProgress, Typography, Box} from '@mui/material';
 import { useLambdasApi } from "../../hooks/use-api";
 import { Person } from "../../generated/client";
 import { useAtomValue } from "jotai";
@@ -11,232 +8,263 @@ import config from "../../app/config";
 import { userProfileAtom } from "../../atoms/auth";
 import { Allocations } from "../../generated/homeLambdasClient/models/Allocations";
 import { Projects } from "../../generated/homeLambdasClient/models/Projects";
-import { Tasks } from "../../generated/homeLambdasClient/models/Tasks";
 import { TimeEntries } from "../../generated/homeLambdasClient/models/TimeEntries";
 import { DataGrid } from '@mui/x-data-grid';
+import { getHoursAndMinutes } from '../../utils/time-utils';
+import TaskTable from '../sprint-view-table/tasks-table';
+import strings from "../../localization/strings";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
+/**
+ * Sprint view screen component
+ */
 const SprintViewScreen = () => {
-  const { allocationsApi, projectsApi, tasksApi, timeEntriesApi } = useLambdasApi();
+  const { allocationsApi, projectsApi, timeEntriesApi } = useLambdasApi();
   const persons: Person[] = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const loggedInPerson = persons.find(
     (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-  
   const [allocations, setAllocations] = useState<Allocations[]>([]);
   const [projects, setProjects] = useState<Projects[]>([]);
-  const [tasks, setTasks] = useState<Tasks[]>([]);
-  const [timeEntries, setTimeEntries] = useState<TimeEntries[]>([]);
-  const [minimizedProjects, setMinimizedProjects] = useState<number[]>([]);
+  const [timeEntries, setTimeEntries] = useState<number[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [myTasks, showMyTasks] = useState<boolean>(true);
+  const [filter, setFilter] = useState<string>("");
 
+  /**
+   * Get project data if user is logged in otherwise endless loading
+   */
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
-      try {
-        // Fetch person allocations
-        const allocationsData = await getPersonAllocations();
-        setAllocations(allocationsData);
-        
-        // Fetch projects
-        const projectsData = await getProjects();
-        setProjects(projectsData);
-        
-        // Fetch tasks
-        const tasksData = await getTasks();
-        setTasks(tasksData);
-        
-        // Fetch time entries
-        const timeEntriesData = await getTimeEntries();
-        setTimeEntries(timeEntriesData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      await getPersonAllocations();
+      await getProjects();
+      await getTimeEntries();
+      setLoading(false);
     };
-  
-    fetchData();
+    if (loggedInPerson) {
+      fetchData();
+    }
   }, [loggedInPerson]);
 
-  const handleError = (error: any, message: string) => {
-    console.error(message, error);
-    return [];
-  };
-
+  /**
+   * Get project allocations for logged in user 
+   */
   const getProjects = async () => {
-    if (!loggedInPerson) return [];
-
-    try {
-      const fetchedAllocations = await allocationsApi.listAllocations({ startDate: new Date() });
-      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
-
-      const fetchedProjects = await Promise.all(filteredAllocations.map(async (allocation) => {
-        try {
-          const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
-          return fetchedProjects.filter(project => project.id === allocation.project);
-        } catch (error) {
-          return handleError(error, 'Error fetching time entries for project:');
-        }
-      }));
-
-      const mergedProjects = fetchedProjects.flatMap(project => project);
-      setProjects(prevState => [...prevState, ...mergedProjects]);
-      return mergedProjects;
-    } catch (error) {
-      return handleError(error, "Error fetching projects:");
+    if (loggedInPerson) {
+      const projects : Projects[] = [];
+      try {
+        const fetchedAllocations = await allocationsApi.listAllocations({
+          startDate: new Date(), 
+          personId: loggedInPerson.id.toString()});
+        const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
+        fetchedAllocations.forEach((allocation)=> {
+          const projectFound = fetchedProjects.find((project)=> project.id === allocation.project);
+          projectFound && projects.push(projectFound);
+        })
+        setProjects(projects);
+      } catch (error) {
+        console.error(error, "Error fetching projects:");
+      }
     }
   };
-
   const getPersonAllocations = async () => {
-    if (!loggedInPerson) return [];
-  
-    try {
-      const fetchedAllocations = await allocationsApi.listAllocations({
-        startDate: new Date(),
-      });
-  
-      return fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
-    } catch (error) {
-      console.error("Error fetching allocations:", error);
-      return []; // Ensure that an empty array is returned in case of an error
+    if (loggedInPerson) {
+      try {
+        const fetchedAllocations = await allocationsApi.listAllocations({
+          startDate: new Date(),
+          personId: loggedInPerson.id.toString()
+        });
+        setAllocations(fetchedAllocations);
+      } catch (error) {
+        console.error("Error fetching allocations:", error);
+      }
     }
   };
 
-  const getTasks = async () => {
-    if (!loggedInPerson) return [];
-  
-    try {
-      const fetchedTasks = await tasksApi.listProjectTasks({
-        projectId: 0
-      });
-  
-      return fetchedTasks.filter(task => task.assignedPersons.includes(loggedInPerson.id));
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      return [];
-    }
-  };
-
+  /**
+   * Get project time entries for logged in user 
+   */
   const getTimeEntries = async () => {
-    if (!loggedInPerson) return [];
-  
-    try {
-      const fetchedAllocations = await allocationsApi.listAllocations({ startDate: new Date() });
-      const filteredAllocations = fetchedAllocations.filter(allocation => allocation.person === loggedInPerson.id);
-  
-      const fetchedTimeEntries = await Promise.all(filteredAllocations.map(async (allocation) => {
-        try {
-          return await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project });
-        } catch (error) {
-          throw new Error(`Error fetching time entries for allocation ${allocation.id}: ${error}`);
-        }
-      }));
-  
-      return fetchedTimeEntries.flatMap(entries => entries);
-    } catch (error) {
-      throw new Error(`Error fetching time entries: ${error}`);
+    if (loggedInPerson) {
+      try {
+        const fetchedAllocations = await allocationsApi.listAllocations({ startDate: new Date() , personId: loggedInPerson.id.toString()});  
+        const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async (allocation) => {
+          try {
+            const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project || 0});
+            let totalMinutes = 0;
+            totalTimeEntries.forEach((timeEntry: TimeEntries)=> {
+              if (loggedInPerson && timeEntry.person===loggedInPerson.id) {
+                totalMinutes+=(timeEntry.timeRegistered || 0)
+              }})
+            return totalMinutes;
+          } catch (error) {
+            console.error(`Error fetching time entries for allocation ${allocation.id}: ${error}`);
+            return 0;
+          }
+        }));
+        setTimeEntries(fetchedTimeEntries);
+      } catch (error) {
+        console.error(`Error fetching time entries: ${error}`);
+      }
     }
   };
 
-  
-
-  const toggleMinimizeProject = (projectId: number) => {
-    setMinimizedProjects(prevMinimizedProjects =>
-      prevMinimizedProjects.includes(projectId)
-        ? prevMinimizedProjects.filter(id => id !== projectId)
-        : [...prevMinimizedProjects, projectId]
-    );
-  };
-
-  const calculateTotalHours = useMemo(() => (allocation: Allocations, estimate: number) => {
+  /**
+   * Calculate project total time spent on the project by the user
+   */
+  const totalAllocations = (allocation: Allocations) => {
     const totalMinutes =
       (allocation.monday || 0) + 
       (allocation.tuesday || 0) + 
       (allocation.wednesday || 0) + 
       (allocation.thursday || 0) + 
       (allocation.friday || 0);
-  
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-  
-    const relevantTimeEntries = timeEntries.filter(entry => entry.project === allocation.project);
-    const timeRegistered = relevantTimeEntries.reduce((total, entry) => total + entry.timeRegistered, 0);
-  
-    const allocationsLeft = totalMinutes - timeRegistered;
-    const leftHours = Math.floor(allocationsLeft / 60);
-    const leftMinutes = allocationsLeft % 60;
-  
-    const estimateHours = Math.floor(estimate / 60);
-    const estimateMinutes = estimate % 60;
-  
-    return {
-      total: `${hours}h ${minutes}min`,
-      timeEntries: `${Math.floor(timeRegistered / 60)}h ${timeRegistered % 60}min`,
-      allocationsLeft: `${leftHours}h ${leftMinutes}min`,
-      estimate: `${estimateHours}h ${estimateMinutes}min`
-    };
-  }, [timeEntries]);
+    return totalMinutes * 2;
+  }
 
-  const filteredTasks = (projectId: number) => {
-    return tasks.filter((task) => task.projectId === projectId);
-  };
+  /**
+   * Get total time required to complete the project 
+   */
+  const getTotalTimeEntries = (allocation: Allocations) => {
+    if (timeEntries.length!==0) {
+      return timeEntries[allocations.indexOf(allocation)];
+    }
+    return 0;
+  }
 
+  /**
+   * Calculate the remaining time of project completion
+   */
+  const timeLeft = (allocation: Allocations) => {
+    return totalAllocations(allocation) - (getTotalTimeEntries(allocation) || 0)
+  }
+
+  /**
+   * Get project name
+   */
+  const getProjectName = (allocation: Allocations) => {
+    if (projects.length !== 0) {
+      return projects[allocations.indexOf(allocation)]?.name;
+    }
+    return "";
+  }
+
+  /**
+   * Get project color
+   */
+  const getProjectColor = (allocation: Allocations) => {
+    if (projects.length !== 0) {
+      return projects[allocations.indexOf(allocation)]?.color;
+    }
+    return "";
+  }
+
+  /**
+   * Calculate total unallocated time for the user 
+   */
+  const unallocatedTime = (allocation: Allocations[]) => {
+      const totalAllocatedTime = allocation.reduce((total, allocation) => total + totalAllocations(allocation), 0);
+      const calculateWorkingLoad = (person?: Person) => {
+        if (!person) {
+          return 0;
+        }
+        const totalMinutes =
+          (person.monday || 0) + 
+          (person.tuesday || 0) + 
+          (person.wednesday || 0) + 
+          (person.thursday || 0) + 
+          (person.friday || 0);
+        return totalMinutes * 2;
+      }
+      return calculateWorkingLoad(loggedInPerson) - totalAllocatedTime;
+    }
+
+  /**
+   * Featute for task filtering 
+   */
+  const handleOnClick = () => {
+    showMyTasks(!myTasks);
+    setFilter("");
+  }
+  
   return (
     <>
-      <h1>{strings.sprint.sprintviewScreen}</h1>
-  
-      <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
-        <DataGrid
-          rows={allocations}
-          columns={[
-            { field: 'projectName', headerName: 'My allocations', flex: 2, valueGetter: (params) => projects.find(project => project.id === params.row.project)?.name },
-            { field: 'allocation', headerName: 'Allocation', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).total },
-            { field: 'timeEntries', headerName: 'Time Entries', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).timeEntries },
-            { field: 'allocationsLeft', headerName: 'Allocations Left', flex: 1, valueGetter: (params) => calculateTotalHours(params.row).allocationsLeft },
-          ]}
-        />
-      </Card>
-  
-      {projects.map((project) => {
-        const timeEntriesData = filteredTasks(project.id).map(task => {
-          const totalMinutes = timeEntries
-            .filter(entry => entry.task === task.id)
-            .map(entry => entry.timeRegistered)
-            .reduce((total, time) => total + time, 0);
-
-          const hours = Math.floor(totalMinutes / 60);
-          const minutes = totalMinutes % 60;
-
-          return {
-            id: task.id,
-            title: task.title,
-            assignedPersons: task.assignedPersons ? task.assignedPersons.join(', ') : '-',
-            status: project.status,
-            priority: task.highPriority ? 'High' : 'Normal',
-            estimate: calculateTotalHours(task, task.estimate).estimate,
-            timeEntries: `${hours}h ${minutes}min`,
-          };
-        });
-
-        return (
-          <Card key={project.id} sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
-            <IconButton onClick={() => toggleMinimizeProject(project.id)}>
-              {minimizedProjects.includes(project.id) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-            <span>{project.name}</span>
-            {minimizedProjects.includes(project.id) && (
-              <DataGrid
-                rows={timeEntriesData}
-                columns={[
-                  { field: 'title', headerName: project.name, flex: 3 },
-                  { field: 'assignedPersons', headerName: 'Assignees', flex: 1 },
-                  { field: 'status', headerName: 'Status', flex: 1 },
-                  { field: 'priority', headerName: 'Priority', flex: 1 },
-                  { field: 'estimate', headerName: 'Estimate', flex: 1 },
-                  { field: 'timeEntries', headerName: 'Time Entries', flex: 1 },
-                ]}
-              />
-            )}
+      {loading || !loggedInPerson ? (
+        
+        <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
+          <Box sx={{textAlign: 'center'}} >
+          <Typography>{strings.placeHolder.pleaseWait}</Typography>
+          <CircularProgress sx={{ scale: "150%", mt: "5%", mb: "5%"}} />
+          </Box>
+        </Card>
+      ) : (
+        <>
+          <FormControlLabel control={<Switch checked={myTasks}/>} label={strings.sprint.showMyTasks}  onClick={() =>  handleOnClick()}/>
+          <FormControl size="small"  style= {{width: "200px", float:"right"}}>
+          <InputLabel disableAnimation={false} >{strings.sprint.taskStatus}</InputLabel>
+            <Select 
+              style={{borderRadius: "30px", marginBottom: "15px" , float:  "right"}}
+              label={strings.sprint.taskStatus}             
+            >   
+              <MenuItem key={1} value={strings.sprint.onHold} onClick={() => setFilter("On hold")} >
+                {strings.sprint.onHold} 
+              </MenuItem>
+              <MenuItem key={2} value={strings.sprint.inProgress} onClick={() => setFilter("In progress")}>
+                {strings.sprint.inProgress}
+              </MenuItem>
+              <MenuItem key={3} value={strings.sprint.allTasks} onClick={() => setFilter("")}>
+                {strings.sprint.allTasks}
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" , marginTop: "16px",
+            '& .negative-value': {
+              color: 'red',
+            }}}>
+            <DataGrid            
+              disableColumnFilter
+              hideFooter={true}            
+              rows={allocations}
+              columns={[
+                { 
+                  field: 'projectName',                  
+                  filterable: false,
+                  headerName: strings.sprint.projectName, 
+                  flex: 2, valueGetter: (params) => getProjectName(params.row),
+                  renderCell:(params) => <><Box style={{marginRight:"10px"}} component="span" sx={{ bgcolor: getProjectColor(params.row), width: 45, height: 25, borderRadius: "5px"}} />{getProjectName(params.row)}</>
+                },
+                { 
+                  field: 'allocation', 
+                  headerName: strings.sprint.allocation, 
+                  flex: 1, valueGetter: (params) => getHoursAndMinutes(totalAllocations(params.row))
+                },
+                { 
+                  field: 'timeEntries', 
+                  headerName: strings.sprint.timeEntries, 
+                  flex: 1, valueGetter: (params) => getHoursAndMinutes(getTotalTimeEntries(params.row) || 0),
+                },
+                { 
+                  field: 'allocationsLeft', 
+                  headerName: strings.sprint.allocationLeft, 
+                  flex: 1, cellClassName: (params) =>  timeLeft(params.row) < 0 ? "negative-value" : "", valueGetter: (params) => getHoursAndMinutes(timeLeft(params.row))
+                },
+              ]}             
+            />
+            <Box sx={{ p: 1, display: 'flex',marginLeft:"2px" }}>
+            {strings.sprint.unAllocated}<span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}> {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
+            </Box>
           </Card>
-        );
-      })}
+          {projects.map((project) => {
+            return (
+            <TaskTable project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
+            )
+          }
+          )}
+        </>
+      )}
     </>
   );
 };

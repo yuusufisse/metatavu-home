@@ -85,7 +85,23 @@ export interface Localized extends LocalizedStringsMethods {
    */
   sprint: {
     sprintview: string;
-    sprintviewScreen: string
+    myAllocation: string,
+    allocation: string,
+    timeEntries: string,
+    allocationLeft: string,
+    assigned: string,
+    taskStatus: string,
+    taskPriority: string,
+    estimatedTime: string,
+    taskName: string,
+    showMyTasks: string,
+    onHold: string,
+    inProgress: string,
+    allTasks: string,
+    notFound: string,
+    projectName: string,
+    search: string,
+    unAllocated: string
   };
   /**
    * General time-related expressions
