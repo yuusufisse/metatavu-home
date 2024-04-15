@@ -148,3 +148,12 @@ export interface DateRange {
   start: DateTime;
   end: DateTime;
 }
+
+/**
+ * Type describing chart data for spring view
+ */
+export interface SprintViewChartData {
+	projectName: string,
+	timeAllocated: number,
+	color: string
+}

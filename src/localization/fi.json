@@ -59,7 +59,8 @@
   },
   "sprint": {
     "sprintview": "Sprintinäkymä",
-    "sprintviewScreen": "Sprintinäkymä näyttö"
+    "sprintviewScreen": "Sprintinäkymä näyttö",
+    "noAllocations": "Ei sprinttijakoa"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",

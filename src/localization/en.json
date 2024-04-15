@@ -59,7 +59,8 @@
   },
   "sprint": {
     "sprintview": "Sprint view",
-    "sprintviewScreen": "Sprint view Screen"
+    "sprintviewScreen": "Sprint view Screen",
+    "noAllocations": "No allocations"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
