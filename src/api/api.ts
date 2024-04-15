@@ -8,6 +8,13 @@ import {
   VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
+import { 
+  AllocationsApi, 
+  Configuration as LambdaConfiguration, 
+  ProjectsApi, 
+  TasksApi,
+  TimeEntriesApi
+} from "../generated/homeLambdasClient"
 
 /**
  * Generic type that accepts parameters within the @ConfigurationParameters interface
@@ -23,11 +30,8 @@ type ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
  * @returns ConfigConstructor instance set up with params
  */
 const getConfigurationFactory =
-  <T extends {}>(
-    ConfigConstructor: ConfigConstructor<T>, 
-    basePath: string, 
-    accessToken?: string
-  ) => () => {
+  <T>(ConfigConstructor: ConfigConstructor<T>, basePath: string, accessToken?: string) =>
+  () => {
     return new ConfigConstructor({
       basePath: basePath,
       accessToken: accessToken
@@ -49,5 +53,22 @@ export const getApiClient = (accessToken?: string) => {
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
     vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())
+  };
+};
+
+/**
+* Metatavu Home Lambda API client with request functions to several endpoints 
+* 
+* @param accessToken Access token required for authentication
+* @returns Configured API request functions
+*/
+export const getLambdasApiClient  = (accessToken?: string) => {
+  const getConfiguration = getConfigurationFactory(LambdaConfiguration, config.lambdas.baseUrl, accessToken);
+
+  return {
+    allocationsApi: new AllocationsApi(getConfiguration()),
+    projectsApi: new ProjectsApi(getConfiguration()),
+    tasksApi: new TasksApi(getConfiguration()),
+    timeEntriesApi: new TimeEntriesApi(getConfiguration())
   };
 };
