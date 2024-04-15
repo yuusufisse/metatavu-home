@@ -26,9 +26,9 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const [open, setOpen] = useState<boolean>(false);
 
-/**
- * Gather tasks and time entries when project is available and update changes appeared
- */
+  /**
+   * Gather tasks and time entries when project is available and update changes appeared
+   */
   useEffect(() => {
     const fetchData = async () => {
       if (project) {
@@ -38,9 +38,9 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
     fetchData();
   }, [project, loggedInpersonId, filter]);
 
-/**
- * Get total time entries for the task
- */
+  /**
+   * Get tasks and total time entries  
+   */
   const getTasksAndTimeEntries = async () => {
     try {
       let fetchedTasks = await tasksApi.listProjectTasks({projectId: project.id});
@@ -48,13 +48,10 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
         fetchedTasks = fetchedTasks.filter((task)=> task.assignedPersons?.includes(loggedInpersonId ));
       }
       setTasks(fetchedTasks);
-    /**
-     * Fetch time entries for each task
-     */
       const fetchedTimeEntries = await Promise.all(fetchedTasks.map(async (task) => {
         try {
           if (project.id ){           
-            const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: project.id,taskId: task.id });//
+            const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: project.id, taskId: task.id });
             let totalMinutes = 0;
             totalTimeEntries.forEach((timeEntry: TimeEntries)=> {
               if (loggedInpersonId && timeEntry.person===loggedInpersonId) {
@@ -68,7 +65,7 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
           }
           return 0;
         } catch (error) {
-          console.error(`Error fetching time entries for allocation ${task.id}: ${error}`);
+          console.error(`Error fetching time entries for task ${task.id}: ${error}`);
           return 0;
         }
       }));
@@ -78,9 +75,9 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
     }
   };
 
-/**
- * Retrieve total time entries for a task
- */
+  /**
+   * Retrieve total time entries for a task
+   */
   const getTotalTimeEntries = (task: Tasks) => {
     if (timeEntries.length!==0) {
       return timeEntries[tasks.indexOf(task)];

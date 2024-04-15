@@ -50,7 +50,7 @@ const SprintViewScreen = () => {
   }, [loggedInPerson]);
 
   /**
-   * Get project allocations for logged in user 
+   * Get project names for logged in user 
    */
   const getProjects = async () => {
     if (loggedInPerson) {
@@ -70,6 +70,10 @@ const SprintViewScreen = () => {
       }
     }
   };
+
+  /**
+   * Get allocations for logged in user 
+   */
   const getPersonAllocations = async () => {
     if (loggedInPerson) {
       try {
@@ -196,16 +200,17 @@ const SprintViewScreen = () => {
         
         <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
           <Box sx={{textAlign: 'center'}} >
-          <Typography>{strings.placeHolder.pleaseWait}</Typography>
-          <CircularProgress sx={{ scale: "150%", mt: "5%", mb: "5%"}} />
+            <Typography>{strings.placeHolder.pleaseWait}</Typography>
+            <CircularProgress sx={{ scale: "150%", mt: "5%", mb: "5%"}} />
           </Box>
         </Card>
       ) : (
         <>
-          <FormControlLabel control={<Switch checked={myTasks}/>} label={strings.sprint.showMyTasks}  onClick={() =>  handleOnClick()}/>
           <FormControl size="small"  style= {{width: "200px", float:"right"}}>
-          <InputLabel disableAnimation={false} >{strings.sprint.taskStatus}</InputLabel>
-            <Select 
+            <FormControlLabel control={<Switch checked={myTasks}/>} label={strings.sprint.showMyTasks}  onClick={() =>  handleOnClick()}/>
+            <InputLabel disableAnimation={false} >{strings.sprint.taskStatus}</InputLabel>
+            <Select
+              defaultValue={strings.sprint.allTasks}
               style={{borderRadius: "30px", marginBottom: "15px" , float:  "right"}}
               label={strings.sprint.taskStatus}             
             >   
@@ -254,7 +259,7 @@ const SprintViewScreen = () => {
               ]}             
             />
             <Box sx={{ p: 1, display: 'flex',marginLeft:"2px" }}>
-            {strings.sprint.unAllocated}<span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}> {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
+              {strings.sprint.unAllocated}<span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}> {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
             </Box>
           </Card>
           {projects.map((project) => {
