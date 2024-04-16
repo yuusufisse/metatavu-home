@@ -1,14 +1,14 @@
 import { Button, Box, LinearProgress, Snackbar, Alert } from "@mui/material";
 import { DateTime } from "luxon";
 import { SyntheticEvent, useState, useEffect  } from "react";
-import { useApi } from "../../hooks/use-api";
-import { errorAtom } from "../../atoms/error";
+import { useApi } from "src/hooks/use-api";
+import { errorAtom } from "src/atoms/error";
 import { useAtomValue, useSetAtom } from "jotai";
 import SyncDialog from "../contexts/sync-handler";
-import strings from "../../localization/strings";
-import { DailyEntry, Person } from "../../generated/client";
-import config from "../../app/config";
-import { userProfileAtom } from "../../atoms/auth";
+import strings from "src/localization/strings";
+import { DailyEntry, Person } from "src/generated/client";
+import config from "src/app/config";
+import { userProfileAtom } from "src/atoms/auth";
 /**
  * Sync button component
  */

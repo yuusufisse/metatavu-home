@@ -1,6 +1,6 @@
 import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
-import strings from "../../../localization/strings";
+import strings from "src/localization/strings";
 
 /**
  * Component properties

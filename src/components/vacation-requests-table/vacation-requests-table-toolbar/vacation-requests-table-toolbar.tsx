@@ -3,18 +3,18 @@ import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import { GridRowId } from "@mui/x-data-grid";
-import { VacationsDataGridRow, ToolbarFormModes, VacationData } from "../../../types";
+import { VacationsDataGridRow, ToolbarFormModes, VacationData } from "src/types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../contexts/confirmation-handler";
-import strings from "../../../localization/strings";
-import { getToolbarTitle } from "../../../utils/toolbar-utils";
+import strings from "src/localization/strings";
+import { getToolbarTitle } from "src/utils/toolbar-utils";
 import { useAtomValue } from "jotai";
-import { languageAtom } from "../../../atoms/language";
+import { languageAtom } from "src/atoms/language";
 import { useLocation } from "react-router-dom";
-import { VacationRequestStatuses } from "../../../generated/client";
+import { VacationRequestStatuses } from "src/generated/client";
 import UpdateStatusButton from "./toolbar-update-status-button";
-import UserRoleUtils from "../../../utils/user-role-utils";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Component properties
