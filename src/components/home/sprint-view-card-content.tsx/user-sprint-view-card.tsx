@@ -23,7 +23,7 @@ const UserSprintViewCard = () => {
   );
   const [allocations, setAllocations] = useState<Allocations[]>([]);
 	const [projects, setProjects] = useState<(Projects|undefined)[]>([]);
-	const [timeEntries, setTimeEntries] = useState<(TimeEntries[]| undefined)[]>([]);
+	const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const {allocationsApi, projectsApi, timeEntriesApi} = useLambdasApi();
 
 	useEffect(()=>{
@@ -31,7 +31,7 @@ const UserSprintViewCard = () => {
 	},[loggedInPerson]);
 
 	/**
-   * Get allocations and projects
+   * Get allocations, projects and time entries
    */
 	const getAllocationsAndProjects = async () => {
 		setLoading(true);
@@ -43,17 +43,25 @@ const UserSprintViewCard = () => {
 					return fetchedProjects.find((project) => project.id === allocation.project) || undefined;
 				});
 
-				const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async(allocation) => {
+				const totalTimeEntries = await Promise.all(fetchedAllocations.map(async(allocation) => {
 					try {
-						return await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project || 0, startDate: allocation.startDate, endDate: allocation.endDate});
+						const fetchedTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project || 0, startDate: allocation.startDate, endDate: allocation.endDate});
+						let totalMinutes = 0;
+            fetchedTimeEntries.forEach((timeEntry: TimeEntries) => {
+              if (loggedInPerson && timeEntry.person === loggedInPerson.id) {
+                totalMinutes += (timeEntry.timeRegistered || 0)
+              }
+            }); 
+            return totalMinutes;
 					} catch (error){
 						console.error("Error fetching time entries:", error);
+						
 					}
+					return 0;
 				}));
-				console.log(fetchedTimeEntries);
 				setAllocations(fetchedAllocations);
 				setProjects(findProjects);
-				setTimeEntries(fetchedTimeEntries);
+				setTimeEntries(totalTimeEntries);
 			} catch (error) {
 				console.error("Error fetching data: ", error);
 			}
@@ -74,25 +82,13 @@ const UserSprintViewCard = () => {
 		+ (allocation.friday || 0);
 		return totalTime * 2;
 	}
-
-	/**
-   * Calculates total time entries
-   *
-   * @param timeEntries time entries data
-   */
-	const calculateTotalTimeEntries = (timeEntries?: TimeEntries[]) => {
-		if (!timeEntries) return 0;
-		let totalTime = 0;
-		timeEntries.forEach((timeEntry)=>{totalTime += timeEntry.timeRegistered || 0})
-		return totalTime;
-	}
 	
 	/**
    * Combines allocations and projects data for chart
    */
 	const createChartData = (): SprintViewChartData[] => {
 		return allocations.map((allocation, index) => {
-			return {projectName: projects[index]?.name || "", timeAllocated: calculateAllocationTime(allocation) || 0, timeEntries: calculateTotalTimeEntries(timeEntries[index]), color: projects[index]?.color || ""};
+			return {projectName: projects[index]?.name || "", timeAllocated: calculateAllocationTime(allocation) || 0, timeEntries: timeEntries[index], color: projects[index]?.color || ""};
 		})
 	}
 

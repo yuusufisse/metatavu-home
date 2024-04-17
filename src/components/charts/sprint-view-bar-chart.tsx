@@ -34,6 +34,11 @@ const SprintViewBarChart = ({chartData}: Props) => {
 						<Cell key={`cell-${index}`} fill={entry.color} />
 					))}
 				</Bar>
+				<Bar dataKey={"timeEntries"} name={"Time entries"}	barSize={40} stackId="stackedBar"	fill={theme.palette.grey.A700}>
+					{chartData.map((entry, index) => (
+						<Cell key={`cell-${index}`} fill={entry.color+"80"} />
+					))}
+				</Bar>
 			</BarChart>
 		</ResponsiveContainer>
 	);
