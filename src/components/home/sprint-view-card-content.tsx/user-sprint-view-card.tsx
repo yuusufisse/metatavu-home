@@ -5,7 +5,7 @@ import { userProfileAtom } from "../../../atoms/auth";
 import { Person } from "../../../generated/client";
 import config from "../../../app/config";
 import { useLambdasApi } from "../../../hooks/use-api";
-import { Allocations, Projects } from "../../../generated/homeLambdasClient";
+import { Allocations, Projects, TimeEntries } from "../../../generated/homeLambdasClient";
 import { CardContent, CircularProgress, Typography } from "@mui/material";
 import SprintViewBarChart from "../../charts/sprint-view-bar-chart";
 import { SprintViewChartData } from "../../../types";
@@ -23,7 +23,8 @@ const UserSprintViewCard = () => {
   );
   const [allocations, setAllocations] = useState<Allocations[]>([]);
 	const [projects, setProjects] = useState<(Projects|undefined)[]>([]);
-  const {allocationsApi, projectsApi} = useLambdasApi();
+	const [timeEntries, setTimeEntries] = useState<(TimeEntries[]| undefined)[]>([]);
+  const {allocationsApi, projectsApi, timeEntriesApi} = useLambdasApi();
 
 	useEffect(()=>{
 		getAllocationsAndProjects();
@@ -41,8 +42,18 @@ const UserSprintViewCard = () => {
 				const findProjects =fetchedAllocations.map( (allocation)=>{
 					return fetchedProjects.find((project) => project.id === allocation.project) || undefined;
 				});
+
+				const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async(allocation) => {
+					try {
+						return await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project || 0, startDate: allocation.startDate, endDate: allocation.endDate});
+					} catch (error){
+						console.error("Error fetching time entries:", error);
+					}
+				}));
+				console.log(fetchedTimeEntries);
 				setAllocations(fetchedAllocations);
 				setProjects(findProjects);
+				setTimeEntries(fetchedTimeEntries);
 			} catch (error) {
 				console.error("Error fetching data: ", error);
 			}
@@ -63,13 +74,25 @@ const UserSprintViewCard = () => {
 		+ (allocation.friday || 0);
 		return totalTime * 2;
 	}
+
+	/**
+   * Calculates total time entries
+   *
+   * @param timeEntries time entries data
+   */
+	const calculateTotalTimeEntries = (timeEntries?: TimeEntries[]) => {
+		if (!timeEntries) return 0;
+		let totalTime = 0;
+		timeEntries.forEach((timeEntry)=>{totalTime += timeEntry.timeRegistered || 0})
+		return totalTime;
+	}
 	
 	/**
    * Combines allocations and projects data for chart
    */
 	const createChartData = (): SprintViewChartData[] => {
 		return allocations.map((allocation, index) => {
-			return {projectName: projects[index]?.name || "", timeAllocated: calculateAllocationTime(allocation) || 0, color: projects[index]?.color || ""};
+			return {projectName: projects[index]?.name || "", timeAllocated: calculateAllocationTime(allocation) || 0, timeEntries: calculateTotalTimeEntries(timeEntries[index]), color: projects[index]?.color || ""};
 		})
 	}
 

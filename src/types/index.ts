@@ -155,5 +155,6 @@ export interface DateRange {
 export interface SprintViewChartData {
 	projectName: string,
 	timeAllocated: number,
+  timeEntries: number,
 	color: string
 }
