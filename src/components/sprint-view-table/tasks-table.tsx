@@ -98,6 +98,12 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
       <span>{project ? project.name : ""}</span>
       {open && tasks.length !== 0 && 
         <DataGrid
+          sx={{
+            borderTop: 0,
+            borderLeft: 0,
+            borderRight: 0,
+            borderBottom: 0,
+          }}
           autoHeight={true}
           localeText={{ noResultsOverlayLabel: strings.sprint.notFound }}
           disableColumnFilter
