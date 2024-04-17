@@ -28,7 +28,9 @@ export const partTimeWorkerNotMonWedTestCases = [
 
 export const oneDayWorkerTestCases = [
   ["2024-04-03", "2024-04-10", 12],
-  ["2024-04-03", "2024-04-03", 6]
+  ["2024-04-03", "2024-04-03", 6],
+  ["2024-04-02", "2024-04-03", 6],
+  ["2024-04-02", "2024-04-02", 0]
 ];
 
 export const nonWeeekWorkerTestCases = [
