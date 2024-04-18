@@ -10,12 +10,11 @@ import { Allocations } from "../../generated/homeLambdasClient/models/Allocation
 import { Projects } from "../../generated/homeLambdasClient/models/Projects";
 import { TimeEntries } from "../../generated/homeLambdasClient/models/TimeEntries";
 import { DataGrid } from '@mui/x-data-grid';
-import { getHoursAndMinutes } from '../../utils/time-utils';
+import { getHoursAndMinutes, getSprintEnd, getSprintStart } from '../../utils/time-utils';
 import TaskTable from '../sprint-view-table/tasks-table';
 import strings from "../../localization/strings";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-
 /**
  * Sprint view screen component
  */
@@ -32,6 +31,8 @@ const SprintViewScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [myTasks, setMyTasks] = useState<boolean>(true);
   const [filter, setFilter] = useState<string>("");
+  const sprintStartDate = getSprintStart((new Date()).toISOString()).toLocaleString();
+  const sprintEndDate = getSprintEnd((new Date()).toISOString()).toLocaleString();
 
   /**
    * Get project data if user is logged in otherwise endless loading
@@ -226,7 +227,7 @@ const SprintViewScreen = () => {
                 { 
                   field: 'projectName',                  
                   filterable: false,
-                  headerName: strings.sprint.projectName, 
+                  headerName: strings.sprint.myAllocation, 
                   flex: 2, valueGetter: (params) => getProjectName(params.row),
                   renderCell:(params) => <><Box minWidth="45px" style={{marginRight:"10px"}} component="span" sx={{ bgcolor: getProjectColor(params.row), height: 25, borderRadius: "5px"}} />{getProjectName(params.row)}</>
                 },
@@ -247,8 +248,11 @@ const SprintViewScreen = () => {
                 },
               ]}             
             />
-            <Box sx={{ p: 1, display: 'flex',marginLeft:"2px" }}>
-              {strings.sprint.unAllocated}<span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}> {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
+            <Box sx={{ display: 'flex', justifyContent: "space-between", marginTop:"10px" }}>
+              <span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}>{strings.sprint.unAllocated} {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
+              <span style={{ paddingRight:"5px"}}>
+                {strings.sprint.sprintview}: {sprintStartDate} - {sprintEndDate}
+              </span>
             </Box>
           </Card>
           {projects.map((project) => {
