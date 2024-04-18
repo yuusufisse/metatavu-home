@@ -181,7 +181,6 @@ const SprintViewScreen = () => {
   return (
     <>
       {loading || !loggedInPerson ? (
-        
         <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
           <Box sx={{textAlign: 'center'}} >
             <Typography>{strings.placeHolder.pleaseWait}</Typography>
@@ -209,7 +208,7 @@ const SprintViewScreen = () => {
               </MenuItem>
             </Select>
           </FormControl>
-          <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" , marginTop: "16px",
+          <Card sx={{ margin: 0, width: "100%", height: "100", marginBottom: "16px" , marginTop: "16px", padding: "0px",
             '& .negative-value': {
               color: 'red',
             }}}>
@@ -219,13 +218,17 @@ const SprintViewScreen = () => {
                 borderLeft: 0,
                 borderRight: 0,
                 borderBottom: 0,
+                '& .header-color': {
+                  backgroundColor: '#f2f2f2',
+                }
               }} 
               disableColumnFilter
               hideFooter={true}            
               rows={allocations}
               columns={[
                 { 
-                  field: 'projectName',                  
+                  field: 'projectName',  
+                  headerClassName: 'header-color',                
                   filterable: false,
                   headerName: strings.sprint.myAllocation, 
                   flex: 2, valueGetter: (params) => getProjectName(params.row),
@@ -233,22 +236,25 @@ const SprintViewScreen = () => {
                 },
                 { 
                   field: 'allocation', 
+                  headerClassName: 'header-color', 
                   headerName: strings.sprint.allocation, 
                   flex: 1, valueGetter: (params) => getHoursAndMinutes(totalAllocations(params.row))
                 },
                 { 
                   field: 'timeEntries', 
+                  headerClassName: 'header-color', 
                   headerName: strings.sprint.timeEntries, 
                   flex: 1, valueGetter: (params) => getHoursAndMinutes(getTotalTimeEntries(params.row) || 0),
                 },
                 { 
                   field: 'allocationsLeft', 
+                  headerClassName: 'header-color', 
                   headerName: strings.sprint.allocationLeft, 
                   flex: 1, cellClassName: (params) =>  timeLeft(params.row) < 0 ? "negative-value" : "", valueGetter: (params) => getHoursAndMinutes(timeLeft(params.row))
                 },
               ]}             
             />
-            <Box sx={{ display: 'flex', justifyContent: "space-between", marginTop:"10px" }}>
+            <Box sx={{ backgroundColor:"#e6e6e6", display: 'flex', justifyContent: "space-between", padding: "5px", paddingTop:" 10px", paddingBottom:" 10px"}}>
               <span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}>{strings.sprint.unAllocated} {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
               <span style={{ paddingRight:"5px"}}>
                 {strings.sprint.sprintview}: {sprintStartDate} - {sprintEndDate}

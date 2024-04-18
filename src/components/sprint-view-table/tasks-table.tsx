@@ -1,4 +1,4 @@
-import { Card, IconButton } from "@mui/material";
+import { Box, Card, CircularProgress, IconButton } from "@mui/material";
 import { Projects, Tasks, TimeEntries } from "../../generated/homeLambdasClient";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
@@ -25,18 +25,21 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   /**
    * Gather tasks and time entries when project is available and update changes appeared
    */
   useEffect(() => {
     const fetchData = async () => {
-      if (project) {
+      setLoading(true);
+      if (project && open) {
         await getTasksAndTimeEntries();
+        setLoading(false);
       }
     };
     fetchData();
-  }, [project, loggedInpersonId, filter]);
+  }, [project, loggedInpersonId, filter, open]);
 
   /**
    * Get tasks and total time entries  
@@ -86,7 +89,7 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
   }
 
   return ( 
-    <Card key={0} sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px", 
+    <Card key={0} sx={{ backgroundColor: '#f2f2f2', margin: 0, paddingTop: "5px", paddingBottom: "5px", width: "100%", height: "100", marginBottom: "16px", 
     '& .high_priority': {
       color: 'red'}, 
     '& .low_priority': {
@@ -97,60 +100,77 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
       </IconButton>
       <span>{project ? project.name : ""}</span>
       {open && tasks.length !== 0 && 
-        <DataGrid
-          sx={{
-            borderTop: 0,
-            borderLeft: 0,
-            borderRight: 0,
-            borderBottom: 0,
-          }}
-          autoHeight={true}
-          localeText={{ noResultsOverlayLabel: strings.sprint.notFound }}
-          disableColumnFilter
-          hideFooter={true}
-          filterModel={
-            {
-            items: [{ 
-              field: 'status',
-              operator: 'contains', 
-              value: filter
-            }]
-          }}
-          rows={tasks}
-          columns={[
-            { 
-              field: 'title',
-              headerName: strings.sprint.taskName,
-              minWidth: 0,
-              flex: 3
-            },
-            { 
-              field: 'assignedPersons',             
-              headerName: strings.sprint.assigned, 
-              flex: 1
-            },
-            { 
-              field: 'status', 
-              headerName: strings.sprint.taskStatus, 
-              flex: 1, valueGetter: (params) => getTotalTimeEntries(params.row)!==0 ? "In progress" : "On hold"
-            },
-            { 
-              field: 'priority', 
-              headerName: strings.sprint.taskPriority,
-              cellClassName: (params) => params.row.highPriority ? 'high_priority' :  'low_priority',
-              flex: 1, valueGetter: (params) => params.row.highPriority ? 'High' : 'Normal'   
-            },
-            { field: 'estimate', 
-              headerName: strings.sprint.estimatedTime, 
-              flex: 1, valueGetter: (params) => getHoursAndMinutes(params.row.estimate || 0) 
-            },
-            { 
-              field: 'timeEntries', 
-              headerName: strings.sprint.timeEntries, 
-              flex: 1, valueGetter: (params) => getHoursAndMinutes(getTotalTimeEntries(params.row)) 
-            }
-          ]}
-        />
+      <>
+        {loading ? 
+          <Box sx={{textAlign: 'center'}} >
+            <CircularProgress sx={{ scale: "100%", mt: "3%", mb: "3%"}} />
+          </Box>
+          :
+          <DataGrid
+            sx={{
+              backgroundColor: "#f6f6f6",
+              borderTop: 0,
+              borderLeft: 0,
+              borderRight: 0,
+              borderBottom: 0,
+              '& .header-color': {
+                backgroundColor: '#f2f2f2',
+              }
+            }}
+            autoHeight={true}
+            localeText={{ noResultsOverlayLabel: strings.sprint.notFound }}
+            disableColumnFilter
+            hideFooter={true}
+            filterModel={
+              {
+              items: [{ 
+                field: 'status',
+                operator: 'contains', 
+                value: filter
+              }]
+            }}
+            rows={tasks}
+            columns={[
+              { 
+                field: 'title',
+                headerClassName: 'header-color', 
+                headerName: strings.sprint.taskName,
+                minWidth: 0,
+                flex: 3
+              },
+              { 
+                field: 'assignedPersons',
+                headerClassName: 'header-color',         
+                headerName: strings.sprint.assigned, 
+                flex: 1
+              },
+              { 
+                field: 'status',
+                headerClassName: 'header-color', 
+                headerName: strings.sprint.taskStatus, 
+                flex: 1, valueGetter: (params) => getTotalTimeEntries(params.row)!==0 ? "In progress" : "On hold"
+              },
+              { 
+                field: 'priority',
+                headerClassName: 'header-color', 
+                headerName: strings.sprint.taskPriority,
+                cellClassName: (params) => params.row.highPriority ? 'high_priority' :  'low_priority',
+                flex: 1, valueGetter: (params) => params.row.highPriority ? 'High' : 'Normal'   
+              },
+              { field: 'estimate',
+                headerClassName: 'header-color', 
+                headerName: strings.sprint.estimatedTime, 
+                flex: 1, valueGetter: (params) => getHoursAndMinutes(params.row.estimate || 0) 
+              },
+              { 
+                field: 'timeEntries',headerClassName: 'header-color', 
+                headerName: strings.sprint.timeEntries, 
+                flex: 1, valueGetter: (params) => getHoursAndMinutes(getTotalTimeEntries(params.row)) 
+              }
+            ]}
+          /> 
+        }
+      </>
       }
     </Card>
   )
