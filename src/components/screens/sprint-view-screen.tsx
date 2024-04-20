@@ -15,6 +15,7 @@ import TaskTable from '../sprint-view-table/tasks-table';
 import strings from "../../localization/strings";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+
 /**
  * Sprint view screen component
  */
@@ -28,78 +29,67 @@ const SprintViewScreen = () => {
   const [allocations, setAllocations] = useState<Allocations[]>([]);
   const [projects, setProjects] = useState<Projects[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [myTasks, setMyTasks] = useState<boolean>(true);
   const [filter, setFilter] = useState<string>("");
-  const sprintStartDate = getSprintStart((new Date()).toISOString()).toLocaleString();
-  const sprintEndDate = getSprintEnd((new Date()).toISOString()).toLocaleString();
+  const sprintStartDate = getSprintStart((new Date()).toISOString());
+  const sprintEndDate = getSprintEnd((new Date()).toISOString());
 
   /**
    * Get project data if user is logged in otherwise endless loading
    */
   useEffect(() => {
     setLoading(true);
-    const fetchData = async () => {
-      await fetchAllocationsData();
+    const fetchViewData = async () => {
+      await fetchData();
       setLoading(false);
     };
     if (loggedInPerson) {
-      fetchData();
+      fetchViewData();
     }
   }, [loggedInPerson]);
 
-  const fetchAllocationsData = async () => {
-    if (loggedInPerson) {
-      try {
+  /**
+   * Fetch allocations, project names and time entries
+   */
+  const fetchData = async () => {
+    try {
+      const fetchedAllocations = await allocationsApi.listAllocations({
+        startDate: new Date(),
+        personId: loggedInPerson?.id.toString()
+      });
+  
+      const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
+      const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async (allocation) => {
+        try {
+          const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project || 0, startDate: allocation.startDate, endDate: allocation.endDate });
+          let totalMinutes = 0;
+          totalTimeEntries.forEach((timeEntry: TimeEntries) => {
+            if (loggedInPerson && timeEntry.person === loggedInPerson.id) {
+              totalMinutes += (timeEntry.timeRegistered || 0)
+            }
+          }); 
+          return totalMinutes;
+        } catch (error) {
+          console.error(`Error fetching time entries for allocation ${allocation.id}: ${error}`);
+          return 0;
+        }
+      }));
 
-        /**
-         * Get allocations for logged in user 
-         */
-        const fetchedAllocations = await allocationsApi.listAllocations({
-          startDate: new Date(),
-          personId: loggedInPerson.id.toString()
-        });
+      const projects : Projects[] = [];
+      fetchedAllocations.forEach((allocation) => {
+        const projectFound = fetchedProjects.find((project) => project.id === allocation.project);
+        projectFound && projects.push(projectFound);
+      });
 
-        /**
-         * Get project names for logged in user 
-         */
-        const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
-  
-        /**
-         * Get project time entries for logged in user 
-         */
-        const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async (allocation) => {
-          try {
-            const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project || 0, startDate: allocation.startDate, endDate: allocation.endDate });
-            let totalMinutes = 0;
-            totalTimeEntries.forEach((timeEntry: TimeEntries) => {
-              if (loggedInPerson && timeEntry.person === loggedInPerson.id) {
-                totalMinutes += (timeEntry.timeRegistered || 0)
-              }
-            }); 
-            return totalMinutes;
-          } catch (error) {
-            console.error(`Error fetching time entries for allocation ${allocation.id}: ${error}`);
-            return 0;
-          }
-        }));
-  
-        const projects : Projects[] = [];
-        fetchedAllocations.forEach((allocation) => {
-          const projectFound = fetchedProjects.find((project) => project.id === allocation.project);
-          projectFound && projects.push(projectFound);
-        });
-  
-        setProjects(projects);
-        setAllocations(fetchedAllocations);
-        setTimeEntries(fetchedTimeEntries);
-  
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      setProjects(projects);
+      setAllocations(fetchedAllocations);
+      setTimeEntries(fetchedTimeEntries);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
-  
+
   /**
    * Calculate project total time spent on the project by the user
    */
@@ -173,14 +163,14 @@ const SprintViewScreen = () => {
   /**
    * Featute for task filtering 
    */
-  const handleOnClick = () => {
+  const handleOnClickTask = () => {
     setMyTasks(!myTasks);
     setFilter("");
   }
   
   return (
     <>
-      {loading || !loggedInPerson ? (
+      {loading ? (
         <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
           <Box sx={{textAlign: 'center'}} >
             <Typography>{strings.placeHolder.pleaseWait}</Typography>
@@ -189,7 +179,7 @@ const SprintViewScreen = () => {
         </Card>
       ) : (
         <>
-          <FormControlLabel control={<Switch checked={myTasks}/>} label={strings.sprint.showMyTasks}  onClick={() =>  handleOnClick()}/>  
+          <FormControlLabel control={<Switch checked={myTasks}/>} label={strings.sprint.showMyTasks}  onClick={() =>  handleOnClickTask()}/>  
           <FormControl size="small"  style= {{width: "200px", float:"right"}}>           
             <InputLabel disableAnimation={false} >{strings.sprint.taskStatus}</InputLabel>
             <Select
@@ -197,13 +187,16 @@ const SprintViewScreen = () => {
               style={{borderRadius: "30px", marginBottom: "15px" , float:  "right"}}
               label={strings.sprint.taskStatus}             
             >   
-              <MenuItem key={1} value={strings.sprint.onHold} onClick={() => setFilter("On hold")} >
-                {strings.sprint.onHold} 
+              <MenuItem key={1} value={strings.sprint.toDo} onClick={() => setFilter("TODO")} >
+                {strings.sprint.toDo} 
               </MenuItem>
-              <MenuItem key={2} value={strings.sprint.inProgress} onClick={() => setFilter("In progress")}>
+              <MenuItem key={2} value={strings.sprint.inProgress} onClick={() => setFilter("INPROGRESS")}>
                 {strings.sprint.inProgress}
               </MenuItem>
-              <MenuItem key={3} value={strings.sprint.allTasks} onClick={() => setFilter("")}>
+              <MenuItem key={3} value={strings.sprint.allTasks} onClick={() => setFilter("DONE")}>
+                {strings.sprint.completed}
+              </MenuItem>
+              <MenuItem key={4} value={strings.sprint.allTasks} onClick={() => setFilter("")}>
                 {strings.sprint.allTasks}
               </MenuItem>
             </Select>
@@ -222,6 +215,8 @@ const SprintViewScreen = () => {
                   backgroundColor: '#f2f2f2',
                 }
               }} 
+              autoHeight={true}
+              localeText={{ noResultsOverlayLabel: strings.sprint.notFound }}
               disableColumnFilter
               hideFooter={true}            
               rows={allocations}
@@ -236,7 +231,7 @@ const SprintViewScreen = () => {
                 },
                 { 
                   field: 'allocation', 
-                  headerClassName: 'header-color', 
+                  headerClassName: 'header-color',
                   headerName: strings.sprint.allocation, 
                   flex: 1, valueGetter: (params) => getHoursAndMinutes(totalAllocations(params.row))
                 },
@@ -257,13 +252,13 @@ const SprintViewScreen = () => {
             <Box sx={{ backgroundColor:"#e6e6e6", display: 'flex', justifyContent: "space-between", padding: "5px", paddingTop:" 10px", paddingBottom:" 10px"}}>
               <span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}>{strings.sprint.unAllocated} {getHoursAndMinutes(unallocatedTime(allocations))} </span> 
               <span style={{ paddingRight:"5px"}}>
-                {strings.sprint.sprintview}: {sprintStartDate} - {sprintEndDate}
+                {strings.sprint.currentSprint}: {sprintStartDate.toLocaleString()} - {sprintEndDate.toLocaleString()}
               </span>
             </Box>
           </Card>
           {projects.map((project) => {
             return (
-            <TaskTable key={project.id} project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
+              <TaskTable key={project.id} project={project} loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} filter={filter} />        
             )
           }
           )}

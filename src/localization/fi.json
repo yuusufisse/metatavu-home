@@ -69,13 +69,16 @@
     "estimatedTime": "Arvio",
     "taskName": "Tehtävä",
     "showMyTasks": "Tehtäväni ",
-    "onHold": "Odotuksessa",
+    "toDo": "Odotuksessa",
     "inProgress": "Käynnissä",
     "allTasks" : "Kaikki tehtävät",
     "notFound" : "Tulosta ei löytynyt",
     "projectName": "Projekti",
     "search": "Hae tehtävää, projektia tai vastaanottajaa",
-    "unAllocated": "Kohdistamaton aika:"
+    "unAllocated": "Kohdistamaton aika:",
+    "sprintDate": "Sprint",
+    "currentSprint": "Nykyinen",
+    "completed": "Valmis"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",

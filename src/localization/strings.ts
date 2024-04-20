@@ -95,13 +95,16 @@ export interface Localized extends LocalizedStringsMethods {
     estimatedTime: string,
     taskName: string,
     showMyTasks: string,
-    onHold: string,
+    toDo: string,
     inProgress: string,
     allTasks: string,
     notFound: string,
     projectName: string,
     search: string,
-    unAllocated: string
+    unAllocated: string,
+    sprintDate: string,
+    currentSprint: string,
+    completed: string
   };
   /**
    * General time-related expressions

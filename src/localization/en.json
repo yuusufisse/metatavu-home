@@ -69,13 +69,16 @@
     "estimatedTime": "Estimate",
     "taskName": "Tasks",
     "showMyTasks": "My tasks",
-    "onHold": "On hold",
+    "toDo": "To do",
     "inProgress": "In progress",
     "allTasks" : "All tasks",
     "notFound" : "No result found",
     "projectName": "Project",
     "search": "Search for a task, project or assignee",
-    "unAllocated": "Unallocated Time:"
+    "unAllocated": "Unallocated Time:",
+    "sprintDate": "Sprint",
+    "currentSprint": "Current",
+    "completed": "Done"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
