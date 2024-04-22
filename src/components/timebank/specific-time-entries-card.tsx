@@ -103,21 +103,24 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
    */
   const renderTimeEntryTypesList = () => (
     <List style={{ width:"12%", minWidth:"110px" }}dense sx={{ marginLeft: "5%" }}>
-      {timeEntriesListItems.map((item, index) => (
-        <ListItem key={`timeEntriesListItem-${index}`}>
-          <ListItemText
-            sx={{ color: item.color }}
-            primary={strings.timebank[item.propName]}
-            secondary={
-              byRange.dailyEntries && selectedEntries
-                ? getHoursAndMinutes(
-                    selectedEntries.reduce((prev, next) => prev + Number(next[item.propName]), 0)
-                  )
-                : getHoursAndMinutes(Number(personDailyEntry ? personDailyEntry[item.propName] : 0))
-            }
-          />
-        </ListItem>
-      ))}
+      {timeEntriesListItems.map((item) => {
+        const entryValue = Number(personDailyEntry ? personDailyEntry[item.propName] : 0);
+        return (
+          <ListItem key={`timeEntriesListItem-${item.propName}`}>
+            <ListItemText
+              sx={{ color: item.color }}
+              primary={strings.timebank[item.propName]}
+              secondary={
+                byRange.dailyEntries && selectedEntries
+                  ? getHoursAndMinutes(
+                      selectedEntries.reduce((prev, next) => prev + Number(next[item.propName]), 0)
+                    )
+                  : getHoursAndMinutes(entryValue)
+              }
+            />
+          </ListItem>
+        )
+      })}
     </List>
   );
 
@@ -264,7 +267,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
                   onClick={() =>
                     setByRange({
                       ...byRange,
-                      dailyEntries: byRange.dailyEntries ? false : true
+                      dailyEntries: byRange.dailyEntries
                     })
                   }
                 />

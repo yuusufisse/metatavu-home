@@ -7,7 +7,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "src/hooks/use-api";
 import { Person, PersonTotalTime, Timespan } from "src/generated/client";
-import { personsAtom, personTotalTimeAtom, timespanAtom } from "src/atoms/person";
+import { personsAtom, personTotalTimeAtom } from "src/atoms/person";
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "src/atoms/auth";
 import config from "src/app/config";

@@ -9,8 +9,7 @@ import { theme } from "../../theme";
 import { useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { DateTime } from "luxon";
-import { personTotalTimeAtom } from "../../atoms/person";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 
 /**
@@ -77,9 +76,9 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
         setTimespan(e.target.value as Timespan);
       }}
     >
-      {Object.keys(Timespan).map((item, index) => {
+      {Object.keys(Timespan).map((item) => {
         return (
-          <MenuItem key={`timespan-select-menuitem-${index}`} value={item}>
+          <MenuItem key={`timespan-select-menuitem-${item}`} value={item}>
             {LocalizationUtils.getLocalizedTimespan(item as Timespan)}
           </MenuItem>
         );
