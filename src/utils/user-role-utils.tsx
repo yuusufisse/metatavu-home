@@ -20,6 +20,19 @@ export default class UserRoleUtils {
   };
 
   /**
+   * Check if the logged-in user has an developer role
+   *
+   * @returns boolean, indicates if user is developer
+   */
+  public static isDeveloper = () => {
+    const accessToken = useAtomValue(authAtom)?.token;
+
+    if (!accessToken?.realm_access) return false;
+
+    return accessToken.realm_access.roles.includes("developer");
+  };
+
+  /**
    * Check if the logged-in user has admin role and is in admin route
    *
    * @returns boolean, indicates if user is admin and in admin route
@@ -29,5 +42,14 @@ export default class UserRoleUtils {
     const adminPathname = pathname.startsWith("/admin");
 
     return UserRoleUtils.isAdmin() && adminPathname;
+  };
+
+  /**
+   * Check if the logged-in user has devveloper role and is in admin route
+   *
+   * @returns boolean, indicates if user is developer
+   */
+  public static developerMode = () => {
+    return UserRoleUtils.isDeveloper();
   };
 }
