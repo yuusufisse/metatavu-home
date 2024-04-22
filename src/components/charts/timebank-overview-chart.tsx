@@ -1,10 +1,10 @@
 import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
-import { renderCustomizedTooltipBarChart, totalTimeToChart } from "../../utils/chart-utils";
-import { theme } from "../../theme";
-import strings from "../../localization/strings";
-import { getHours } from "../../utils/time-utils";
-import { Worktime } from "../../types";
-import { PersonTotalTime } from "../../generated/client";
+import { renderCustomizedTooltipBarChart, totalTimeToChart } from "src/utils/chart-utils";
+import { theme } from "src/theme";
+import strings from "src/localization/strings";
+import { getHours } from "src/utils/time-utils";
+import { Worktime } from "src/types";
+import { PersonTotalTime } from "src/generated/client";
 
 /**
  * Component properties
