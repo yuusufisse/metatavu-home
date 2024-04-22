@@ -2,7 +2,7 @@ import { Grow, Container, Box, Typography, FormControl, TextField, MenuItem, Cir
 import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
 import strings from "../../localization/strings";
 import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
-import { Timespan } from "../../generated/client";
+import { PersonTotalTime, Timespan } from "../../generated/client";
 import LocalizationUtils from "../../utils/localization-utils";
 import TimebankOverviewChart from "../charts/timebank-overview-chart";
 import { theme } from "../../theme";
@@ -29,7 +29,7 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
   const [timespan, setTimespan] = useState<Timespan>(Timespan.ALL_TIME);
   const [loading, setLoading] = useState(false);
   const { personsApi } = useApi();
-  const [personTotalTime, setPersonTotalTime] = useAtom(personTotalTimeAtom);
+  const [personTotalTime, setPersonTotalTime] = useState<PersonTotalTime>();
   const setError = useSetAtom(errorAtom);
 
   useEffect(() => {

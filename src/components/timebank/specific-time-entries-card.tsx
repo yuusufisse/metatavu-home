@@ -6,7 +6,6 @@ import TimebankMultiBarChart from "../charts/timebank-multibar-chart"
 import TimebankPieChart from "../charts/timebank-piechart"
 import { useEffect, useState } from "react"
 import { DateTime } from "luxon"
-import { useAtom, useSetAtom } from "jotai"
 import { dailyEntriesAtom, personDailyEntryAtom } from "../../atoms/person"
 import { DailyEntryWithIndexSignature, DateRange } from "../../types"
 import { DatePicker } from "@mui/x-date-pickers"
@@ -14,6 +13,8 @@ import DateRangePicker from "./timebank-daterange-picker"
 import { useApi } from "../../hooks/use-api"
 import { theme } from "../../theme"
 import { errorAtom } from "../../atoms/error"
+import { DailyEntry } from "src/generated/client"
+import { useAtomValue, useSetAtom } from "jotai"
 
 /**
  * Component properties
@@ -35,8 +36,8 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
-  const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
-  const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
+  const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntryWithIndexSignature|undefined>(useAtomValue(personDailyEntryAtom));
+  const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>(useAtomValue(dailyEntriesAtom));
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
         dailyEntries.filter((item) => item.date <= new Date() && item.logged)[0].date

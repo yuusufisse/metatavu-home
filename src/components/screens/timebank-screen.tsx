@@ -1,20 +1,10 @@
 import { useEffect, useState } from "react";
-import { Person, Timespan } from "src/generated/client";
+import { Person } from "src/generated/client";
 import { CircularProgress, Card } from "@mui/material";
 import { userProfileAtom } from "src/atoms/auth";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { errorAtom } from "src/atoms/error";
-import {
-  dailyEntriesAtom,
-  personDailyEntryAtom,
-  personsAtom,
-  timebankScreenPersonTotalTimeAtom,
-  timespanAtom
-} from "src/atoms/person";
-import { useApi } from "src/hooks/use-api";
+import { useAtomValue } from "jotai";
+import { personsAtom } from "src/atoms/person";
 import TimebankContent from "../timebank/timebank-content";
-import { DateTime } from "luxon";
-import strings from "src/localization/strings";
 import config from "src/app/config";
 
 /**
