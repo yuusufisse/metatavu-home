@@ -1,18 +1,18 @@
 import { Grow, Container, CircularProgress, List, ListItem, ListItemText, FormControlLabel, Checkbox } from "@mui/material"
 import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
-import strings from "../../localization/strings"
-import { getHoursAndMinutes } from "../../utils/time-utils"
-import TimebankMultiBarChart from "../charts/timebank-multibar-chart"
-import TimebankPieChart from "../charts/timebank-piechart"
+import strings from "src/localization/strings"
+import { getHoursAndMinutes } from "src/utils/time-utils"
+import TimebankMultiBarChart from "src/components/charts/timebank-multibar-chart"
+import TimebankPieChart from "src/components/charts/timebank-piechart"
 import { useEffect, useState } from "react"
 import { DateTime } from "luxon"
-import { dailyEntriesAtom, personDailyEntryAtom } from "../../atoms/person"
-import { DailyEntryWithIndexSignature, DateRange } from "../../types"
+import { dailyEntriesAtom, personDailyEntryAtom } from "src/atoms/person"
+import { DailyEntryWithIndexSignature, DateRange } from "src/types"
 import { DatePicker } from "@mui/x-date-pickers"
 import DateRangePicker from "./timebank-daterange-picker"
-import { useApi } from "../../hooks/use-api"
-import { theme } from "../../theme"
-import { errorAtom } from "../../atoms/error"
+import { useApi } from "src/hooks/use-api"
+import { theme } from "src/theme"
+import { errorAtom } from "src/atoms/error"
 import { DailyEntry } from "src/generated/client"
 import { useAtomValue, useSetAtom } from "jotai"
 
@@ -267,7 +267,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
                   onClick={() =>
                     setByRange({
                       ...byRange,
-                      dailyEntries: byRange.dailyEntries
+                      dailyEntries: !byRange.dailyEntries
                     })
                   }
                 />

@@ -1,16 +1,16 @@
 import { Grow, Container, Box, Typography, FormControl, TextField, MenuItem, CircularProgress, List, ListItem, ListItemText } from "@mui/material"
 import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
-import strings from "../../localization/strings";
-import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
-import { PersonTotalTime, Timespan } from "../../generated/client";
-import LocalizationUtils from "../../utils/localization-utils";
-import TimebankOverviewChart from "../charts/timebank-overview-chart";
-import { theme } from "../../theme";
+import strings from "src/localization/strings";
+import { formatTimePeriod, getHoursAndMinutes } from "src/utils/time-utils";
+import { PersonTotalTime, Timespan } from "src/generated/client";
+import LocalizationUtils from "src/utils/localization-utils";
+import TimebankOverviewChart from "src/components/charts/timebank-overview-chart";
+import { theme } from "src/theme";
 import { useEffect, useState } from "react";
-import { useApi } from "../../hooks/use-api";
+import { useApi } from "src/hooks/use-api";
 import { DateTime } from "luxon";
 import { useSetAtom } from "jotai";
-import { errorAtom } from "../../atoms/error";
+import { errorAtom } from "src/atoms/error";
 
 /**
  * Component properties
