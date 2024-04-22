@@ -1,5 +1,5 @@
 import { Grid, Card, CardContent, Skeleton, Typography, Box } from "@mui/material";
-//import strings from "src/localization/strings";
+import strings from "src/localization/strings";
 import { Link } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
@@ -30,7 +30,6 @@ import { validateValueIsNotUndefinedNorNull } from "src/utils/check-utils";
 import { VacationInfoListItem } from "src/types";
 import { formatDate } from "src/utils/time-utils";
 import config from "src/app/config";
-import strings from "src/localization/strings";
 // TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
 // import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
 
