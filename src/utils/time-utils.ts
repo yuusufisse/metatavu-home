@@ -191,5 +191,5 @@ export const getSprintStart = (date: string) => {
  * @param date string date 
  */
 export const getSprintEnd = (date: string) => {
-  return getSprintStart(date).plus({days : 14});
+  return getSprintStart(date).plus({days : 11});
 }

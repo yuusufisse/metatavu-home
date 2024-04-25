@@ -77,8 +77,8 @@
     "search": "Search for a task, project or assignee",
     "unAllocated": "Unallocated Time:",
     "sprintDate": "Sprint",
-    "currentSprint": "Current",
-    "completed": "Done"
+    "completed": "Done", 
+    "current": "Current: {0}-{1}"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
@@ -155,6 +155,12 @@
     "updateStatusError": "Updating vacation request status has failed",
     "noVacationRequestsFound": "No vacation requests found",
     "nameNotFound": "Name not found"
+  },
+  "sprintRequestError": {
+    "fetchError": "Fetching sprint data requests has failed",
+    "fetchTimeEntriesError": "Error fetching time entries",
+    "fetchAllocationError": "Error fetching time entries for allocation {0}: {1}",
+    "fetchTasksError": "Error fetching time entries for task {0}: {1}"
   },
   "form": {
     "submit": "Submit",

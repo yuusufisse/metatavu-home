@@ -103,8 +103,8 @@ export interface Localized extends LocalizedStringsMethods {
     search: string,
     unAllocated: string,
     sprintDate: string,
-    currentSprint: string,
-    completed: string
+    completed: string,
+    current: string,
   };
   /**
    * General time-related expressions
@@ -180,6 +180,15 @@ export interface Localized extends LocalizedStringsMethods {
     updateStatusError: string;
     noVacationRequestsFound: string;
     nameNotFound: string;
+  };
+  /**
+   * Translations related to sprint requests errors
+   */
+  sprintRequestError: {
+    fetchError: string;
+    fetchTimeEntriesError: string;
+    fetchAllocationError: string;
+    fetchTasksError: string;
   };
   /**
    * Translations related to form
