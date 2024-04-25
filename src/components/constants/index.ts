@@ -1,4 +1,4 @@
-import { theme } from "../../theme";
+import { theme } from "src/theme";
 
 /**
  * Colors array to be mapped in elements such as the pie chart.

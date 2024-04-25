@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import ErrorScreen from "./error-screen";
 
 /**

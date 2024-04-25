@@ -6,27 +6,27 @@ import {
   VacationRequestStatus,
   VacationRequestStatuses,
   Person
-} from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
+} from "src/generated/client";
+import { useApi } from "src/hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { userProfileAtom } from "../../atoms/auth";
-import { errorAtom } from "../../atoms/error";
+import { userProfileAtom } from "src/atoms/auth";
+import { errorAtom } from "src/atoms/error";
 import { GridRowId } from "@mui/x-data-grid";
-import { VacationData } from "../../types";
-import strings from "../../localization/strings";
+import { VacationData } from "src/types";
+import strings from "src/localization/strings";
 import {
   allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
   vacationRequestsAtom,
   vacationRequestStatusesAtom
-} from "../../atoms/vacation";
-import UserRoleUtils from "../../utils/user-role-utils";
+} from "src/atoms/vacation";
+import UserRoleUtils from "src/utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
-import LocalizationUtils from "../../utils/localization-utils";
-import { personsAtom } from "../../atoms/person";
-import config from "../../app/config";
-import { renderVacationDaysTextForScreen } from "../../utils/vacation-days-utils";
+import LocalizationUtils from "src/utils/localization-utils";
+import { personsAtom } from "src/atoms/person";
+import config from "src/app/config";
+import { renderVacationDaysTextForScreen } from "src/utils/vacation-days-utils";
 
 /**
  * Vacation requests screen

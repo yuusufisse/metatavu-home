@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { Card,FormControl, InputLabel, MenuItem, Select, CircularProgress, Typography, Box, FormControlLabel, Switch} from "@mui/material";
-import { useLambdasApi } from "../../hooks/use-api";
-import { Person } from "../../generated/client";
+import { useLambdasApi } from "src/hooks/use-api";
+import { Person } from "src/generated/client";
 import { useAtomValue, useSetAtom } from "jotai";
-import { personsAtom,  } from "../../atoms/person";
-import config from "../../app/config";
-import { userProfileAtom } from "../../atoms/auth";
-import { Allocations, Projects, TimeEntries } from "../../generated/homeLambdasClient/models/";
+import { personsAtom,  } from "src/atoms/person";
+import config from "src/app/config";
+import { userProfileAtom } from "src/atoms/auth";
+import { Allocations, Projects, TimeEntries } from "src/generated/homeLambdasClient/models/";
 import { DataGrid } from '@mui/x-data-grid';
-import { getHoursAndMinutes, getSprintEnd, getSprintStart } from '../../utils/time-utils';
+import { getHoursAndMinutes, getSprintEnd, getSprintStart } from 'src/utils/time-utils';
 import TaskTable from '../sprint-view-table/tasks-table';
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import sprintViewProjectsColumns from "../sprint-view-table/sprint-projects-columns";
-import { errorAtom } from "../../atoms/error";
+import { errorAtom } from "src/atoms/error";
 
 /**
  * Sprint view screen component
