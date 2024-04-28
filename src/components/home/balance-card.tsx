@@ -1,18 +1,18 @@
-import { getHoursAndMinutes } from "../../utils/time-utils";
+import { getHoursAndMinutes } from "src/utils/time-utils";
 import { Grid, Typography, Card, CardContent, Skeleton } from "@mui/material";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import ScheduleIcon from "@mui/icons-material/Schedule";
-import { errorAtom } from "../../atoms/error";
+import { errorAtom } from "src/atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { useApi } from "../../hooks/use-api";
-import { Person, PersonTotalTime, Timespan } from "../../generated/client";
-import { personsAtom, personTotalTimeAtom, timespanAtom } from "../../atoms/person";
+import { useApi } from "src/hooks/use-api";
+import { Person, PersonTotalTime, Timespan } from "src/generated/client";
+import { personsAtom, personTotalTimeAtom, timespanAtom } from "src/atoms/person";
 import { Link } from "react-router-dom";
-import { userProfileAtom } from "../../atoms/auth";
-import config from "../../app/config";
-import UserRoleUtils from "../../utils/user-role-utils";
-import { theme } from "../../theme";
+import { userProfileAtom } from "src/atoms/auth";
+import config from "src/app/config";
+import UserRoleUtils from "src/utils/user-role-utils";
+import { theme } from "src/theme";
 import { DateTime } from "luxon";
 
 /**

@@ -17,17 +17,17 @@ import {
   InputLabel,
   Select
 } from "@mui/material";
-import { formatTimePeriod, getHoursAndMinutes } from "../../utils/time-utils";
-import { Timespan } from "../../generated/client";
+import { formatTimePeriod, getHoursAndMinutes } from "src/utils/time-utils";
+import { Timespan } from "src/generated/client";
 import TimebankPieChart from "../charts/timebank-piechart";
 import TimebankOverviewChart from "../charts/timebank-overview-chart";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import TimebankMultiBarChart from "../charts/timebank-multibar-chart";
 import DateRangePicker from "./timebank-daterange-picker";
 import { useEffect, useState } from "react";
-import { theme } from "../../theme";
+import { theme } from "src/theme";
 import { useAtom, useAtomValue } from "jotai";
 import {
   personDailyEntryAtom,
@@ -35,10 +35,10 @@ import {
   timespanAtom,
   personsAtom,
   timebankScreenPersonTotalTimeAtom
-} from "../../atoms/person";
-import UserRoleUtils from "../../utils/user-role-utils";
-import { DailyEntryWithIndexSignature, DateRange } from "../../types";
-import LocalizationUtils from "../../utils/localization-utils";
+} from "src/atoms/person";
+import UserRoleUtils from "src/utils/user-role-utils";
+import { DailyEntryWithIndexSignature, DateRange } from "src/types";
+import LocalizationUtils from "src/utils/localization-utils";
 
 /**
  * Component properties

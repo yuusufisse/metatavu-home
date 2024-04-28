@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { personsAtom } from "../../atoms/person";
+import { personsAtom } from "src/atoms/person";
 import {
   Box,
   Card,
@@ -10,16 +10,16 @@ import {
   Typography
 } from "@mui/material";
 import { DateTime } from "luxon";
-import { languageAtom } from "../../atoms/language";
-import { theme } from "../../theme";
+import { languageAtom } from "src/atoms/language";
+import { theme } from "src/theme";
 import { PieChart, Pie, Cell, Legend, TooltipProps, Tooltip, ResponsiveContainer } from "recharts";
-import { PersonWithTotalTime, WorkTimeCategory, WorkTimeTotalData } from "../../types";
-import { getHoursAndMinutes } from "../../utils/time-utils";
+import { PersonWithTotalTime, WorkTimeCategory, WorkTimeTotalData } from "src/types";
+import { getHoursAndMinutes } from "src/utils/time-utils";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
-import strings from "../../localization/strings";
-import { useApi } from "../../hooks/use-api";
-import { errorAtom } from "../../atoms/error";
-import { PersonTotalTime, Timespan } from "../../generated/client";
+import strings from "src/localization/strings";
+import { useApi } from "src/hooks/use-api";
+import { errorAtom } from "src/atoms/error";
+import { PersonTotalTime, Timespan } from "src/generated/client";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { COLORS } from "../constants";
