@@ -40,7 +40,6 @@ const VacationsCard = () => {
   const adminMode = UserRoleUtils.adminMode();
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
-  const userIsDeveloper = UserRoleUtils.isDeveloper();
   const setError = useSetAtom(errorAtom);
   const [vacationRequests, setVacationRequests] = useAtom(
     adminMode ? allVacationRequestsAtom : vacationRequestsAtom
@@ -53,11 +52,6 @@ const VacationsCard = () => {
   const loggedInPerson = persons.find(
     (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-
-
-  if (!userIsDeveloper) {
-    return null;
-  }
 
   /**
    * Fetch vacation request statuses

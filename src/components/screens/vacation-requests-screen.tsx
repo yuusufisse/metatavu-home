@@ -33,7 +33,6 @@ import { renderVacationDaysTextForScreen } from "src/utils/vacation-days-utils";
  */
 const VacationRequestsScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
-  const userIsDeveloper = UserRoleUtils.isDeveloper();
   const { vacationRequestsApi, vacationRequestStatusApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
   const setError = useSetAtom(errorAtom);
@@ -48,10 +47,6 @@ const VacationRequestsScreen = () => {
   const loggedInPerson = persons.find(
     (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-
-  if (!userIsDeveloper) {
-    return null;
-  }
 
   /**
    * Fetch vacation request statuses

@@ -18,12 +18,14 @@ import { Settings } from "luxon";
 import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 import SprintViewScreen from "./components/screens/sprint-view-screen";
+import UserRoleUtils from "./utils/user-role-utils";
 
 /**
  * Application component
  */
 const App = () => {
   const language = useAtomValue(languageAtom);
+  const userIsDeveloper = UserRoleUtils.isDeveloper();
 
   useMemo(() => {
     Settings.defaultLocale = language;
@@ -41,7 +43,7 @@ const App = () => {
         },
         {
           path: "/vacations",
-          element: <VacationRequestsScreen />
+          element: userIsDeveloper ? <VacationRequestsScreen /> : null
         },
         {
           path: "/timebank",
@@ -49,7 +51,7 @@ const App = () => {
         },
         {
           path: "/sprintview",
-          element: <SprintViewScreen />
+          element: userIsDeveloper ? <SprintViewScreen /> : null
         }
       ]
     },
@@ -68,7 +70,7 @@ const App = () => {
         },
         {
           path: "/admin/vacations",
-          element: <VacationRequestsScreen />
+          element: userIsDeveloper ? <VacationRequestsScreen /> : null
         },
         {
           path: "/admin/timebank/viewall",
@@ -76,7 +78,7 @@ const App = () => {
         },
         {
           path: "/admin/sprintview",
-          element: <SprintViewScreen />
+          element: userIsDeveloper ? <SprintViewScreen /> : null
         }
       ]
     }
