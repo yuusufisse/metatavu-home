@@ -24,7 +24,7 @@ export default class UserRoleUtils {
    *
    * @returns boolean, indicates if user is developer
    */
-  public static isDeveloper = () => {
+  public static readonly isDeveloper = () => {
     const accessToken = useAtomValue(authAtom)?.token;
 
     if (!accessToken?.realm_access) return false;
@@ -49,7 +49,7 @@ export default class UserRoleUtils {
    *
    * @returns boolean, indicates if user is developer
    */
-  public static developerMode = () => {
+  public static readonly developerMode = () => {
     return UserRoleUtils.isDeveloper();
   };
 }
