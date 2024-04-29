@@ -59,8 +59,10 @@
   },
   "sprint": {
     "sprintview": "Sprint view",
-    "sprintviewScreen": "Sprint view Screen",
-    "noAllocations": "No allocations"
+    "sprintviewScreen": "Sprint view screen",
+    "noAllocations": "No allocations",
+    "allocation": "Allocation",
+    "timeEntries": "Time entries"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
@@ -137,6 +139,10 @@
     "updateStatusError": "Updating vacation request status has failed",
     "noVacationRequestsFound": "No vacation requests found",
     "nameNotFound": "Name not found"
+  },
+  "sprintRequestError": {
+    "fetchError": "Fetching sprint data requests has failed",
+    "fetchTimeEntriesError": "Error fetching time entries"
   },
   "form": {
     "submit": "Submit",

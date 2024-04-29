@@ -150,7 +150,7 @@ export interface DateRange {
 }
 
 /**
- * Type describing chart data for spring view
+ * Type describing chart data for sprint view
  */
 export interface SprintViewChartData {
 	projectName: string,

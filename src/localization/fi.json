@@ -60,7 +60,9 @@
   "sprint": {
     "sprintview": "Sprintinäkymä",
     "sprintviewScreen": "Sprintinäkymä näyttö",
-    "noAllocations": "Ei sprinttijakoa"
+    "noAllocations": "Ei sprinttijakoa",
+    "allocation": "Allokointi",
+    "timeEntries": "Aikamerkinnät"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
@@ -137,6 +139,10 @@
     "updateStatusError": "Lomahakemustilojen päivittäminen epäonnistui",
     "noVacationRequestsFound": "Lomahakemuksia ei löydetty",
     "nameNotFound": "Nimeä ei löydetty"
+  },
+  "sprintRequestError": {
+    "fetchError": "Sprintin tietopyyntöjen hakeminen epäonnistui",
+    "fetchTimeEntriesError": "Virhe aikamerkintöjen hakemisessa"
   },
   "form": {
     "submit": "Lähetä",

@@ -87,6 +87,8 @@ export interface Localized extends LocalizedStringsMethods {
     sprintview: string;
     sprintviewScreen: string;
     noAllocations: string;
+    allocation: string;
+    timeEntries: string;
   };
   /**
    * General time-related expressions
@@ -162,6 +164,13 @@ export interface Localized extends LocalizedStringsMethods {
     updateStatusError: string;
     noVacationRequestsFound: string;
     nameNotFound: string;
+  };
+  /**
+   * Translations related to sprint requests errors
+   */
+  sprintRequestError: {
+    fetchError: string;
+    fetchTimeEntriesError: string;
   };
   /**
    * Translations related to form

@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material"
-import strings from "../../../localization/strings"
+import strings from "src/localization/strings"
 
 /**
  * Sprint card component for admin
