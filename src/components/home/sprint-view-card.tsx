@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import strings from "../../localization/strings";
-import UserRoleUtils from "../../utils/user-role-utils";
+import strings from "src/localization/strings";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * SprintView card component

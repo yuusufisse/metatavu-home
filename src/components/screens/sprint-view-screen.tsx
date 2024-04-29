@@ -1,4 +1,4 @@
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 
 /**
  * Sprint View screen component

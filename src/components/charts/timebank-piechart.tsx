@@ -3,11 +3,11 @@ import {
   renderCustomizedLabel,
   dailyEntryToChart,
   renderCustomizedTooltipPieChart
-} from "../../utils/chart-utils";
+} from "src/utils/chart-utils";
 import { Typography } from "@mui/material";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import { COLORS } from "../constants";
-import { DailyEntry } from "../../generated/client";
+import { DailyEntry } from "src/generated/client";
 
 /**
  * Component properties
