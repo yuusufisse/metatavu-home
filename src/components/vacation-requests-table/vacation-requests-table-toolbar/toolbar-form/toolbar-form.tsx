@@ -1,14 +1,14 @@
 import { Box, Grid } from "@mui/material";
-import { VacationType } from "../../../../generated/client";
+import { VacationType } from "src/generated/client";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import { VacationsDataGridRow, VacationData, ToolbarFormModes, DateRange } from "../../../../types";
+import { VacationsDataGridRow, VacationData, ToolbarFormModes, DateRange } from "src/types";
 import { GridRowId } from "@mui/x-data-grid";
-import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
+import { determineToolbarFormMode } from "src/utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import ToolbarFormFields from "./toolbar-form-fields";
-import { allVacationRequestsAtom, vacationRequestsAtom } from "../../../../atoms/vacation";
-import UserRoleUtils from "../../../../utils/user-role-utils";
+import { allVacationRequestsAtom, vacationRequestsAtom } from "src/atoms/vacation";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Component properties

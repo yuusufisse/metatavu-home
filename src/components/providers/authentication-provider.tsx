@@ -1,10 +1,10 @@
-import config from "../../app/config";
-import { authAtom, userProfileAtom } from "../../atoms/auth";
+import config from "src/app/config";
+import { authAtom, userProfileAtom } from "src/atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { ReactNode, useCallback, useEffect } from "react";
-import { personsAtom } from "../../atoms/person";
-import { useApi } from "../../hooks/use-api";
+import { personsAtom } from "src/atoms/person";
+import { useApi } from "src/hooks/use-api";
 
 interface Props {
   children: ReactNode;

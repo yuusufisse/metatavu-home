@@ -1,35 +1,35 @@
 import { Grid, Card, CardContent, Skeleton, Typography, Box } from "@mui/material";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import { Link } from "react-router-dom";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useState, useMemo } from "react";
-import { userProfileAtom } from "../../atoms/auth";
-import { errorAtom } from "../../atoms/error";
+import { userProfileAtom } from "src/atoms/auth";
+import { errorAtom } from "src/atoms/error";
 import {
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses,
   Person
-} from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
+} from "src/generated/client";
+import { useApi } from "src/hooks/use-api";
 import { DateTime } from "luxon";
-import LocalizationUtils from "../../utils/localization-utils";
+import LocalizationUtils from "src/utils/localization-utils";
 import {
   allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
   vacationRequestsAtom,
   vacationRequestStatusesAtom
-} from "../../atoms/vacation";
-import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
-import UserRoleUtils from "../../utils/user-role-utils";
+} from "src/atoms/vacation";
+import { getVacationRequestStatusColor } from "src/utils/vacation-status-utils";
+import UserRoleUtils from "src/utils/user-role-utils";
 import { Check, Pending } from "@mui/icons-material";
-import { personsAtom } from "../../atoms/person";
-import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
-import { validateValueIsNotUndefinedNorNull } from "../../utils/check-utils";
-import { VacationInfoListItem } from "../../types";
-import { formatDate } from "../../utils/time-utils";
-import config from "../../app/config";
+import { personsAtom } from "src/atoms/person";
+import { getVacationRequestPersonFullName } from "src/utils/vacation-request-utils";
+import { validateValueIsNotUndefinedNorNull } from "src/utils/check-utils";
+import { VacationInfoListItem } from "src/types";
+import { formatDate } from "src/utils/time-utils";
+import config from "src/app/config";
 // TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
 // import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
 

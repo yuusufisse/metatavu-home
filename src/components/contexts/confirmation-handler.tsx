@@ -1,6 +1,6 @@
 import { Divider, Typography } from "@mui/material";
 import GenericDialog from "../generics/generic-dialog";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 
 /**
  * Component properties

@@ -1,5 +1,5 @@
 import { useRouteError } from "react-router-dom";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import { Container } from "@mui/material";
 
 /**
