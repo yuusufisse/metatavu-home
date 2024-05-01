@@ -13,7 +13,7 @@ interface Props {
 }
 
 /**
- * Requests data for Task's table columns
+ * Sprint view tasks table columns component
  * 
  *  @param props component properties
  */
@@ -40,7 +40,7 @@ const sprintViewTasksColumns = ({tasks, timeEntries}: Props) => {
       headerClassName: "header-color", 
       headerName: strings.sprint.taskStatus, 
       flex: 1, 
-      valueGetter: (params) => params.row.status || "",
+      valueGetter: (params) => params.row.status || ""
     },
     { 
       field: "priority",

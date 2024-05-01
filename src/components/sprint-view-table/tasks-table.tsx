@@ -15,16 +15,16 @@ import { useSetAtom } from "jotai";
  */
 interface Props {
   project : Projects,
-  loggedInpersonId?: number,
+  loggedInPersonId?: number,
   filter?: string
 }
 
 /**
- * Task component
+ * Task table component
  * 
  * @param props component properties
  */
-const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
+const TaskTable = ({project, loggedInPersonId, filter}: Props) => {
   const { tasksApi, timeEntriesApi } = useLambdasApi();
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
@@ -35,7 +35,7 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
   const [reload, setReload] = useState(false);
 
   /**
-   * Gather tasks and time entries when project is available and update changes appeared
+   * Gather tasks and time entries when project is available and update reload state
    */
   useEffect(() => {
     if (project && open) {
@@ -48,7 +48,7 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
    */
   useEffect(()=>{
     setReload(true);
-  },[loggedInpersonId]);
+  }, [loggedInPersonId]);
   
   /**
    * Get tasks and total time entries  
@@ -58,8 +58,8 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
     if (reload || !tasks.length || !timeEntries.length){
       try {
         let fetchedTasks = await tasksApi.listProjectTasks({projectId: project.id});
-        if (loggedInpersonId) {
-          fetchedTasks = fetchedTasks.filter((task)=> task.assignedPersons?.includes(loggedInpersonId ));
+        if (loggedInPersonId) {
+          fetchedTasks = fetchedTasks.filter((task) => task.assignedPersons?.includes(loggedInPersonId));
         }
         setTasks(fetchedTasks);
         const fetchedTimeEntries = await Promise.all(fetchedTasks.map(async (task) => {
@@ -68,10 +68,10 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
               const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: project.id, taskId: task.id });
               let totalMinutes = 0;
               totalTimeEntries.forEach((timeEntry: TimeEntries)=> {
-                if (loggedInpersonId && timeEntry.person===loggedInpersonId) {
+                if (loggedInPersonId && timeEntry.person === loggedInPersonId) {
                   totalMinutes+=(timeEntry.timeRegistered || 0)
                 }
-                if (!loggedInpersonId) {
+                if (!loggedInPersonId) {
                   totalMinutes += timeEntry.timeRegistered || 0;
                 }
               })
@@ -79,7 +79,7 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
             }
           } catch (error) {
             if (task.id) {
-              const message: string = strings.formatString(strings.sprintRequestError.fetchTasksError, task.id||0, error as string).toString();
+              const message: string = strings.formatString(strings.sprintRequestError.fetchTasksError, task.id || 0, error as string).toString();
               setError(message);
             }
           }
@@ -95,19 +95,21 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
   };
 
   return ( 
-    <Card key={0} sx={{ 
-      backgroundColor: "#f2f2f2", 
-      margin: 0, 
-      paddingTop: "5px", 
-      paddingBottom: "5px", 
-      width: "100%", 
-      height: "100", 
-      marginBottom: "16px", 
-    "& .high_priority": {
-      color: "red"}, 
-    "& .low_priority": {
-      color: "green"} 
-    }}>
+    <Card key={0} 
+      sx={{ 
+        backgroundColor: "#f2f2f2", 
+        margin: 0, 
+        paddingTop: "5px", 
+        paddingBottom: "5px", 
+        width: "100%", 
+        height: "100", 
+        marginBottom: "16px", 
+      "& .high_priority": {
+        color: "red"}, 
+      "& .low_priority": {
+        color: "green"} 
+      }}
+    >
       <IconButton onClick={() => setOpen(!open)}>
         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </IconButton>
@@ -115,12 +117,14 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
       {open && 
         <>
           {loading ? 
-            <Box sx={{textAlign: "center"}} >
-              <CircularProgress sx={{ 
-                scale: "100%", 
-                mt: "3%", 
-                mb: "3%"
-              }}
+            <Box 
+              sx={{textAlign: "center"}} >
+                <CircularProgress 
+                  sx={{ 
+                    scale: "100%", 
+                    mt: "3%", 
+                    mb: "3%"
+                  }}
               />
             </Box>
             :
@@ -139,8 +143,7 @@ const TaskTable = ({project, loggedInpersonId, filter}: Props) => {
               localeText={{ noResultsOverlayLabel: strings.sprint.notFound }}
               disableColumnFilter
               hideFooter={true}
-              filterModel={
-                {
+              filterModel={{
                 items: [{ 
                   field: "status",
                   operator: "contains", 

@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * Requests data for Project's table columns
+ * Sprint view projects table columns component
  * 
  * @param props component properties
  */
@@ -32,19 +32,19 @@ const sprintViewProjectsColumns = ({allocations, timeEntries, projects}: Props) 
       flex: 2, 
       valueGetter: (params) => getProjectName(params.row, allocations, projects),
       renderCell: (params) => 
-      <>
-        <Box 
-          minWidth="45px" 
-          style={{ marginRight:"10px" }} 
-          component="span" 
-          sx={{ 
-            bgcolor: getProjectColor(params.row, allocations, projects), 
-            height: 25, 
-            borderRadius: "5px" 
-          }}
-        />
-        {getProjectName(params.row, allocations, projects)}
-      </>
+        <>
+          <Box 
+            minWidth="45px" 
+            style={{ marginRight:"10px" }} 
+            component="span" 
+            sx={{ 
+              bgcolor: getProjectColor(params.row, allocations, projects), 
+              height: 25, 
+              borderRadius: "5px" 
+            }}
+          />
+          {getProjectName(params.row, allocations, projects)}
+        </>
     },
     { 
       field: "allocation", 

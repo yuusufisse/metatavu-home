@@ -86,10 +86,8 @@ const SprintViewScreen = () => {
         setProjects(projects);
         setAllocations(fetchedAllocations);
         setTimeEntries(fetchedTimeEntries);
-        setLoading(false);
       } catch (error) {
         setError(`${strings.sprintRequestError.fetchError}, ${error}`);
-        setLoading(false);
       }
     }
     setLoading(false);
@@ -98,12 +96,12 @@ const SprintViewScreen = () => {
   /**
    * Calculate total unallocated time for the user in the current 2 week period
    * 
-   * @param alllocation task allocated within a project
+   * @param allocation task allocated within a project
    */
   const unallocatedTime = (allocation: Allocations[]) => {
-      const totalAllocatedTime = allocation.reduce((total, allocation) => total + totalAllocations(allocation), 0);
-      return calculateWorkingLoad(loggedInPerson) - totalAllocatedTime;
-    }
+    const totalAllocatedTime = allocation.reduce((total, allocation) => total + totalAllocations(allocation), 0);
+    return calculateWorkingLoad(loggedInPerson) - totalAllocatedTime;
+  }
 
   /**
    * Featute for task filtering 
@@ -120,14 +118,17 @@ const SprintViewScreen = () => {
           p: "25%", 
           display: "flex", 
           justifyContent: "center" 
-          }}>
+          }}
+        >
           {loading && <Box sx={{ textAlign: "center" }} >
             <Typography>{strings.placeHolder.pleaseWait}</Typography>
-            <CircularProgress sx={{ 
-              scale: "150%", 
-              mt: "5%", 
-              mb: "5%" 
-            }} />
+            <CircularProgress 
+              sx={{ 
+                scale: "150%", 
+                mt: "5%", 
+                mb: "5%" 
+              }} 
+            />
           </Box>}
         </Card> 
       ) : (
@@ -137,7 +138,7 @@ const SprintViewScreen = () => {
             label={strings.sprint.showMyTasks}  
             onClick={() =>  handleOnClickTask()}
           />  
-          <FormControl size= "small" style= {{ width: "200px", float: "right" }}>           
+          <FormControl size= "small" style={{ width: "200px", float: "right" }}>           
             <InputLabel disableAnimation={false}>
               {strings.sprint.taskStatus}
             </InputLabel>
@@ -180,27 +181,29 @@ const SprintViewScreen = () => {
               </MenuItem>
             </Select>
           </FormControl>
-          <Card sx={{ 
-            margin: 0, 
-            width: "100%", 
-            height: "100", 
-            marginBottom: "16px", 
-            marginTop: "16px", 
-            padding: "0px",
-            "& .negative-value": {
-              color: "red"
-            }
-          }}
-          >
-            <DataGrid sx={{
-              borderTop: 0,
-              borderLeft: 0,
-              borderRight: 0,
-              borderBottom: 0,
-              "& .header-color": {
-                backgroundColor: "#f2f2f2"
+          <Card 
+            sx={{ 
+              margin: 0, 
+              width: "100%", 
+              height: "100", 
+              marginBottom: "16px", 
+              marginTop: "16px", 
+              padding: "0px",
+              "& .negative-value": {
+                color: "red"
               }
-            }} 
+            }}
+          >
+            <DataGrid 
+              sx={{
+                borderTop: 0,
+                borderLeft: 0,
+                borderRight: 0,
+                borderBottom: 0,
+                "& .header-color": {
+                  backgroundColor: "#f2f2f2"
+                }
+              }} 
               autoHeight={true}
               localeText={{ noResultsOverlayLabel: strings.sprint.notFound }}
               disableColumnFilter
@@ -208,16 +211,22 @@ const SprintViewScreen = () => {
               rows={allocations}
               columns={columns}
             />
-            <Box sx={{ 
-              backgroundColor:"#e6e6e6", 
-              display: "flex", 
-              justifyContent: "space-between", 
-              padding: "5px", 
-              paddingTop:" 10px", 
-              paddingBottom:" 10px" 
-            }}
+            <Box 
+              sx={{ 
+                backgroundColor:"#e6e6e6", 
+                display: "flex", 
+                justifyContent: "space-between", 
+                padding: "5px", 
+                paddingTop:" 10px", 
+                paddingBottom:" 10px" 
+              }}
             >
-              <span style={{paddingLeft: "5px", color: unallocatedTime(allocations) < 0 ? "red" : ""}}>
+              <span 
+                style={{
+                  paddingLeft: "5px", 
+                  color: unallocatedTime(allocations) < 0 ? "red" : ""
+                }}
+              >
                 {strings.sprint.unAllocated}, {getHoursAndMinutes(unallocatedTime(allocations))}
               </span> 
               <span style={{ paddingRight:"5px"}}>
@@ -229,7 +238,7 @@ const SprintViewScreen = () => {
             <TaskTable 
               key={project.id} 
               project={project} 
-              loggedInpersonId={myTasks ? loggedInPerson?.id : undefined} 
+              loggedInPersonId={myTasks ? loggedInPerson?.id : undefined} 
               filter={filter} 
             />
           )}

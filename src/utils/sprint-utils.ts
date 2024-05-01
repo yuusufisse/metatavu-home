@@ -2,11 +2,11 @@ import { Person } from "src/generated/client";
 import { Allocations, Projects, Tasks } from "src/generated/homeLambdasClient";
 
 /**
- * Retrieve total time entries for an Allocation
+ * Retrieve total time entries for an allocation
  * 
- * @param allocation task allocated within a project
- * @param allocations tasks related to the project
- * @param timeEntries  total time entries requested for each allocation
+ * @param allocation allocation
+ * @param allocations list of allocations
+ * @param timeEntries list of total time entries associated with allocations
  */
 export const getTotalTimeEntriesAllocations = (allocation: Allocations, allocations: Allocations[], timeEntries: number[]) => {
   if (timeEntries.length) {
@@ -19,8 +19,8 @@ export const getTotalTimeEntriesAllocations = (allocation: Allocations, allocati
  * Retrieve total time entries for a task
  * 
  * @param task task of allocated project
- * @param tasks total tasks related to the project
- * @param timeEntries total time entries requested for each task
+ * @param tasks list of tasks related to the project
+ * @param timeEntries list of total time associated with tasks
  */
 export const getTotalTimeEntriesTasks = (task: Tasks, tasks: Tasks[], timeEntries: number[]) => {
   if (timeEntries.length) {
@@ -32,9 +32,9 @@ export const getTotalTimeEntriesTasks = (task: Tasks, tasks: Tasks[], timeEntrie
 /**
  * Get project name
  * 
- * @param allocation task allocated within a project
- * @param allocations tasks related to the project
- * @param projects project associated with the given allocation
+ * @param allocation allocation
+ * @param allocations list of allocations
+ * @param projects list of project associated with the allocations
  */
 export const getProjectName = (allocation: Allocations, allocations: Allocations[], projects: Projects[]) => {
   if (projects.length) {
@@ -46,9 +46,9 @@ export const getProjectName = (allocation: Allocations, allocations: Allocations
 /**
  * Get project color
  * 
- * @param allocation task allocated within a project
- * @param allocations tasks related to the project
- * @param projects project associated with the given allocation
+ * @param allocation allocation
+ * @param allocations list of allocations
+ * @param projects list of projects associated with allocations
  */
 export const getProjectColor = (allocation: Allocations, allocations: Allocations[], projects: Projects[]) => {
   if (projects.length) {
@@ -75,9 +75,9 @@ export const totalAllocations = (allocation: Allocations) => {
 /**
  * Calculate the remaining time of project completion
  * 
- * @param allocation task allocated within a project
- * @param allocations tasks related to the project
- * @param projects project associated with the given allocation
+ * @param allocation allocation
+ * @param allocations list of allocations
+ * @param projects list of projects associated with allocations
  */
 export const timeLeft = (allocation: Allocations, allocations: Allocations[], timeEntries: number[]) => {
   return totalAllocations(allocation) - getTotalTimeEntriesAllocations(allocation, allocations, timeEntries) || 0;
@@ -88,11 +88,9 @@ export const timeLeft = (allocation: Allocations, allocations: Allocations[], ti
  * 
  * @param person user time spent on the project in minutes
  */
-
 export const calculateWorkingLoad = (person?: Person) => {
-  if (!person) {
-    return 0;
-  }
+  if (!person) return 0;
+
   const totalMinutes =
     (person.monday || 0) + 
     (person.tuesday || 0) + 
@@ -100,4 +98,4 @@ export const calculateWorkingLoad = (person?: Person) => {
     (person.thursday || 0) + 
     (person.friday || 0);
   return totalMinutes * 2;
-}
+};
