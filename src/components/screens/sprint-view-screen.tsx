@@ -49,46 +49,45 @@ const SprintViewScreen = () => {
    */
   const fetchProjectDetails = async () => {
     setLoading(true);
-    if (loggedInPerson){
-      try {
-        const fetchedAllocations = await allocationsApi.listAllocations({
-          startDate: new Date(),
-          personId: loggedInPerson?.id.toString()
-        });
-        const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
-        const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async (allocation) => {
-          try {
-            if (allocation.project) {
-              const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project, startDate: allocation.startDate, endDate: allocation.endDate });
-              let totalMinutes = 0;
-              totalTimeEntries.forEach((timeEntry: TimeEntries) => {
-                if (loggedInPerson && timeEntry.person === loggedInPerson.id) {
-                  totalMinutes += (timeEntry.timeRegistered || 0)
-                }
-              }); 
-              return totalMinutes;
-            }
-          } catch (error) {
-            if (allocation.id) {
-              const message: string = strings.formatString(strings.sprintRequestError.fetchAllocationError, (allocation.id).toString(), error as string).toString();
-              setError(message);          
-            }
+    if (!loggedInPerson) return;
+    try {
+      const fetchedAllocations = await allocationsApi.listAllocations({
+        startDate: new Date(),
+        personId: loggedInPerson?.id.toString()
+      });
+      const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
+      const fetchedTimeEntries = await Promise.all(fetchedAllocations.map(async (allocation) => {
+        try {
+          if (allocation.project) {
+            const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({ projectId: allocation.project, startDate: allocation.startDate, endDate: allocation.endDate });
+            let totalMinutes = 0;
+            totalTimeEntries.forEach((timeEntry: TimeEntries) => {
+              if (loggedInPerson && timeEntry.person === loggedInPerson.id) {
+                totalMinutes += (timeEntry.timeRegistered || 0)
+              }
+            }); 
+            return totalMinutes;
           }
-          return 0;
-        }));
-  
-        const projects : Projects[] = [];
-        fetchedAllocations.forEach((allocation) => {
-          const projectFound = fetchedProjects.find((project) => project.id === allocation.project);
-          projectFound && projects.push(projectFound);
-        });
+        } catch (error) {
+          if (allocation.id) {
+            const message: string = strings.formatString(strings.sprintRequestError.fetchAllocationError, (allocation.id).toString(), error as string).toString();
+            setError(message);          
+          }
+        }
+        return 0;
+      }));
 
-        setProjects(projects);
-        setAllocations(fetchedAllocations);
-        setTimeEntries(fetchedTimeEntries);
-      } catch (error) {
-        setError(`${strings.sprintRequestError.fetchError}, ${error}`);
-      }
+      const projects : Projects[] = [];
+      fetchedAllocations.forEach((allocation) => {
+        const projectFound = fetchedProjects.find((project) => project.id === allocation.project);
+        projectFound && projects.push(projectFound);
+      });
+
+      setProjects(projects);
+      setAllocations(fetchedAllocations);
+      setTimeEntries(fetchedTimeEntries);
+    } catch (error) {
+      setError(`${strings.sprintRequestError.fetchError}, ${error}`);
     }
     setLoading(false);
   };
@@ -113,14 +112,14 @@ const SprintViewScreen = () => {
   
   return (
     <>
-      {!allocations.length && !projects.length && !timeEntries.length ? (
+      {loading ? (
         <Card sx={{ 
           p: "25%", 
           display: "flex", 
           justifyContent: "center" 
           }}
         >
-          {loading && <Box sx={{ textAlign: "center" }} >
+          {<Box sx={{ textAlign: "center" }} >
             <Typography>{strings.placeHolder.pleaseWait}</Typography>
             <CircularProgress 
               sx={{ 
