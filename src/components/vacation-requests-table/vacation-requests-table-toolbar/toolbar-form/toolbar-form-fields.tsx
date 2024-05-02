@@ -1,14 +1,19 @@
 import { Button, FormControl, FormLabel, MenuItem, TextField } from "@mui/material";
-import getVacationTypeByString from "../../../../utils/vacation-type-utils";
-import { VacationType } from "../../../../generated/client";
+import getVacationTypeByString from "src/utils/vacation-type-utils";
 import { ChangeEvent, useEffect } from "react";
 import DateRangePicker from "../../../generics/date-range-picker";
-import { DateRange, ToolbarFormModes, VacationData } from "../../../../types";
+import { DateRange, ToolbarFormModes, VacationData } from "src/types";
 import { DateTime } from "luxon";
-import { hasAllPropsDefined } from "../../../../utils/check-utils";
-import strings from "../../../../localization/strings";
-import LocalizationUtils from "../../../../utils/localization-utils";
-import { getVacationDurationInDays } from "../../../../utils/time-utils";
+import { hasAllPropsDefined } from "src/utils/check-utils";
+import strings from "src/localization/strings";
+import LocalizationUtils from "src/utils/localization-utils";
+import { calculateTotalVacationDays } from "src/utils/time-utils";
+import { useAtom, useAtomValue } from "jotai";
+import config from "src/app/config";
+import { userProfileAtom } from "src/atoms/auth";
+import { personsAtom } from "src/atoms/person";
+import { VacationType, Person } from "src/generated/client";
+import { daysOfWeek } from "src/components/constants";
 
 /**
  * Component properties
@@ -35,12 +40,18 @@ const ToolbarFormFields = ({
   dateRange,
   setDateRange
 }: Props) => {
+  const userProfile = useAtomValue(userProfileAtom);
+  const [persons] = useAtom(personsAtom);
+  const loggedInPerson = persons.find(
+    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+  );
+
   useEffect(() => {
     setVacationData({
       ...vacationData,
       startDate: dateRange.start,
       endDate: dateRange.end,
-      days: getVacationDurationInDays(dateRange.start, dateRange.end)
+      days: calculateTotalVacationDays(dateRange.start, dateRange.end, getWorkingWeek(loggedInPerson))
     });
   }, [dateRange]);
 
@@ -70,6 +81,23 @@ const ToolbarFormFields = ({
       message: value
     });
   };
+
+  /**
+   * Get a list of working days
+   *
+   * @param loggedInPerson Person
+   */
+  const getWorkingWeek = (loggedInPerson?: Person) => {
+    const workingWeek = new Array(daysOfWeek.length).fill(false);
+    if (!loggedInPerson) return workingWeek;
+    
+    daysOfWeek.forEach((weekDay, index)=>{
+      if (loggedInPerson[weekDay as keyof typeof loggedInPerson] !== 0) {
+        workingWeek[index] = true;
+      }
+    }) 
+    return workingWeek;
+  }
 
   return (
     <FormControl sx={{ width: "100%" }}>

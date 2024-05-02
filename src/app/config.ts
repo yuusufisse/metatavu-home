@@ -9,6 +9,9 @@ interface Config {
   api: {
     baseUrl: string;
   };
+  lambdas: {
+    baseUrl: string;
+  };
   person: {
     forecastUserIdOverride: number;
   };
@@ -34,6 +37,9 @@ const config: Config = {
   },
   api: {
     baseUrl: env.VITE_API_BASE_URL
+  },
+  lambdas: {
+    baseUrl: env.VITE_HOME_LAMBDAS_BASE_URL
   },
   person: {
     forecastUserIdOverride: env.VITE_FORECAST_USER_ID_OVERRIDE

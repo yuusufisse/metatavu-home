@@ -2,7 +2,7 @@ import { Divider } from "@mui/material";
 import GenericDialog from "../generics/generic-dialog";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 
 /**
  * Component properties
