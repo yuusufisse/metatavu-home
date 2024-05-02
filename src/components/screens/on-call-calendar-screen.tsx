@@ -3,7 +3,6 @@ import { DateCalendar, PickersDay, PickersDayProps } from "@mui/x-date-pickers";
 import {
   Badge,
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -11,7 +10,7 @@ import {
   Typography
 } from "@mui/material";
 import { DateTime } from "luxon";
-import { useApi } from "../../hooks/use-api";
+import { useLambdasApi } from "../../hooks/use-api";
 import { oncallAtom } from "../../atoms/oncall";
 import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
@@ -19,11 +18,11 @@ import strings from "../../localization/strings";
 import { stringToColor } from "../../utils/oncall-utils";
 import { OnCallCalendarEntry } from "../../types";
 import OnCallHandler from "../contexts/oncall-handler";
-import { OnCallPaid } from "../../generated/client";
 import OnCallListView from "../oncall-calendars/oncall-list-view";
+import { OnCallPaid } from "src/generated/homeLambdasClient";
 
 const OnCallCalendarScreen = () => {
-  const { onCallApi } = useApi();
+  const { onCallApi } = useLambdasApi();
   const [onCallData, setOnCallData] = useAtom(oncallAtom);
   const [open, setOpen] = useState(false);
   const [isCalendarView, setIsCalendarView] = useState(true);
@@ -62,15 +61,16 @@ const OnCallCalendarScreen = () => {
 
   const generateOnCallWeeks = () => {
     const onCallWeeks: OnCallCalendarEntry[] = [];
+    console.log(onCallData)
     onCallData.forEach((item) => {
-      const weeks = DateTime.fromObject({ weekNumber: Number(item.Week), weekYear: selectedYear });
+      const weeks = DateTime.fromObject({ weekNumber: item.week, weekYear: selectedYear });
 
       for (let i = 0; i < 7; i++) {
         onCallWeeks.push({
           date: weeks.plus({ days: i }).toISODate(),
-          person: item.Person,
-          paid: item.Paid,
-          badgeColor: stringToColor(item.Person)
+          person: item.person,
+          paid: item.paid,
+          badgeColor: stringToColor(item.person)
         });
       }
     });
@@ -82,11 +82,11 @@ const OnCallCalendarScreen = () => {
       const weekNumber = DateTime.fromISO(entry.date).weekNumber;
       const year = DateTime.fromISO(entry.date).year;
       const updateParameters: OnCallPaid = {
-        paid: !entry.paid,
         year: year,
-        week: weekNumber
+        week: weekNumber,
+        paid: !entry.paid,
       };
-      await onCallApi.updatePaid({ onCall: updateParameters });
+      await onCallApi.updatePaid({ onCallPaid : updateParameters });
       getOnCallData(year);
     }
   };
@@ -105,6 +105,7 @@ const OnCallCalendarScreen = () => {
     const { day, outsideCurrentMonth, ...other } = props;
 
     const calendarProps = generateOnCallWeeks();
+    console.log(calendarProps)
     const badgeColor = calendarProps.find((item) => item.date === day.toISODate())?.badgeColor;
     const populatedDay = calendarProps.map((item) => item.date).includes(day.toISODate());
     const personName = calendarProps.filter((item) => item.date === day.toISODate())[0]?.person;

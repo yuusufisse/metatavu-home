@@ -13,10 +13,9 @@ import {
   Configuration as LambdaConfiguration, 
   ProjectsApi, 
   TasksApi,
-  TimeEntriesApi
+  TimeEntriesApi,
+  OnCallApi
 } from "../generated/homeLambdasClient"
-import { OnCallApi } from "../generated/client/apis/OnCallApi";
-
 /**
  * Generic type that accepts parameters within the @ConfigurationParameters interface
  */
@@ -71,23 +70,6 @@ export const getLambdasApiClient = (accessToken?: string) => {
     projectsApi: new ProjectsApi(getConfiguration()),
     tasksApi: new TasksApi(getConfiguration()),
     timeEntriesApi: new TimeEntriesApi(getConfiguration()),
-    onCallApi: new OnCallApi(getLambdaConfiguration())
-  };
-};
-
-/**
-* Metatavu Home Lambda API client with request functions to several endpoints 
-* 
-* @param accessToken Access token required for authentication
-* @returns Configured API request functions
-*/
-export const getLambdasApiClient  = (accessToken?: string) => {
-  const getConfiguration = getConfigurationFactory(LambdaConfiguration, config.lambdas.baseUrl, accessToken);
-
-  return {
-    allocationsApi: new AllocationsApi(getConfiguration()),
-    projectsApi: new ProjectsApi(getConfiguration()),
-    tasksApi: new TasksApi(getConfiguration()),
-    timeEntriesApi: new TimeEntriesApi(getConfiguration())
+    onCallApi: new OnCallApi(getConfiguration())
   };
 };

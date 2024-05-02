@@ -15,9 +15,6 @@ interface Config {
   person: {
     forecastUserIdOverride: number;
   };
-  lambdas : {
-    url : string;
-  }
 }
 
 const env = cleanEnv(import.meta.env, {
@@ -43,9 +40,6 @@ const config: Config = {
   },
   person: {
     forecastUserIdOverride: env.VITE_FORECAST_USER_ID_OVERRIDE
-  },
-  lambdas: {
-    url: env.VITE_HOME_LAMBDAS_BASE_URL
   }
 };
 
