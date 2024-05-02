@@ -51,7 +51,7 @@ const OnCallCalendarScreen = () => {
 
   const getCurrentOnCallPerson = () => {
     if (selectedYear === DateTime.now().year) {
-      const currentWeek = 10;
+      const currentWeek = DateTime.now().weekNumber;
       const currentOnCallPerson = onCallData.find(
         (item) => Number(item.Week) === currentWeek
       )?.Person;
@@ -78,15 +78,17 @@ const OnCallCalendarScreen = () => {
   };
 
   const updatePaidStatus = async (entry: OnCallCalendarEntry) => {
-    const weekNumber = DateTime.fromISO(entry.date).weekNumber;
-    const year = DateTime.fromISO(entry.date).year;
-    const updateParameters: OnCallPaid = {
-      paid: !entry.paid,
-      year: year,
-      week: weekNumber
-    };
-    await onCallApi.updatePaid({ onCall: updateParameters });
-    getOnCallData(year);
+    if (entry.date) {
+      const weekNumber = DateTime.fromISO(entry.date).weekNumber;
+      const year = DateTime.fromISO(entry.date).year;
+      const updateParameters: OnCallPaid = {
+        paid: !entry.paid,
+        year: year,
+        week: weekNumber
+      };
+      await onCallApi.updatePaid({ onCall: updateParameters });
+      getOnCallData(year);
+    }
   };
 
   const renderCurrentOnCall = () => {
@@ -144,24 +146,22 @@ const OnCallCalendarScreen = () => {
         />
       );
 
-    return <OnCallListView selectedYear={selectedYear} />;
+    return <OnCallListView selectedYear={selectedYear} updatePaid={updatePaidStatus} />;
   };
 
   const selectEntryToUpdate = (onCallEntries: OnCallCalendarEntry[], date: DateTime) => {
     const selectedEntry = onCallEntries.find((item) => item.date === date.toISODate());
-    // updatePaidStatus(selectedEntry);
     setSelectedOnCallEntry(selectedEntry);
     setOpen(true);
-    console.log(selectedEntry, onCallData);
   };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
       <FormControl sx={{ width: "50%", textAlign: "center", margin: "auto" }}>
-        <InputLabel id="demo-simple-select-label">Select calendar view</InputLabel>
+        <InputLabel id="calendarSelect">Select calendar view</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="calendarSelect"
+          id="calendarSelect"
           label="Select calendar view"
           value={isCalendarView ? "Calendar" : "List"}
         >
@@ -181,7 +181,6 @@ const OnCallCalendarScreen = () => {
       />
       {renderCalendarOrList()}
       {renderCurrentOnCall()}
-      <Button onClick={() => setOpen(true)}>TEST</Button>
     </Box>
   );
 };

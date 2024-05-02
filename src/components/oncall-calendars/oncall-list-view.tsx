@@ -10,7 +10,7 @@ import { OnCallCalendarEntry } from "../../types";
  */
 interface Props {
   selectedYear: number;
-  updatePaidStatus: (entry: OnCallCalendarEntry) => void;
+  updatePaid: (entry: OnCallCalendarEntry) => void;
 }
 
 const OnCallListView = ({ selectedYear }: Props) => {

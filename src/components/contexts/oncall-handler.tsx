@@ -10,7 +10,7 @@ import { DateTime } from "luxon";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
-  onCallEntry: OnCallCalendarEntry;
+  onCallEntry: OnCallCalendarEntry | undefined;
   updatePaidStatus: (entry: OnCallCalendarEntry) => void;
 }
 
@@ -19,7 +19,7 @@ const OnCallHandler = ({ open, setOpen, onCallEntry, updatePaidStatus }: Props) 
   if (onCallEntry)
     return (
       <GenericDialog
-        title={`Week ${DateTime.fromISO(onCallEntry.date).weekNumber}`}
+        title={`Week ${DateTime.fromISO(String(onCallEntry.date)).weekNumber}`}
         open={open}
         error={false}
         onClose={() => setOpen(false)}
