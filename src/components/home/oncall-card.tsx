@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography } from '@mui/material'
 import { useAtom, useSetAtom } from 'jotai';
 import { DateTime } from 'luxon';
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { errorAtom } from 'src/atoms/error';
 import { oncallAtom } from 'src/atoms/oncall';
@@ -12,7 +12,6 @@ const OnCallCard = () => {
 
     const { onCallApi } = useLambdasApi();
     const [onCallData, setOnCallData] = useAtom(oncallAtom);
-    const [onCallPerson, setOnCallPerson] = useState("");
 
     const setError = useSetAtom(errorAtom);
 
@@ -34,12 +33,13 @@ const OnCallCard = () => {
     };
 
     const getCurrentOnCallPerson = () => {
-        const currentWeek = 10;
+        const currentWeek = DateTime.now().weekNumber;
         const currentOnCallPerson = onCallData.find(
             (item) => Number(item.week) === currentWeek
         )?.person;
 
-        if (currentOnCallPerson) setOnCallPerson(currentOnCallPerson);
+        if (currentOnCallPerson) return <>Current on call person this week: <b>{currentOnCallPerson}</b></>
+        return "No on call person this week"
     };
     
   return (
@@ -52,7 +52,7 @@ const OnCallCard = () => {
             <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
                 On call calendar
             </Typography>
-            <Typography variant="body1">On call person this week: <b>{onCallPerson}</b></Typography>
+            <Typography variant="body1">{getCurrentOnCallPerson()}</Typography>
         </CardContent>
         </Card>
     </Link>
