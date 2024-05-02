@@ -221,17 +221,19 @@ const SprintViewScreen = () => {
                 paddingBottom:" 10px" 
               }}
             >
-              <span 
-                style={{
+              <Typography> 
+                {strings.sprint.unAllocated} 
+                <span style={{ 
                   paddingLeft: "5px", 
-                  color: unallocatedTime(allocations) < 0 ? "red" : ""
-                }}
-              >
-                {strings.sprint.unAllocated}, {getHoursAndMinutes(unallocatedTime(allocations))}
-              </span> 
-              <span style={{ paddingRight:"5px"}}>
+                  color: unallocatedTime(allocations) < 0 ? "red" : "" 
+                  }}
+                >
+                  {getHoursAndMinutes(unallocatedTime(allocations))}
+                </span> 
+              </Typography>
+              <Typography style={{ paddingRight:"5px"}}>
                 {strings.formatString(strings.sprint.current, sprintStartDate.toLocaleString(), sprintEndDate.toLocaleString() )}
-              </span>
+              </Typography>
             </Box>
           </Card>
           {projects.map((project) =>

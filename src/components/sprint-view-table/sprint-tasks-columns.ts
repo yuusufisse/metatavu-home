@@ -40,7 +40,8 @@ const sprintViewTasksColumns = ({tasks, timeEntries}: Props) => {
       headerClassName: "header-color", 
       headerName: strings.sprint.taskStatus, 
       flex: 1, 
-      valueGetter: (params) => params.row.status || ""
+      valueGetter: (params) => params.row.statusCategory || "",
+      renderCell: (params) => params.row.status
     },
     { 
       field: "priority",
