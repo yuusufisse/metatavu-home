@@ -9,7 +9,7 @@ import UserRoleUtils from "src/utils/user-role-utils";
  */
 const AdminScreen = () => {
   const developerMode = UserRoleUtils.developerMode();
-  const sprintViewCard = developerMode ? <SprintViewCard />:null
+  const sprintViewCard = developerMode ? <SprintViewCard /> : null;
   const vacationsCard = developerMode ? <VacationsCard />:null
   return (
     <Grid container spacing={2}>
