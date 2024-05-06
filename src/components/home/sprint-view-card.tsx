@@ -8,11 +8,6 @@ import UserRoleUtils from "src/utils/user-role-utils";
  */
 const SprintViewCard = () => {
   const adminMode = UserRoleUtils.adminMode();
-  const userIsDeveloper = UserRoleUtils.isDeveloper();
-
-  if (!userIsDeveloper) {
-    return null;
-  }
   
   return (
     <Link

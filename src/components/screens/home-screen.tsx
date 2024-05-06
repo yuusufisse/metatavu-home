@@ -8,17 +8,19 @@ import UserRoleUtils from "src/utils/user-role-utils";
  * Home screen component
  */
 const HomeScreen = () => {
-  const userIsDeveloper = UserRoleUtils.isDeveloper();
+  const developerMode = UserRoleUtils.developerMode();
+  const sprintViewCard = developerMode ? <SprintViewCard />:null
+  const vacationsCard = developerMode ? <VacationsCard />:null
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
         <BalanceCard />
         <Grid item xs={12} style={{ marginTop: "16px" }}>
-          {userIsDeveloper && <SprintViewCard />}
+          {sprintViewCard}
         </Grid>
       </Grid>
       <Grid item xs={12} sm={6}>
-        {userIsDeveloper && <VacationsCard />}
+        {vacationsCard}
       </Grid>
     </Grid>
   );
