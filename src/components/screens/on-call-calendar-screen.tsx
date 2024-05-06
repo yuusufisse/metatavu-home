@@ -3,6 +3,7 @@ import { DateCalendar, PickersDay, PickersDayProps } from "@mui/x-date-pickers";
 import {
   Badge,
   Box,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -21,35 +22,58 @@ import OnCallHandler from "../contexts/oncall-handler";
 import OnCallListView from "../oncall-calendars/oncall-list-view";
 import { OnCallPaid } from "src/generated/homeLambdasClient";
 
+/**
+ * On call calendar screen component
+ */
 const OnCallCalendarScreen = () => {
+  /**
+   * Validates if local storage item is of correct type
+   * @returns boolean value from local storage if validated
+   */
+  const validateJSONString = () => {
+    const item = localStorage.getItem("calendarViewAsDefault");
+    if (item) return JSON.parse(item);
+    return true;
+  };
+
   const { onCallApi } = useLambdasApi();
   const [onCallData, setOnCallData] = useAtom(oncallAtom);
   const [open, setOpen] = useState(false);
-  const [isCalendarView, setIsCalendarView] = useState(true);
-  const [selectedYear, setSelectedYear] = useState<number>(DateTime.now().year);
+  const [isCalendarView, setIsCalendarView] = useState(validateJSONString());
+  const [selectedDate, setSelectedDate] = useState<DateTime>(DateTime.now());
   const [onCallPerson, setOnCallPerson] = useState("");
   const [selectedOnCallEntry, setSelectedOnCallEntry] = useState<OnCallCalendarEntry>();
   const setError = useSetAtom(errorAtom);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getOnCallData(selectedYear);
-  }, [selectedYear]);
+    getOnCallData(selectedDate.year);
+  }, [selectedDate.year]);
 
   useEffect(() => {
     getCurrentOnCallPerson();
   }, [onCallData]);
 
+  /**
+   * Fetches on call data, such as personnel and weeks
+   * @param year year of entries to search
+   */
   const getOnCallData = async (year: number) => {
+    setIsLoading(true);
     try {
       const fetchedData = await onCallApi.listOnCallData({ year: year.toString() });
       setOnCallData(fetchedData);
     } catch (error) {
       setError(`${strings.error.fetchFailedGeneral}, ${error}`);
     }
+    setIsLoading(false);
   };
 
+  /**
+   * Finds the current on call employee and sets them in a state
+   */
   const getCurrentOnCallPerson = () => {
-    if (selectedYear === DateTime.now().year) {
+    if (selectedDate.year === DateTime.now().year) {
       const currentWeek = DateTime.now().weekNumber;
       const currentOnCallPerson = onCallData.find(
         (item) => Number(item.Week) === currentWeek
@@ -59,11 +83,14 @@ const OnCallCalendarScreen = () => {
     }
   };
 
+  /**
+   * Generates props for Badge component to be displayed in DateCalendar
+   * @returns Array containing props for Badge component
+   */
   const generateOnCallWeeks = () => {
     const onCallWeeks: OnCallCalendarEntry[] = [];
-    console.log(onCallData)
     onCallData.forEach((item) => {
-      const weeks = DateTime.fromObject({ weekNumber: item.week, weekYear: selectedYear });
+      const weeks = DateTime.fromObject({ weekNumber: item.week, weekYear: selectedDate.year });
 
       for (let i = 0; i < 7; i++) {
         onCallWeeks.push({
@@ -77,35 +104,48 @@ const OnCallCalendarScreen = () => {
     return onCallWeeks;
   };
 
-  const updatePaidStatus = async (entry: OnCallCalendarEntry) => {
-    if (entry.date) {
-      const weekNumber = DateTime.fromISO(entry.date).weekNumber;
-      const year = DateTime.fromISO(entry.date).year;
-      const updateParameters: OnCallPaid = {
-        year: year,
-        week: weekNumber,
-        paid: !entry.paid,
-      };
-      await onCallApi.updatePaid({ onCallPaid : updateParameters });
-      getOnCallData(year);
-    }
+  /**
+   * Updates the selected paid status
+   * @param year
+   * @param weekNumber
+   * @param paid
+   */
+  const updatePaidStatus = async (year: number, weekNumber: number, paid: boolean) => {
+    const updateParameters: OnCallPaid = {
+      year: year,
+      week: weekNumber,
+      paid: !paid
+    };
+    await onCallApi.updatePaid({ onCallPaid: updateParameters });
+    getOnCallData(year);
   };
 
+  /**
+   * Renders the current week's on call person if they exist
+   * @returns Typography element containing the current on call employee
+   */
   const renderCurrentOnCall = () => {
     if (onCallPerson)
       return (
-        <Typography sx={{ textAlign: "center" }}>Current on-call person: {onCallPerson}</Typography>
+        <Typography sx={{ textAlign: "center" }}>
+          {strings.oncall.onCallPersonExists} {onCallPerson}
+        </Typography>
       );
 
-    return <Typography sx={{ textAlign: "center" }}>No on call person this week</Typography>;
+    return <Typography sx={{ textAlign: "center" }}>{strings.oncall.noOnCallPerson}</Typography>;
   };
+
+  /**
+   * Populates DateCalendar component with customized Badge components created from on-call data
+   * @param props
+   * @returns Badge and PickersDay component for calendar each day
+   */
   const populateCalendarWeeks = (
     props: PickersDayProps<DateTime> & { highlightedDays?: number[] }
   ) => {
     const { day, outsideCurrentMonth, ...other } = props;
 
     const calendarProps = generateOnCallWeeks();
-    console.log(calendarProps)
     const badgeColor = calendarProps.find((item) => item.date === day.toISODate())?.badgeColor;
     const populatedDay = calendarProps.map((item) => item.date).includes(day.toISODate());
     const personName = calendarProps.filter((item) => item.date === day.toISODate())[0]?.person;
@@ -132,24 +172,55 @@ const OnCallCalendarScreen = () => {
     );
   };
 
+  /**
+   * Handles render between list view and calendar view
+   * @param toggle
+   */
   const handleCalendarViewChange = (toggle: boolean) => {
     setIsCalendarView(toggle);
+    localStorage.setItem("calendarViewAsDefault", toggle.toString());
   };
 
+  /**
+   * Renders calendar or list view
+   * @returns Calendar or list view component
+   */
   const renderCalendarOrList = () => {
+    if (isLoading)
+      return (
+        <Box sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
+          <CircularProgress sx={{ scale: "150%" }} />
+        </Box>
+      );
     if (isCalendarView)
       return (
         <DateCalendar
-          onMonthChange={(value) => setSelectedYear(value.year)}
-          onYearChange={(value) => setSelectedYear(value.year)}
+          defaultValue={selectedDate}
+          onMonthChange={(value) => {
+            setSelectedDate(value);
+          }}
+          onYearChange={(value) => {
+            setSelectedDate(value);
+          }}
           displayWeekNumber={true}
           slots={{ day: populateCalendarWeeks }}
         />
       );
 
-    return <OnCallListView selectedYear={selectedYear} updatePaid={updatePaidStatus} />;
+    return (
+      <OnCallListView
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        updatePaidStatus={updatePaidStatus}
+      />
+    );
   };
 
+  /**
+   * Selects a paid status to update and handles the rendering of oncall handler
+   * @param onCallEntries
+   * @param date
+   */
   const selectEntryToUpdate = (onCallEntries: OnCallCalendarEntry[], date: DateTime) => {
     const selectedEntry = onCallEntries.find((item) => item.date === date.toISODate());
     setSelectedOnCallEntry(selectedEntry);
@@ -159,7 +230,7 @@ const OnCallCalendarScreen = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
       <FormControl sx={{ width: "50%", textAlign: "center", margin: "auto" }}>
-        <InputLabel id="calendarSelect">Select calendar view</InputLabel>
+        <InputLabel id="calendarSelect">{strings.oncall.selectView}</InputLabel>
         <Select
           labelId="calendarSelect"
           id="calendarSelect"
@@ -167,10 +238,10 @@ const OnCallCalendarScreen = () => {
           value={isCalendarView ? "Calendar" : "List"}
         >
           <MenuItem value={"Calendar"} onClick={() => handleCalendarViewChange(true)}>
-            Calendar
+            {strings.oncall.calendar}
           </MenuItem>
           <MenuItem value={"List"} onClick={() => handleCalendarViewChange(false)}>
-            List
+            {strings.oncall.list}
           </MenuItem>
         </Select>
       </FormControl>
@@ -180,8 +251,8 @@ const OnCallCalendarScreen = () => {
         onCallEntry={selectedOnCallEntry}
         updatePaidStatus={updatePaidStatus}
       />
-      {renderCalendarOrList()}
       {renderCurrentOnCall()}
+      {renderCalendarOrList()}
     </Box>
   );
 };
