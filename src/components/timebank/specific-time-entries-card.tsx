@@ -105,6 +105,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
     <List style={{ width:"12%", minWidth:"110px" }}dense sx={{ marginLeft: "5%" }}>
       {timeEntriesListItems.map((item) => {
         const entryValue = Number(personDailyEntry ? personDailyEntry[item.propName] : 0);
+        
         return (
           <ListItem key={`timeEntriesListItem-${item.propName}`}>
             <ListItemText
