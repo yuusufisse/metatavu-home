@@ -36,7 +36,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
-  const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntryWithIndexSignature|undefined>(useAtomValue(personDailyEntryAtom));
+  const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntryWithIndexSignature | undefined>(useAtomValue(personDailyEntryAtom));
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>(useAtomValue(dailyEntriesAtom));
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
