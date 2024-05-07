@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { oncallAtom } from "../../atoms/oncall";
 import { Box, Button, Checkbox, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { DateTime } from "luxon";
 import strings from "src/localization/strings";
 

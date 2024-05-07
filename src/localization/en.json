@@ -190,6 +190,7 @@
     "employeeSelectlabel": "Select employee"
   },
   "oncall": {
+    "title": "On call calendar",
     "previousYear": "Previous year",
     "nextYear": "Next year",
     "oncallShifts": "On call weeks",

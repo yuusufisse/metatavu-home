@@ -190,6 +190,7 @@
     "employeeSelectlabel": "Valitse työntekijä"
   },
   "oncall": {
+    "title": "Päivystyskalenteri",
     "previousYear": "Edellinen vuosi",
     "nextYear": "Seuraava vuosi",
     "oncallShifts": "Päivystysvuorot",

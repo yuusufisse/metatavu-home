@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { DateCalendar, PickersDay, PickersDayProps } from "@mui/x-date-pickers";
+import { useEffect, useState } from "react";
+import { DateCalendar, PickersDay, type PickersDayProps } from "@mui/x-date-pickers";
 import {
   Badge,
   Box,
@@ -17,10 +17,10 @@ import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
 import { stringToColor } from "../../utils/oncall-utils";
-import { OnCallCalendarEntry } from "../../types";
+import type { OnCallCalendarEntry } from "../../types";
 import OnCallHandler from "../contexts/oncall-handler";
 import OnCallListView from "../oncall-calendars/oncall-list-view";
-import { OnCallPaid } from "src/generated/homeLambdasClient";
+import type { OnCallPaid } from "src/generated/homeLambdasClient";
 
 /**
  * On call calendar screen component
@@ -50,6 +50,7 @@ const OnCallCalendarScreen = () => {
     getOnCallData(selectedDate.year);
   }, [selectedDate.year]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dependency is necessary
   useEffect(() => {
     getCurrentOnCallPerson();
   }, [onCallData]);
@@ -75,10 +76,7 @@ const OnCallCalendarScreen = () => {
   const getCurrentOnCallPerson = () => {
     if (selectedDate.year === DateTime.now().year) {
       const currentWeek = DateTime.now().weekNumber;
-      const currentOnCallPerson = onCallData.find(
-        (item) => Number(item.Week) === currentWeek
-      )?.Person;
-
+      const currentOnCallPerson = onCallData.find((item) => item.week === currentWeek)?.person;
       if (currentOnCallPerson) setOnCallPerson(currentOnCallPerson);
     }
   };
@@ -89,7 +87,7 @@ const OnCallCalendarScreen = () => {
    */
   const generateOnCallWeeks = () => {
     const onCallWeeks: OnCallCalendarEntry[] = [];
-    onCallData.forEach((item) => {
+    for (const item of onCallData) {
       const weeks = DateTime.fromObject({ weekNumber: item.week, weekYear: selectedDate.year });
 
       for (let i = 0; i < 7; i++) {
@@ -100,7 +98,7 @@ const OnCallCalendarScreen = () => {
           badgeColor: stringToColor(item.person)
         });
       }
-    });
+    }
     return onCallWeeks;
   };
 
@@ -128,7 +126,8 @@ const OnCallCalendarScreen = () => {
     if (onCallPerson)
       return (
         <Typography sx={{ textAlign: "center" }}>
-          {strings.oncall.onCallPersonExists} {onCallPerson}
+          {strings.oncall.onCallPersonExists}{" "}
+          <b style={{ color: stringToColor(onCallPerson) }}>{onCallPerson}</b>
         </Typography>
       );
 

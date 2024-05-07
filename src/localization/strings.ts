@@ -262,6 +262,7 @@ export interface Localized extends LocalizedStringsMethods {
     employeeSelectlabel: string;
   };
   oncall: {
+    title: string;
     previousYear: string;
     nextYear: string;
     oncallShifts: string;
