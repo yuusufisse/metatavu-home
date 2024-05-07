@@ -31,7 +31,8 @@ const TimebankScreen = () => {
   const [personDailyEntry, setPersonDailyEntry] = useAtom(personDailyEntryAtom);
   const [dailyEntries, setDailyEntries] = useAtom(dailyEntriesAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(loggedInPerson?.id);
   const selectedPerson = persons.find((person) => person.id === selectedEmployeeId);
@@ -136,7 +137,11 @@ const TimebankScreen = () => {
       });
       setDailyEntries(fetchedDailyEntries);
       setPersonDailyEntry(
-        fetchedDailyEntries.find((item) => item.person === selectedEmployeeId && DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate())
+        fetchedDailyEntries.find(
+          (item) =>
+            item.person === selectedEmployeeId &&
+            DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
+        )
       );
     } catch (error) {
       setError(`${strings.error.dailyEntriesFetch}, ${error}`);
@@ -148,7 +153,7 @@ const TimebankScreen = () => {
       <div style={{ marginTop: "16px" }} />
       {!personDailyEntry || !selectedEmployeeId || !dailyEntries.length || !personTotalTime ? (
         <Card sx={{ p: "25%", display: "flex", justifyContent: "center" }}>
-          { loading && <CircularProgress sx={{ scale: "150%" }} /> }
+          {loading && <CircularProgress sx={{ scale: "150%" }} />}
         </Card>
       ) : (
         <TimebankContent
