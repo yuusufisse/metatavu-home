@@ -7,7 +7,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "src/hooks/use-api";
 import { Person, PersonTotalTime, Timespan } from "src/generated/client";
-import { personsAtom, personTotalTimeAtom, timespanAtom } from "src/atoms/person";
+import { personsAtom, personTotalTimeAtom } from "src/atoms/person";
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "src/atoms/auth";
 import config from "src/app/config";
@@ -21,7 +21,6 @@ import { DateTime } from "luxon";
 const BalanceCard = () => {
   const persons = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
-  const [timespan, setTimespan] = useAtom(timespanAtom);
   const { personsApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [loading, setLoading] = useState(false);
@@ -56,11 +55,10 @@ const BalanceCard = () => {
    * Get person total time if it is undefined or set to "all time"
    */
   useEffect(() => {
-    if (!personTotalTime || timespan !== Timespan.ALL_TIME) {
-      setTimespan(Timespan.ALL_TIME);
+    if (!personTotalTime) {
       getPersons();
     }
-  }, [persons, timespan]);
+  }, [persons]);
 
   /**
    * Renders person's total time
