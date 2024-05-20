@@ -5,12 +5,12 @@ import { userProfileAtom } from "src/atoms/auth";
 import { Person } from "src/generated/client";
 import config from "src/app/config";
 import { useLambdasApi } from "src/hooks/use-api";
-import { Allocations, TimeEntries } from "src/generated/homeLambdasClient";
+import { Allocations, Projects, TimeEntries } from "src/generated/homeLambdasClient";
 import { CardContent, Skeleton, Typography } from "@mui/material";
 import SprintViewBarChart from "src/components/charts/sprint-view-bar-chart";
 import { SprintViewChartData } from "src/types";
 import strings from "src/localization/strings";
-import { totalAllocations } from "src/utils/sprint-utils";
+import { totalAllocations, filterAllocationsAndProjects } from "src/utils/sprint-utils";
 import { errorAtom } from "src/atoms/error";
 
 /**
@@ -24,8 +24,7 @@ const UserSprintViewCard = () => {
     (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
   const [allocations, setAllocations] = useState<Allocations[]>([]);
-  const [projectNames, setProjectNames] = useState<string[]>([]);
-  const [projectColors, setProjectColors] = useState<string[]>([]);
+  const [projects, setProjects] = useState<Projects[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const { allocationsApi, projectsApi, timeEntriesApi } = useLambdasApi();
   const setError = useSetAtom(errorAtom);
@@ -41,18 +40,13 @@ const UserSprintViewCard = () => {
     setLoading(true);
     if (loggedInPerson) {
       try {
-        const projectColors: string[] = [];
-        const fetchedAllocations = await allocationsApi.listAllocations({
+        let fetchedAllocations = await allocationsApi.listAllocations({
           personId: loggedInPerson.id.toString(),
           startDate: new Date()
         });
         const fetchedProjects = await projectsApi.listProjects();
-        const allocatedProjectsNames = fetchedAllocations.map(allocation => {
-          const project = fetchedProjects.find((project) => project.id === allocation.project);
-          projectColors.push(project?.color || "");
-          return project?.name || "";
-        });
-        const totalTimeEntries = await Promise.all(fetchedAllocations.map(async (allocation) => {
+        const {filteredallocations, filteredProjects} = filterAllocationsAndProjects(fetchedAllocations, fetchedProjects);
+        const totalTimeEntries = await Promise.all(filteredallocations.map(async (allocation) => {
           try {
             if (allocation.project) {
               const fetchedTimeEntries = await timeEntriesApi.listProjectTimeEntries({
@@ -73,9 +67,8 @@ const UserSprintViewCard = () => {
           }
           return 0;
         }));
-        setProjectColors(projectColors);
-        setAllocations(fetchedAllocations);
-        setProjectNames(allocatedProjectsNames);
+        setProjects(filteredProjects);
+        setAllocations(filteredallocations);
         setTimeEntries(totalTimeEntries);
       } catch (error) {
         setError(`${strings.sprintRequestError.fetchError}, ${error}`);
@@ -90,10 +83,10 @@ const UserSprintViewCard = () => {
   const createChartData = (): SprintViewChartData[] => {
     return allocations.map((allocation, index) => {
       return {
-        projectName: projectNames[index],
+        projectName: projects[index].name || "",
         timeAllocated: totalAllocations(allocation),
         timeEntries: timeEntries[index],
-        color: projectColors[index]
+        color: projects[index].color || ""
       };
     })
   }

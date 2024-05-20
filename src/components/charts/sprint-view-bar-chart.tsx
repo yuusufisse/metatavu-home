@@ -80,5 +80,4 @@ const CustomTooltip = ({ payload, label }: any) => {
       </div>
     );
   }
-  return <></>;
 };

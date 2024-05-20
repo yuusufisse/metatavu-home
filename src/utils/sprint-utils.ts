@@ -100,3 +100,20 @@ export const calculateWorkingLoad = (person?: Person) => {
     (person.friday || 0);
   return totalMinutes * 2;
 }
+
+/**
+ * Filter allocations and projects if project is not running
+ * 
+ * @param allocations allocations
+ * @param projects list of running projects
+ */
+export const filterAllocationsAndProjects = (allocations: Allocations[], projects: Projects[]) => {
+  let i = 0;
+  const filteredProjects: Projects[] = [];
+  const filteredallocations = allocations.filter(allocation => projects.find(project => allocation.project === project.id));
+  filteredallocations.map(allocation => {
+    const allocationProject = projects.find(project => allocation.project === project.id);
+    if (allocationProject) filteredProjects.push(allocationProject);
+  })
+  return {filteredallocations, filteredProjects};
+}
