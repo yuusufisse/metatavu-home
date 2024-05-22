@@ -108,7 +108,6 @@ export const calculateWorkingLoad = (person?: Person) => {
  * @param projects list of running projects
  */
 export const filterAllocationsAndProjects = (allocations: Allocations[], projects: Projects[]) => {
-  let i = 0;
   const filteredProjects: Projects[] = [];
   const filteredallocations = allocations.filter(allocation => projects.find(project => allocation.project === project.id));
   filteredallocations.map(allocation => {
