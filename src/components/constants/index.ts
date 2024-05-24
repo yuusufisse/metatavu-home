@@ -13,3 +13,13 @@ export const COLORS = [
  * Days of week array.
  * */ 
 export const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+/**
+ * Task statuses.
+ * */ 
+export const Status = {
+  TODO: "TODO",
+  INPROGRESS: "INPROGRESS",
+  DONE: "DONE",
+  ALL: ""
+};

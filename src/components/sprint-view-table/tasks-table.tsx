@@ -57,12 +57,11 @@ const TaskTable = ({ project, loggedInPersonId, filter }: Props) => {
     setLoading(true);
     if (reload || !tasks.length || !timeEntries.length) {
       try {
-        let fetchedTasks = await tasksApi.listProjectTasks({ projectId: project.id });
-        if (loggedInPersonId) {
-          fetchedTasks = fetchedTasks.filter((task) =>
-            task.assignedPersons?.includes(loggedInPersonId)
-          );
-        }
+        const fetchedTasks = !loggedInPersonId ? await tasksApi.listProjectTasks({ projectId: project.id })
+        : await tasksApi.listProjectTasks({ projectId: project.id }).then(result => result.filter((task) =>
+          task.assignedPersons?.includes(loggedInPersonId || 0)
+        ));
+
         setTasks(fetchedTasks);
         const fetchedTimeEntries = await Promise.all(
           fetchedTasks.map(async (task) => {

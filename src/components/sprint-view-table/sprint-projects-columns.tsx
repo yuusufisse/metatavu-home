@@ -1,4 +1,4 @@
-import { GridColDef } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import strings from "../../localization/strings";
 import { getHoursAndMinutes } from "src/utils/time-utils";
@@ -9,7 +9,7 @@ import {
   timeLeft,
   totalAllocations
 } from "src/utils/sprint-utils";
-import { Allocations, Projects } from "src/generated/homeLambdasClient";
+import type { Allocations, Projects } from "src/generated/homeLambdasClient";
 
 /**
  * Component properties

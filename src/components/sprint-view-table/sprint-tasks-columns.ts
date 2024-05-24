@@ -1,7 +1,7 @@
-import { GridColDef } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
 import strings from "../../localization/strings";
 import { getHoursAndMinutes } from "../../utils/time-utils";
-import { Tasks } from "../../generated/homeLambdasClient";
+import type { Tasks } from "../../generated/homeLambdasClient";
 import { getTotalTimeEntriesTasks } from "src/utils/sprint-utils";
 
 /**

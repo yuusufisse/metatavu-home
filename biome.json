@@ -8,10 +8,12 @@
 		"rules": {
 			"recommended": true,
 			"complexity": {
-				"noUselessFragments": "error"
+				"noUselessFragments": "error",
+				"noForEach": "off"
 			},
 			"suspicious": {
-				"noExplicitAny": "off"
+				"noExplicitAny": "off",
+				"useExhaustiveDependencies": "off"
 			},
 			"correctness": {
 				"noUnusedVariables": "error"

@@ -1,30 +1,20 @@
 import { useState, useEffect } from "react";
-import {
-  Card,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  CircularProgress,
-  Typography,
-  Box,
-  FormControlLabel,
-  Switch
-} from "@mui/material";
+import { Card, CircularProgress, Typography, Box, FormControlLabel, Switch } from "@mui/material";
 import { useLambdasApi } from "src/hooks/use-api";
-import { Person } from "src/generated/client";
+import type { Person } from "src/generated/client";
 import { useAtomValue, useSetAtom } from "jotai";
 import { personsAtom } from "src/atoms/person";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
-import { Allocations, Projects, TimeEntries } from "src/generated/homeLambdasClient/models/";
+import type { Allocations, Projects, TimeEntries} from "src/generated/homeLambdasClient/models/";
 import { DataGrid } from "@mui/x-data-grid";
 import { getHoursAndMinutes, getSprintEnd, getSprintStart } from "src/utils/time-utils";
 import TaskTable from "src/components/sprint-view-table/tasks-table";
 import strings from "src/localization/strings";
 import sprintViewProjectsColumns from "src/components/sprint-view-table/sprint-projects-columns";
 import { errorAtom } from "src/atoms/error";
-import { calculateWorkingLoad, totalAllocations } from "src/utils/sprint-utils";
+import { calculateWorkingLoad, totalAllocations, filterAllocationsAndProjects } from "src/utils/sprint-utils";
+import { TaskStatusFilter } from "src/components/sprint-view-table/menu-Item-filter-table";
 
 /**
  * Sprint view screen component
@@ -65,11 +55,13 @@ const SprintViewScreen = () => {
     try {
       const fetchedAllocations = await allocationsApi.listAllocations({
         startDate: new Date(),
+        endDate: new Date(),
         personId: loggedInPerson?.id.toString()
       });
       const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
+      const {filteredAllocations, filteredProjects} = filterAllocationsAndProjects(fetchedAllocations, fetchedProjects);
       const fetchedTimeEntries = await Promise.all(
-        fetchedAllocations.map(async (allocation) => {
+        filteredAllocations.map(async (allocation) => {
           try {
             if (allocation.project) {
               const totalTimeEntries = await timeEntriesApi.listProjectTimeEntries({
@@ -101,14 +93,8 @@ const SprintViewScreen = () => {
         })
       );
 
-      const projects: Projects[] = [];
-      fetchedAllocations.forEach((allocation) => {
-        const projectFound = fetchedProjects.find((project) => project.id === allocation.project);
-        projectFound && projects.push(projectFound);
-      });
-
-      setProjects(projects);
-      setAllocations(fetchedAllocations);
+      setProjects(filteredProjects);
+      setAllocations(filteredAllocations);
       setTimeEntries(fetchedTimeEntries);
     } catch (error) {
       setError(`${strings.sprintRequestError.fetchError}, ${error}`);
@@ -167,35 +153,7 @@ const SprintViewScreen = () => {
             label={strings.sprint.showMyTasks}
             onClick={() => handleOnClickTask()}
           />
-          <FormControl size="small" style={{ width: "200px", float: "right" }}>
-            <InputLabel disableAnimation={false}>{strings.sprint.taskStatus}</InputLabel>
-            <Select
-              defaultValue={strings.sprint.allTasks}
-              style={{
-                borderRadius: "30px",
-                marginBottom: "15px",
-                float: "right"
-              }}
-              label={strings.sprint.taskStatus}
-            >
-              <MenuItem key={1} value={strings.sprint.toDo} onClick={() => setFilter("TODO")}>
-                {strings.sprint.toDo}
-              </MenuItem>
-              <MenuItem
-                key={2}
-                value={strings.sprint.inProgress}
-                onClick={() => setFilter("INPROGRESS")}
-              >
-                {strings.sprint.inProgress}
-              </MenuItem>
-              <MenuItem key={3} value={strings.sprint.allTasks} onClick={() => setFilter("DONE")}>
-                {strings.sprint.completed}
-              </MenuItem>
-              <MenuItem key={4} value={strings.sprint.allTasks} onClick={() => setFilter("")}>
-                {strings.sprint.allTasks}
-              </MenuItem>
-            </Select>
-          </FormControl>
+          {TaskStatusFilter(setFilter)}
           <Card
             sx={{
               margin: 0,
@@ -232,8 +190,8 @@ const SprintViewScreen = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 padding: "5px",
-                paddingTop: " 10px",
-                paddingBottom: " 10px"
+                paddingTop: "10px",
+                paddingBottom: "10px"
               }}
             >
               <Typography>
@@ -256,14 +214,14 @@ const SprintViewScreen = () => {
               </Typography>
             </Box>
           </Card>
-          {projects.map((project) => (
+          {projects.map((project) =>
             <TaskTable
               key={project.id}
               project={project}
               loggedInPersonId={myTasks ? loggedInPerson?.id : undefined}
               filter={filter}
             />
-          ))}
+          )}
         </>
       )}
     </>
