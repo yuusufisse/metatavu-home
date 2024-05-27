@@ -6,14 +6,23 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { personsAtom } from "src/atoms/person";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
-import type { Allocations, Projects, TimeEntries, UsersAvatars} from "src/generated/homeLambdasClient/models/";
+import type {
+  Allocations,
+  Projects,
+  TimeEntries,
+  UsersAvatars
+} from "src/generated/homeLambdasClient/models/";
 import { DataGrid } from "@mui/x-data-grid";
 import { getHoursAndMinutes, getSprintEnd, getSprintStart } from "src/utils/time-utils";
 import TaskTable from "src/components/sprint-view-table/tasks-table";
 import strings from "src/localization/strings";
 import sprintViewProjectsColumns from "src/components/sprint-view-table/sprint-projects-columns";
 import { errorAtom } from "src/atoms/error";
-import { calculateWorkingLoad, totalAllocations, filterAllocationsAndProjects } from "src/utils/sprint-utils";
+import {
+  calculateWorkingLoad,
+  totalAllocations,
+  filterAllocationsAndProjects
+} from "src/utils/sprint-utils";
 import { TaskStatusFilter } from "src/components/sprint-view-table/menu-Item-filter-table";
 
 /**
@@ -53,7 +62,7 @@ const SprintViewScreen = () => {
   const fetchSlackAvatars = async () => {
     const fetchedAvatars = await slackAvatarsApi.slackAvatar();
     setAvatars(fetchedAvatars);
-  }
+  };
 
   /**
    * Fetch allocations, project names and time entries
@@ -68,7 +77,10 @@ const SprintViewScreen = () => {
         personId: loggedInPerson?.id.toString()
       });
       const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
-      const {filteredAllocations, filteredProjects} = filterAllocationsAndProjects(fetchedAllocations, fetchedProjects);
+      const { filteredAllocations, filteredProjects } = filterAllocationsAndProjects(
+        fetchedAllocations,
+        fetchedProjects
+      );
       const fetchedTimeEntries = await Promise.all(
         filteredAllocations.map(async (allocation) => {
           try {
@@ -223,7 +235,7 @@ const SprintViewScreen = () => {
               </Typography>
             </Box>
           </Card>
-          {projects.map((project) =>
+          {projects.map((project) => (
             <TaskTable
               key={project.id}
               project={project}
@@ -231,7 +243,7 @@ const SprintViewScreen = () => {
               filter={filter}
               avatars={avatars}
             />
-          )}
+          ))}
         </>
       )}
     </>
