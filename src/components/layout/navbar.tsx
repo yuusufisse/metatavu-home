@@ -1,13 +1,5 @@
 import { MouseEvent, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
+import {MenuItem, AppBar, Box, Toolbar, IconButton, Menu, Container, Tooltip, Avatar } from "@mui/material";
 import LocalizationButtons from "../layout-components/localization-buttons";
 import strings from "src/localization/strings";
 import { authAtom } from "src/atoms/auth";

@@ -6,7 +6,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { personsAtom } from "src/atoms/person";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
-import type { Allocations, Projects, TimeEntries} from "src/generated/homeLambdasClient/models/";
+import type { Allocations, Projects, TimeEntries, UsersAvatars} from "src/generated/homeLambdasClient/models/";
 import { DataGrid } from "@mui/x-data-grid";
 import { getHoursAndMinutes, getSprintEnd, getSprintStart } from "src/utils/time-utils";
 import TaskTable from "src/components/sprint-view-table/tasks-table";
@@ -20,7 +20,7 @@ import { TaskStatusFilter } from "src/components/sprint-view-table/menu-Item-fil
  * Sprint view screen component
  */
 const SprintViewScreen = () => {
-  const { allocationsApi, projectsApi, timeEntriesApi } = useLambdasApi();
+  const { allocationsApi, projectsApi, timeEntriesApi, slackAvatarsApi } = useLambdasApi();
   const persons: Person[] = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
   const loggedInPerson = persons.find(
@@ -30,6 +30,7 @@ const SprintViewScreen = () => {
   const [allocations, setAllocations] = useState<Allocations[]>([]);
   const [projects, setProjects] = useState<Projects[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
+  const [avatars, setAvatars] = useState<UsersAvatars[]>([]);
   const [loading, setLoading] = useState(false);
   const [myTasks, setMyTasks] = useState(true);
   const [filter, setFilter] = useState("");
@@ -45,6 +46,14 @@ const SprintViewScreen = () => {
   useEffect(() => {
     fetchProjectDetails();
   }, [loggedInPerson]);
+
+  /**
+   * fetch avatars
+   */
+  const fetchSlackAvatars = async () => {
+    const fetchedAvatars = await slackAvatarsApi.slackAvatar();
+    setAvatars(fetchedAvatars);
+  }
 
   /**
    * Fetch allocations, project names and time entries
@@ -92,7 +101,7 @@ const SprintViewScreen = () => {
           return 0;
         })
       );
-
+      await fetchSlackAvatars();
       setProjects(filteredProjects);
       setAllocations(filteredAllocations);
       setTimeEntries(fetchedTimeEntries);
@@ -220,6 +229,7 @@ const SprintViewScreen = () => {
               project={project}
               loggedInPersonId={myTasks ? loggedInPerson?.id : undefined}
               filter={filter}
+              avatars={avatars}
             />
           )}
         </>

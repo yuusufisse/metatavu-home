@@ -1,5 +1,5 @@
 import { Box, Card, CircularProgress, IconButton, Typography } from "@mui/material";
-import { Projects, Tasks, TimeEntries } from "../../generated/homeLambdasClient";
+import { Projects, Tasks, TimeEntries, UsersAvatars } from "../../generated/homeLambdasClient";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useLambdasApi } from "../../hooks/use-api";
@@ -17,6 +17,7 @@ interface Props {
   project: Projects;
   loggedInPersonId?: number;
   filter?: string;
+  avatars?: UsersAvatars[];
 }
 
 /**
@@ -24,13 +25,13 @@ interface Props {
  *
  * @param props component properties
  */
-const TaskTable = ({ project, loggedInPersonId, filter }: Props) => {
+const TaskTable = ({ project, loggedInPersonId, filter, avatars }: Props) => {
   const { tasksApi, timeEntriesApi } = useLambdasApi();
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const columns = sprintViewTasksColumns({ tasks, timeEntries });
+  const columns = sprintViewTasksColumns({ tasks, timeEntries, avatars });
   const setError = useSetAtom(errorAtom);
   const [reload, setReload] = useState(false);
 
