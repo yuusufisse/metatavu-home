@@ -12,11 +12,11 @@
 				"noForEach": "off"
 			},
 			"suspicious": {
-				"noExplicitAny": "off",
-				"useExhaustiveDependencies": "off"
+				"noExplicitAny": "off"
 			},
 			"correctness": {
-				"noUnusedVariables": "error"
+				"noUnusedVariables": "error",
+				"useExhaustiveDependencies": "off"
 			}
 		},
 		"ignore": ["/generated"]
