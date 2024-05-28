@@ -1,5 +1,5 @@
 import { Box, Card, CircularProgress, IconButton, Typography } from "@mui/material";
-import { Projects, Tasks, TimeEntries, UsersAvatars } from "../../generated/homeLambdasClient";
+import { Projects, Tasks, TimeEntries } from "../../generated/homeLambdasClient";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useLambdasApi } from "../../hooks/use-api";
@@ -17,7 +17,6 @@ interface Props {
   project: Projects;
   loggedInPersonId?: number;
   filter?: string;
-  avatars?: UsersAvatars[];
 }
 
 /**
