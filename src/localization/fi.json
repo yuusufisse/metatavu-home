@@ -160,7 +160,8 @@
     "fetchError": "Sprintin tietopyyntöjen hakeminen epäonnistui",
     "fetchTimeEntriesError": "Virhe aikamerkintöjen hakemisessa",
     "fetchAllocationError": "Virhe aikamerkintöjen hakemisessa jakamista varten {0}: {1}",
-    "fetchTasksError": "Tehtävän {0} aikamerkintöjen noutovirhe: {1}"
+    "fetchTasksError": "Tehtävän {0} aikamerkintöjen noutovirhe: {1}",
+    "fetchTaskIdError": "Tehtävän tunnusta ei löytynyt"
   },
   "form": {
     "submit": "Lähetä",

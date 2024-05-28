@@ -25,13 +25,13 @@ interface Props {
  *
  * @param props component properties
  */
-const TaskTable = ({ project, loggedInPersonId, filter, avatars }: Props) => {
+const TaskTable = ({ project, loggedInPersonId, filter}: Props) => {
   const { tasksApi, timeEntriesApi } = useLambdasApi();
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const columns = sprintViewTasksColumns({ tasks, timeEntries, avatars });
+  const columns = sprintViewTasksColumns({ tasks, timeEntries });
   const setError = useSetAtom(errorAtom);
   const [reload, setReload] = useState(false);
 
@@ -84,16 +84,14 @@ const TaskTable = ({ project, loggedInPersonId, filter, avatars }: Props) => {
                 return totalMinutes;
               }
             } catch (error) {
-              if (task.id) {
-                const message: string = strings
-                  .formatString(
-                    strings.sprintRequestError.fetchTasksError,
-                    task.id || 0,
-                    error as string
-                  )
-                  .toString();
-                setError(message);
-              }
+              const message: string = strings
+                .formatString(
+                  strings.sprintRequestError.fetchTasksError,
+                  task.id || `${strings.sprintRequestError.fetchTaskIdError}`,
+                  error as string
+                )
+                .toString();
+              setError(message);
             }
             return 0;
           })

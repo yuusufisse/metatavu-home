@@ -160,7 +160,8 @@
     "fetchError": "Fetching sprint data requests has failed",
     "fetchTimeEntriesError": "Error fetching time entries",
     "fetchAllocationError": "Error fetching time entries for allocation {0}: {1}",
-    "fetchTasksError": "Error fetching time entries for task {0}: {1}"
+    "fetchTasksError": "Error fetching time entries for task {0}: {1}",
+    "fetchTaskIdError": "Task id not found"
   },
   "form": {
     "submit": "Submit",

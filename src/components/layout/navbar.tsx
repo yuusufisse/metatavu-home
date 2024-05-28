@@ -2,10 +2,14 @@ import { MouseEvent, useState } from "react";
 import {MenuItem, AppBar, Box, Toolbar, IconButton, Menu, Container, Tooltip, Avatar } from "@mui/material";
 import LocalizationButtons from "../layout-components/localization-buttons";
 import strings from "src/localization/strings";
-import { authAtom } from "src/atoms/auth";
+import { authAtom, userProfileAtom } from "src/atoms/auth";
 import { useAtomValue } from "jotai";
 import NavItems from "./navitems";
 import SyncButton from "./sync-button";
+import { avatarsAtom, personsAtom } from "src/atoms/person";
+import { UsersAvatars } from "src/generated/homeLambdasClient";
+import { Person } from "src/generated/client";
+import config from "src/app/config";
 
 /**
  * NavBar component
@@ -13,6 +17,14 @@ import SyncButton from "./sync-button";
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const avatars: UsersAvatars[] = useAtomValue(avatarsAtom);
+  const persons: Person[] = useAtomValue(personsAtom);
+  const userProfile = useAtomValue(userProfileAtom);
+  const loggedInPerson = persons.find(
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+  );
+  const loggedInPersonAvatar = avatars.find(avatar => loggedInPerson?.id===avatar.personId)?.imageOriginal||"";
 
   /**
    * Handles opening user menu
@@ -48,7 +60,7 @@ const NavBar = () => {
             <Box>
               <Tooltip title={strings.header.openUserMenu}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar />
+                  <Avatar src={loggedInPersonAvatar}/>
                 </IconButton>
               </Tooltip>
               <Menu

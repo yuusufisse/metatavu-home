@@ -3,8 +3,8 @@ import { authAtom, userProfileAtom } from "src/atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
 import { ReactNode, useCallback, useEffect } from "react";
-import { personsAtom } from "src/atoms/person";
-import { useApi } from "src/hooks/use-api";
+import { avatarsAtom, personsAtom } from "src/atoms/person";
+import { useApi, useLambdasApi } from "src/hooks/use-api";
 
 interface Props {
   children: ReactNode;
@@ -19,7 +19,9 @@ const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const setUserProfile = useSetAtom(userProfileAtom);
   const setPersons = useSetAtom(personsAtom);
+  const setAvatars = useSetAtom(avatarsAtom);
   const { personsApi } = useApi();
+  const { slackAvatarsApi } = useLambdasApi();
 
   const updateAuthData = useCallback(() => {
     setAuth({
@@ -84,8 +86,19 @@ const AuthenticationProvider = ({ children }: Props) => {
     setPersons(fetchedPersons);
   };
 
+  /**
+   * fetchs avatars
+   */
+  const getSlackAvatars = async () => {
+    const fetchedAvatars = await slackAvatarsApi.slackAvatar();
+    setAvatars(fetchedAvatars);
+  };
+
   useEffect(() => {
-    if (auth) getPersonsList();
+    if (auth) {
+      getPersonsList();
+      getSlackAvatars();
+    }
   }, [auth]);
 
   /**

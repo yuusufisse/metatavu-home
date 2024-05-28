@@ -189,6 +189,7 @@ export interface Localized extends LocalizedStringsMethods {
     fetchTimeEntriesError: string;
     fetchAllocationError: string;
     fetchTasksError: string;
+    fetchTaskIdError: string;
   };
   /**
    * Translations related to form
