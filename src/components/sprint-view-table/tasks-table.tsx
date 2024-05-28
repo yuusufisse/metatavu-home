@@ -1,13 +1,13 @@
 import { Box, Card, CircularProgress, IconButton, Typography } from "@mui/material";
-import { Projects, Tasks, TimeEntries } from "../../generated/homeLambdasClient";
+import { Projects, Tasks, TimeEntries } from "src/generated/homeLambdasClient";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { useLambdasApi } from "../../hooks/use-api";
+import { useLambdasApi } from "src/hooks/use-api";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import sprintViewTasksColumns from "./sprint-tasks-columns";
-import { errorAtom } from "../../atoms/error";
+import { errorAtom } from "src/atoms/error";
 import { useSetAtom } from "jotai";
 
 /**
@@ -24,7 +24,7 @@ interface Props {
  *
  * @param props component properties
  */
-const TaskTable = ({ project, loggedInPersonId, filter}: Props) => {
+const TaskTable = ({ project, loggedInPersonId, filter }: Props) => {
   const { tasksApi, timeEntriesApi } = useLambdasApi();
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [timeEntries, setTimeEntries] = useState<number[]>([]);
@@ -32,7 +32,6 @@ const TaskTable = ({ project, loggedInPersonId, filter}: Props) => {
   const [loading, setLoading] = useState(false);
   const columns = sprintViewTasksColumns({ tasks, timeEntries });
   const setError = useSetAtom(errorAtom);
-  const [reload, setReload] = useState(false);
 
   /**
    * Gather tasks and time entries when project is available and update reload state
@@ -41,13 +40,14 @@ const TaskTable = ({ project, loggedInPersonId, filter}: Props) => {
     if (project && open) {
       getTasksAndTimeEntries();
     }
-  }, [project, open, filter, reload]);
+  }, [project, open, filter]);
 
   /**
    * Handle loggenInPersonId change
    */
   useEffect(() => {
-    setReload(true);
+    setTasks([]);
+    setOpen(false);
   }, [loggedInPersonId]);
 
   /**
@@ -55,12 +55,15 @@ const TaskTable = ({ project, loggedInPersonId, filter}: Props) => {
    */
   const getTasksAndTimeEntries = async () => {
     setLoading(true);
-    if (reload || !tasks.length || !timeEntries.length) {
+    if (!tasks.length || !timeEntries.length) {
       try {
-        const fetchedTasks = !loggedInPersonId ? await tasksApi.listProjectTasks({ projectId: project.id })
-        : await tasksApi.listProjectTasks({ projectId: project.id }).then(result => result.filter((task) =>
-          task.assignedPersons?.includes(loggedInPersonId || 0)
-        ));
+        const fetchedTasks = !loggedInPersonId
+          ? await tasksApi.listProjectTasks({ projectId: project.id })
+          : await tasksApi
+              .listProjectTasks({ projectId: project.id })
+              .then((result) =>
+                result.filter((task) => task.assignedPersons?.includes(loggedInPersonId || 0))
+              );
 
         setTasks(fetchedTasks);
         const fetchedTimeEntries = await Promise.all(
@@ -100,7 +103,6 @@ const TaskTable = ({ project, loggedInPersonId, filter}: Props) => {
         setError(`${strings.sprintRequestError.fetchTimeEntriesError} ${error}`);
       }
     }
-    setReload(false);
     setLoading(false);
   };
 
