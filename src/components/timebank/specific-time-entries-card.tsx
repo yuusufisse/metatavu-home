@@ -66,11 +66,11 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
         setPersonDailyEntry(
           fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
         );
+        setSelectedEntries(getDateRangeEntries(dateRangePickerRange, fetchedDailyEntries) || []);
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
-    }
-    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
+    }    
     setLoading(false);
   };
 
@@ -129,9 +129,10 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
    * Gets daily entries within time range
    *
    * @param dateRangePickerRange date range picker range
+   * @param dailyEntries daily entries list
    * @returns date range entries
    */
-  const getDateRangeEntries = (range: DateRange) => {
+  const getDateRangeEntries = (range: DateRange, dailyEntries: DailyEntry[]) => {
     if (range.start && range.end) {
       const selectedDays = range.end.diff(range.start, "days").toObject();
       const result = [];
@@ -159,7 +160,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
    */
   const handleDateRangeChange = (dateRangePickerRange: DateRange) => {
     setDateRangePickerRange(dateRangePickerRange);
-    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
+    setSelectedEntries(getDateRangeEntries(dateRangePickerRange, dailyEntries) || []);
   };
 
   /**
