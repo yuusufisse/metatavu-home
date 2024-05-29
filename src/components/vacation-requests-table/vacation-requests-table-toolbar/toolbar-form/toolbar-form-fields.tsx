@@ -13,7 +13,7 @@ import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
 import { personsAtom } from "src/atoms/person";
 import { VacationType, Person } from "src/generated/client";
-import { daysOfWeek } from "src/components/constants";
+import { DAYS_OF_WEEK } from "src/components/constants";
 
 /**
  * Component properties
@@ -88,10 +88,10 @@ const ToolbarFormFields = ({
    * @param loggedInPerson Person
    */
   const getWorkingWeek = (loggedInPerson?: Person) => {
-    const workingWeek = new Array(daysOfWeek.length).fill(false);
+    const workingWeek = new Array(DAYS_OF_WEEK.length).fill(false);
     if (!loggedInPerson) return workingWeek;
     
-    daysOfWeek.forEach((weekDay, index)=>{
+    DAYS_OF_WEEK.forEach((weekDay, index)=>{
       if (loggedInPerson[weekDay as keyof typeof loggedInPerson] !== 0) {
         workingWeek[index] = true;
       }

@@ -1,19 +1,25 @@
-import { MouseEvent, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
+import { MouseEvent, useEffect, useState } from "react";
+import {
+  MenuItem,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Menu,
+  Container,
+  Tooltip,
+  Avatar
+} from "@mui/material";
 import LocalizationButtons from "../layout-components/localization-buttons";
 import strings from "src/localization/strings";
-import { authAtom } from "src/atoms/auth";
-import { useAtomValue } from "jotai";
+import { authAtom, userProfileAtom } from "src/atoms/auth";
+import { useAtom, useAtomValue } from "jotai";
 import NavItems from "./navitems";
 import SyncButton from "./sync-button";
+import { avatarsAtom, personsAtom } from "src/atoms/person";
+import { Person } from "src/generated/client";
+import config from "src/app/config";
+import { useLambdasApi } from "src/hooks/use-api";
 
 /**
  * NavBar component
@@ -21,6 +27,16 @@ import SyncButton from "./sync-button";
 const NavBar = () => {
   const auth = useAtomValue(authAtom);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [avatars, setAvatars] = useAtom(avatarsAtom);
+  const persons: Person[] = useAtomValue(personsAtom);
+  const userProfile = useAtomValue(userProfileAtom);
+  const { slackAvatarsApi } = useLambdasApi();
+  const loggedInPerson = persons.find(
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+  );
+  const loggedInPersonAvatar =
+    avatars.find((avatar) => loggedInPerson?.id === avatar.personId)?.imageOriginal || "";
 
   /**
    * Handles opening user menu
@@ -45,6 +61,18 @@ const NavBar = () => {
     auth?.logout();
   };
 
+  /**
+   * fetch avatars
+   */
+  const getSlackAvatars = async () => {
+    const fetchedAvatars = await slackAvatarsApi.slackAvatar();
+    setAvatars(fetchedAvatars);
+  };
+
+  useEffect(() => {
+    getSlackAvatars();
+  }, [loggedInPerson]);
+
   return (
     <>
       <AppBar position="relative">
@@ -56,7 +84,7 @@ const NavBar = () => {
             <Box>
               <Tooltip title={strings.header.openUserMenu}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar />
+                  <Avatar src={loggedInPersonAvatar}/>
                 </IconButton>
               </Tooltip>
               <Menu

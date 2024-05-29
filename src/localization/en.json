@@ -59,7 +59,26 @@
   },
   "sprint": {
     "sprintview": "Sprint view",
-    "sprintviewScreen": "Sprint view Screen"
+    "myAllocation": "My allocations",
+    "allocation": "Allocation",
+    "timeEntries": "Time Entries",
+    "allocationLeft": "Allocations Left",
+    "assigned": "Assignee",
+    "taskStatus": "Status",
+    "taskPriority": "Priority",
+    "estimatedTime": "Estimate",
+    "taskName": "Tasks",
+    "showMyTasks": "My tasks",
+    "toDo": "To do",
+    "inProgress": "In progress",
+    "allTasks" : "All tasks",
+    "notFound" : "No result found",
+    "projectName": "Project",
+    "search": "Search for a task, project or assignee",
+    "unAllocated": "Unallocated Time:",
+    "sprintDate": "Sprint",
+    "completed": "Done", 
+    "current": "Current: {0}-{1}"
   },
   "errors": {
     "fetchFailedGeneral": "There was an error fetching data",
@@ -136,6 +155,13 @@
     "updateStatusError": "Updating vacation request status has failed",
     "noVacationRequestsFound": "No vacation requests found",
     "nameNotFound": "Name not found"
+  },
+  "sprintRequestError": {
+    "fetchError": "Fetching sprint data requests has failed",
+    "fetchTimeEntriesError": "Error fetching time entries",
+    "fetchAllocationError": "Error fetching time entries for allocation {0}: {1}",
+    "fetchTasksError": "Error fetching time entries for task {0}: {1}",
+    "fetchTaskIdError": "Task id not found"
   },
   "form": {
     "submit": "Submit",

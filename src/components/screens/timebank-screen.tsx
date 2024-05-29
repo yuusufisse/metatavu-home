@@ -14,7 +14,8 @@ const TimebankScreen = () => {
   const userProfile = useAtomValue(userProfileAtom);
   const persons = useAtomValue(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(loggedInPerson?.id);
 

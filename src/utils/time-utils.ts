@@ -172,3 +172,24 @@ const countWorkingWeekDaysInRange = (startWeekIndex: number, endWeekIndex: numbe
   }
   return takenWorkingDays;
 }
+
+/**
+ * Get sprint start date
+ *
+ * @param date string date 
+ */
+export const getSprintStart = (date: string) => {
+  const weekIndex = DateTime.fromISO(date).localWeekNumber;
+  const weekDay = DateTime.fromISO(date).weekday;
+  const days = (weekIndex%2 === 1 ? 0 : 7) + weekDay;
+  return DateTime.fromISO(date).minus({days : days - 1});
+}
+
+/**
+ * Get sprint end date
+ *
+ * @param date string date 
+ */
+export const getSprintEnd = (date: string) => {
+  return getSprintStart(date).plus({days : 11});
+}

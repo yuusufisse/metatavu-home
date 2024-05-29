@@ -85,7 +85,26 @@ export interface Localized extends LocalizedStringsMethods {
    */
   sprint: {
     sprintview: string;
-    sprintviewScreen: string
+    myAllocation: string,
+    allocation: string,
+    timeEntries: string,
+    allocationLeft: string,
+    assigned: string,
+    taskStatus: string,
+    taskPriority: string,
+    estimatedTime: string,
+    taskName: string,
+    showMyTasks: string,
+    toDo: string,
+    inProgress: string,
+    allTasks: string,
+    notFound: string,
+    projectName: string,
+    search: string,
+    unAllocated: string,
+    sprintDate: string,
+    completed: string,
+    current: string,
   };
   /**
    * General time-related expressions
@@ -161,6 +180,16 @@ export interface Localized extends LocalizedStringsMethods {
     updateStatusError: string;
     noVacationRequestsFound: string;
     nameNotFound: string;
+  };
+  /**
+   * Translations related to sprint requests errors
+   */
+  sprintRequestError: {
+    fetchError: string;
+    fetchTimeEntriesError: string;
+    fetchAllocationError: string;
+    fetchTasksError: string;
+    fetchTaskIdError: string;
   };
   /**
    * Translations related to form
