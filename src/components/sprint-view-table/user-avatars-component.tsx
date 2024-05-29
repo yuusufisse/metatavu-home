@@ -11,6 +11,9 @@ interface Props {
   assignedPersons: number[];
 }
 
+/**
+ * List of avatars component
+ */
 const UserAvatars = ({ assignedPersons }: Props) => {
   const persons: Person[] = useAtomValue(personsAtom);
   const avatars: UsersAvatars[] = useAtomValue(avatarsAtom);
@@ -30,8 +33,8 @@ const UserAvatars = ({ assignedPersons }: Props) => {
 /**
  * Render Slack Avatars
  *
- * @param assignedPersons list of all persons 
- * @param avatars list of exsisting avatars 
+ * @param assignedPersons list of all persons
+ * @param avatars list of exsisting avatars
  * @param persons list of persons assigned to the project
  * @param maxAvatarsInLine avatars limitation per table cell
  */
@@ -45,6 +48,7 @@ const renderAvatars = (
     const avatar = avatars?.find((avatar) => avatar.personId === personId);
     const person = persons?.find((person) => person.id === personId);
     const numberOfAssignedPersons = assignedPersons.length;
+    const hiddenAssignedPersons = numberOfAssignedPersons - maxAvatarsInLine;
 
     if (index < maxAvatarsInLine) {
       return (
@@ -54,27 +58,30 @@ const renderAvatars = (
       );
     }
 
-    if (index === maxAvatarsInLine && numberOfAssignedPersons - maxAvatarsInLine > 0) {
+    if (index === maxAvatarsInLine && hiddenAssignedPersons > 0) {
       const groupedPersons = assignedPersons.slice(maxAvatarsInLine);
-      let tooltipTitile = "";
+      let tooltipTitle = "";
 
       groupedPersons.forEach((groupedPersonId: number) => {
         const personFound = persons.find((person: { id: number }) => person.id === groupedPersonId);
         if (personFound) {
-          tooltipTitile += `${personFound?.firstName} ${personFound?.lastName}, `;
+          tooltipTitle += `${personFound?.firstName} ${personFound?.lastName}, `;
         }
       });
-      tooltipTitile = tooltipTitile.slice(0, tooltipTitile.length - 2);
-      if (numberOfAssignedPersons - maxAvatarsInLine === 1) {
+      tooltipTitle = tooltipTitle.slice(0, tooltipTitle.length - 2);
+      if (hiddenAssignedPersons === 1) {
         return (
-          <Tooltip key={personId} title={tooltipTitile}>
+          <Tooltip key={personId} title={tooltipTitle}>
             <Avatar src={avatar?.imageOriginal} />
           </Tooltip>
         );
       }
       return (
-        <Tooltip key={"Group of hidden avatars"} title={tooltipTitile}>
-          <Avatar>+{numberOfAssignedPersons - maxAvatarsInLine}</Avatar>
+        <Tooltip
+          key={`hidden-avatars ${groupedPersons.map((personId) => personId)}`}
+          title={tooltipTitle}
+        >
+          <Avatar>+{hiddenAssignedPersons}</Avatar>
         </Tooltip>
       );
     }
