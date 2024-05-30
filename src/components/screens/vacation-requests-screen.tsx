@@ -1,7 +1,7 @@
 import { Button, Card, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
-import {
+import type {
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses,
@@ -11,14 +11,14 @@ import { useApi } from "src/hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "src/atoms/auth";
 import { errorAtom } from "src/atoms/error";
-import { GridRowId } from "@mui/x-data-grid";
-import { VacationData } from "src/types";
+import type { GridRowId } from "@mui/x-data-grid";
+import type { VacationData } from "src/types";
 import strings from "src/localization/strings";
 import {
   allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
   vacationRequestsAtom,
-  vacationRequestStatusesAtom
+  vacationRequestStatusesAtom,
 } from "src/atoms/vacation";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { Link } from "react-router-dom";
@@ -39,15 +39,17 @@ const VacationRequestsScreen = () => {
   const [vacationRequests, setVacationRequests] = useAtom(
     adminMode ? allVacationRequestsAtom : vacationRequestsAtom
   );
+  const [originalData, setOriginalData] = useState(vacationRequests);
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
+  const [toggleFilter, setToggleFilter] = useState(true);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-
   /**
    * Fetch vacation request statuses
    */
@@ -56,7 +58,6 @@ const VacationRequestsScreen = () => {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
-
         await Promise.all(
           vacationRequests.map(async (vacationRequest) => {
             let createdStatuses: VacationRequestStatus[] = [];
@@ -74,9 +75,30 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
+
+  const filterVacationRequests = async () => {
+    if (loading) {
+      return;
+    }
+    setToggleFilter((prevToggleFilter) => {
+      const newToggleFilter = !prevToggleFilter;
+      const newVacationRequest = originalData.filter((vacation) =>
+        newToggleFilter
+          ? vacation.endDate.getTime() <= Date.now()
+          : vacation.endDate.getTime() > Date.now()
+      );
+      setVacationRequests(newVacationRequest);
+      return newToggleFilter;
+    });
+  };
+
+  useMemo(() => {
+    if(!originalData.length) return;
+    filterVacationRequests();
+  }, [originalData]);
 
   useMemo(() => {
     fetchVacationRequestStatuses();
@@ -135,11 +157,12 @@ const VacationRequestsScreen = () => {
           });
         }
         setVacationRequests(fetchedVacationRequests);
+        setOriginalData(fetchedVacationRequests);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useMemo(() => {
@@ -194,10 +217,10 @@ const VacationRequestsScreen = () => {
             updatedVacationRequests = updatedVacationRequests.filter(
               (vacationRequest) => vacationRequest.id !== selectedRowId
             );
-            setLoading(false);
           } catch (error) {
             setError(`${strings.vacationRequestError.deleteRequestError}, ${error}`);
           }
+          setLoading(false);
         })
       );
       setVacationRequests(updatedVacationRequests);
@@ -232,11 +255,11 @@ const VacationRequestsScreen = () => {
             updatedBy: loggedInPerson.keycloakId
           }
         });
-      setLoading(false);
       return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -261,10 +284,10 @@ const VacationRequestsScreen = () => {
         }
       });
       setVacationRequests([createdRequest, ...vacationRequests]);
-      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.createRequestError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -299,10 +322,10 @@ const VacationRequestsScreen = () => {
         );
         setVacationRequests(updatedVacationRequests);
       }
-      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.updateRequestError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -421,6 +444,8 @@ const VacationRequestsScreen = () => {
       {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
+          toggleFilter={toggleFilter}
+          filterVacationRequests={filterVacationRequests}
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
           updateVacationRequest={updateVacationRequest}

@@ -1,6 +1,6 @@
 import en from "./en.json";
 import fi from "./fi.json";
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
+import LocalizedStrings, { type LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -210,6 +210,8 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     create: string;
     manageRequests: string;
+    future: string;
+    past: string;
   };
   /**
    * Translations related to data grid
