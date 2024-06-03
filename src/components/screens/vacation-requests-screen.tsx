@@ -1,7 +1,7 @@
 import { Button, Card, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
-import {
+import type {
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses,
@@ -11,8 +11,8 @@ import { useApi } from "src/hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { userProfileAtom } from "src/atoms/auth";
 import { errorAtom } from "src/atoms/error";
-import { GridRowId } from "@mui/x-data-grid";
-import { VacationData } from "src/types";
+import type { GridRowId } from "@mui/x-data-grid";
+import type { VacationData } from "src/types";
 import strings from "src/localization/strings";
 import {
   allVacationRequestsAtom,
@@ -45,7 +45,8 @@ const VacationRequestsScreen = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
   /**
@@ -104,7 +105,7 @@ const VacationRequestsScreen = () => {
           const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
-            } else if (a.updatedAt) {
+            }if (a.updatedAt) {
               return a;
             }
             return b;

@@ -1,6 +1,6 @@
 import en from "./en.json";
 import fi from "./fi.json";
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
+import LocalizedStrings, { type LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -85,26 +85,26 @@ export interface Localized extends LocalizedStringsMethods {
    */
   sprint: {
     sprintview: string;
-    myAllocation: string,
-    allocation: string,
-    timeEntries: string,
-    allocationLeft: string,
-    assigned: string,
-    taskStatus: string,
-    taskPriority: string,
-    estimatedTime: string,
-    taskName: string,
-    showMyTasks: string,
-    toDo: string,
-    inProgress: string,
-    allTasks: string,
-    notFound: string,
-    projectName: string,
-    search: string,
-    unAllocated: string,
-    sprintDate: string,
-    completed: string,
-    current: string,
+    myAllocation: string;
+    allocation: string;
+    timeEntries: string;
+    allocationLeft: string;
+    assigned: string;
+    taskStatus: string;
+    taskPriority: string;
+    estimatedTime: string;
+    taskName: string;
+    showMyTasks: string;
+    toDo: string;
+    inProgress: string;
+    allTasks: string;
+    notFound: string;
+    projectName: string;
+    search: string;
+    unAllocated: string;
+    sprintDate: string;
+    completed: string;
+    current: string;
   };
   /**
    * General time-related expressions

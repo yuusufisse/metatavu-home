@@ -9,7 +9,9 @@
       "recommended": true,
       "complexity": {
         "noUselessFragments": "error",
-        "noForEach": "off"
+        "noForEach": "off",
+        "noStaticOnlyClass": "off",
+        "noBannedTypes": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"

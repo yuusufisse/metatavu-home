@@ -7,10 +7,10 @@ import { useState, useMemo } from "react";
 import { userProfileAtom } from "src/atoms/auth";
 import { errorAtom } from "src/atoms/error";
 import {
-  VacationRequest,
-  VacationRequestStatus,
+  type VacationRequest,
+  type VacationRequestStatus,
   VacationRequestStatuses,
-  Person
+  type Person
 } from "src/generated/client";
 import { useApi } from "src/hooks/use-api";
 import { DateTime } from "luxon";
@@ -27,7 +27,7 @@ import { Check, Pending } from "@mui/icons-material";
 import { personsAtom } from "src/atoms/person";
 import { getVacationRequestPersonFullName } from "src/utils/vacation-request-utils";
 import { validateValueIsNotUndefinedNorNull } from "src/utils/check-utils";
-import { VacationInfoListItem } from "src/types";
+import type { VacationInfoListItem } from "src/types";
 import { formatDate } from "src/utils/time-utils";
 import config from "src/app/config";
 // TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
@@ -108,7 +108,7 @@ const VacationsCard = () => {
           const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
-            } else if (a.updatedAt) {
+            }if (a.updatedAt) {
               return a;
             }
             return b;

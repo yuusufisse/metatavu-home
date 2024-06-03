@@ -1,5 +1,5 @@
 import { Skeleton } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
 
 /**
  * Component properties

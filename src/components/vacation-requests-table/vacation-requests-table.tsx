@@ -1,8 +1,8 @@
-import { DataGrid, GridRowId, GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useMemo, useRef, useState } from "react";
 import { Box, styled } from "@mui/material";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
-import { VacationsDataGridRow, VacationData } from "src/types";
+import type { VacationsDataGridRow, VacationData } from "src/types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
 import { languageAtom } from "src/atoms/language";
 import { useAtomValue } from "jotai";
@@ -16,8 +16,8 @@ import {
   vacationRequestStatusesAtom
 } from "src/atoms/vacation";
 import {
-  VacationRequest,
-  VacationRequestStatus,
+  type VacationRequest,
+  type VacationRequestStatus,
   VacationRequestStatuses
 } from "src/generated/client";
 import { getVacationRequestStatusColor } from "src/utils/vacation-status-utils";

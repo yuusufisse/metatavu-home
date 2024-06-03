@@ -1,7 +1,7 @@
 import { atom } from "jotai";
-import { DailyEntry, Person, PersonTotalTime } from "../generated/client";
-import { DailyEntryWithIndexSignature, PersonWithTotalTime } from "../types";
-import { UsersAvatars } from "src/generated/homeLambdasClient";
+import type { DailyEntry, Person, PersonTotalTime } from "../generated/client";
+import type { DailyEntryWithIndexSignature, PersonWithTotalTime } from "../types";
+import type { UsersAvatars } from "src/generated/homeLambdasClient";
 
 export const personsAtom = atom<Person[]>([]);
 export const personTotalTimeAtom = atom<PersonTotalTime | undefined>(undefined);
