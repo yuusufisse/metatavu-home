@@ -1,5 +1,5 @@
 import { DatePicker } from "@mui/x-date-pickers";
-import { DateRange } from "src/types";
+import type { DateRange } from "src/types";
 import strings from "src/localization/strings";
 
 /**

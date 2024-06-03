@@ -1,9 +1,9 @@
 import { Button, FormControl, FormLabel, MenuItem, TextField } from "@mui/material";
 import getVacationTypeByString from "src/utils/vacation-type-utils";
-import { ChangeEvent, useEffect } from "react";
+import { type ChangeEvent, useEffect } from "react";
 import DateRangePicker from "../../../generics/date-range-picker";
-import { DateRange, ToolbarFormModes, VacationData } from "src/types";
-import { DateTime } from "luxon";
+import { type DateRange, ToolbarFormModes, type VacationData } from "src/types";
+import type { DateTime } from "luxon";
 import { hasAllPropsDefined } from "src/utils/check-utils";
 import strings from "src/localization/strings";
 import LocalizationUtils from "src/utils/localization-utils";
@@ -12,7 +12,7 @@ import { useAtom, useAtomValue } from "jotai";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
 import { personsAtom } from "src/atoms/person";
-import { VacationType, Person } from "src/generated/client";
+import { VacationType, type Person } from "src/generated/client";
 import { DAYS_OF_WEEK } from "src/components/constants";
 
 /**
@@ -43,7 +43,8 @@ const ToolbarFormFields = ({
   const userProfile = useAtomValue(userProfileAtom);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
   useEffect(() => {
@@ -51,7 +52,11 @@ const ToolbarFormFields = ({
       ...vacationData,
       startDate: dateRange.start,
       endDate: dateRange.end,
-      days: calculateTotalVacationDays(dateRange.start, dateRange.end, getWorkingWeek(loggedInPerson))
+      days: calculateTotalVacationDays(
+        dateRange.start,
+        dateRange.end,
+        getWorkingWeek(loggedInPerson)
+      )
     });
   }, [dateRange]);
 
@@ -90,14 +95,14 @@ const ToolbarFormFields = ({
   const getWorkingWeek = (loggedInPerson?: Person) => {
     const workingWeek = new Array(DAYS_OF_WEEK.length).fill(false);
     if (!loggedInPerson) return workingWeek;
-    
-    DAYS_OF_WEEK.forEach((weekDay, index)=>{
+
+    DAYS_OF_WEEK.forEach((weekDay, index) => {
       if (loggedInPerson[weekDay as keyof typeof loggedInPerson] !== 0) {
         workingWeek[index] = true;
       }
-    }) 
+    });
     return workingWeek;
-  }
+  };
 
   return (
     <FormControl sx={{ width: "100%" }}>

@@ -1,5 +1,5 @@
-import { Person } from "src/generated/client";
-import { Allocations, Projects, Tasks } from "src/generated/homeLambdasClient";
+import type { Person } from "src/generated/client";
+import type { Allocations, Projects, Tasks } from "src/generated/homeLambdasClient";
 
 /**
  * Retrieve total time entries for an allocation
@@ -121,16 +121,18 @@ export const calculateWorkingLoad = (person?: Person) => {
 
 /**
  * Filter allocations and projects if project is not running
- * 
+ *
  * @param allocations allocations
  * @param projects list of running projects
  */
 export const filterAllocationsAndProjects = (allocations: Allocations[], projects: Projects[]) => {
   const filteredProjects: Projects[] = [];
-  const filteredAllocations = allocations.filter(allocation => projects.find(project => allocation.project === project.id));
-  filteredAllocations.map(allocation => {
-    const allocationProject = projects.find(project => allocation.project === project.id);
+  const filteredAllocations = allocations.filter((allocation) =>
+    projects.find((project) => allocation.project === project.id)
+  );
+  filteredAllocations.map((allocation) => {
+    const allocationProject = projects.find((project) => allocation.project === project.id);
     if (allocationProject) filteredProjects.push(allocationProject);
-  })
-  return {filteredAllocations, filteredProjects};
-}
+  });
+  return { filteredAllocations, filteredProjects };
+};

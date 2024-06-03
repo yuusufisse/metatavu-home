@@ -7,7 +7,7 @@ import {
 import { Typography } from "@mui/material";
 import strings from "src/localization/strings";
 import { COLORS } from "../constants";
-import { DailyEntry } from "src/generated/client";
+import type { DailyEntry } from "src/generated/client";
 
 /**
  * Component properties
@@ -42,13 +42,12 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
           outerRadius={50}
           label={(entry) => {
             if (!entry.dataKey) {
-              return null; 
-            } else {
-              return renderCustomizedLabel(entry);
+              return null;
             }
+            return renderCustomizedLabel(entry);
           }}
           labelLine={false}
-        >     
+        >
           {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index]} />
           ))}

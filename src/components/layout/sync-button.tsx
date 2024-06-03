@@ -1,12 +1,12 @@
 import { Button, Box, LinearProgress, Snackbar, Alert } from "@mui/material";
 import { DateTime } from "luxon";
-import { SyntheticEvent, useState, useEffect  } from "react";
+import { type SyntheticEvent, useState, useEffect } from "react";
 import { useApi } from "src/hooks/use-api";
 import { errorAtom } from "src/atoms/error";
 import { useAtomValue, useSetAtom } from "jotai";
 import SyncDialog from "../contexts/sync-handler";
 import strings from "src/localization/strings";
-import { DailyEntry, Person } from "src/generated/client";
+import type { DailyEntry, Person } from "src/generated/client";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
 /**
@@ -28,10 +28,10 @@ const SyncButton = () => {
   useEffect(() => {
     fetchPersons();
     fetchDailyEntries();
-  },[]);
+  }, []);
 
   /**
-   * fetching persons 
+   * fetching persons
    */
   const fetchPersons = async () => {
     try {
@@ -40,7 +40,7 @@ const SyncButton = () => {
     } catch (error) {
       setError(`${strings.error.fetchFailedGeneral}, ${error}`);
     }
-  }
+  };
 
   /**
    * fetching daily entries
@@ -57,24 +57,26 @@ const SyncButton = () => {
     } catch (error) {
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
-  }
-  
+  };
+
   /**
    * Update latest daily entry date
    */
   const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
-  
+
     if (dailyEntries?.length) {
       dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
     } else {
       const fetchedDailyEntries = dailyEntries;
-  
+
       if (fetchedDailyEntries?.length) {
-        dailyEntryDates = fetchedDailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
+        dailyEntryDates = fetchedDailyEntries.map((dailyEntry) =>
+          DateTime.fromJSDate(dailyEntry.date)
+        );
       }
     }
-  
+
     if (dailyEntryDates.length) {
       setSyncStartDate(DateTime.max(...dailyEntryDates));
     }
