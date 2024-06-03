@@ -12,7 +12,7 @@ import { Inventory } from "@mui/icons-material";
 import {
   allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
-  vacationRequestsAtom,
+  displayedVacationRequestsAtom,
   vacationRequestStatusesAtom
 } from "src/atoms/vacation";
 import {
@@ -32,8 +32,8 @@ import { userProfileAtom } from "src/atoms/auth";
  * Component properties
  */
 interface Props {
-  toggleFilter: boolean
-  filterVacationRequests: () => void;
+  isUpcoming: boolean
+  toggleIsUpcoming: () => void;
   deleteVacationRequests: (
     selectedRowIds: GridRowId[],
     rows: VacationsDataGridRow[]
@@ -53,8 +53,8 @@ interface Props {
  * @param props component properties
  */
 const VacationRequestsTable = ({
-  toggleFilter,
-  filterVacationRequests,
+  isUpcoming,
+  toggleIsUpcoming,
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
@@ -62,7 +62,7 @@ const VacationRequestsTable = ({
   loading
 }: Props) => {
   const adminMode = UserRoleUtils.adminMode();
-  const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
+  const vacationRequests = useAtomValue(displayedVacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
@@ -198,8 +198,8 @@ const VacationRequestsTable = ({
       ref={containerRef}
     >
       <TableToolbar
-        toggleFilter={toggleFilter}
-        filterVacationRequests={filterVacationRequests}
+        isUpcoming={isUpcoming}
+        toggleIsUpcoming={toggleIsUpcoming}
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}

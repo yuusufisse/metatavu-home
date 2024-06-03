@@ -20,8 +20,8 @@ import UserRoleUtils from "src/utils/user-role-utils";
  * Component properties
  */
 interface Props {
-  toggleFilter: boolean;
-  filterVacationRequests: () => void;
+  isUpcoming: boolean;
+  toggleIsUpcoming: () => void;
   deleteVacationRequests: (
     selectedRowIds: GridRowId[],
     rows: VacationsDataGridRow[]
@@ -45,8 +45,8 @@ interface Props {
  * @param props component properties
  */
 const TableToolbar = ({
-  toggleFilter,
-  filterVacationRequests,
+  isUpcoming,
+  toggleIsUpcoming,
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
@@ -168,10 +168,10 @@ const TableToolbar = ({
           <ToolbarGridItem item xs={3}>
             <Button
               sx={{ backgroundColor: "#eeeeee", p: 1, "&:hover": { backgroundColor: "#e0e0e0" } }}
-              onClick={filterVacationRequests}
+              onClick={toggleIsUpcoming}
             >
               <FilterAlt />
-              {toggleFilter ? strings.tableToolbar.past : strings.tableToolbar.future}
+              {isUpcoming ? strings.tableToolbar.future : strings.tableToolbar.past}
             </Button>
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>

@@ -7,3 +7,5 @@ export const vacationRequestStatusesAtom = atom<VacationRequestStatus[]>([]);
 
 export const allVacationRequestsAtom = atom<VacationRequest[]>([]);
 export const allVacationRequestStatusesAtom = atom<VacationRequestStatus[]>([]);
+
+export const displayedVacationRequestsAtom = atom<VacationRequest[]>([]);

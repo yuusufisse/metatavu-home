@@ -19,6 +19,7 @@ import {
   allVacationRequestStatusesAtom,
   vacationRequestsAtom,
   vacationRequestStatusesAtom,
+  displayedVacationRequestsAtom
 } from "src/atoms/vacation";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { Link } from "react-router-dom";
@@ -39,17 +40,34 @@ const VacationRequestsScreen = () => {
   const [vacationRequests, setVacationRequests] = useAtom(
     adminMode ? allVacationRequestsAtom : vacationRequestsAtom
   );
-  const [originalData, setOriginalData] = useState(vacationRequests);
+  const [_displayedVacationRequests, setDisplayedVacationRequests] = useAtom(displayedVacationRequestsAtom)
+
+  const upcomingVacationRequests = useMemo(
+    () => vacationRequests.filter((request) => request.endDate.getTime() > Date.now()),
+    [vacationRequests]
+  );
+  const pastVacationRequests = useMemo(
+    () => vacationRequests.filter((request) => request.endDate.getTime() <= Date.now()),
+    [vacationRequests]
+  );
+
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const [toggleFilter, setToggleFilter] = useState(true);
+  const [isUpcoming, setIsUpcoming] = useState(true);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
     (person: Person) =>
       person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
+
+  useEffect(() => {
+    isUpcoming
+      ? setDisplayedVacationRequests(upcomingVacationRequests)
+      : setDisplayedVacationRequests(pastVacationRequests);
+  }, [isUpcoming, vacationRequests]);
+
   /**
    * Fetch vacation request statuses
    */
@@ -71,34 +89,17 @@ const VacationRequestsScreen = () => {
             });
           })
         );
+        setLoading(false);
         await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
     }
-    setLoading(false);
   };
 
-  const filterVacationRequests = async () => {
-    if (loading) {
-      return;
-    }
-    setToggleFilter((prevToggleFilter) => {
-      const newToggleFilter = !prevToggleFilter;
-      const newVacationRequest = originalData.filter((vacation) =>
-        newToggleFilter
-          ? vacation.endDate.getTime() <= Date.now()
-          : vacation.endDate.getTime() > Date.now()
-      );
-      setVacationRequests(newVacationRequest);
-      return newToggleFilter;
-    });
+  const toggleIsUpcoming = () => {
+    setIsUpcoming(!isUpcoming);
   };
-
-  useEffect(() => {
-    if(!originalData.length) return;
-    filterVacationRequests();
-  }, [originalData]);
 
   useMemo(() => {
     fetchVacationRequestStatuses();
@@ -157,7 +158,6 @@ const VacationRequestsScreen = () => {
           });
         }
         setVacationRequests(fetchedVacationRequests);
-        setOriginalData(fetchedVacationRequests);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
@@ -444,8 +444,8 @@ const VacationRequestsScreen = () => {
       {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
-          toggleFilter={toggleFilter}
-          filterVacationRequests={filterVacationRequests}
+          isUpcoming={isUpcoming}
+          toggleIsUpcoming={toggleIsUpcoming}
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
           updateVacationRequest={updateVacationRequest}
