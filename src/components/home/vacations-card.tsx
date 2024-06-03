@@ -50,7 +50,8 @@ const VacationsCard = () => {
   const [loading, setLoading] = useState(false);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
   /**
@@ -108,7 +109,8 @@ const VacationsCard = () => {
           const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
-            }if (a.updatedAt) {
+            }
+            if (a.updatedAt) {
               return a;
             }
             return b;
