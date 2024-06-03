@@ -117,7 +117,7 @@ const TimebankViewAllScreen = () => {
             label={(props) => getHoursAndMinutes(props.value)}
           >
             {workTimeData.map((_entry, index) => (
-              <Cell key={`cell-${_entry.name}`} fill={COLORS[index % COLORS.length]} />
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
           {legend ? <Legend wrapperStyle={{ position: "relative" }} /> : null}

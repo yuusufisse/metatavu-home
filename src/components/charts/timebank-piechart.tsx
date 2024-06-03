@@ -49,7 +49,7 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
           labelLine={false}
         >
           {dailyEntryToChart(personDailyEntry).map((_entry, index) => (
-            <Cell key={`cell-${_entry.name}`} fill={COLORS[index]} />
+            <Cell key={`cell-${index}`} fill={COLORS[index]} />
           ))}
         </Pie>
         <Tooltip content={renderCustomizedTooltipPieChart} />
