@@ -88,12 +88,12 @@ const VacationRequestsScreen = () => {
               vacationRequestStatuses.push(createdStatus);
             });
           })
-        );
-        setLoading(false);
+        );        
         await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
+      setLoading(false);
     }
   };
 
