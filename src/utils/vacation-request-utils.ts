@@ -1,5 +1,5 @@
-import { Person, VacationRequest } from "../generated/client";
-import { KeycloakProfile } from "keycloak-js";
+import type { Person, VacationRequest } from "../generated/client";
+import type { KeycloakProfile } from "keycloak-js";
 import strings from "../localization/strings";
 
 /**

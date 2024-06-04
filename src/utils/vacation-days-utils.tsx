@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { theme } from "../theme";
-import { Person } from "../generated/client";
+import type { Person } from "../generated/client";
 import strings from "../localization/strings";
 
 /**
@@ -10,14 +10,10 @@ import strings from "../localization/strings";
  */
 export const renderVacationDaysTextForCard = (person: Person) => {
   const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+    person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
   const unspentVacationsColor =
-    person && person.unspentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+    person && person.unspentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
   if (person) {
     return (
@@ -27,9 +23,7 @@ export const renderVacationDaysTextForCard = (person: Person) => {
             {strings.vacationsCard.spentVacations}
           </Grid>
           <Grid item xs={6}>
-            <Typography color={spentVacationsColor}>
-              {person.spentVacations}
-            </Typography>
+            <Typography color={spentVacationsColor}>{person.spentVacations}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} alignItems="center">
@@ -37,16 +31,13 @@ export const renderVacationDaysTextForCard = (person: Person) => {
             {strings.vacationsCard.unspentVacations}
           </Grid>
           <Grid item xs={6}>
-            <Typography color={unspentVacationsColor}>
-              {person.unspentVacations}
-            </Typography>
+            <Typography color={unspentVacationsColor}>{person.unspentVacations}</Typography>
           </Grid>
         </Grid>
       </Grid>
     );
-  } else {
-    return <Typography>{strings.error.personsFetch}</Typography>;
   }
+    return <Typography>{strings.error.personsFetch}</Typography>;
 };
 
 /**
@@ -56,14 +47,10 @@ export const renderVacationDaysTextForCard = (person: Person) => {
  */
 export const renderVacationDaysTextForScreen = (person: Person) => {
   const spentVacationsColor =
-    person && person.spentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+    person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
   const unspentVacationsColor =
-    person && person.unspentVacations > 0
-      ? theme.palette.success.main
-      : theme.palette.error.main;
+    person && person.unspentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
   if (person) {
     return (
@@ -82,7 +69,6 @@ export const renderVacationDaysTextForScreen = (person: Person) => {
         </Grid>
       </Grid>
     );
-  } else {
-    return <Typography>{strings.error.personsFetch}</Typography>;
   }
+    return <Typography>{strings.error.personsFetch}</Typography>;
 };

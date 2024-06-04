@@ -59,10 +59,26 @@
   },
   "sprint": {
     "sprintview": "Sprintinäkymä",
-    "sprintviewScreen": "Sprintinäkymä näyttö",
-    "noAllocations": "Ei sprinttijakoa",
-    "allocation": "Allokointi",
-    "timeEntries": "Aikamerkinnät"
+    "myAllocation": "Minun allokointi",
+    "allocation": "Allokointi ",
+    "timeEntries": "Aikamerkinnät",
+    "allocationLeft": "Jäljellä oleva alkoatio",
+    "assigned": "Luovutuksensaaja",
+    "taskStatus": "Tila",
+    "taskPriority": "Prioriteetti",
+    "estimatedTime": "Arvio",
+    "taskName": "Tehtävä",
+    "showMyTasks": "Tehtäväni ",
+    "toDo": "Odotuksessa",
+    "inProgress": "Käynnissä",
+    "allTasks" : "Kaikki tehtävät",
+    "notFound" : "Tulosta ei löytynyt",
+    "projectName": "Projekti",
+    "search": "Hae tehtävää, projektia tai vastaanottajaa",
+    "unAllocated": "Kohdistamaton aika:",
+    "sprintDate": "Sprint",
+    "completed": "Valmis",
+    "current": "Nykyinen: {0}-{1}"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
@@ -142,7 +158,10 @@
   },
   "sprintRequestError": {
     "fetchError": "Sprintin tietopyyntöjen hakeminen epäonnistui",
-    "fetchTimeEntriesError": "Virhe aikamerkintöjen hakemisessa"
+    "fetchTimeEntriesError": "Virhe aikamerkintöjen hakemisessa",
+    "fetchAllocationError": "Virhe aikamerkintöjen hakemisessa jakamista varten {0}: {1}",
+    "fetchTasksError": "Tehtävän {0} aikamerkintöjen noutovirhe: {1}",
+    "fetchTaskIdError": "Tehtävän tunnusta ei löytynyt"
   },
   "form": {
     "submit": "Lähetä",

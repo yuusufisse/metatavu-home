@@ -2,8 +2,8 @@ import { Add, Cancel, Edit } from "@mui/icons-material";
 import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
-import { GridRowId } from "@mui/x-data-grid";
-import { VacationsDataGridRow, ToolbarFormModes, VacationData } from "src/types";
+import type { GridRowId } from "@mui/x-data-grid";
+import { type VacationsDataGridRow, ToolbarFormModes, type VacationData } from "src/types";
 import ToolbarDeleteButton from "./toolbar-delete-button";
 import FormToggleButton from "./toolbar-form-toggle-button";
 import ConfirmationHandler from "../../contexts/confirmation-handler";
@@ -60,7 +60,9 @@ const TableToolbar = ({
   const language = useAtomValue(languageAtom);
   const adminMode = UserRoleUtils.adminMode();
   const { pathname } = useLocation();
-  const disableEditButton = rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !== VacationRequestStatuses.PENDING;
+  const disableEditButton =
+    rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !==
+    VacationRequestStatuses.PENDING;
 
   useEffect(() => {
     setTitle(getToolbarTitle(toolbarFormMode));
@@ -124,7 +126,7 @@ const TableToolbar = ({
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
           </ToolbarGridItem>
-          {selectedRowIds?.length === 1  &&          
+          {selectedRowIds?.length === 1 && (
             <ToolbarGridItem item sm={adminMode ? 3 : 6} xs={6}>
               <FormToggleButton
                 title={strings.tableToolbar.edit}
@@ -134,7 +136,7 @@ const TableToolbar = ({
                 disabled={disableEditButton}
               />
             </ToolbarGridItem>
-          }
+          )}
           {adminMode && (
             <>
               <ToolbarGridItem item sm={3} xs={6}>

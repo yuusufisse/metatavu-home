@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { Language } from "src/types";
+import type { Language } from "src/types";
 import strings from "src/localization/strings";
 
 const defaultLanguage = navigator.language === "fi" ? strings.getLanguage() : "en-gb";

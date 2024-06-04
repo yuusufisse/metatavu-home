@@ -1,8 +1,24 @@
-import { Grow, Container, Box, Typography, FormControl, TextField, MenuItem, CircularProgress, List, ListItem, ListItemText } from "@mui/material"
-import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
+import {
+  Grow,
+  Container,
+  Box,
+  Typography,
+  FormControl,
+  TextField,
+  MenuItem,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText
+} from "@mui/material";
+import {
+  TimebankCard,
+  TimebankCardFlexBox,
+  TimebankCardTitle
+} from "./generic/generic-card-components";
 import strings from "src/localization/strings";
 import { formatTimePeriod, getHoursAndMinutes } from "src/utils/time-utils";
-import { PersonTotalTime, Timespan } from "src/generated/client";
+import { type PersonTotalTime, Timespan } from "src/generated/client";
 import LocalizationUtils from "src/utils/localization-utils";
 import TimebankOverviewChart from "src/components/charts/timebank-overview-chart";
 import { theme } from "src/theme";
@@ -16,7 +32,7 @@ import { errorAtom } from "src/atoms/error";
  * Component properties
  */
 interface Props {
-  selectedEmployeeId?: number
+  selectedEmployeeId?: number;
 }
 
 /**
@@ -24,7 +40,7 @@ interface Props {
  *
  * @param props Component properties
  */
-const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
+const SummaryTimEntriesCard = ({ selectedEmployeeId }: Props) => {
   const [timespan, setTimespan] = useState<Timespan>(Timespan.ALL_TIME);
   const [loading, setLoading] = useState(false);
   const { personsApi } = useApi();
@@ -39,7 +55,7 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
 
   /**
    * Gets person's total time data.
-   * 
+   *
    * @param selectedPersonId selected person id
    */
   const getPersonTotalTime = async (selectedPersonId: number) => {
@@ -87,8 +103,8 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
   );
 
   /**
-  * Renders overview chart and list item elements containing total time summaries
-  */
+   * Renders overview chart and list item elements containing total time summaries
+   */
   const renderOverViewChart = () => {
     if (loading) {
       return (
@@ -106,7 +122,7 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
     return (
       <>
         <TimebankOverviewChart personTotalTime={personTotalTime} />
-        <List style={{ width:"12%", minWidth:"110px" }} dense sx={{ marginLeft: "5%" }}>
+        <List style={{ width: "12%", minWidth: "110px" }} dense sx={{ marginLeft: "5%" }}>
           <ListItem>
             <ListItemText
               sx={{
@@ -167,7 +183,7 @@ const SummaryTimEntriesCard = ({selectedEmployeeId}: Props) => {
         </Container>
       </TimebankCard>
     </Grow>
-  )
-}
+  );
+};
 
-export default SummaryTimEntriesCard
+export default SummaryTimEntriesCard;

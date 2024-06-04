@@ -22,7 +22,8 @@ export const formatDate = (date: DateTime, dateWithTime?: boolean) => {
 export const getHoursAndMinutes = (minutes: number) => {
   if (minutes < 0) {
     return `-${Duration.fromObject({ minutes: minutes }).negate().toFormat("h 'h' m 'min'")}`;
-  } else return Duration.fromObject({ minutes: minutes }).toFormat("h 'h' m 'min'");
+  }
+  return Duration.fromObject({ minutes: minutes }).toFormat("h 'h' m 'min'");
 };
 
 /**
@@ -50,13 +51,16 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
       return `${timespan[0]}`; // Year
     case 2:
       if (timespan[0].length > 4) {
-        const startDate = DateTime.fromJSDate(new Date(timespan[0])).toLocaleString(DateTime.DATE_SHORT);
-        const endDate = DateTime.fromJSDate(new Date(timespan[1])).toLocaleString(DateTime.DATE_SHORT);
-        
+        const startDate = DateTime.fromJSDate(new Date(timespan[0])).toLocaleString(
+          DateTime.DATE_SHORT
+        );
+        const endDate = DateTime.fromJSDate(new Date(timespan[1])).toLocaleString(
+          DateTime.DATE_SHORT
+        );
+
         return `${startDate} – ${endDate}`; // All time
-      } else {
-        return `${timespan[0]}/${timespan[1]}`; // Month
       }
+      return `${timespan[0]}/${timespan[1]}`; // Month
     case 3:
       return `${timespan[0]}/${timespan[2]}`; // Week
     default:
@@ -71,17 +75,29 @@ export const formatTimePeriod = (timespan: string[] | undefined) => {
  * @param vacationDayEnd DateTime vacation end date
  * @param workingWeek list of booleans representing which days are working days
  */
-export const calculateTotalVacationDays = (vacationStartDate: DateTime, vacationEndDate: DateTime, workingWeek: boolean[]) => {
+export const calculateTotalVacationDays = (
+  vacationStartDate: DateTime,
+  vacationEndDate: DateTime,
+  workingWeek: boolean[]
+) => {
   const vacationDayStart = vacationStartDate.weekday;
   const vacationDayEnd = vacationEndDate.weekday;
   const daysSelected = Number(Math.round(vacationEndDate.diff(vacationStartDate, ["days"]).days));
-  const weeks = Math.floor(daysSelected/7);
+  const weeks = Math.floor(daysSelected / 7);
   const [startWeek, endWeek] = getIndexDaysWorking(workingWeek);
 
-  if (!startWeek || !endWeek) return 0; 
-  if (daysSelected === 0) return singleVacationDaySelected(workingWeek[vacationDayStart-1], startWeek, endWeek);
-  return multipleVacationDaysSelected(workingWeek, vacationDayStart, vacationDayEnd, startWeek, endWeek, weeks);
-}
+  if (!startWeek || !endWeek) return 0;
+  if (daysSelected === 0)
+    return singleVacationDaySelected(workingWeek[vacationDayStart - 1], startWeek, endWeek);
+  return multipleVacationDaysSelected(
+    workingWeek,
+    vacationDayStart,
+    vacationDayEnd,
+    startWeek,
+    endWeek,
+    weeks
+  );
+};
 
 /**
  * Get indexes - start and end day of working week
@@ -94,12 +110,12 @@ const getIndexDaysWorking = (workingWeek: boolean[]) => {
   let endIndex = 6;
   while (true) {
     if (startIndex > 6 || endIndex < 0) break;
-    if (!workingWeek[startIndex]) startIndex+=1;
-    if (!workingWeek[endIndex]) endIndex-=1;
-    if (workingWeek[startIndex] && workingWeek[endIndex]) return [startIndex+1, endIndex+1];
+    if (!workingWeek[startIndex]) startIndex += 1;
+    if (!workingWeek[endIndex]) endIndex -= 1;
+    if (workingWeek[startIndex] && workingWeek[endIndex]) return [startIndex + 1, endIndex + 1];
   }
   return [null, null];
-} 
+};
 
 /**
  * Get vacation days if one day is chosen
@@ -112,7 +128,7 @@ const singleVacationDaySelected = (workDay: boolean, startWeek: number, endWeek?
   if (!workDay) return 0;
   if (endWeek === startWeek) return 6;
   return 1;
-}
+};
 
 /**
  * Get vacation days if multiple days are chosen
@@ -124,9 +140,16 @@ const singleVacationDaySelected = (workDay: boolean, startWeek: number, endWeek?
  * @param endWeek index of the end week
  * @param weeks number of weeks
  */
-const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: number, vacationDayEnd: number, startWeek: number, endWeek: number, weeks: number) => {
-  const workDays = workingWeek.filter(workDay => workDay).length;
-  const startsFromWorkingDay = workingWeek[vacationDayStart-1];
+const multipleVacationDaysSelected = (
+  workingWeek: boolean[],
+  vacationDayStart: number,
+  vacationDayEnd: number,
+  startWeek: number,
+  endWeek: number,
+  weeks: number
+) => {
+  const workDays = workingWeek.filter((workDay) => workDay).length;
+  const startsFromWorkingDay = workingWeek[vacationDayStart - 1];
 
   if (vacationDayStart === vacationDayEnd) {
     // if number of weeks is an integer
@@ -135,17 +158,22 @@ const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: 
 
   if (vacationDayEnd > vacationDayStart) {
     // calculate the number of vacation days from start till the end of vacation if the number of weeks is not an integer
-    let takenWorkingDays = countWorkingWeekDaysInRange(vacationDayStart, vacationDayEnd, workingWeek);
+    let takenWorkingDays = countWorkingWeekDaysInRange(
+      vacationDayStart,
+      vacationDayEnd,
+      workingWeek
+    );
     if (takenWorkingDays === workDays) takenWorkingDays = 6;
     return weeks * 6 + takenWorkingDays;
   }
 
   // calculate the number of vacation days from start vacation day till the end of working week and from start working week till the end of vacation if the number of weeks is not an integer
-  let takenWorkingDays = countWorkingWeekDaysInRange(vacationDayStart, endWeek, workingWeek) + 
-  countWorkingWeekDaysInRange(startWeek, vacationDayEnd, workingWeek);
+  let takenWorkingDays =
+    countWorkingWeekDaysInRange(vacationDayStart, endWeek, workingWeek) +
+    countWorkingWeekDaysInRange(startWeek, vacationDayEnd, workingWeek);
   if (takenWorkingDays === workDays) takenWorkingDays = 6;
   return weeks * 6 + takenWorkingDays;
-}
+};
 
 /**
  * Get vacation days based on the number of weeks, considering if it starts from a working day
@@ -156,7 +184,7 @@ const multipleVacationDaysSelected = (workingWeek: boolean[], vacationDayStart: 
 const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: number) => {
   if (!startsFromWorkingDay) return weeks * 6;
   return weeks * 6 + 1;
-}
+};
 
 /**
  * Calculate number of working days within a range of week indexes
@@ -165,10 +193,35 @@ const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: 
  * @param endWeekIndex represents end week date of range
  * @param workingWeek list of booleans representing which days are working days
  */
-const countWorkingWeekDaysInRange = (startWeekIndex: number, endWeekIndex: number, workingWeek: boolean[]) => {
+const countWorkingWeekDaysInRange = (
+  startWeekIndex: number,
+  endWeekIndex: number,
+  workingWeek: boolean[]
+) => {
   let takenWorkingDays = 0;
-  for (let i = startWeekIndex; i <= endWeekIndex; i++){
-    if (workingWeek[i-1]) takenWorkingDays+=1;
+  for (let i = startWeekIndex; i <= endWeekIndex; i++) {
+    if (workingWeek[i - 1]) takenWorkingDays += 1;
   }
   return takenWorkingDays;
-}
+};
+
+/**
+ * Get sprint start date
+ *
+ * @param date string date
+ */
+export const getSprintStart = (date: string) => {
+  const weekIndex = DateTime.fromISO(date).localWeekNumber;
+  const weekDay = DateTime.fromISO(date).weekday;
+  const days = (weekIndex % 2 === 1 ? 0 : 7) + weekDay;
+  return DateTime.fromISO(date).minus({ days: days - 1 });
+};
+
+/**
+ * Get sprint end date
+ *
+ * @param date string date
+ */
+export const getSprintEnd = (date: string) => {
+  return getSprintStart(date).plus({ days: 11 });
+};

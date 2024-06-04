@@ -1,26 +1,39 @@
-import { Grow, Container, CircularProgress, List, ListItem, ListItemText, FormControlLabel, Checkbox } from "@mui/material"
-import {TimebankCard, TimebankCardFlexBox, TimebankCardTitle} from "./generic/generic-card-components"
-import strings from "src/localization/strings"
-import { getHoursAndMinutes } from "src/utils/time-utils"
-import TimebankMultiBarChart from "src/components/charts/timebank-multibar-chart"
-import TimebankPieChart from "src/components/charts/timebank-piechart"
-import { useEffect, useState } from "react"
-import { DateTime } from "luxon"
-import { dailyEntriesAtom, personDailyEntryAtom } from "src/atoms/person"
-import { DailyEntryWithIndexSignature, DateRange } from "src/types"
-import { DatePicker } from "@mui/x-date-pickers"
-import DateRangePicker from "./timebank-daterange-picker"
-import { useApi } from "src/hooks/use-api"
-import { theme } from "src/theme"
-import { errorAtom } from "src/atoms/error"
-import { DailyEntry } from "src/generated/client"
-import { useAtomValue, useSetAtom } from "jotai"
+import {
+  Grow,
+  Container,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  FormControlLabel,
+  Checkbox
+} from "@mui/material";
+import {
+  TimebankCard,
+  TimebankCardFlexBox,
+  TimebankCardTitle
+} from "./generic/generic-card-components";
+import strings from "src/localization/strings";
+import { getHoursAndMinutes } from "src/utils/time-utils";
+import TimebankMultiBarChart from "src/components/charts/timebank-multibar-chart";
+import TimebankPieChart from "src/components/charts/timebank-piechart";
+import { useEffect, useState } from "react";
+import { DateTime } from "luxon";
+import { dailyEntriesAtom, personDailyEntryAtom } from "src/atoms/person";
+import type { DailyEntryWithIndexSignature, DateRange } from "src/types";
+import { DatePicker } from "@mui/x-date-pickers";
+import DateRangePicker from "./timebank-daterange-picker";
+import { useApi } from "src/hooks/use-api";
+import { theme } from "src/theme";
+import { errorAtom } from "src/atoms/error";
+import type { DailyEntry } from "src/generated/client";
+import { useAtomValue, useSetAtom } from "jotai";
 
 /**
  * Component properties
  */
 interface Props {
-  selectedEmployeeId?: number
+  selectedEmployeeId?: number;
 }
 
 /**
@@ -28,15 +41,17 @@ interface Props {
  *
  * @param props Component properties
  */
-const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
+const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
   const [loading, setLoading] = useState(false);
   const setError = useSetAtom(errorAtom);
   const [selectedEntries, setSelectedEntries] = useState<DailyEntryWithIndexSignature[]>([]);
-  const {dailyEntriesApi} = useApi();
+  const { dailyEntriesApi } = useApi();
   const [byRange, setByRange] = useState({
     dailyEntries: false
   });
-  const [personDailyEntry, setPersonDailyEntry] = useState<DailyEntryWithIndexSignature | undefined>(useAtomValue(personDailyEntryAtom));
+  const [personDailyEntry, setPersonDailyEntry] = useState<
+    DailyEntryWithIndexSignature | undefined
+  >(useAtomValue(personDailyEntryAtom));
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>(useAtomValue(dailyEntriesAtom));
   const todayOrEarlier = dailyEntries.length
     ? DateTime.fromJSDate(
@@ -102,10 +117,10 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
    * @returns time entries list component
    */
   const renderTimeEntryTypesList = () => (
-    <List style={{ width:"12%", minWidth:"110px" }}dense sx={{ marginLeft: "5%" }}>
+    <List style={{ width: "12%", minWidth: "110px" }} dense sx={{ marginLeft: "5%" }}>
       {timeEntriesListItems.map((item) => {
         const entryValue = Number(personDailyEntry ? personDailyEntry[item.propName] : 0);
-        
+
         return (
           <ListItem key={`timeEntriesListItem-${item.propName}`}>
             <ListItemText
@@ -120,7 +135,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
               }
             />
           </ListItem>
-        )
+        );
       })}
     </List>
   );
@@ -135,7 +150,7 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
     if (range.start && range.end) {
       const selectedDays = range.end.diff(range.start, "days").toObject();
       const result = [];
-      
+
       for (let i = 0; selectedDays.days && i <= selectedDays.days; i++) {
         result.push(
           dailyEntries.filter(
@@ -146,7 +161,6 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
                 range.start?.plus({ days: i }).toISODate()
           )[0]
         );
-        
       }
       return result.filter((item) => item);
     }
@@ -174,7 +188,11 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
       });
       setDailyEntries(fetchedDailyEntries);
       setPersonDailyEntry(
-        fetchedDailyEntries.find((item) => item.person === selectedEmployeeId && DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate())
+        fetchedDailyEntries.find(
+          (item) =>
+            item.person === selectedEmployeeId &&
+            DateTime.fromJSDate(item.date).toISODate() === selectedDate.toISODate()
+        )
       );
     } catch (error) {
       setError(`${strings.error.dailyEntriesFetch}, ${error}`);
@@ -187,8 +205,8 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
    * @returns JSX.Element consisting of either chart component
    */
   const renderDailyEntryOrRangeChart = () => {
-    if (loading){
-      return <CircularProgress sx={{ margin: "auto",mt: "5%",mb: "5%" }} />;
+    if (loading) {
+      return <CircularProgress sx={{ margin: "auto", mt: "5%", mb: "5%" }} />;
     }
     if (byRange.dailyEntries && selectedEntries) {
       return (
@@ -196,15 +214,15 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
           <TimebankMultiBarChart selectedEntries={selectedEntries} />
           {renderTimeEntryTypesList()}
         </>
-      )
+      );
     }
     if (personDailyEntry) {
       return (
         <>
-          <TimebankPieChart personDailyEntry={personDailyEntry } />
+          <TimebankPieChart personDailyEntry={personDailyEntry} />
           {renderTimeEntryTypesList()}
         </>
-      )
+      );
     }
   };
 
@@ -224,8 +242,12 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
           label={strings.timebank.selectEntry}
           onChange={(value: DateTime | null) => value && handleDailyEntryChange(value)}
           value={personDailyEntry ? DateTime.fromJSDate(personDailyEntry?.date) : todayOrEarlier}
-          minDate={dailyEntries.length ? DateTime.fromJSDate( dailyEntries[dailyEntries.length - 1].date): DateTime.now()}
-          maxDate={dailyEntries.length ? DateTime.fromJSDate( dailyEntries[0].date): DateTime.now()}
+          minDate={
+            dailyEntries.length
+              ? DateTime.fromJSDate(dailyEntries[dailyEntries.length - 1].date)
+              : DateTime.now()
+          }
+          maxDate={dailyEntries.length ? DateTime.fromJSDate(dailyEntries[0].date) : DateTime.now()}
         />
       );
     }
@@ -254,13 +276,13 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
                 ? getHoursAndMinutes(
                     Number(selectedEntries?.reduce((prev, next) => prev + next.logged, 0))
                   )
-                : getHoursAndMinutes(Number(personDailyEntry?.logged)||0)
+                : getHoursAndMinutes(Number(personDailyEntry?.logged) || 0)
             }
           />
           <TimebankCardFlexBox>
             {renderDatePickers()}
             <FormControlLabel
-              style={{ width:"20%" }}
+              style={{ width: "20%" }}
               label={strings.timebank.byrange}
               control={
                 <Checkbox
@@ -275,13 +297,11 @@ const SpecificTimeEntriesCard = ({selectedEmployeeId}: Props) => {
               }
             />
           </TimebankCardFlexBox>
-          <TimebankCardFlexBox>
-              {renderDailyEntryOrRangeChart()}
-          </TimebankCardFlexBox>
+          <TimebankCardFlexBox>{renderDailyEntryOrRangeChart()}</TimebankCardFlexBox>
         </Container>
       </TimebankCard>
     </Grow>
-  )
-}
+  );
+};
 
 export default SpecificTimeEntriesCard;
