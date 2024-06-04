@@ -63,6 +63,8 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
     end: todayOrEarlier
   });
 
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     getPersonDailyEntries(selectedEmployeeId);
   }, [selectedEmployeeId, byRange.dailyEntries]);
@@ -238,6 +240,13 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
           sx={{
             width: "40%",
             marginRight: "1%"
+          }}
+          open={open}
+          onClose={() => setOpen(false)}
+          slotProps={{
+            textField: {
+              onClick: () => setOpen(true)
+            }
           }}
           label={strings.timebank.selectEntry}
           onChange={(value: DateTime | null) => value && handleDailyEntryChange(value)}
