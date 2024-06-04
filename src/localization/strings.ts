@@ -87,8 +87,10 @@ export interface Localized extends LocalizedStringsMethods {
     sprintview: string;
     myAllocation: string;
     allocation: string;
+    timeAllocated: string;
     timeEntries: string;
     allocationLeft: string;
+    noAllocation: string;
     assigned: string;
     taskStatus: string;
     taskPriority: string;

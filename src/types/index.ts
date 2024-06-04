@@ -153,6 +153,7 @@ export interface DateRange {
  * Type describing chart data for sprint view
  */
 export interface SprintViewChartData {
+  id: number,
   projectName: string,
   timeAllocated: number,
   timeEntries: number,
