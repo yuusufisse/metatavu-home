@@ -176,7 +176,7 @@ const VacationRequestsTable = ({
    */
   const CustomSkeletonTableRows = () => (
     <SkeletonTableRows
-      dataGridHeight={15}
+      dataGridHeight={dataGridHeight}
       dataGridRowHeight={dataGridRowHeight}
       dataGridColumnHeaderHeight={dataGridColumnHeaderHeight}
     />
