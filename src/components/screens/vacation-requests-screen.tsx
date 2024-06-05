@@ -62,6 +62,9 @@ const VacationRequestsScreen = () => {
       person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
 
+  /**
+   * Decide if we show upcoming or past vacations
+   */
   useEffect(() => {
     isUpcoming
       ? setDisplayedVacationRequests(upcomingVacationRequests)
