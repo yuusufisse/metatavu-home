@@ -46,7 +46,7 @@ const UserSprintViewCard = () => {
           startDate: new Date(),
           endDate: new Date()
         });
-        const fetchedProjects = await projectsApi.listProjects();
+        const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
         const { filteredAllocations, filteredProjects } = filterAllocationsAndProjects(
           fetchedAllocations,
           fetchedProjects
