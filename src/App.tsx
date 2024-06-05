@@ -18,6 +18,7 @@ import { Settings } from "luxon";
 import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 import SprintViewScreen from "./components/screens/sprint-view-screen";
+import VacationTimeOverrideScreen from "./components/screens/vacation-time-override-screen";
 
 /**
  * Application component
@@ -77,6 +78,10 @@ const App = () => {
         {
           path: "/admin/sprintview",
           element: <SprintViewScreen />
+        },
+        {
+          path: "/admin/override",
+          element: <VacationTimeOverrideScreen />
         }
       ]
     }
