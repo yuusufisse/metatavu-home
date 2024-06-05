@@ -10,7 +10,6 @@ import VacationRequestsTableColumns from "./vacation-requests-table-columns";
 import strings from "src/localization/strings";
 import { Inventory } from "@mui/icons-material";
 import {
-  allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
   displayedVacationRequestsAtom,
   vacationRequestStatusesAtom
