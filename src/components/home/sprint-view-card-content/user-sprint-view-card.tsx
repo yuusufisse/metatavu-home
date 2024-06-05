@@ -1,11 +1,11 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { personsAtom } from "src/atoms/person";
+import { allocationsAtom, personsAtom, projectsAtom, timeEntriesAtom } from "src/atoms/person";
 import { userProfileAtom } from "src/atoms/auth";
 import type { Person } from "src/generated/client";
 import config from "src/app/config";
 import { useLambdasApi } from "src/hooks/use-api";
-import type { Allocations, Projects, TimeEntries } from "src/generated/homeLambdasClient";
+import type { TimeEntries } from "src/generated/homeLambdasClient";
 import { CardContent, Skeleton, Typography } from "@mui/material";
 import SprintViewBarChart from "src/components/charts/sprint-view-bar-chart";
 import type { SprintViewChartData } from "src/types";
@@ -24,9 +24,9 @@ const UserSprintViewCard = () => {
     (person: Person) =>
       person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-  const [allocations, setAllocations] = useState<Allocations[]>([]);
-  const [projects, setProjects] = useState<Projects[]>([]);
-  const [timeEntries, setTimeEntries] = useState<number[]>([]);
+  const [allocations, setAllocations] = useAtom(allocationsAtom);
+  const [projects, setProjects] = useAtom(projectsAtom);
+  const [timeEntries, setTimeEntries] = useAtom(timeEntriesAtom);
   const { allocationsApi, projectsApi, timeEntriesApi } = useLambdasApi();
   const setError = useSetAtom(errorAtom);
 
@@ -39,7 +39,7 @@ const UserSprintViewCard = () => {
    */
   const getAllocationsAndProjects = async () => {
     setLoading(true);
-    if (loggedInPerson) {
+    if (loggedInPerson && !allocations.length) {
       try {
         const fetchedAllocations = await allocationsApi.listAllocations({
           personId: loggedInPerson.id.toString(),
