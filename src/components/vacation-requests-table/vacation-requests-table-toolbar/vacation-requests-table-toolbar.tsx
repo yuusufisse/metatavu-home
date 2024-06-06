@@ -64,6 +64,11 @@ const TableToolbar = ({
   const language = useAtomValue(languageAtom);
   const adminMode = UserRoleUtils.adminMode();
   const { pathname } = useLocation();
+  const isToolbarVisible = toolbarOpen && !formOpen && selectedRowIds?.length;
+  const buttonLabel = isUpcoming ? strings.tableToolbar.future : strings.tableToolbar.past;
+  const gridItemSize = selectedRowIds?.length === 1
+  ? (adminMode ? 3 : 6)
+  : (adminMode ? 6 : 12);
   const disableEditButton =
     rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !==
     VacationRequestStatuses.PENDING;
@@ -121,11 +126,11 @@ const TableToolbar = ({
         setOpen={setConfirmationHandlerOpen}
         deleteVacationsData={deleteVacationsData}
       />
-      {toolbarOpen && !formOpen && selectedRowIds?.length ? (
+      {isToolbarVisible ? (
         <ToolbarGridContainer container>
           <ToolbarGridItem
             item
-            sm={selectedRowIds?.length === 1 ? (adminMode ? 3 : 6) : adminMode ? 6 : 12}
+            sm={gridItemSize}
             xs={6}
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
@@ -171,7 +176,7 @@ const TableToolbar = ({
               onClick={toggleIsUpcoming}
             >
               <FilterAlt />
-              {isUpcoming ? strings.tableToolbar.future : strings.tableToolbar.past}
+              {buttonLabel}
             </Button>
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>
