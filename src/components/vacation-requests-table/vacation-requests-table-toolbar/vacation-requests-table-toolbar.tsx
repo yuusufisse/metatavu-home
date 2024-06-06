@@ -66,9 +66,11 @@ const TableToolbar = ({
   const { pathname } = useLocation();
   const isToolbarVisible = toolbarOpen && !formOpen && selectedRowIds?.length;
   const buttonLabel = isUpcoming ? strings.tableToolbar.future : strings.tableToolbar.past;
+  const singleSelectionSize = adminMode ? 3 : 6
+  const multiSelectionSize = adminMode ? 6 : 12
   const gridItemSize = selectedRowIds?.length === 1
-  ? (adminMode ? 3 : 6)
-  : (adminMode ? 6 : 12);
+  ? (singleSelectionSize)
+  : (multiSelectionSize);
   const disableEditButton =
     rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !==
     VacationRequestStatuses.PENDING;
