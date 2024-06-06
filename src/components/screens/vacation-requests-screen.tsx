@@ -40,7 +40,7 @@ const VacationRequestsScreen = () => {
   const [vacationRequests, setVacationRequests] = useAtom(
     adminMode ? allVacationRequestsAtom : vacationRequestsAtom
   );
-  const [_displayedVacationRequests, setDisplayedVacationRequests] = useAtom(displayedVacationRequestsAtom)
+  const setDisplayedVacationRequests = useSetAtom(displayedVacationRequestsAtom);
 
   const upcomingVacationRequests = useMemo(
     () => vacationRequests.filter((request) => request.endDate.getTime() > Date.now()),
@@ -100,6 +100,9 @@ const VacationRequestsScreen = () => {
     }
   };
 
+    /**
+   * Handler for upcoming/ past vacations toggle click
+   */
   const toggleIsUpcoming = () => {
     setIsUpcoming(!isUpcoming);
   };
