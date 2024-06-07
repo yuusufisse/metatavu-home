@@ -8,7 +8,7 @@ import {
   DialogTitle,
   IconButton
 } from "@mui/material";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 /**
  * Component properties

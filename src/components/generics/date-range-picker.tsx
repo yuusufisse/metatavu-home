@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { DateTime } from "luxon";
+import type { DateTime } from "luxon";
 import strings from "src/localization/strings";
-import { DateRange } from "src/types";
+import type { DateRange } from "src/types";
 
 /**
  * Component properties

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import UserRoleUtils from "src/utils/user-role-utils";
 import AdminRouteErrorScreen from "../screens/admin-route-error-screen";
 

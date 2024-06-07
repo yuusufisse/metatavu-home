@@ -1,5 +1,5 @@
 import { Box, Card, CircularProgress, IconButton, Typography } from "@mui/material";
-import { Projects, Tasks, TimeEntries } from "src/generated/homeLambdasClient";
+import type { Projects, Tasks, TimeEntries } from "src/generated/homeLambdasClient";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useLambdasApi } from "src/hooks/use-api";

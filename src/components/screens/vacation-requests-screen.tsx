@@ -133,7 +133,8 @@ const VacationRequestsScreen = () => {
           const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
-            } else if (a.updatedAt) {
+            }
+            if (a.updatedAt) {
               return a;
             }
             return b;

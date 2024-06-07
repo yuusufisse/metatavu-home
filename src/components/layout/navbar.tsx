@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useState } from "react";
 import {
   MenuItem,
   AppBar,
@@ -17,7 +17,7 @@ import { useAtom, useAtomValue } from "jotai";
 import NavItems from "./navitems";
 import SyncButton from "./sync-button";
 import { avatarsAtom, personsAtom } from "src/atoms/person";
-import { Person } from "src/generated/client";
+import type { Person } from "src/generated/client";
 import config from "src/app/config";
 import { useLambdasApi } from "src/hooks/use-api";
 
@@ -84,7 +84,7 @@ const NavBar = () => {
             <Box>
               <Tooltip title={strings.header.openUserMenu}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar src={loggedInPersonAvatar}/>
+                  <Avatar src={loggedInPersonAvatar} />
                 </IconButton>
               </Tooltip>
               <Menu

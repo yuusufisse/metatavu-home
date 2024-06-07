@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { TooltipProps } from "recharts";
-import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
-import { DailyEntry, PersonTotalTime } from "../generated/client";
+import type { TooltipProps } from "recharts";
+import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
+import type { DailyEntry, PersonTotalTime } from "../generated/client";
 import strings from "../localization/strings";
 import { theme } from "../theme";
 import { getHoursAndMinutes } from "./time-utils";
-import { CustomLabel } from "../types";
+import type { CustomLabel } from "../types";
 
 /**
  * Reformats inputted daily entry to be presented in the pie chart
@@ -137,30 +137,34 @@ export const renderCustomizedTooltipBarChart = ({
       >
         {name}
       </Typography>
-      {billableProject ? 
-        renderCustomizedTooltipRow(
-          strings.timebank.billableProjectTime,
-          billableProject as number,
-          theme.palette.success.main
-        ) : ""}
-      {nonBillableProject ?
-        renderCustomizedTooltipRow(
-          strings.timebank.nonBillableProjectTime,
-          nonBillableProject as number,
-          theme.palette.success.main
-        ) : ""}
-      {internal ?
-        renderCustomizedTooltipRow(
-          strings.timebank.internalTime,
-          internal as number,
-          theme.palette.warning.main
-        ) : ""}
-      {expected ?
-        renderCustomizedTooltipRow(
-          strings.timebank.expected,
-          expected as number,
-          theme.palette.info.main
-        ) : ""}
+      {billableProject
+        ? renderCustomizedTooltipRow(
+            strings.timebank.billableProjectTime,
+            billableProject as number,
+            theme.palette.success.main
+          )
+        : ""}
+      {nonBillableProject
+        ? renderCustomizedTooltipRow(
+            strings.timebank.nonBillableProjectTime,
+            nonBillableProject as number,
+            theme.palette.success.main
+          )
+        : ""}
+      {internal
+        ? renderCustomizedTooltipRow(
+            strings.timebank.internalTime,
+            internal as number,
+            theme.palette.warning.main
+          )
+        : ""}
+      {expected
+        ? renderCustomizedTooltipRow(
+            strings.timebank.expected,
+            expected as number,
+            theme.palette.info.main
+          )
+        : ""}
     </Box>
   );
 };
