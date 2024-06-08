@@ -1,5 +1,5 @@
 import { BarChart, XAxis, YAxis, Tooltip, Bar, ResponsiveContainer, Cell } from "recharts";
-import { getHours, getHoursAndMinutes } from "src/utils/time-utils";
+import { getHours } from "src/utils/time-utils";
 import type { SprintViewChartData } from "src/types";
 import strings from "src/localization/strings";
 import { CustomTooltip } from "src/utils/chart-utils";
@@ -16,23 +16,23 @@ interface Props {
  *
  * @param props component properties
  */
-const SprintViewBarChart = ({ chartData }: Props) => (
-  <ResponsiveContainer width="100%" height={chartData.length === 1 ? 100 : chartData.length * 60}>
+const SprintViewAllBarChart = ({ chartData }: Props) => (
+  <ResponsiveContainer width="100%" >
     <BarChart
       data={chartData}
-      layout="vertical"
+      layout="horizontal"
       barGap={0}
       margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
     >
-      <XAxis
+      <XAxis type="category" dataKey="projectName" tick={false} hide={true} />
+      <YAxis
         type="number"
         axisLine={false}
         tickFormatter={(value) => getHours(value as number)}
         domain={[0, (dataMax: number) => dataMax]}
         style={{ fontSize: "18px" }}
-        padding={{ left: 0, right: 0 }}
+        padding={{ top: 0, bottom: 0 }}
       />
-      <YAxis type="category" dataKey="projectName" tick={false} hide={true} />
       <Tooltip content={<CustomTooltip />} />
       <Bar dataKey={"timeAllocated"} name={strings.sprint.timeAllocated} barSize={20}>
         {chartData.map((entry) => (
@@ -52,4 +52,4 @@ const SprintViewBarChart = ({ chartData }: Props) => (
   </ResponsiveContainer>
 );
 
-export default SprintViewBarChart;
+export default SprintViewAllBarChart;

@@ -70,8 +70,8 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    getSlackAvatars();
-  }, [loggedInPerson]);
+    if (!avatars.length) getSlackAvatars();
+  }, []);
 
   return (
     <>
