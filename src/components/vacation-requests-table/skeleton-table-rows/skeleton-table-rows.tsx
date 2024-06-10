@@ -23,7 +23,7 @@ const SkeletonTableRows = ({
   dataGridColumnHeaderHeight
 }: Props) => {
   const columns = VacationRequestsTableColumns();
-  const rowCount = Math.floor(dataGridHeight - dataGridColumnHeaderHeight / dataGridRowHeight);
+  const rowCount = Math.floor((dataGridHeight - dataGridColumnHeaderHeight) / dataGridRowHeight);
 
   return (
     <>

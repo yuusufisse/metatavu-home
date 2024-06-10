@@ -210,6 +210,8 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     create: string;
     manageRequests: string;
+    future: string;
+    past: string;
   };
   /**
    * Translations related to data grid
