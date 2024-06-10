@@ -58,9 +58,9 @@ const SprintViewScreen = () => {
    * Fetch allocations, project names and time entries
    */
   const fetchProjectDetails = async () => {
-    setLoading(true);
     if (!loggedInPerson) return;
-
+    
+    setLoading(true);
     try {
       const fetchedAllocations = await allocationsApi.listAllocations({
         startDate: new Date(),

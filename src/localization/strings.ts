@@ -45,6 +45,7 @@ export interface Localized extends LocalizedStringsMethods {
     dailyEntriesNotFound: string;
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
+    fetchSlackAvatarsFailed: string;
   };
   /**
    * Translations related to localization

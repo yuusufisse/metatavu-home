@@ -28,7 +28,8 @@
     "dailyEntriesFetch": "Retrieving daily entries has failed",
     "dailyEntriesNotFound": "Could not find daily entries",
     "fetchFailedGeneral": "There was an error fetching data",
-    "fetchFailedNoEntriesGeneral": "No time entries found"
+    "fetchFailedNoEntriesGeneral": "No time entries found",
+    "fetchSlackAvatarsFailed": "Error while fetching Slack avatars"
   },
   "localization": {
     "en": "EN",

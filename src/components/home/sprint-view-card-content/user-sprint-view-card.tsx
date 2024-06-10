@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { allocationsAtom, personsAtom, projectsAtom, timeEntriesAtom } from "src/atoms/person";
+import { personsAtom } from "src/atoms/person";
 import { userProfileAtom } from "src/atoms/auth";
 import type { Person } from "src/generated/client";
 import config from "src/app/config";
@@ -12,6 +12,7 @@ import type { SprintViewChartData } from "src/types";
 import strings from "src/localization/strings";
 import { totalAllocations, filterAllocationsAndProjects } from "src/utils/sprint-utils";
 import { errorAtom } from "src/atoms/error";
+import { allocationsAtom, projectsAtom, timeEntriesAtom } from "src/atoms/sprint-data";
 
 /**
  * Sprint card component for users
