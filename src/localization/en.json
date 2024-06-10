@@ -177,7 +177,9 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "create": "Request vacation",
-    "manageRequests": "Manage vacation requests"
+    "manageRequests": "Manage vacation requests",
+    "future": "Upcoming",
+    "past": "Past"
   },
   "dataGrid": {
     "noRows": "No Rows"

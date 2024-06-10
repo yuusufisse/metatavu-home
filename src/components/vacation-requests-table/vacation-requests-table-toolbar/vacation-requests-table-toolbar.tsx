@@ -1,5 +1,5 @@
-import { Add, Cancel, Edit } from "@mui/icons-material";
-import { Box, Collapse, Grid, Typography, styled } from "@mui/material";
+import { Add, Cancel, Edit, FilterAlt } from "@mui/icons-material";
+import { Box, Button, Collapse, Grid, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import ToolbarForm from "./toolbar-form/toolbar-form";
 import type { GridRowId } from "@mui/x-data-grid";
@@ -20,6 +20,8 @@ import UserRoleUtils from "src/utils/user-role-utils";
  * Component properties
  */
 interface Props {
+  isUpcoming: boolean;
+  toggleIsUpcoming: () => void;
   deleteVacationRequests: (
     selectedRowIds: GridRowId[],
     rows: VacationsDataGridRow[]
@@ -43,6 +45,8 @@ interface Props {
  * @param props component properties
  */
 const TableToolbar = ({
+  isUpcoming,
+  toggleIsUpcoming,
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
@@ -60,6 +64,13 @@ const TableToolbar = ({
   const language = useAtomValue(languageAtom);
   const adminMode = UserRoleUtils.adminMode();
   const { pathname } = useLocation();
+  const isToolbarVisible = toolbarOpen && !formOpen && selectedRowIds?.length;
+  const buttonLabel = isUpcoming ? strings.tableToolbar.future : strings.tableToolbar.past;
+  const singleSelectionSize = adminMode ? 3 : 6
+  const multiSelectionSize = adminMode ? 6 : 12
+  const gridItemSize = selectedRowIds?.length === 1
+  ? (singleSelectionSize)
+  : (multiSelectionSize);
   const disableEditButton =
     rows.find((request: VacationsDataGridRow) => request.id === selectedRowIds[0])?.status !==
     VacationRequestStatuses.PENDING;
@@ -117,11 +128,11 @@ const TableToolbar = ({
         setOpen={setConfirmationHandlerOpen}
         deleteVacationsData={deleteVacationsData}
       />
-      {toolbarOpen && !formOpen && selectedRowIds?.length ? (
+      {isToolbarVisible ? (
         <ToolbarGridContainer container>
           <ToolbarGridItem
             item
-            sm={selectedRowIds?.length === 1 ? (adminMode ? 3 : 6) : adminMode ? 6 : 12}
+            sm={gridItemSize}
             xs={6}
           >
             <ToolbarDeleteButton setConfirmationHandlerOpen={setConfirmationHandlerOpen} />
@@ -158,8 +169,17 @@ const TableToolbar = ({
         </ToolbarGridContainer>
       ) : (
         <ToolbarGridContainer container>
-          <ToolbarGridItem item xs={6}>
+          <ToolbarGridItem item xs={3}>
             <Typography variant="h6">{title}</Typography>
+          </ToolbarGridItem>
+          <ToolbarGridItem item xs={3}>
+            <Button
+              sx={{ backgroundColor: "#eeeeee", p: 1, "&:hover": { backgroundColor: "#e0e0e0" } }}
+              onClick={toggleIsUpcoming}
+            >
+              <FilterAlt />
+              {buttonLabel}
+            </Button>
           </ToolbarGridItem>
           <ToolbarGridItem item xs={6}>
             {formOpen ? (

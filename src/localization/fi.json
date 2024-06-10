@@ -177,7 +177,9 @@
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "create": "Hae lomaa",
-    "manageRequests": "Hallinnoi lomahakemuksia"
+    "manageRequests": "Hallinnoi lomahakemuksia",
+    "future": "Tulevat",
+    "past": "Menneet"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"
