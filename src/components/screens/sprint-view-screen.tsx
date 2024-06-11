@@ -1,5 +1,16 @@
 import { useState, useEffect } from "react";
-import { Card, CircularProgress, Typography, Box, FormControlLabel, Switch } from "@mui/material";
+import {
+  Card,
+  CircularProgress,
+  Typography,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Switch
+} from "@mui/material";
 import { useLambdasApi } from "src/hooks/use-api";
 import type { Person } from "src/generated/client";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -23,6 +34,7 @@ import {
   filterAllocationsAndProjects
 } from "src/utils/sprint-utils";
 import { TaskStatusFilter } from "src/components/sprint-view-table/menu-Item-filter-table";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Sprint view screen component
@@ -41,31 +53,34 @@ const SprintViewScreen = () => {
   const [loading, setLoading] = useState(false);
   const [myTasks, setMyTasks] = useState(true);
   const [filter, setFilter] = useState("");
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | undefined>(loggedInPerson?.id);
   const todaysDate = new Date().toISOString();
   const sprintStartDate = getSprintStart(todaysDate);
   const sprintEndDate = getSprintEnd(todaysDate);
   const columns = sprintViewProjectsColumns({ allocations, timeEntries, projects });
   const setError = useSetAtom(errorAtom);
+  const isAdmin = UserRoleUtils.isAdmin();
+  const adminMode = UserRoleUtils.adminMode();
 
   /**
    * Get project data if user is logged in
    */
   useEffect(() => {
     fetchProjectDetails();
-  }, [loggedInPerson]);
+  }, [loggedInPerson, selectedEmployeeId]);
 
   /**
    * Fetch allocations, project names and time entries
    */
   const fetchProjectDetails = async () => {
     setLoading(true);
-    if (!loggedInPerson) return;
+    if (!selectedEmployeeId) return;
 
     try {
       const fetchedAllocations = await allocationsApi.listAllocations({
         startDate: new Date(),
         endDate: new Date(),
-        personId: loggedInPerson?.id.toString()
+        personId: selectedEmployeeId.toString()
       });
       const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
       const { filteredAllocations, filteredProjects } = filterAllocationsAndProjects(
@@ -83,7 +98,7 @@ const SprintViewScreen = () => {
               });
               let totalMinutes = 0;
               totalTimeEntries.forEach((timeEntry: TimeEntries) => {
-                if (loggedInPerson && timeEntry.person === loggedInPerson.id) {
+                if (selectedEmployeeId && timeEntry.person === selectedEmployeeId) {
                   totalMinutes += timeEntry.timeRegistered || 0;
                 }
               });
@@ -127,12 +142,16 @@ const SprintViewScreen = () => {
   };
 
   /**
-   * Featute for task filtering
+   * Feature for task filtering
    */
   const handleOnClickTask = () => {
     setMyTasks(!myTasks);
     setFilter("");
   };
+
+  if (adminMode) {
+    return null
+  }
 
   return (
     <>
@@ -159,6 +178,26 @@ const SprintViewScreen = () => {
         </Card>
       ) : (
         <>
+          {isAdmin && (
+            <Card sx={{ p: "7px", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+              <FormControl fullWidth>
+                <InputLabel id="employee-select-label">{strings.employeeSelect.employeeSelectlabel}</InputLabel>
+                <Select
+                  labelId="employee-select-label"
+                  id="employee-select"
+                  value={selectedEmployeeId || ""}
+                  onChange={(event) => setSelectedEmployeeId(Number(event.target.value))}
+                  label={strings.employeeSelect.employeeSelectlabel}
+                >
+                  {persons.map((person) => (
+                    <MenuItem key={person.id} value={person.id}>
+                      {`${person.firstName} ${person.lastName}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Card>
+          )}
           <FormControlLabel
             control={<Switch checked={myTasks} />}
             label={strings.sprint.showMyTasks}
@@ -229,7 +268,7 @@ const SprintViewScreen = () => {
             <TaskTable
               key={project.id}
               project={project}
-              loggedInPersonId={myTasks ? loggedInPerson?.id : undefined}
+              loggedInPersonId={myTasks ? selectedEmployeeId : undefined}
               filter={filter}
             />
           ))}
