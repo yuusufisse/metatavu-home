@@ -9,6 +9,7 @@ import strings from "src/localization/strings";
 import type { DailyEntry, Person } from "src/generated/client";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
+import { personsAtom } from "src/atoms/person";
 /**
  * Sync button component
  */
@@ -20,40 +21,32 @@ const SyncButton = () => {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
+  const [canSync, setCanSync] = useState(false);
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
-  const [persons, setPersons] = useState<Person[]>();
-  const { personsApi, dailyEntriesApi } = useApi();
+  const { dailyEntriesApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
+  const persons = useAtomValue(personsAtom);
+  const loggedInPerson = persons?.find((person: Person) => person.keycloakId === userProfile?.id);
 
   useEffect(() => {
-    fetchPersons();
-    fetchDailyEntries();
-  }, []);
-
-  /**
-   * fetching persons
-   */
-  const fetchPersons = async () => {
-    try {
-      const tempPersons = await personsApi.listPersons({});
-      setPersons(tempPersons);
-    } catch (error) {
-      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+    console.log("now")
+    if (!persons) {
+      return;
     }
-  };
-
+    fetchDailyEntries();
+  }, [loggedInPerson]);
   /**
    * fetching daily entries
    */
   const fetchDailyEntries = async () => {
+    console.log("fetching daily etries");
     try {
-      const loggedInPerson = persons?.find(
-        (person: Person) => person.keycloakId === userProfile?.id
-      );
       const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-        personId: loggedInPerson?.id || config.person.forecastUserIdOverride
+        personId: loggedInPerson?.id || config.person.forecastUserIdOverride,
+        vacation: false
       });
       setDailyEntries(fetchedDailyEntries);
+      setCanSync(true);
     } catch (error) {
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
@@ -64,17 +57,17 @@ const SyncButton = () => {
    */
   const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
+    try {
+      console.log("persons:", persons);
+      console.log("logged in person", loggedInPerson);
 
-    if (dailyEntries?.length) {
-      dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
-    } else {
-      const fetchedDailyEntries = dailyEntries;
-
-      if (fetchedDailyEntries?.length) {
-        dailyEntryDates = fetchedDailyEntries.map((dailyEntry) =>
-          DateTime.fromJSDate(dailyEntry.date)
-        );
+      if (dailyEntries?.length) {
+        console.log("dailyEntries:", dailyEntries);
+        dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
       }
+    } catch (error) {
+      console.error("Error fetching daily entries:", error);
+      setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
 
     if (dailyEntryDates.length) {
@@ -106,12 +99,14 @@ const SyncButton = () => {
         after: syncStartDate.toJSDate() || undefined,
         syncDeleted: false
       });
+      console.log("sync success", syncStartDate);
       setSyncSuccess(true);
     } catch (error) {
       setError(`${strings.syncButton.error} ${error}`);
       setSyncSuccess(false);
     }
     setSyncing(false);
+    console.log("sync ended");
     setSyncStartDate(yesterday);
   };
 
@@ -138,7 +133,7 @@ const SyncButton = () => {
         onClick={() => {
           handleSyncButtonClick();
         }}
-        disabled={syncing}
+        disabled={syncing || !canSync}
       >
         <Box sx={{ width: "100%" }}>
           {strings.syncButton.sync}
