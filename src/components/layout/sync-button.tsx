@@ -28,18 +28,10 @@ const SyncButton = () => {
   const persons = useAtomValue(personsAtom);
   const loggedInPerson = persons?.find((person: Person) => person.keycloakId === userProfile?.id);
 
-  useEffect(() => {
-    console.log("now")
-    if (!persons) {
-      return;
-    }
-    fetchDailyEntries();
-  }, [loggedInPerson]);
   /**
    * fetching daily entries
    */
   const fetchDailyEntries = async () => {
-    console.log("fetching daily etries");
     try {
       const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
         personId: loggedInPerson?.id || config.person.forecastUserIdOverride,
@@ -51,6 +43,14 @@ const SyncButton = () => {
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
   };
+
+  useEffect(() => {
+    //REVIEWER persons change alot for eaxmple multiple times when opening admin timebanks screen and we do this fetch always, not good, also when ever changing between user/admin screen 
+    if(persons.length)
+      {
+        fetchDailyEntries();
+      }
+  }, [persons]);
 
   /**
    * Update latest daily entry date
