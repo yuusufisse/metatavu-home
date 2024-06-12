@@ -1,7 +1,6 @@
 import { Search } from "@mui/icons-material";
 import { Box, TextField, InputAdornment } from "@mui/material";
 import type { ChangeEvent } from "react";
-import strings from "src/localization/strings";
 
 /**
  *  Search component properties
@@ -9,18 +8,24 @@ import strings from "src/localization/strings";
 interface Props {
   loading: boolean;
   searchInput: string;
+  placeholder: string;
   handleSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 /**
  * Renders the search
  */
-export const renderSearch = ({ loading, searchInput, handleSearchInputChange }: Props) => (
+export const renderSearch = ({
+  loading,
+  searchInput,
+  handleSearchInputChange,
+  placeholder
+}: Props) => (
   <Box sx={{ display: "flex", justifyContent: "center" }}>
     <TextField
       value={searchInput}
       onChange={handleSearchInputChange}
-      placeholder={strings.timebank.searchPlaceholder}
+      placeholder={placeholder}
       variant="standard"
       disabled={loading}
       sx={{ width: "99%", padding: 1 }}

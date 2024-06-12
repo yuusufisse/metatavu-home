@@ -213,7 +213,7 @@ const TimebankViewAllScreen = () => {
   return (
     <>
       <Card sx={{ marginBottom: 2 }}>
-        {renderSearch({ loading, searchInput, handleSearchInputChange })}
+        {renderSearch({ loading, searchInput, handleSearchInputChange, placeholder: strings.timebank.searchPlaceholder })}
       </Card>
       <Grid container spacing={2} textAlign={"center"} marginBottom={20}>
         {loading ? (
