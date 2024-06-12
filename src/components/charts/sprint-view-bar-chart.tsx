@@ -9,6 +9,7 @@ import { CustomTooltip } from "src/utils/chart-utils";
  */
 interface Props {
   chartData: SprintViewChartData[];
+  vertical?: boolean;
 }
 
 /**
@@ -16,23 +17,18 @@ interface Props {
  *
  * @param props component properties
  */
-const SprintViewBarChart = ({ chartData }: Props) => (
-  <ResponsiveContainer width="100%" height={chartData.length === 1 ? 100 : chartData.length * 60}>
+const SprintViewBarChart = ({ chartData, vertical = true }: Props) => (
+  <ResponsiveContainer
+    width="100%"
+    height={(vertical && (chartData.length === 1 ? 100 : chartData.length * 60)) || undefined}
+  >
     <BarChart
       data={chartData}
-      layout="vertical"
+      layout={vertical ? "vertical" : "horizontal"}
       barGap={0}
       margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
     >
-      <XAxis
-        type="number"
-        axisLine={false}
-        tickFormatter={(value) => getHours(value as number)}
-        domain={[0, (dataMax: number) => dataMax]}
-        style={{ fontSize: "18px" }}
-        padding={{ left: 0, right: 0 }}
-      />
-      <YAxis type="category" dataKey="projectName" tick={false} hide={true} />
+      {Axis(vertical)}
       <Tooltip content={<CustomTooltip />} />
       <Bar dataKey={"timeAllocated"} name={strings.sprint.timeAllocated} barSize={20}>
         {chartData.map((entry) => (
@@ -51,5 +47,37 @@ const SprintViewBarChart = ({ chartData }: Props) => (
     </BarChart>
   </ResponsiveContainer>
 );
+
+const Axis = (vertical: boolean) => {
+  return (
+    <>
+      {vertical ? (
+        <>
+          <XAxis
+            type="number"
+            axisLine={false}
+            tickFormatter={(value) => getHours(value as number)}
+            domain={[0, (dataMax: number) => dataMax]}
+            style={{ fontSize: "18px" }}
+            padding={{ left: 0, right: 0 }}
+          />
+          <YAxis type="category" dataKey="projectName" tick={false} hide={true} />
+        </>
+      ) : (
+        <>
+          <XAxis type="category" dataKey="projectName" tick={false} hide={true} />
+          <YAxis
+            type="number"
+            axisLine={false}
+            tickFormatter={(value) => getHours(value as number)}
+            domain={[0, (dataMax: number) => dataMax]}
+            style={{ fontSize: "18px" }}
+            padding={{ top: 0, bottom: 0 }}
+          />
+        </>
+      )}
+    </>
+  );
+};
 
 export default SprintViewBarChart;

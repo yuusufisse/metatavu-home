@@ -20,7 +20,7 @@ import strings from "src/localization/strings";
 import { useLambdasApi } from "src/hooks/use-api";
 import { errorAtom } from "src/atoms/error";
 import { fetchProjectDetails, totalAllocations } from "src/utils/sprint-utils";
-import SprintViewAllBarChart from "../charts/sprint-view-all-bar-chart";
+import SprintViewBarChart from "src/components/charts/sprint-view-bar-chart";
 import type { PersonWithAllocations, SprintViewChartData } from "src/types";
 import type { Person } from "src/generated/client";
 import type { Allocations, Projects } from "src/generated/homeLambdasClient/models/";
@@ -130,7 +130,7 @@ const SprintViewAllScreen = () => {
           <Grid item xs={12} sm={6} md={4} key={person.id}>
             <Card key={person.id}>
               <CardContent sx={{ display: "flex", justifyContent: "left", height: "200px" }}>
-                <SprintViewAllBarChart chartData={filteredChartData} />
+                <SprintViewBarChart chartData={filteredChartData} vertical={false} />
                 <Typography
                   style={{ paddingLeft: "0" }}
                   fontSize={"20px"}
@@ -204,7 +204,11 @@ const SprintViewAllScreen = () => {
           setSelectedProjects(selectedProjectIds);
         }}
         renderOption={(props, option, { selected }) => (
-          <li {...props} style={{ display: "flex", alignItems: "center" }}>
+          <li
+            {...props}
+            style={{ display: "flex", alignItems: "center" }}
+            key={`project-option-${option.id}`}
+          >
             <Checkbox sx={{ marginRight: 2 }} checked={selected} />
             <Box
               minWidth="5px"
@@ -219,7 +223,7 @@ const SprintViewAllScreen = () => {
             {option.name}
           </li>
         )}
-        renderInput={(params) => (      
+        renderInput={(params) => (
           <TextField
             {...params}
             placeholder={strings.sprint.searchProjectsAndPersons}
@@ -238,7 +242,7 @@ const SprintViewAllScreen = () => {
                   </IconButton>
                   {params.InputProps.startAdornment}
                 </>
-              ),
+              )
             }}
           />
         )}
