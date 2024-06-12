@@ -5,13 +5,13 @@ import { userProfileAtom } from "src/atoms/auth";
 import type { Person } from "src/generated/client";
 import config from "src/app/config";
 import { useLambdasApi } from "src/hooks/use-api";
-import type { Allocations, Projects } from "src/generated/homeLambdasClient";
 import { CardContent, Skeleton, Typography } from "@mui/material";
 import SprintViewBarChart from "src/components/charts/sprint-view-bar-chart";
 import type { SprintViewChartData } from "src/types";
 import strings from "src/localization/strings";
 import { totalAllocations, fetchProjectDetails } from "src/utils/sprint-utils";
 import { errorAtom } from "src/atoms/error";
+import { allocationsAtom, projectsAtom, timeEntriesAtom } from "src/atoms/sprint-data";
 
 /**
  * Sprint card component for users
@@ -24,9 +24,9 @@ const UserSprintViewCard = () => {
     (person: Person) =>
       person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
-  const [allocations, setAllocations] = useState<Allocations[]>([]);
-  const [projects, setProjects] = useState<Projects[]>([]);
-  const [timeEntries, setTimeEntries] = useState<number[]>([]);
+  const [allocations, setAllocations] = useAtom(allocationsAtom);
+  const [projects, setProjects] = useAtom(projectsAtom);
+  const [timeEntries, setTimeEntries] = useAtom(timeEntriesAtom);
   const { allocationsApi, projectsApi, timeEntriesApi } = useLambdasApi();
   const setError = useSetAtom(errorAtom);
 
@@ -38,8 +38,8 @@ const UserSprintViewCard = () => {
    * Fetches users' allocations and projects
    */
   const fetchProjectAndAllocations = async () => {
+    if (!loggedInPerson || allocations.length) return;
     setLoading(true);
-    if (!loggedInPerson) return;
     const { filteredAllocations, filteredProjects, fetchedTimeEntries } = await fetchProjectDetails(
       {
         setError,

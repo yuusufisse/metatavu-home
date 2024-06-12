@@ -28,7 +28,8 @@
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
-    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla",
+    "fetchSlackAvatarsFailed": "Virhe Slack-avatareita pyydettäessä"
   },
   "localization": {
     "en": "EN",
@@ -179,7 +180,9 @@
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "create": "Hae lomaa",
-    "manageRequests": "Hallinnoi lomahakemuksia"
+    "manageRequests": "Hallinnoi lomahakemuksia",
+    "future": "Tulevat",
+    "past": "Menneet"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"

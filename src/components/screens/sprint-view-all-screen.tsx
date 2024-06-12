@@ -13,8 +13,7 @@ import {
   type PopperProps,
   Popper,
   styled,
-  IconButton,
-  InputAdornment
+  IconButton
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import strings from "src/localization/strings";
