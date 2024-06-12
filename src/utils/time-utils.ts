@@ -214,6 +214,7 @@ export const getSprintStart = (date: string) => {
   const weekIndex = DateTime.fromISO(date).localWeekNumber;
   const weekDay = DateTime.fromISO(date).weekday;
   const days = (weekIndex % 2 === 1 ? 0 : 7) + weekDay;
+  
   return DateTime.fromISO(date).minus({ days: days - 1 });
 };
 
