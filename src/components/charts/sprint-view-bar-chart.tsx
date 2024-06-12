@@ -1,5 +1,5 @@
 import { BarChart, XAxis, YAxis, Tooltip, Bar, ResponsiveContainer, Cell } from "recharts";
-import { getHours, getHoursAndMinutes } from "src/utils/time-utils";
+import { getHours } from "src/utils/time-utils";
 import type { SprintViewChartData } from "src/types";
 import strings from "src/localization/strings";
 import { CustomTooltip } from "src/utils/chart-utils";
