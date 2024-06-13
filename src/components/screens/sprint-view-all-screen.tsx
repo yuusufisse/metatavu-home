@@ -133,25 +133,23 @@ const SprintViewAllScreen = () => {
       ? chartData.filter((entry) => selectedProjects.includes(entry.id))
       : chartData;
 
-    return (
-      <>
-        {allocations.length && filteredChartData.length ? (
-          <Grid item xs={12} sm={6} md={4} key={person.id}>
-            <Card key={person.id}>
-              <CardContent sx={{ display: "flex", justifyContent: "left", height: "200px" }}>
-                <SprintViewBarChart chartData={filteredChartData} vertical={false} />
-                <Typography
-                  style={{ paddingLeft: "0" }}
-                  fontSize={"20px"}
-                >{`${person.firstName} ${person.lastName}`}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ) : (
-          <></>
-        )}
-      </>
-    );
+    if (allocations.length && filteredChartData.length)
+      return (
+        <Grid item xs={12} sm={6} md={4} key={person.id}>
+          <Card key={person.id}>
+            <CardContent
+              key={person.id}
+              sx={{ display: "flex", justifyContent: "left", height: "200px" }}
+            >
+              <SprintViewBarChart chartData={filteredChartData} vertical={false} />
+              <Typography
+                style={{ paddingLeft: "0" }}
+                fontSize={"20px"}
+              >{`${person.firstName} ${person.lastName}`}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      );
   };
 
   /**
@@ -287,18 +285,16 @@ const SprintViewAllScreen = () => {
         </Box>
       ) : (
         <>
-          <Card sx={{ marginBottom:2 }}>{customSearch(projectOptions)}</Card>
+          <Card sx={{ marginBottom: 2 }}>{customSearch(projectOptions)}</Card>
           <Grid container spacing={2} marginBottom={20} textAlign={"center"}>
-            {displayedPersonAllocations.map((personsWithAllocations) => (
-              <>
-                {renderBarChart(
-                  personsWithAllocations.allocations,
-                  personsWithAllocations.projects,
-                  personsWithAllocations.timeEntries,
-                  personsWithAllocations.person
-                )}
-              </>
-            ))}
+            {displayedPersonAllocations.map((personsWithAllocations) =>
+              renderBarChart(
+                personsWithAllocations.allocations,
+                personsWithAllocations.projects,
+                personsWithAllocations.timeEntries,
+                personsWithAllocations.person
+              )
+            )}
           </Grid>
         </>
       )}
