@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { personsAtom } from "src/atoms/person";
 import {
   Box,
@@ -27,6 +27,7 @@ import type { Allocations, Projects } from "src/generated/homeLambdasClient/mode
 import { userProfileAtom } from "src/atoms/auth";
 import config from "src/app/config";
 import { Search } from "@mui/icons-material";
+import { personsWithAllocationsAtom, projectOptionsAtom } from "src/atoms/sprint-data";
 
 /**
  * Sprint view all screen component
@@ -42,11 +43,11 @@ const SprintViewAllScreen = () => {
   );
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [personsWithAllocations, setPersonsWithAllocations] = useState<PersonWithAllocations[]>([]);
+  const [personsWithAllocations, setPersonsWithAllocations] = useAtom(personsWithAllocationsAtom);
   const [displayedPersonAllocations, setDisplayedPersonAllocations] = useState<
     PersonWithAllocations[]
   >([]);
-  const [projectOptions, setProjectOptions] = useState<Projects[]>([]);
+  const [projectOptions, setProjectOptions] = useAtom(projectOptionsAtom);
   const [selectedProjects, setSelectedProjects] = useState<number[]>([]);
 
   /**
@@ -79,37 +80,41 @@ const SprintViewAllScreen = () => {
   const fetchProjectAndAllocations = async () => {
     if (!loggedInPerson) return;
     setLoading(true);
-    const listpProjectOptions: Projects[] = [];
-    const allPersonAllocations: PersonWithAllocations[] = await Promise.all(
-      persons.map(async (person) => {
-        const { filteredAllocations, filteredProjects, fetchedTimeEntries } =
-          await fetchProjectDetails({
-            setError,
-            person,
-            allocationsApi,
-            projectsApi,
-            timeEntriesApi
+    if (!personsWithAllocations.length) {
+      const listpProjectOptions: Projects[] = [];
+      const allPersonAllocations: PersonWithAllocations[] = await Promise.all(
+        persons.map(async (person) => {
+          const { filteredAllocations, filteredProjects, fetchedTimeEntries } =
+            await fetchProjectDetails({
+              setError,
+              person,
+              allocationsApi,
+              projectsApi,
+              timeEntriesApi
+            });
+
+          filteredProjects.forEach((project) => {
+            if (
+              project &&
+              !listpProjectOptions.map((project) => project.id).includes(project.id || 0)
+            )
+              listpProjectOptions.push(project);
           });
 
-        filteredProjects.forEach((project) => {
-          if (
-            project &&
-            !listpProjectOptions.map((project) => project.id).includes(project.id || 0)
-          )
-            listpProjectOptions.push(project);
-        });
-
-        return {
-          allocations: filteredAllocations,
-          projects: filteredProjects,
-          timeEntries: fetchedTimeEntries,
-          person: person
-        };
-      })
-    );
-    setPersonsWithAllocations(allPersonAllocations);
-    setDisplayedPersonAllocations(allPersonAllocations);
-    setProjectOptions(listpProjectOptions);
+          return {
+            allocations: filteredAllocations,
+            projects: filteredProjects,
+            timeEntries: fetchedTimeEntries,
+            person: person
+          };
+        })
+      );
+      setPersonsWithAllocations(allPersonAllocations);
+      setDisplayedPersonAllocations(allPersonAllocations);
+      setProjectOptions(listpProjectOptions);
+    } else {
+      setDisplayedPersonAllocations(personsWithAllocations);
+    }
     setLoading(false);
   };
 
@@ -282,7 +287,7 @@ const SprintViewAllScreen = () => {
         </Box>
       ) : (
         <>
-          <Card sx={{ marginBottom: 1 }}>{customSearch(projectOptions)}</Card>
+          <Card sx={{ marginBottom:2 }}>{customSearch(projectOptions)}</Card>
           <Grid container spacing={2} marginBottom={20} textAlign={"center"}>
             {displayedPersonAllocations.map((personsWithAllocations) => (
               <>
@@ -294,7 +299,7 @@ const SprintViewAllScreen = () => {
                 )}
               </>
             ))}
-          </Grid>{" "}
+          </Grid>
         </>
       )}
     </>
