@@ -1,5 +1,4 @@
 import { atom } from "jotai";
-import { OnCallEntry } from "../types";
-import { OnCall } from "../generated/client";
+import type { OnCall } from "src/generated/homeLambdasClient";
 
 export const oncallAtom = atom<OnCall[]>([]);
