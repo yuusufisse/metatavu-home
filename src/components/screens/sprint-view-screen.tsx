@@ -40,7 +40,9 @@ const SprintViewScreen = () => {
   const [loading, setLoading] = useState(false);
   const [myTasks, setMyTasks] = useState(true);
   const [filter, setFilter] = useState("");
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | undefined>(loggedInPerson?.id);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | undefined>(
+    loggedInPerson?.id
+  );
   const todaysDate = new Date().toISOString();
   const sprintStartDate = getSprintStart(todaysDate);
   const sprintEndDate = getSprintEnd(todaysDate);
@@ -61,13 +63,21 @@ const SprintViewScreen = () => {
    */
   const fetchProjectDetails = async () => {
     setLoading(true);
-    if (!selectedEmployeeId) return;
+    let personId = 0;
+    if (!loggedInPerson ) return;
+
+    if (!selectedEmployeeId) {
+      personId = loggedInPerson.id;
+      setSelectedEmployeeId(loggedInPerson.id);
+    } else {
+      personId = selectedEmployeeId;
+    }
 
     try {
       const fetchedAllocations = await allocationsApi.listAllocations({
         startDate: new Date(),
         endDate: new Date(),
-        personId: selectedEmployeeId.toString()
+        personId: personId.toString()
       });
       const fetchedProjects = await projectsApi.listProjects({ startDate: new Date() });
       const { filteredAllocations, filteredProjects } = filterAllocationsAndProjects(
@@ -85,7 +95,7 @@ const SprintViewScreen = () => {
               });
               let totalMinutes = 0;
               totalTimeEntries.forEach((timeEntry: TimeEntries) => {
-                if (selectedEmployeeId && timeEntry.person === selectedEmployeeId) {
+                if (personId && timeEntry.person === personId) {
                   totalMinutes += timeEntry.timeRegistered || 0;
                 }
               });
@@ -143,13 +153,14 @@ const SprintViewScreen = () => {
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-        {isAdmin && renderSelect({
-          loading,
-          selectedEmployeeId,
-          persons,
-          onChange: (event: SelectChangeEvent<any>) =>
-            setSelectedEmployeeId(Number(event.target.value))
-        })}
+        {isAdmin &&
+          renderSelect({
+            loading,
+            selectedEmployeeId,
+            persons,
+            onChange: (event: SelectChangeEvent<any>) =>
+              setSelectedEmployeeId(Number(event.target.value))
+          })}
         <FormControlLabel
           control={<Switch checked={myTasks} />}
           label={strings.sprint.showMyTasks}
