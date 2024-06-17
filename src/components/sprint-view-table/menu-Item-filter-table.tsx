@@ -11,6 +11,8 @@ interface Props {
 
 /**
  * Filters tasks by status categories
+ * 
+ * @param props Component properties
  */
 export const TaskStatusFilter = ({setFilter}: Props) => {
   const statusFilters  = [
