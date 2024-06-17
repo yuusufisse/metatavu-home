@@ -22,15 +22,12 @@ export const TaskStatusFilter = ({setFilter}: Props) => {
 
   return (
     <FormControl size="small" style={{ width: "200px", float: "right" }}>
-    <InputLabel disableAnimation={false}>{strings.sprint.taskStatus}</InputLabel>
     <Select
       defaultValue={strings.sprint.allTasks}
       style={{
         borderRadius: "30px",
-        marginBottom: "15px",
         float: "right"
       }}
-      label={strings.sprint.taskStatus}
     >
       { statusFilters.map(filter => (
         <MenuItem 

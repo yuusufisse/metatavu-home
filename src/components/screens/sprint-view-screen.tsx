@@ -1,27 +1,12 @@
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CircularProgress,
-  Typography,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControlLabel,
-  Switch
-} from "@mui/material";
+import { Card, CircularProgress, Typography, Box, FormControlLabel, Switch } from "@mui/material";
 import { useLambdasApi } from "src/hooks/use-api";
 import type { Person } from "src/generated/client";
 import { useAtomValue, useSetAtom } from "jotai";
 import { personsAtom } from "src/atoms/person";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
-import type {
-  Allocations,
-  Projects,
-  TimeEntries
-} from "src/generated/homeLambdasClient/models/";
+import type { Allocations, Projects, TimeEntries } from "src/generated/homeLambdasClient/models/";
 import { DataGrid } from "@mui/x-data-grid";
 import { getHoursAndMinutes, getSprintEnd, getSprintStart } from "src/utils/time-utils";
 import TaskTable from "src/components/sprint-view-table/tasks-table";
@@ -35,6 +20,8 @@ import {
 } from "src/utils/sprint-utils";
 import { TaskStatusFilter } from "src/components/sprint-view-table/menu-Item-filter-table";
 import UserRoleUtils from "src/utils/user-role-utils";
+import { renderSelect } from "src/utils/select-utils";
+import type { SelectChangeEvent } from "@mui/material";
 
 /**
  * Sprint view screen component
@@ -150,11 +137,26 @@ const SprintViewScreen = () => {
   };
 
   if (adminMode) {
-    return null
+    return null;
   }
 
   return (
     <>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+        {isAdmin && renderSelect({
+          loading,
+          selectedEmployeeId,
+          persons,
+          onChange: (event: SelectChangeEvent<any>) =>
+            setSelectedEmployeeId(Number(event.target.value))
+        })}
+        <FormControlLabel
+          control={<Switch checked={myTasks} />}
+          label={strings.sprint.showMyTasks}
+          onClick={() => handleOnClickTask()}
+        />
+        <TaskStatusFilter setFilter={setFilter} />
+      </Box>
       {loading ? (
         <Card
           sx={{
@@ -163,47 +165,19 @@ const SprintViewScreen = () => {
             justifyContent: "center"
           }}
         >
-          {
-            <Box sx={{ textAlign: "center" }}>
-              <Typography>{strings.placeHolder.pleaseWait}</Typography>
-              <CircularProgress
-                sx={{
-                  scale: "150%",
-                  mt: "5%",
-                  mb: "5%"
-                }}
-              />
-            </Box>
-          }
+          <Box sx={{ textAlign: "center" }}>
+            <Typography>{strings.placeHolder.pleaseWait}</Typography>
+            <CircularProgress
+              sx={{
+                scale: "150%",
+                mt: "5%",
+                mb: "5%"
+              }}
+            />
+          </Box>
         </Card>
       ) : (
         <>
-          {isAdmin && (
-            <Card sx={{ p: "7px", display: "flex", justifyContent: "center", marginBottom: "24px" }}>
-              <FormControl fullWidth>
-                <InputLabel id="employee-select-label">{strings.employeeSelect.employeeSelectlabel}</InputLabel>
-                <Select
-                  labelId="employee-select-label"
-                  id="employee-select"
-                  value={selectedEmployeeId || ""}
-                  onChange={(event) => setSelectedEmployeeId(Number(event.target.value))}
-                  label={strings.employeeSelect.employeeSelectlabel}
-                >
-                  {persons.map((person) => (
-                    <MenuItem key={person.id} value={person.id}>
-                      {`${person.firstName} ${person.lastName}`}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Card>
-          )}
-          <FormControlLabel
-            control={<Switch checked={myTasks} />}
-            label={strings.sprint.showMyTasks}
-            onClick={() => handleOnClickTask()}
-          />
-          <TaskStatusFilter setFilter={setFilter}/>
           <Card
             sx={{
               margin: 0,
