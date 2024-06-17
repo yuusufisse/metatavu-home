@@ -21,7 +21,6 @@ import type { Person } from "src/generated/client";
 import config from "src/app/config";
 import { useLambdasApi } from "src/hooks/use-api";
 import { errorAtom } from "src/atoms/error";
-import { SlackAvatar } from "src/generated/homeLambdasClient/models/SlackAvatar";
 
 /**
  * NavBar component
