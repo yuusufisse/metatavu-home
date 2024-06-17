@@ -38,14 +38,13 @@ const SyncButton = () => {
         vacation: false
       });
       setDailyEntries(fetchedDailyEntries);
-      setCanSync(true);
     } catch (error) {
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
+    setCanSync(true);
   };
 
   useEffect(() => {
-    //REVIEWER persons change alot for eaxmple multiple times when opening admin timebanks screen and we do this fetch always, not good, also when ever changing between user/admin screen 
     if(persons.length)
       {
         fetchDailyEntries();
@@ -58,11 +57,8 @@ const SyncButton = () => {
   const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
     try {
-      console.log("persons:", persons);
-      console.log("logged in person", loggedInPerson);
 
       if (dailyEntries?.length) {
-        console.log("dailyEntries:", dailyEntries);
         dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
       }
     } catch (error) {
@@ -99,14 +95,12 @@ const SyncButton = () => {
         after: syncStartDate.toJSDate() || undefined,
         syncDeleted: false
       });
-      console.log("sync success", syncStartDate);
       setSyncSuccess(true);
     } catch (error) {
       setError(`${strings.syncButton.error} ${error}`);
       setSyncSuccess(false);
     }
     setSyncing(false);
-    console.log("sync ended");
     setSyncStartDate(yesterday);
   };
 
