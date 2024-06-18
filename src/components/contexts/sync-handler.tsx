@@ -1,8 +1,8 @@
 import { Divider } from "@mui/material";
 import GenericDialog from "../generics/generic-dialog";
-import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import strings from "src/localization/strings";
+import { CustomDatePicker } from "../timebank/timebank-daterange-picker";
 
 /**
  * Component properties
@@ -47,7 +47,7 @@ const SyncDialog = ({
       confirmButtonText={strings.syncDialog.sync}
       title={strings.syncDialog.title}
     >
-      <DatePicker
+      <CustomDatePicker
         label={strings.syncDialog.label}
         maxDate={DateTime.now()}
         minDate={DateTime.now().set({ year: 2021, month: 7, day: 31 })}

@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { dailyEntriesAtom, personDailyEntryAtom } from "src/atoms/person";
 import type { DailyEntryWithIndexSignature, DateRange } from "src/types";
-import { DatePicker } from "@mui/x-date-pickers";
-import DateRangePicker from "./timebank-daterange-picker";
+import { DateRangePicker, CustomDatePicker } from "./timebank-daterange-picker";
 import { useApi } from "src/hooks/use-api";
 import { theme } from "src/theme";
 import { errorAtom } from "src/atoms/error";
@@ -62,8 +61,6 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
     start: todayOrEarlier.minus({ days: 7 }),
     end: todayOrEarlier
   });
-
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getPersonDailyEntries(selectedEmployeeId);
@@ -236,17 +233,10 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
   const renderDatePickers = () => {
     if (dailyEntries && !byRange.dailyEntries) {
       return (
-        <DatePicker
+        <CustomDatePicker
           sx={{
             width: "40%",
             marginRight: "1%"
-          }}
-          open={open}
-          onClose={() => setOpen(false)}
-          slotProps={{
-            textField: {
-              onClick: () => setOpen(true)
-            }
           }}
           label={strings.timebank.selectEntry}
           onChange={(value: DateTime | null) => value && handleDailyEntryChange(value)}
