@@ -120,13 +120,15 @@ const SprintViewAllScreen = () => {
 
   /**
    * Renders sprint view bar chart
+   *
+   * @params PersonWithAllocations
    */
-  const renderBarChart = (
-    allocations: Allocations[],
-    projects: Projects[],
-    timeEntries: number[],
-    person: Person
-  ) => {
+  const renderBarChart = ({
+    allocations,
+    projects,
+    timeEntries,
+    person
+  }: PersonWithAllocations) => {
     const chartData = createChartData(allocations, projects, timeEntries, person);
 
     const filteredChartData = selectedProjects.length
@@ -288,12 +290,7 @@ const SprintViewAllScreen = () => {
           <Card sx={{ marginBottom: 2 }}>{customSearch(projectOptions)}</Card>
           <Grid container spacing={2} marginBottom={20} textAlign={"center"}>
             {displayedPersonAllocations.map((personsWithAllocations) =>
-              renderBarChart(
-                personsWithAllocations.allocations,
-                personsWithAllocations.projects,
-                personsWithAllocations.timeEntries,
-                personsWithAllocations.person
-              )
+              renderBarChart(personsWithAllocations)
             )}
           </Grid>
         </>
