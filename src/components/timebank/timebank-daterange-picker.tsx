@@ -68,7 +68,7 @@ export const CustomDatePicker = ({
   onChange,
   sx
 }: DatePickerProps) => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <DatePicker
