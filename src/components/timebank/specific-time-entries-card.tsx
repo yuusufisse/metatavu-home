@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { dailyEntriesAtom, personDailyEntryAtom } from "src/atoms/person";
 import type { DailyEntryWithIndexSignature, DateRange } from "src/types";
-import { DatePicker } from "@mui/x-date-pickers";
-import DateRangePicker from "./timebank-daterange-picker";
+import { DateRangePicker, CustomDatePicker } from "./timebank-daterange-picker";
 import { useApi } from "src/hooks/use-api";
 import { theme } from "src/theme";
 import { errorAtom } from "src/atoms/error";
@@ -234,7 +233,7 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
   const renderDatePickers = () => {
     if (dailyEntries && !byRange.dailyEntries) {
       return (
-        <DatePicker
+        <CustomDatePicker
           sx={{
             width: "40%",
             marginRight: "1%"
