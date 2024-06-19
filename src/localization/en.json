@@ -28,7 +28,8 @@
     "dailyEntriesFetch": "Retrieving daily entries has failed",
     "dailyEntriesNotFound": "Could not find daily entries",
     "fetchFailedGeneral": "There was an error fetching data",
-    "fetchFailedNoEntriesGeneral": "No time entries found"
+    "fetchFailedNoEntriesGeneral": "No time entries found",
+    "fetchSlackAvatarsFailed": "Error while fetching Slack avatars"
   },
   "localization": {
     "en": "EN",
@@ -61,8 +62,10 @@
     "sprintview": "Sprint view",
     "myAllocation": "My allocations",
     "allocation": "Allocation",
+    "timeAllocated": "Time allocated",
     "timeEntries": "Time Entries",
     "allocationLeft": "Allocations Left",
+    "noAllocation": "No allocation found",
     "assigned": "Assignee",
     "taskStatus": "Status",
     "taskPriority": "Priority",
@@ -175,7 +178,9 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "create": "Request vacation",
-    "manageRequests": "Manage vacation requests"
+    "manageRequests": "Manage vacation requests",
+    "future": "Upcoming",
+    "past": "Past"
   },
   "dataGrid": {
     "noRows": "No Rows"

@@ -45,6 +45,7 @@ export interface Localized extends LocalizedStringsMethods {
     dailyEntriesNotFound: string;
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
+    fetchSlackAvatarsFailed: string;
   };
   /**
    * Translations related to localization
@@ -87,8 +88,10 @@ export interface Localized extends LocalizedStringsMethods {
     sprintview: string;
     myAllocation: string;
     allocation: string;
+    timeAllocated: string;
     timeEntries: string;
     allocationLeft: string;
+    noAllocation: string;
     assigned: string;
     taskStatus: string;
     taskPriority: string;
@@ -210,6 +213,8 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     create: string;
     manageRequests: string;
+    future: string;
+    past: string;
   };
   /**
    * Translations related to data grid

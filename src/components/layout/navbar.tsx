@@ -13,13 +13,14 @@ import {
 import LocalizationButtons from "../layout-components/localization-buttons";
 import strings from "src/localization/strings";
 import { authAtom, userProfileAtom } from "src/atoms/auth";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import NavItems from "./navitems";
 import SyncButton from "./sync-button";
 import { avatarsAtom, personsAtom } from "src/atoms/person";
 import type { Person } from "src/generated/client";
 import config from "src/app/config";
 import { useLambdasApi } from "src/hooks/use-api";
+import { errorAtom } from "src/atoms/error";
 
 /**
  * NavBar component
@@ -30,6 +31,7 @@ const NavBar = () => {
   const [avatars, setAvatars] = useAtom(avatarsAtom);
   const persons: Person[] = useAtomValue(personsAtom);
   const userProfile = useAtomValue(userProfileAtom);
+  const setError = useSetAtom(errorAtom);
   const { slackAvatarsApi } = useLambdasApi();
   const loggedInPerson = persons.find(
     (person: Person) =>
@@ -62,16 +64,22 @@ const NavBar = () => {
   };
 
   /**
-   * fetch avatars
+   * Fetch Slack avatars
    */
   const getSlackAvatars = async () => {
-    const fetchedAvatars = await slackAvatarsApi.slackAvatar();
-    setAvatars(fetchedAvatars);
+    if (avatars) return;
+    try {
+      const fetchedAvatars = await slackAvatarsApi.slackAvatar();
+      setAvatars(fetchedAvatars);
+    }
+    catch (error) {
+      setError(`${strings.error.fetchSlackAvatarsFailed}: ${error}`);
+    }
   };
 
   useEffect(() => {
     getSlackAvatars();
-  }, [loggedInPerson]);
+  }, []);
 
   return (
     <>

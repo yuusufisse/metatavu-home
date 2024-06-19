@@ -28,7 +28,8 @@
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
-    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla",
+    "fetchSlackAvatarsFailed": "Virhe Slack-avatareita pyydettäessä"
   },
   "localization": {
     "en": "EN",
@@ -61,8 +62,10 @@
     "sprintview": "Sprintinäkymä",
     "myAllocation": "Minun allokointi",
     "allocation": "Allokointi ",
+    "timeAllocated": "Myönnetty aika",
     "timeEntries": "Aikamerkinnät",
     "allocationLeft": "Jäljellä oleva alkoatio",
+    "noAllocation": "Allokaatiota ei ole löydetty",
     "assigned": "Luovutuksensaaja",
     "taskStatus": "Tila",
     "taskPriority": "Prioriteetti",
@@ -175,7 +178,9 @@
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "create": "Hae lomaa",
-    "manageRequests": "Hallinnoi lomahakemuksia"
+    "manageRequests": "Hallinnoi lomahakemuksia",
+    "future": "Tulevat",
+    "past": "Menneet"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"

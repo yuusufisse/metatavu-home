@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { dailyEntriesAtom, personDailyEntryAtom } from "src/atoms/person";
 import type { DailyEntryWithIndexSignature, DateRange } from "src/types";
-import { DatePicker } from "@mui/x-date-pickers";
-import DateRangePicker from "./timebank-daterange-picker";
+import { DateRangePicker, CustomDatePicker } from "./timebank-daterange-picker";
 import { useApi } from "src/hooks/use-api";
 import { theme } from "src/theme";
 import { errorAtom } from "src/atoms/error";
@@ -81,11 +80,11 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
         setPersonDailyEntry(
           fetchedDailyEntries.find((item) => item.date <= new Date() && item.logged)
         );
+        setSelectedEntries(getDateRangeEntries(dateRangePickerRange, fetchedDailyEntries) || []);
       } catch (error) {
         setError(`${strings.error.dailyEntriesFetch}, ${error}`);
       }
     }
-    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
     setLoading(false);
   };
 
@@ -146,7 +145,7 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
    * @param dateRangePickerRange date range picker range
    * @returns date range entries
    */
-  const getDateRangeEntries = (range: DateRange) => {
+  const getDateRangeEntries = (range: DateRange, dailyEntries: DailyEntry[]) => {
     if (range.start && range.end) {
       const selectedDays = range.end.diff(range.start, "days").toObject();
       const result = [];
@@ -172,7 +171,7 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
    */
   const handleDateRangeChange = (dateRangePickerRange: DateRange) => {
     setDateRangePickerRange(dateRangePickerRange);
-    setSelectedEntries(getDateRangeEntries(dateRangePickerRange) || []);
+    setSelectedEntries(getDateRangeEntries(dateRangePickerRange, dailyEntries) || []);
   };
 
   /**
@@ -233,7 +232,7 @@ const SpecificTimeEntriesCard = ({ selectedEmployeeId }: Props) => {
   const renderDatePickers = () => {
     if (dailyEntries && !byRange.dailyEntries) {
       return (
-        <DatePicker
+        <CustomDatePicker
           sx={{
             width: "40%",
             marginRight: "1%"

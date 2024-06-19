@@ -1,5 +1,5 @@
 import { Button, Card, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
 import type {
   VacationRequest,
@@ -18,7 +18,8 @@ import {
   allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
   vacationRequestsAtom,
-  vacationRequestStatusesAtom
+  vacationRequestStatusesAtom,
+  displayedVacationRequestsAtom
 } from "src/atoms/vacation";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { Link } from "react-router-dom";
@@ -39,15 +40,36 @@ const VacationRequestsScreen = () => {
   const [vacationRequests, setVacationRequests] = useAtom(
     adminMode ? allVacationRequestsAtom : vacationRequestsAtom
   );
+  const setDisplayedVacationRequests = useSetAtom(displayedVacationRequestsAtom);
+
+  const upcomingVacationRequests = useMemo(
+    () => vacationRequests.filter((request) => request.endDate.getTime() > Date.now()),
+    [vacationRequests]
+  );
+  const pastVacationRequests = useMemo(
+    () => vacationRequests.filter((request) => request.endDate.getTime() <= Date.now()),
+    [vacationRequests]
+  );
+
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
+  const [isUpcoming, setIsUpcoming] = useState(true);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
     (person: Person) =>
       person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
+
+  /**
+   * Decide if we show upcoming or past vacations
+   */
+  useEffect(() => {
+    isUpcoming
+      ? setDisplayedVacationRequests(upcomingVacationRequests)
+      : setDisplayedVacationRequests(pastVacationRequests);
+  }, [isUpcoming, vacationRequests]);
 
   /**
    * Fetch vacation request statuses
@@ -57,7 +79,6 @@ const VacationRequestsScreen = () => {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
-
         await Promise.all(
           vacationRequests.map(async (vacationRequest) => {
             let createdStatuses: VacationRequestStatus[] = [];
@@ -70,13 +91,20 @@ const VacationRequestsScreen = () => {
               vacationRequestStatuses.push(createdStatus);
             });
           })
-        );
+        );        
         await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
       setLoading(false);
     }
+  };
+
+    /**
+   * Handler for upcoming/ past vacations toggle click
+   */
+  const toggleIsUpcoming = () => {
+    setIsUpcoming(!isUpcoming);
   };
 
   useMemo(() => {
@@ -140,8 +168,8 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useMemo(() => {
@@ -196,10 +224,10 @@ const VacationRequestsScreen = () => {
             updatedVacationRequests = updatedVacationRequests.filter(
               (vacationRequest) => vacationRequest.id !== selectedRowId
             );
-            setLoading(false);
           } catch (error) {
             setError(`${strings.vacationRequestError.deleteRequestError}, ${error}`);
           }
+          setLoading(false);
         })
       );
       setVacationRequests(updatedVacationRequests);
@@ -234,11 +262,11 @@ const VacationRequestsScreen = () => {
             updatedBy: loggedInPerson.keycloakId
           }
         });
-      setLoading(false);
       return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -263,10 +291,10 @@ const VacationRequestsScreen = () => {
         }
       });
       setVacationRequests([createdRequest, ...vacationRequests]);
-      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.createRequestError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -301,10 +329,10 @@ const VacationRequestsScreen = () => {
         );
         setVacationRequests(updatedVacationRequests);
       }
-      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.updateRequestError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -423,6 +451,8 @@ const VacationRequestsScreen = () => {
       {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
+          isUpcoming={isUpcoming}
+          toggleIsUpcoming={toggleIsUpcoming}
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
           updateVacationRequest={updateVacationRequest}
