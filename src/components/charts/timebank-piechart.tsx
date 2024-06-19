@@ -35,15 +35,12 @@ const TimebankPieChart = ({ personDailyEntry }: Props) => {
     <ResponsiveContainer width={"75%"} height={200}>
       <PieChart>
         <Pie
-          data={dailyEntryToChart(personDailyEntry)}
+          data={dailyEntryToChart(personDailyEntry).filter((entry) => entry.dataKey)}
           dataKey="dataKey"
           cx="50%"
           cy="50%"
           outerRadius={50}
           label={(entry) => {
-            if (!entry.dataKey) {
-              return null;
-            }
             return renderCustomizedLabel(entry);
           }}
           labelLine={false}
