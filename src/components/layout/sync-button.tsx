@@ -21,7 +21,7 @@ const SyncButton = () => {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
-  const [canSync, setCanSync] = useState(false);
+  const [enableSync, setEnableSync] = useState(false);
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
   const { dailyEntriesApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
@@ -41,14 +41,13 @@ const SyncButton = () => {
     } catch (error) {
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
-    setCanSync(true);
+    setEnableSync(true);
   };
 
   useEffect(() => {
-    if(persons.length)
-      {
-        fetchDailyEntries();
-      }
+    if (persons.length) {
+      fetchDailyEntries();
+    }
   }, [persons]);
 
   /**
@@ -57,12 +56,10 @@ const SyncButton = () => {
   const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
     try {
-
       if (dailyEntries?.length) {
         dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
       }
     } catch (error) {
-      console.error("Error fetching daily entries:", error);
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
 
@@ -127,7 +124,7 @@ const SyncButton = () => {
         onClick={() => {
           handleSyncButtonClick();
         }}
-        disabled={syncing || !canSync}
+        disabled={syncing || !enableSync}
       >
         <Box sx={{ width: "100%" }}>
           {strings.syncButton.sync}
