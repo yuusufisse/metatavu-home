@@ -63,7 +63,7 @@ const NavBar = () => {
   };
 
   /**
-   * Fetch Slack avatars
+   * Fetch Slack avatars and sets logged in user avatar
    */
   const getSlackAvatars = async () => {
     if (!loggedInPerson) return;
