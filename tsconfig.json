@@ -25,9 +25,10 @@
       "src/generated/*": ["src/generated/*"],
       "src/utils/*": ["src/utils/*"],
       "src/types/*": ["src/types/*"],
-      "src/theme/*": ["src/theme/*"],
-    }
+      "src/theme/*": ["src/theme/*"]
+    },
+    "types": ["vitest/globals"]
   },
-  "include": ["src"],
+  "include": ["src", "src/tests"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

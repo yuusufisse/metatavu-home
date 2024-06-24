@@ -153,7 +153,7 @@ const multipleVacationDaysSelected = (
 
   if (vacationDayStart === vacationDayEnd) {
     // if number of weeks is an integer
-    return calculateVacationDurationInWeeks(startsFromWorkingDay, weeks);
+    return calculateVacationDurationInWeeks(startsFromWorkingDay, weeks, workDays);
   }
 
   if (vacationDayEnd > vacationDayStart) {
@@ -180,8 +180,10 @@ const multipleVacationDaysSelected = (
  *
  * @param startsFromWorkingDay represents if the choosen start date is a working day
  * @param weeks number of weeks
+ * @param workDays number of working days
  */
-const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: number) => {
+const calculateVacationDurationInWeeks = (startsFromWorkingDay: boolean, weeks: number, workDays: number) => {
+  if (workDays===1) return weeks * 6 + 6;
   if (!startsFromWorkingDay) return weeks * 6;
   return weeks * 6 + 1;
 };
