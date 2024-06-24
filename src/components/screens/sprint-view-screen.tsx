@@ -64,7 +64,7 @@ const SprintViewScreen = () => {
   const fetchProjectDetails = async () => {
     setLoading(true);
     let personId = 0;
-    if (!loggedInPerson ) return;
+    if (!loggedInPerson) return;
 
     if (!selectedEmployeeId) {
       personId = loggedInPerson.id;
@@ -152,21 +152,32 @@ const SprintViewScreen = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          mb: 2,
+          justifyContent: "space-between"
+        }}
+      >
         {isAdmin &&
+          selectedEmployeeId &&
           renderSelect({
             loading,
             selectedEmployeeId,
             persons,
-            onChange: (event: SelectChangeEvent<any>) =>
-              setSelectedEmployeeId(Number(event.target.value))
+            onChange: (event) => setSelectedEmployeeId(Number(event.target.value)),
+            size: "small"
           })}
-        <FormControlLabel
-          control={<Switch checked={myTasks} />}
-          label={strings.sprint.showMyTasks}
-          onClick={() => handleOnClickTask()}
-        />
-        <TaskStatusFilter setFilter={setFilter} />
+        <Box>
+          <FormControlLabel
+            control={<Switch checked={myTasks} />}
+            label={strings.sprint.showMyTasks}
+            onClick={() => handleOnClickTask()}
+          />
+          <TaskStatusFilter setFilter={setFilter} />
+        </Box>
       </Box>
       {loading ? (
         <Card
