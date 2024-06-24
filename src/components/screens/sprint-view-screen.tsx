@@ -21,7 +21,6 @@ import {
 import { TaskStatusFilter } from "src/components/sprint-view-table/menu-Item-filter-table";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { renderSelect } from "src/utils/select-utils";
-import type { SelectChangeEvent } from "@mui/material";
 
 /**
  * Sprint view screen component
