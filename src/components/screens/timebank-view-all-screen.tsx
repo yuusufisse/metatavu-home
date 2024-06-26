@@ -140,7 +140,8 @@ const TimebankViewAllScreen = () => {
     try {
       totalTime = await personsApi.listPersonTotalTime({
         personId: person.person.id,
-        timespan: Timespan.ALL_TIME
+        timespan: Timespan.ALL_TIME,
+        before: DateTime.now().minus({ days: 1 }).toJSDate()
       });
     } catch (error) {
       setError(`${error} ${strings.error.totalTimeFetch}`);
