@@ -1,6 +1,6 @@
-import { DateTime } from "luxon";
-import { Person, PersonTotalTime, VacationType, DailyEntry } from "../generated/client";
-import { ReactNode } from "react";
+import type { DateTime } from "luxon";
+import type { Person, PersonTotalTime, VacationType, DailyEntry } from "../generated/client";
+import type { ReactNode } from "react";
 
 /**
  * Enum describing table form modes
@@ -14,7 +14,7 @@ export enum ToolbarFormModes {
 /**
  * Type describing Icon properties
  */
-export type ButtonIconProps = {};
+export type ButtonIconProps = Record<string, never>;
 
 /**
  * Type describing available languages
@@ -157,4 +157,15 @@ export interface OnCallCalendarEntry {
   person: string;
   paid: boolean;
   badgeColor: string;
+}
+
+/**
+ * Type describing chart data for sprint view
+ */
+export interface SprintViewChartData {
+  id: number,
+  projectName: string,
+  timeAllocated: number,
+  timeEntries: number,
+  color: string
 }

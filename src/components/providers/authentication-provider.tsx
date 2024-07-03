@@ -2,7 +2,7 @@ import config from "src/app/config";
 import { authAtom, userProfileAtom } from "src/atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
-import { ReactNode, useCallback, useEffect } from "react";
+import { type ReactNode, useCallback, useEffect } from "react";
 import { personsAtom } from "src/atoms/person";
 import { useApi } from "src/hooks/use-api";
 
@@ -85,7 +85,9 @@ const AuthenticationProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    if (auth) getPersonsList();
+    if (auth) {
+      getPersonsList();
+    }
   }, [auth]);
 
   /**

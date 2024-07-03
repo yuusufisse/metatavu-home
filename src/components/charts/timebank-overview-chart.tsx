@@ -4,7 +4,7 @@ import { theme } from "src/theme";
 import strings from "src/localization/strings";
 import { getHours } from "src/utils/time-utils";
 import { Worktime } from "src/types";
-import { PersonTotalTime } from "src/generated/client";
+import type { PersonTotalTime } from "src/generated/client";
 
 /**
  * Component properties

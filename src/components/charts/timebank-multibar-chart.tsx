@@ -1,11 +1,11 @@
 import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
-import { DailyEntry } from "src/generated/client";
+import type { DailyEntry } from "src/generated/client";
 import { theme } from "src/theme";
 import strings from "src/localization/strings";
 import { getHours } from "src/utils/time-utils";
 import { Typography } from "@mui/material";
 import { renderCustomizedTooltipBarChart } from "src/utils/chart-utils";
-import { ChartData, Worktime } from "src/types";
+import { type ChartData, Worktime } from "src/types";
 
 /**
  * Component properties

@@ -1,14 +1,15 @@
 import { Button, Box, LinearProgress, Snackbar, Alert } from "@mui/material";
 import { DateTime } from "luxon";
-import { SyntheticEvent, useState, useEffect  } from "react";
+import { type SyntheticEvent, useState, useEffect } from "react";
 import { useApi } from "src/hooks/use-api";
 import { errorAtom } from "src/atoms/error";
 import { useAtomValue, useSetAtom } from "jotai";
 import SyncDialog from "../contexts/sync-handler";
 import strings from "src/localization/strings";
-import { DailyEntry, Person } from "src/generated/client";
+import type { DailyEntry, Person } from "src/generated/client";
 import config from "src/app/config";
 import { userProfileAtom } from "src/atoms/auth";
+import { personsAtom } from "src/atoms/person";
 /**
  * Sync button component
  */
@@ -20,61 +21,48 @@ const SyncButton = () => {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncHandlerOpen, setSyncHandlerOpen] = useState(false);
+  const [enableSync, setEnableSync] = useState(false);
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>();
-  const [persons, setPersons] = useState<Person[]>();
-  const { personsApi, dailyEntriesApi } = useApi();
+  const { dailyEntriesApi } = useApi();
   const userProfile = useAtomValue(userProfileAtom);
-
-  useEffect(() => {
-    fetchPersons();
-    fetchDailyEntries();
-  },[]);
-
-  /**
-   * fetching persons 
-   */
-  const fetchPersons = async () => {
-    try {
-      const tempPersons = await personsApi.listPersons({});
-      setPersons(tempPersons);
-    } catch (error) {
-      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
-    }
-  }
+  const persons = useAtomValue(personsAtom);
+  const loggedInPerson = persons?.find((person: Person) => person.keycloakId === userProfile?.id);
 
   /**
    * fetching daily entries
    */
   const fetchDailyEntries = async () => {
     try {
-      const loggedInPerson = persons?.find(
-        (person: Person) => person.keycloakId === userProfile?.id
-      );
       const fetchedDailyEntries = await dailyEntriesApi.listDailyEntries({
-        personId: loggedInPerson?.id || config.person.forecastUserIdOverride
+        personId: loggedInPerson?.id || config.person.forecastUserIdOverride,
+        vacation: false
       });
       setDailyEntries(fetchedDailyEntries);
     } catch (error) {
       setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
-  }
-  
+    setEnableSync(true);
+  };
+
+  useEffect(() => {
+    if (persons.length) {
+      fetchDailyEntries();
+    }
+  }, [persons]);
+
   /**
    * Update latest daily entry date
    */
   const updateSyncFromDailyEntries = async () => {
     let dailyEntryDates: DateTime[] = [];
-  
-    if (dailyEntries?.length) {
-      dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
-    } else {
-      const fetchedDailyEntries = dailyEntries;
-  
-      if (fetchedDailyEntries?.length) {
-        dailyEntryDates = fetchedDailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
+    try {
+      if (dailyEntries?.length) {
+        dailyEntryDates = dailyEntries.map((dailyEntry) => DateTime.fromJSDate(dailyEntry.date));
       }
+    } catch (error) {
+      setError(`${strings.error.fetchFailedNoEntriesGeneral}, ${error}`);
     }
-  
+
     if (dailyEntryDates.length) {
       setSyncStartDate(DateTime.max(...dailyEntryDates));
     }
@@ -136,7 +124,7 @@ const SyncButton = () => {
         onClick={() => {
           handleSyncButtonClick();
         }}
-        disabled={syncing}
+        disabled={syncing || !enableSync}
       >
         <Box sx={{ width: "100%" }}>
           {strings.syncButton.sync}

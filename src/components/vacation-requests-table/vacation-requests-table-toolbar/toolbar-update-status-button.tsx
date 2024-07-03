@@ -1,6 +1,6 @@
 import { Check, Close } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
-import { GridRowId } from "@mui/x-data-grid";
+import type { GridRowId } from "@mui/x-data-grid";
 import { VacationRequestStatuses } from "src/generated/client";
 import strings from "src/localization/strings";
 

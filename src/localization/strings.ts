@@ -1,6 +1,6 @@
 import en from "./en.json";
 import fi from "./fi.json";
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
+import LocalizedStrings, { type LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -45,6 +45,7 @@ export interface Localized extends LocalizedStringsMethods {
     dailyEntriesNotFound: string;
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
+    fetchSlackAvatarsFailed: string;
   };
   /**
    * Translations related to localization
@@ -85,7 +86,28 @@ export interface Localized extends LocalizedStringsMethods {
    */
   sprint: {
     sprintview: string;
-    sprintviewScreen: string;
+    myAllocation: string;
+    allocation: string;
+    timeAllocated: string;
+    timeEntries: string;
+    allocationLeft: string;
+    noAllocation: string;
+    assigned: string;
+    taskStatus: string;
+    taskPriority: string;
+    estimatedTime: string;
+    taskName: string;
+    showMyTasks: string;
+    toDo: string;
+    inProgress: string;
+    allTasks: string;
+    notFound: string;
+    projectName: string;
+    search: string;
+    unAllocated: string;
+    sprintDate: string;
+    completed: string;
+    current: string;
   };
   /**
    * General time-related expressions
@@ -163,6 +185,16 @@ export interface Localized extends LocalizedStringsMethods {
     nameNotFound: string;
   };
   /**
+   * Translations related to sprint requests errors
+   */
+  sprintRequestError: {
+    fetchError: string;
+    fetchTimeEntriesError: string;
+    fetchAllocationError: string;
+    fetchTasksError: string;
+    fetchTaskIdError: string;
+  };
+  /**
    * Translations related to form
    */
   form: {
@@ -181,6 +213,8 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     create: string;
     manageRequests: string;
+    future: string;
+    past: string;
   };
   /**
    * Translations related to data grid

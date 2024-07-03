@@ -6,7 +6,7 @@ import { errorAtom } from "src/atoms/error";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useApi } from "src/hooks/use-api";
-import { Person, PersonTotalTime, Timespan } from "src/generated/client";
+import { type Person, type PersonTotalTime, Timespan } from "src/generated/client";
 import { personsAtom, personTotalTimeAtom } from "src/atoms/person";
 import { Link } from "react-router-dom";
 import { userProfileAtom } from "src/atoms/auth";
@@ -34,7 +34,8 @@ const BalanceCard = () => {
   const getPersons = async () => {
     setLoading(true);
     const loggedInPerson = persons.find(
-      (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+      (person: Person) =>
+        person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
     );
     if (loggedInPerson) {
       try {
@@ -73,11 +74,13 @@ const BalanceCard = () => {
 
     if (adminMode) {
       return <Typography>{strings.placeHolder.notYetImplemented}</Typography>;
-    } else if (!personTotalTime && !loading && persons.length) {
+    }
+    if (!personTotalTime && !loading && persons.length) {
       return (
         <Typography color={balanceColor}>{strings.error.fetchFailedNoEntriesGeneral}</Typography>
       );
-    } else if (personTotalTime) {
+    }
+    if (personTotalTime) {
       return (
         <Typography color={balanceColor}>{getHoursAndMinutes(personTotalTime.balance)}</Typography>
       );
