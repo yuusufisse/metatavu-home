@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { oncallAtom } from "../../atoms/oncall";
+import { onCallAtom } from "../../atoms/oncall";
 import { Box, Button, Checkbox, Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { DateTime } from "luxon";
@@ -19,7 +19,7 @@ interface Props {
  * @param props component properties
  */
 const OnCallListView = ({ selectedDate, setSelectedDate, updatePaidStatus }: Props) => {
-  const onCallData = useAtomValue(oncallAtom);
+  const onCallData = useAtomValue(onCallAtom);
 
   /**
    * Increases or decreases the selected year by 1

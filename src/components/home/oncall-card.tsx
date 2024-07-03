@@ -4,13 +4,16 @@ import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { errorAtom } from "src/atoms/error";
-import { oncallAtom } from "src/atoms/oncall";
+import { onCallAtom } from "src/atoms/oncall";
 import { useLambdasApi } from "src/hooks/use-api";
 import strings from "src/localization/strings";
 
+/**
+ * On-call card component
+ */
 const OnCallCard = () => {
   const { onCallApi } = useLambdasApi();
-  const [onCallData, setOnCallData] = useAtom(oncallAtom);
+  const [onCallData, setOnCallData] = useAtom(onCallAtom);
 
   const setError = useSetAtom(errorAtom);
 
@@ -18,16 +21,24 @@ const OnCallCard = () => {
     getOnCallData(DateTime.now().year);
   }, []);
 
+  /**
+   * Fetches on-call data for a specific year
+   * @param year
+   */
   const getOnCallData = async (year: number) => {
     try {
       const fetchedData = await onCallApi.listOnCallData({ year: year.toString() });
       setOnCallData(fetchedData);
       getCurrentOnCallPerson();
     } catch (error) {
-      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+      setError(`${strings.oncall.fetchFailed}, ${error}`);
     }
   };
 
+  /**
+   * Gets the current on-call person
+   * @returns string containing current on-call person
+   */
   const getCurrentOnCallPerson = () => {
     const currentWeek = DateTime.now().weekNumber;
     const currentOnCallPerson = onCallData.find(

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { DateTime } from "luxon";
 import { useLambdasApi } from "../../hooks/use-api";
-import { oncallAtom } from "../../atoms/oncall";
+import { onCallAtom } from "../../atoms/oncall";
 import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
@@ -37,7 +37,7 @@ const OnCallCalendarScreen = () => {
   };
 
   const { onCallApi } = useLambdasApi();
-  const [onCallData, setOnCallData] = useAtom(oncallAtom);
+  const [onCallData, setOnCallData] = useAtom(onCallAtom);
   const [open, setOpen] = useState(false);
   const [isCalendarView, setIsCalendarView] = useState(validateJSONString());
   const [selectedDate, setSelectedDate] = useState<DateTime>(DateTime.now());
@@ -65,7 +65,7 @@ const OnCallCalendarScreen = () => {
       const fetchedData = await onCallApi.listOnCallData({ year: year.toString() });
       setOnCallData(fetchedData);
     } catch (error) {
-      setError(`${strings.error.fetchFailedGeneral}, ${error}`);
+      setError(`${strings.oncall.fetchFailed}, ${error}`);
     }
     setIsLoading(false);
   };

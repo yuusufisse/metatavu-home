@@ -200,6 +200,7 @@
     "list": "Lista",
     "selectView": "Valitse kalenterinäkymä",
     "noOnCallPerson": "Päivystäjää ei ole tälle viikolle",
-    "onCallPersonExists": "Tämän viikon päivystäjä:"
+    "onCallPersonExists": "Tämän viikon päivystäjä:",
+    "fetchFailed": "Päivystystietojen haku epäonnistui"
   }
 }

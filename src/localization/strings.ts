@@ -273,6 +273,7 @@ export interface Localized extends LocalizedStringsMethods {
     selectView: string;
     noOnCallPerson: string;
     onCallPersonExists: string;
+    fetchFailed: string;
   };
 }
 

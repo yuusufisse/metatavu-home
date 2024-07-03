@@ -24,49 +24,47 @@ const OnCallHandler = ({ open, setOpen, onCallEntry, updatePaidStatus }: Props) 
   const weekNumber = DateTime.fromISO(String(onCallEntry?.date)).weekNumber;
   const year = DateTime.fromISO(String(onCallEntry?.date)).year;
 
-  if (onCallEntry)
-    /**
-     * Component render
-     */
-    return (
-      <GenericDialog
-        title={`${strings.timeExpressions.week} ${
-          DateTime.fromISO(String(onCallEntry.date)).weekNumber
-        }`}
-        open={open}
-        error={false}
-        onClose={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-      >
-        <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
-          <DialogContent>{strings.confirmationHandler.title}</DialogContent>
-          <DialogActions>
-            <Button
-              onClick={async () => {
-                await updatePaidStatus(year, weekNumber, onCallEntry.paid);
-                setConfirmationOpen(false);
-                setOpen(false);
-              }}
-            >
-              {strings.confirmationHandler.confirmButtonText}
-            </Button>
-            <Button onClick={() => setConfirmationOpen(false)}>
-              {strings.confirmationHandler.cancelButtonText}
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {strings.vacationRequest.person}: {onCallEntry.person}
-        <br />
-        {strings.vacationRequest.status}: {onCallEntry.paid ? strings.oncall.paid : strings.oncall.notPaid}
-        <br />
-        <Box sx={{ display: "flex", justifyContent: "center", mt: "16px" }}>
-          <Button variant="outlined" onClick={() => setConfirmationOpen(true)}>
-            {strings.form.update}
+  if (!onCallEntry) return null;
+
+  /**
+   * Component render
+   */
+  return (
+    <GenericDialog
+      title={`${strings.timeExpressions.week} ${weekNumber}`}
+      open={open}
+      onClose={() => setOpen(false)}
+      onCancel={() => setOpen(false)}
+    >
+      <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
+        <DialogContent>{strings.confirmationHandler.title}</DialogContent>
+        <DialogActions>
+          <Button
+            onClick={async () => {
+              await updatePaidStatus(year, weekNumber, onCallEntry.paid);
+              setConfirmationOpen(false);
+              setOpen(false);
+            }}
+          >
+            {strings.confirmationHandler.confirmButtonText}
           </Button>
-        </Box>
-      </GenericDialog>
-    );
-  return "";
+          <Button onClick={() => setConfirmationOpen(false)}>
+            {strings.confirmationHandler.cancelButtonText}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {strings.vacationRequest.person}: {onCallEntry.person}
+      <br />
+      {strings.vacationRequest.status}:{" "}
+      {onCallEntry.paid ? strings.oncall.paid : strings.oncall.notPaid}
+      <br />
+      <Box sx={{ display: "flex", justifyContent: "center", mt: "16px" }}>
+        <Button variant="outlined" onClick={() => setConfirmationOpen(true)}>
+          {strings.form.update}
+        </Button>
+      </Box>
+    </GenericDialog>
+  );
 };
 
 export default OnCallHandler;
