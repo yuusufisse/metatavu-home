@@ -30,9 +30,9 @@ const viteConfig = defineViteConfig({
 const vitestConfig = defineVitestConfig({
   test: {
     environment: 'jsdom',
-    setupFiles: './testSetup.tsx', 
+    globals: true,
+    setupFiles: './testSetup.tsx'
   }
 });
-
 
 export default mergeConfig(viteConfig, vitestConfig);
