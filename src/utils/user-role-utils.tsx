@@ -47,7 +47,7 @@ export  default class UserRoleUtils {
   };
 
   /**
-   * Check if the logged-in user has devveloper role and is in admin route
+   * Check if the logged-in user has developer role and is in admin route
    *
    * @returns boolean, indicates if user is developer
    */
