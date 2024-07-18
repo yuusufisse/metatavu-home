@@ -1,4 +1,3 @@
-
 import { calculateTotalVacationDays } from "src/utils/time-utils";
 import { DateTime } from "luxon";
 import { fromMonToFri, fromMonToFriNotMonWed, fromMonToFriNotWed, nonWeeekWorker, oneDayWorker } from "./mocks/working-weeks-mock";

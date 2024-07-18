@@ -136,3 +136,7 @@ export const filterAllocationsAndProjects = (allocations: Allocations[], project
   });
   return { filteredAllocations, filteredProjects };
 };
+
+export const TESTING = () => {
+  return "test";
+}
