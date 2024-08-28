@@ -5,6 +5,7 @@ import {
   DailyEntriesApi,
   PersonsApi,
   SynchronizeApi,
+  UsersApi,
   VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
@@ -51,6 +52,7 @@ export const getApiClient = (accessToken?: string) => {
   return {
     dailyEntriesApi: new DailyEntriesApi(getConfiguration()),
     personsApi: new PersonsApi(getConfiguration()),
+    usersApi: new UsersApi(getConfiguration()),
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
     vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())

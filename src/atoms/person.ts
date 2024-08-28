@@ -3,6 +3,7 @@ import type { DailyEntry, Person, PersonTotalTime } from "../generated/client";
 import type { DailyEntryWithIndexSignature, PersonWithTotalTime } from "../types";
 import type { UsersAvatars } from "src/generated/homeLambdasClient";
 
+
 export const personsAtom = atom<Person[]>([]);
 export const personTotalTimeAtom = atom<PersonTotalTime | undefined>(undefined);
 export const personsWithTotalTimeAtom = atom<PersonWithTotalTime[]>([]);
