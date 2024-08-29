@@ -287,7 +287,8 @@ const VacationRequestsScreen = () => {
           message: vacationData.message,
           createdAt: new Date(),
           updatedAt: new Date(),
-          days: vacationData.days
+          days: vacationData.days,
+          draft: false
         }
       });
       setVacationRequests([createdRequest, ...vacationRequests]);
