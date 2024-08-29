@@ -80,14 +80,14 @@ const AuthenticationProvider = ({ children }: Props) => {
   /**
    * Sets the logged in timebank person from keycloak ID into global state
    */
-  const getPersonsList = async () => {
+  const getUsersList = async () => {
     const fetchedUsers = await usersApi.listUsers();
     setUsers(fetchedUsers);
   };
 
   useEffect(() => {
     if (auth) {
-      getPersonsList();
+      getUsersList();
     }
   }, [auth]);
 
