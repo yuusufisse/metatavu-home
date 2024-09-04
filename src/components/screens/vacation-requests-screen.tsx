@@ -289,7 +289,6 @@ const VacationRequestsScreen = () => {
           updatedAt: new Date(),
           days: vacationData.days,
           draft: false,
-          
         }
       });
       setVacationRequests([createdRequest, ...vacationRequests]);
