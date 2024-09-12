@@ -11,6 +11,8 @@ import {
     DialogActions, 
     TextField 
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 /**
  * Some mock Data.
@@ -32,9 +34,10 @@ const QuestionnaireScreen = () => {
      * Status for new questionnaire window.
      */
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleClickOpen = () => {
-        setOpen(true);
+        navigate('/newQuestionnaire');
     };
 
     const handleClose = () => {
@@ -70,7 +73,7 @@ const QuestionnaireScreen = () => {
                 </Grid>
             </Card>
 
-            <Dialog open={open} onClose={handleClose}>
+            {/* <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Fill the Form</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -110,7 +113,7 @@ const QuestionnaireScreen = () => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleClose}>Submit</Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </div>
     );
 };

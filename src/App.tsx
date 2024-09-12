@@ -19,6 +19,7 @@ import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 import SprintViewScreen from "./components/screens/sprint-view-screen";
 import QuestionnaireScreen from "./components/screens/questionnair-screen";
+import NewQuizScreen from "./components/screens/questionnair-new-quiz-screen";
 
 
 /**
@@ -56,6 +57,10 @@ const App = () => {
         {
           path: "/questionnaire",
           element: <QuestionnaireScreen />
+        },
+        {
+          path: "/newQuestionnaire",
+          element: <NewQuizScreen />
         }
       ]
     },
@@ -87,7 +92,12 @@ const App = () => {
         {
           path: "/admin/questionnaire",
           element: <QuestionnaireScreen />
+        },
+        {
+          path: "/admin/newQuestionnaire",
+          element: <NewQuizScreen />
         }
+        
       ]
     }
   ]);
