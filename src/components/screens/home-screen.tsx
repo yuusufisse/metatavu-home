@@ -1,5 +1,6 @@
 import { Grid } from "@mui/material";
 import BalanceCard from "../home/balance-card";
+import QuestionCard from "../home/questionnair-card";
 import VacationsCard from "../home/vacations-card";
 import SprintViewCard from "../home/sprint-view-card";
 import UserRoleUtils from "src/utils/user-role-utils";
@@ -21,6 +22,9 @@ const HomeScreen = () => {
       </Grid>
       <Grid item xs={12} sm={6}>
         {vacationsCard}
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <QuestionCard />
       </Grid>
     </Grid>
   );
