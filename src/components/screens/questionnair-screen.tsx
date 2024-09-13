@@ -33,16 +33,14 @@ const QuestionnaireScreen = () => {
     /**
      * Status for new questionnaire window.
      */
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleClickOpen = () => {
         navigate('/newQuestionnaire');
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    // const handleClose = () => {setOpen(false);};
 
     return (
         <div>
