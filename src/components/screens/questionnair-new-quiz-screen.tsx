@@ -1,3 +1,4 @@
+import { Check } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -20,35 +21,44 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NewQuestionDialog from "./question-form";
 
 /**
  * New Questionnaire Card component
- * Includes a dialog window to create a new question
+ * Includes a dialog window (question-form.tsx) to create a new question
  */
 
 const NewQuizCard = () => {
-  const [open, setOpen] = useState(false);
+  // State to control the dialog open/close
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const openDialog = () => {
-    setOpen(true);
-  };
+  // Function to handle opening the dialog
+  const openDialog = () => setIsDialogOpen(true);
 
-  const closeDialog = () => {
-    setOpen(false);
+  // Function to handle closing the dialog
+  const closeDialog = () => setIsDialogOpen(false);
+
+  // Function to handle submitting the question and options, this is for testing purposes
+  const handleAddQuestionSubmit = (questionText, options) => {
+    console.log("Question Submitted:", questionText);
+    console.log("Options:", options);
+
+    // You can add your logic here to save the question and options to state,
+    // send to the backend, or handle them however your application needs.
+    closeDialog();
+    // Close the dialog after submitting
   };
 
   const navigate = useNavigate();
 
-  // const handleClickAddNew = () => {
-  //   navigate("/addNewQuestion");
-  // };
   const handleClickGoBack = () => {
     navigate("/questionnaire");
   };
 
+  /**
+   *
+   */
   const [questionTitle, setQuestionTitle] = useState("");
-  const [questionBody, setQuestionBody] = useState("");
-  const [options, setOptions] = useState([false, false, false, false]);
 
   const handleQuestionTitleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -56,22 +66,72 @@ const NewQuizCard = () => {
     setQuestionTitle(event.target.value);
   };
 
-  const handleQuestionBodyChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setQuestionBody(event.target.value);
-  };
+  // OLD VERSION
 
-  const handleOptionChange = (index: number) => {
-    const updatedOptions = [...options];
-    updatedOptions[index] = !updatedOptions[index];
-    setOptions(updatedOptions);
-  };
+  // interface Question {
+  //   questionText: string;
+  //   options: string[];
+  //   correctAnswers: boolean[];
+  // }
 
-  const handleAddQuestionSubmit = () => {
-    console.log("Question body: ", questionBody);
-    console.log("Options: ", options);
-  };
+  // const questionnaire: { title: string; questions: Question[] } = {
+  //   title: questionTitle,
+  //   questions: []
+  //   // Array of question objects { questionText, options{} }
+  // };
+
+  // const handleAddQuestionSubmit = (questionText: string, options: Array<string>, correctAnswers: Array<boolean> ) => {
+
+  //   const newQuestion = {
+  //     questionText: questionText,
+  //     options: options,
+  //     correctAnswers: correctAnswers
+  //   };
+
+  //   questionnaire.questions.push(newQuestion);
+
+  //   console.log("Question body: ", questionText);
+  //   console.log("Options: ", options);
+  //   console.log("Question added:" , newQuestion);
+  // };
+
+  // TODO
+  // NEW DESIGN
+
+  // const QuestionForm = ({ onSubmit }) => {
+  //   const [questionText, setQuestionText] = useState('');
+  //   const [options, setOptions] = useState([
+  //       { label: '', isCorrect: false },
+  //       { label: '', isCorrect: false },
+  //       { label: '', isCorrect: false },
+  //       { label: '', isCorrect: false }
+  //   ]);
+
+  //   // Handle option label change
+  //   const handleLabelChange = (index, event) => {
+  //       const updatedOptions = [...options];
+  //       updatedOptions[index].label = event.target.value;
+  //       setOptions(updatedOptions);
+  //   };
+
+  //   // Handle checkbox change
+  //   const handleCheckboxChange = (index) => {
+  //       const updatedOptions = [...options];
+  //       updatedOptions[index].isCorrect = !updatedOptions[index].isCorrect;
+  //       setOptions(updatedOptions);
+  //   };
+
+  //   // Handle form submission
+  //   const handleSubmit = () => {
+  //       onSubmit(questionText, options); // Call the handleAddQuestionSubmit function
+  //   };
+  // };
+  // OLD VERSION END
+
+  /**
+   * This should save the question title and questions to DB.
+   * TODO
+   */
 
   const handleSaveSubmit = () => {
     console.log("Question Title: ", questionTitle);
@@ -142,7 +202,7 @@ const NewQuizCard = () => {
         </CardContent>
       </Card>
 
-      {/* Render all questins in list */}
+      {/* Render all questins in list THIS TODO*/}
       <Card
         sx={{
           p: 3,
@@ -159,146 +219,11 @@ const NewQuizCard = () => {
         </CardContent>
       </Card>
       {/* Dialog window to make new question */}
-      <Dialog open={open} onClose={closeDialog}>
-        <DialogTitle>Make new question</DialogTitle>
-        <DialogContent>
-          <Card
-            className="new-question"
-            sx={{
-              p: 3,
-              width: "80%",
-              display: "flex",
-              flexDirection: "column",
-              height: "100",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h4" gutterBottom>
-                New Question
-              </Typography>
-
-              <TextField
-                id="textfield-question-body"
-                label="Question"
-                multiline
-                rows={6}
-                defaultValue="Insert question here"
-                value={questionBody}
-                onChange={handleQuestionBodyChange}
-                fullWidth
-              />
-
-              {/* <Box>
-
-                <FormGroup
-                  row
-                  aria-label="List of answers, correct ones should be marked with a checkmark"
-                >
-                  
-                  <Checkbox
-                    icon={<Check />}
-                    checkedIcon={<Check />}
-                    name="checkedH"
-                    checked={false}
-                    onChange={() => {}}
-                  />
-                  <TextField variant="outlined" label="Insert Option" />
-
-                </FormGroup>
-
-              </Box> */}
-
-              <Box sx={{ display: "flex" }}>
-                <FormControl
-                  sx={{ m: 3 }}
-                  component="fieldset"
-                  variant="standard"
-                >
-                  <FormLabel component="legend">
-                    List of answers, correct ones should be marked with a
-                    checkmark
-                  </FormLabel>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={options[0]}
-                          onChange={() => handleOptionChange}
-                          name="option1"
-                        />
-                      }
-                      label={
-                        <TextField variant="outlined" label="Insert Option" />
-                      }
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={options[1]}
-                          onChange={() => handleOptionChange}
-                          name="option2"
-                        />
-                      }
-                      label={
-                        <TextField variant="outlined" label="Insert Option" />
-                      }
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={options[2]}
-                          onChange={() => handleOptionChange}
-                          name="option3"
-                        />
-                      }
-                      label={
-                        <TextField variant="outlined" label="Insert Option" />
-                      }
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={options[3]}
-                          onChange={() => handleOptionChange}
-                          name="option4"
-                        />
-                      }
-                      label={
-                        <TextField variant="outlined" label="Insert Option" />
-                      }
-                    />
-                  </FormGroup>
-                </FormControl>
-              </Box>
-
-              <ButtonGroup>
-                <Button size="large" variant="contained" color="primary">
-                  + Add new Answer option
-                </Button>
-                <Button
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                  onSubmit={handleAddQuestionSubmit}
-                >
-                  Save question
-                </Button>
-              </ButtonGroup>
-            </CardContent>
-          </Card>
-        </DialogContent>
-        <DialogActions>
-          <Button>+ Add new answer option</Button>
-          <Button onClick={handleSaveSubmit}>Submit</Button>
-          <Button onClick={closeDialog}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
+      <NewQuestionDialog
+        open={isDialogOpen}
+        closeDialog={closeDialog}
+        handleAddQuestionSubmit={handleAddQuestionSubmit}
+      />
     </Paper>
   );
 };
