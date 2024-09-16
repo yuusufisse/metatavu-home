@@ -6,7 +6,6 @@ import { type ReactNode, useCallback, useEffect } from "react";
 import { usersAtom } from "src/atoms/user";
 import { useApi } from "src/hooks/use-api";
 
-
 interface Props {
   children: ReactNode;
 }
