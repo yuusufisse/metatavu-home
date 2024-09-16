@@ -1,7 +1,7 @@
-import { Variant } from "@mui/material/styles/createTypography";
-import { ComponentType, ReactNode } from "react";
-import { ButtonIconProps } from "../../../types";
-import { Button, ButtonOwnProps, Typography } from "@mui/material";
+import type { Variant } from "@mui/material/styles/createTypography";
+import type { ComponentType, ReactNode } from "react";
+import type { ButtonIconProps } from "src/types";
+import { Button, type ButtonOwnProps, Typography } from "@mui/material";
 
 /**
  * Component properties

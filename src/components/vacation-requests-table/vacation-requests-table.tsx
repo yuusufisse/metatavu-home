@@ -1,37 +1,38 @@
-import { DataGrid, GridRowId, GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useMemo, useRef, useState } from "react";
 import { Box, styled } from "@mui/material";
 import TableToolbar from "./vacation-requests-table-toolbar/vacation-requests-table-toolbar";
-import { VacationsDataGridRow, VacationData } from "../../types";
+import type { VacationsDataGridRow, VacationData } from "src/types";
 import SkeletonTableRows from "./skeleton-table-rows/skeleton-table-rows";
-import { languageAtom } from "../../atoms/language";
+import { languageAtom } from "src/atoms/language";
 import { useAtomValue } from "jotai";
 import VacationRequestsTableColumns from "./vacation-requests-table-columns";
-import strings from "../../localization/strings";
+import strings from "src/localization/strings";
 import { Inventory } from "@mui/icons-material";
 import {
-  allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
-  vacationRequestsAtom,
+  displayedVacationRequestsAtom,
   vacationRequestStatusesAtom
-} from "../../atoms/vacation";
+} from "src/atoms/vacation";
 import {
-  VacationRequest,
-  VacationRequestStatus,
+  type VacationRequest,
+  type VacationRequestStatus,
   VacationRequestStatuses
-} from "../../generated/client";
-import { getVacationRequestStatusColor } from "../../utils/vacation-status-utils";
-import UserRoleUtils from "../../utils/user-role-utils";
+} from "src/generated/client";
+import { getVacationRequestStatusColor } from "src/utils/vacation-status-utils";
+import UserRoleUtils from "src/utils/user-role-utils";
 import { DateTime } from "luxon";
-import LocalizationUtils from "../../utils/localization-utils";
-import { getVacationRequestPersonFullName } from "../../utils/vacation-request-utils";
-import { personsAtom } from "../../atoms/person";
-import { userProfileAtom } from "../../atoms/auth";
+import LocalizationUtils from "src/utils/localization-utils";
+import { getVacationRequestPersonFullName } from "src/utils/vacation-request-utils";
+import { personsAtom } from "src/atoms/person";
+import { userProfileAtom } from "src/atoms/auth";
 
 /**
  * Component properties
  */
 interface Props {
+  isUpcoming: boolean
+  toggleIsUpcoming: () => void;
   deleteVacationRequests: (
     selectedRowIds: GridRowId[],
     rows: VacationsDataGridRow[]
@@ -51,6 +52,8 @@ interface Props {
  * @param props component properties
  */
 const VacationRequestsTable = ({
+  isUpcoming,
+  toggleIsUpcoming,
   deleteVacationRequests,
   createVacationRequest,
   updateVacationRequest,
@@ -58,7 +61,7 @@ const VacationRequestsTable = ({
   loading
 }: Props) => {
   const adminMode = UserRoleUtils.adminMode();
-  const vacationRequests = useAtomValue(adminMode ? allVacationRequestsAtom : vacationRequestsAtom);
+  const vacationRequests = useAtomValue(displayedVacationRequestsAtom);
   const vacationRequestStatuses = useAtomValue(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
@@ -194,6 +197,8 @@ const VacationRequestsTable = ({
       ref={containerRef}
     >
       <TableToolbar
+        isUpcoming={isUpcoming}
+        toggleIsUpcoming={toggleIsUpcoming}
         deleteVacationRequests={deleteVacationRequests}
         createVacationRequest={createVacationRequest}
         updateVacationRequest={updateVacationRequest}

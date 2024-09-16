@@ -1,14 +1,19 @@
 import { Box, Grid } from "@mui/material";
-import { VacationType } from "../../../../generated/client";
+import { VacationType } from "src/generated/client";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
-import { VacationsDataGridRow, VacationData, ToolbarFormModes, DateRange } from "../../../../types";
-import { GridRowId } from "@mui/x-data-grid";
-import { determineToolbarFormMode } from "../../../../utils/toolbar-utils";
+import {
+  type VacationsDataGridRow,
+  type VacationData,
+  ToolbarFormModes,
+  type DateRange
+} from "src/types";
+import type { GridRowId } from "@mui/x-data-grid";
+import { determineToolbarFormMode } from "src/utils/toolbar-utils";
 import { useAtomValue } from "jotai";
 import ToolbarFormFields from "./toolbar-form-fields";
-import { allVacationRequestsAtom, vacationRequestsAtom } from "../../../../atoms/vacation";
-import UserRoleUtils from "../../../../utils/user-role-utils";
+import { allVacationRequestsAtom, vacationRequestsAtom } from "src/atoms/vacation";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Component properties
@@ -116,10 +121,11 @@ const ToolbarForm = ({
   }, [toolbarFormMode]);
 
   /**
- * Checks if the vacation type is either sickness or childsickness.
- */
+   * Checks if the vacation type is either sickness or childsickness.
+   */
   const isSicknessOrChildSickness =
-  vacationData.type === VacationType.SICKNESS || vacationData.type === VacationType.CHILD_SICKNESS;
+    vacationData.type === VacationType.SICKNESS ||
+    vacationData.type === VacationType.CHILD_SICKNESS;
   const dateTimeTomorrow = isSicknessOrChildSickness
     ? DateTime.now().minus({ years: 1 })
     : DateTime.now().plus({ days: 1 });

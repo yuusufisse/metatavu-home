@@ -9,5 +9,18 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["@mui/material/Tooltip"]
+  },
+  resolve: {
+    alias: {
+      "src/components": "/src/components",
+      "src/atoms": "/src/atoms",
+      "src/hooks": "/src/hooks",
+      "src/localization": "/src/localization",
+      "src/app": "/src/app",
+      "src/generated": "/src/generated",
+      "src/utils": "/src/utils",
+      "src/types": "/src/types",
+      "src/theme": "/src/theme",
+    }
   }
 });

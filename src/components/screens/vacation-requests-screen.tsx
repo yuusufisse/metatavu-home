@@ -1,32 +1,33 @@
 import { Button, Card, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import VacationRequestsTable from "../vacation-requests-table/vacation-requests-table";
-import {
+import type {
   VacationRequest,
   VacationRequestStatus,
   VacationRequestStatuses,
   Person
-} from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
+} from "src/generated/client";
+import { useApi } from "src/hooks/use-api";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { userProfileAtom } from "../../atoms/auth";
-import { errorAtom } from "../../atoms/error";
-import { GridRowId } from "@mui/x-data-grid";
-import { VacationData } from "../../types";
-import strings from "../../localization/strings";
+import { userProfileAtom } from "src/atoms/auth";
+import { errorAtom } from "src/atoms/error";
+import type { GridRowId } from "@mui/x-data-grid";
+import type { VacationData } from "src/types";
+import strings from "src/localization/strings";
 import {
   allVacationRequestsAtom,
   allVacationRequestStatusesAtom,
   vacationRequestsAtom,
-  vacationRequestStatusesAtom
-} from "../../atoms/vacation";
-import UserRoleUtils from "../../utils/user-role-utils";
+  vacationRequestStatusesAtom,
+  displayedVacationRequestsAtom
+} from "src/atoms/vacation";
+import UserRoleUtils from "src/utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
-import LocalizationUtils from "../../utils/localization-utils";
-import { personsAtom } from "../../atoms/person";
-import config from "../../app/config";
-import { renderVacationDaysTextForScreen } from "../../utils/vacation-days-utils";
+import LocalizationUtils from "src/utils/localization-utils";
+import { personsAtom } from "src/atoms/person";
+import config from "src/app/config";
+import { renderVacationDaysTextForScreen } from "src/utils/vacation-days-utils";
 
 /**
  * Vacation requests screen
@@ -39,14 +40,36 @@ const VacationRequestsScreen = () => {
   const [vacationRequests, setVacationRequests] = useAtom(
     adminMode ? allVacationRequestsAtom : vacationRequestsAtom
   );
+  const setDisplayedVacationRequests = useSetAtom(displayedVacationRequestsAtom);
+
+  const upcomingVacationRequests = useMemo(
+    () => vacationRequests.filter((request) => request.endDate.getTime() > Date.now()),
+    [vacationRequests]
+  );
+  const pastVacationRequests = useMemo(
+    () => vacationRequests.filter((request) => request.endDate.getTime() <= Date.now()),
+    [vacationRequests]
+  );
+
   const [latestVacationRequestStatuses, setLatestVacationRequestStatuses] = useAtom(
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
+  const [isUpcoming, setIsUpcoming] = useState(true);
   const [persons] = useAtom(personsAtom);
   const loggedInPerson = persons.find(
-    (person: Person) => person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: Person) =>
+      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
   );
+
+  /**
+   * Decide if we show upcoming or past vacations
+   */
+  useEffect(() => {
+    isUpcoming
+      ? setDisplayedVacationRequests(upcomingVacationRequests)
+      : setDisplayedVacationRequests(pastVacationRequests);
+  }, [isUpcoming, vacationRequests]);
 
   /**
    * Fetch vacation request statuses
@@ -56,7 +79,6 @@ const VacationRequestsScreen = () => {
       try {
         setLoading(true);
         const vacationRequestStatuses: VacationRequestStatus[] = [];
-
         await Promise.all(
           vacationRequests.map(async (vacationRequest) => {
             let createdStatuses: VacationRequestStatus[] = [];
@@ -69,13 +91,20 @@ const VacationRequestsScreen = () => {
               vacationRequestStatuses.push(createdStatus);
             });
           })
-        );
+        );        
         await filterLatestVacationRequestStatuses(vacationRequestStatuses);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchStatusError}, ${error}`);
       }
       setLoading(false);
     }
+  };
+
+    /**
+   * Handler for upcoming/ past vacations toggle click
+   */
+  const toggleIsUpcoming = () => {
+    setIsUpcoming(!isUpcoming);
   };
 
   useMemo(() => {
@@ -104,7 +133,8 @@ const VacationRequestsScreen = () => {
           const latestStatus = selectedVacationRequestStatuses.reduce((a, b) => {
             if (a.updatedAt && b.updatedAt) {
               return a.updatedAt > b.updatedAt ? a : b;
-            } else if (a.updatedAt) {
+            }
+            if (a.updatedAt) {
               return a;
             }
             return b;
@@ -138,8 +168,8 @@ const VacationRequestsScreen = () => {
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useMemo(() => {
@@ -194,10 +224,10 @@ const VacationRequestsScreen = () => {
             updatedVacationRequests = updatedVacationRequests.filter(
               (vacationRequest) => vacationRequest.id !== selectedRowId
             );
-            setLoading(false);
           } catch (error) {
             setError(`${strings.vacationRequestError.deleteRequestError}, ${error}`);
           }
+          setLoading(false);
         })
       );
       setVacationRequests(updatedVacationRequests);
@@ -232,11 +262,11 @@ const VacationRequestsScreen = () => {
             updatedBy: loggedInPerson.keycloakId
           }
         });
-      setLoading(false);
       return createdVacationRequestStatus;
     } catch (error) {
       setError(`${strings.vacationRequestError.createStatusError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -257,14 +287,15 @@ const VacationRequestsScreen = () => {
           message: vacationData.message,
           createdAt: new Date(),
           updatedAt: new Date(),
-          days: vacationData.days
+          days: vacationData.days,
+          draft: false,
         }
       });
       setVacationRequests([createdRequest, ...vacationRequests]);
-      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.createRequestError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -299,10 +330,10 @@ const VacationRequestsScreen = () => {
         );
         setVacationRequests(updatedVacationRequests);
       }
-      setLoading(false);
     } catch (error) {
       setError(`${strings.vacationRequestError.updateRequestError}, ${error}`);
     }
+    setLoading(false);
   };
 
   /**
@@ -421,6 +452,8 @@ const VacationRequestsScreen = () => {
       {loggedInPerson && renderVacationDaysTextForScreen(loggedInPerson)}
       <Card sx={{ margin: 0, padding: "10px", width: "100%", height: "100", marginBottom: "16px" }}>
         <VacationRequestsTable
+          isUpcoming={isUpcoming}
+          toggleIsUpcoming={toggleIsUpcoming}
           deleteVacationRequests={deleteVacationRequests}
           createVacationRequest={createVacationRequest}
           updateVacationRequest={updateVacationRequest}

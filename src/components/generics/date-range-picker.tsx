@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
-import { DateTime } from "luxon";
-import strings from "../../localization/strings";
-import { DateRange } from "../../types";
+import type { DateTime } from "luxon";
+import strings from "src/localization/strings";
+import type { DateRange } from "src/types";
+import { CustomDatePicker } from "../timebank/timebank-daterange-picker";
 
 /**
  * Component properties
@@ -39,7 +39,7 @@ const DateRangePicker = ({ dateTimeTomorrow, dateRange, setDateRange }: Props) =
         alignItems: "center"
       }}
     >
-      <DatePicker
+      <CustomDatePicker
         sx={{ width: "100%", padding: "0 5px 0 0" }}
         label={strings.vacationRequest.startDate}
         value={dateRange.start}
@@ -48,7 +48,7 @@ const DateRangePicker = ({ dateTimeTomorrow, dateRange, setDateRange }: Props) =
           newValue && handleDateChange(newValue, dateRange.end)
         }
       />
-      <DatePicker
+      <CustomDatePicker
         sx={{ width: "100%", padding: "0 0 0 5px" }}
         label={strings.vacationRequest.endDate}
         value={dateRange.end}

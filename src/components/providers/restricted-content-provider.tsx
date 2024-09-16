@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useState } from "react";
-import UserRoleUtils from "../../utils/user-role-utils";
+import { type ReactNode, useEffect, useState } from "react";
+import UserRoleUtils from "src/utils/user-role-utils";
 import AdminRouteErrorScreen from "../screens/admin-route-error-screen";
 
 /**

@@ -1,7 +1,7 @@
-import { GridColDef } from "@mui/x-data-grid";
-import strings from "../../localization/strings";
-import LocalizationUtils from "../../utils/localization-utils";
-import { formatDate } from "../../utils/time-utils";
+import type { GridColDef } from "@mui/x-data-grid";
+import strings from "src/localization/strings";
+import LocalizationUtils from "src/utils/localization-utils";
+import { formatDate } from "src/utils/time-utils";
 
 /**
  * Vacation requests table columns component

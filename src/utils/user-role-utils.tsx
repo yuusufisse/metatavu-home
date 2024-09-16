@@ -5,9 +5,7 @@ import { useLocation } from "react-router";
 /**
  * User Role Utils class
  */
-
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
-export  default class UserRoleUtils {
+export default class UserRoleUtils {
   /**
    * Check if the logged-in user has an admin role
    *
@@ -47,7 +45,7 @@ export  default class UserRoleUtils {
   };
 
   /**
-   * Check if the logged-in user has developer role and is in admin route
+   * Check if the logged-in user has devveloper role and is in admin route
    *
    * @returns boolean, indicates if user is developer
    */

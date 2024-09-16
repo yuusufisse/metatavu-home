@@ -3,10 +3,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import Logo from "../../../resources/img/Metatavu-icon.svg";
 import Button from "@mui/material/Button";
-import { MouseEvent, useState } from "react";
+import { type MouseEvent, useState } from "react";
 import { Box, IconButton, Menu, MenuItem } from "@mui/material";
-import strings from "../../localization/strings";
-import UserRoleUtils from "../../utils/user-role-utils";
+import strings from "src/localization/strings";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Navigation Items component

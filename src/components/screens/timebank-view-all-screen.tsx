@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { personsAtom } from "../../atoms/person";
+import { personsAtom } from "src/atoms/person";
 import {
   Box,
   Card,
@@ -10,17 +10,25 @@ import {
   Typography
 } from "@mui/material";
 import { DateTime } from "luxon";
-import { languageAtom } from "../../atoms/language";
-import { theme } from "../../theme";
-import { PieChart, Pie, Cell, Legend, TooltipProps, Tooltip, ResponsiveContainer } from "recharts";
-import { PersonWithTotalTime, WorkTimeCategory, WorkTimeTotalData } from "../../types";
-import { getHoursAndMinutes } from "../../utils/time-utils";
-import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
-import strings from "../../localization/strings";
-import { useApi } from "../../hooks/use-api";
-import { errorAtom } from "../../atoms/error";
-import { PersonTotalTime, Timespan } from "../../generated/client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { languageAtom } from "src/atoms/language";
+import { theme } from "src/theme";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  type TooltipProps,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+import { type PersonWithTotalTime, WorkTimeCategory, type WorkTimeTotalData } from "src/types";
+import { getHoursAndMinutes } from "src/utils/time-utils";
+import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
+import strings from "src/localization/strings";
+import { useApi } from "src/hooks/use-api";
+import { errorAtom } from "src/atoms/error";
+import { type PersonTotalTime, Timespan } from "src/generated/client";
+import { type ChangeEvent, useEffect, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { COLORS } from "../constants";
 
@@ -35,7 +43,9 @@ const TimebankViewAllScreen = () => {
   const [persons] = useAtom(personsAtom);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [displayedPersonsTotalTime, setDisplayedPersonsTotalTime] = useState<PersonWithTotalTime[]>([]);
+  const [displayedPersonsTotalTime, setDisplayedPersonsTotalTime] = useState<PersonWithTotalTime[]>(
+    []
+  );
 
   /**
    * Renders the customized tooltip for charts
@@ -130,7 +140,8 @@ const TimebankViewAllScreen = () => {
     try {
       totalTime = await personsApi.listPersonTotalTime({
         personId: person.person.id,
-        timespan: Timespan.ALL_TIME
+        timespan: Timespan.ALL_TIME,
+        before: DateTime.now().minus({ days: 1 }).toJSDate()
       });
     } catch (error) {
       setError(`${error} ${strings.error.totalTimeFetch}`);

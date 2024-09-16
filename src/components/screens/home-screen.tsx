@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import BalanceCard from "../home/balance-card";
 import VacationsCard from "../home/vacations-card";
 import SprintViewCard from "../home/sprint-view-card";
-import UserRoleUtils from "../../utils/user-role-utils";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Home screen component

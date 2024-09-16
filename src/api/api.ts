@@ -1,13 +1,22 @@
 import config from "../app/config";
 import {
   Configuration,
-  ConfigurationParameters,
+  type ConfigurationParameters,
   DailyEntriesApi,
   PersonsApi,
   SynchronizeApi,
+  UsersApi,
   VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
+import {
+  AllocationsApi,
+  Configuration as LambdaConfiguration,
+  ProjectsApi,
+  SlackAvatarsApi,
+  TasksApi,
+  TimeEntriesApi
+} from "../generated/homeLambdasClient";
 
 /**
  * Generic type that accepts parameters within the @ConfigurationParameters interface
@@ -16,7 +25,7 @@ type ConfigConstructor<T> = new (_params: ConfigurationParameters) => T;
 
 /**
  * Creates a new ConfigConstructor instance with params required to access the API
- * 
+ *
  * @param ConfigConstructor ConfigConstructor class instance
  * @param basePath API base URL
  * @param accessToken Access token for request
@@ -31,20 +40,43 @@ const getConfigurationFactory =
     });
   };
 
-  /**
-   * API client with request functions to several endpoints 
-   * 
-   * @param accessToken Access token required for authentication
-   * @returns Configured API request functions
-   */
+/**
+ * API client with request functions to several endpoints
+ *
+ * @param accessToken Access token required for authentication
+ * @returns Configured API request functions
+ */
 export const getApiClient = (accessToken?: string) => {
   const getConfiguration = getConfigurationFactory(Configuration, config.api.baseUrl, accessToken);
 
   return {
     dailyEntriesApi: new DailyEntriesApi(getConfiguration()),
     personsApi: new PersonsApi(getConfiguration()),
+    usersApi: new UsersApi(getConfiguration()),
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
     vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())
+  };
+};
+
+/**
+ * Metatavu Home Lambda API client with request functions to several endpoints
+ *
+ * @param accessToken Access token required for authentication
+ * @returns Configured API request functions
+ */
+export const getLambdasApiClient = (accessToken?: string) => {
+  const getConfiguration = getConfigurationFactory(
+    LambdaConfiguration,
+    config.lambdas.baseUrl,
+    accessToken
+  );
+
+  return {
+    allocationsApi: new AllocationsApi(getConfiguration()),
+    projectsApi: new ProjectsApi(getConfiguration()),
+    tasksApi: new TasksApi(getConfiguration()),
+    timeEntriesApi: new TimeEntriesApi(getConfiguration()),
+    slackAvatarsApi: new SlackAvatarsApi(getConfiguration())
   };
 };

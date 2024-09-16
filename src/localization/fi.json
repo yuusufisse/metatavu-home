@@ -28,7 +28,8 @@
     "dailyEntriesFetch": "Aikakirjauksien haku epäonnistui",
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
-    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla"
+    "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla",
+    "fetchSlackAvatarsFailed": "Virhe Slack-avatareita pyydettäessä"
   },
   "localization": {
     "en": "EN",
@@ -59,7 +60,28 @@
   },
   "sprint": {
     "sprintview": "Sprintinäkymä",
-    "sprintviewScreen": "Sprintinäkymä näyttö"
+    "myAllocation": "Minun allokointi",
+    "allocation": "Allokointi ",
+    "timeAllocated": "Myönnetty aika",
+    "timeEntries": "Aikamerkinnät",
+    "allocationLeft": "Jäljellä oleva alkoatio",
+    "noAllocation": "Allokaatiota ei ole löydetty",
+    "assigned": "Luovutuksensaaja",
+    "taskStatus": "Tila",
+    "taskPriority": "Prioriteetti",
+    "estimatedTime": "Arvio",
+    "taskName": "Tehtävä",
+    "showMyTasks": "Tehtäväni ",
+    "toDo": "Odotuksessa",
+    "inProgress": "Käynnissä",
+    "allTasks" : "Kaikki tehtävät",
+    "notFound" : "Tulosta ei löytynyt",
+    "projectName": "Projekti",
+    "search": "Hae tehtävää, projektia tai vastaanottajaa",
+    "unAllocated": "Kohdistamaton aika:",
+    "sprintDate": "Sprint",
+    "completed": "Valmis",
+    "current": "Nykyinen: {0}-{1}"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
@@ -137,6 +159,13 @@
     "noVacationRequestsFound": "Lomahakemuksia ei löydetty",
     "nameNotFound": "Nimeä ei löydetty"
   },
+  "sprintRequestError": {
+    "fetchError": "Sprintin tietopyyntöjen hakeminen epäonnistui",
+    "fetchTimeEntriesError": "Virhe aikamerkintöjen hakemisessa",
+    "fetchAllocationError": "Virhe aikamerkintöjen hakemisessa jakamista varten {0}: {1}",
+    "fetchTasksError": "Tehtävän {0} aikamerkintöjen noutovirhe: {1}",
+    "fetchTaskIdError": "Tehtävän tunnusta ei löytynyt"
+  },
   "form": {
     "submit": "Lähetä",
     "update": "Päivitä"
@@ -149,7 +178,9 @@
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "create": "Hae lomaa",
-    "manageRequests": "Hallinnoi lomahakemuksia"
+    "manageRequests": "Hallinnoi lomahakemuksia",
+    "future": "Tulevat",
+    "past": "Menneet"
   },
   "dataGrid": {
     "noRows": "Ei rivejä"

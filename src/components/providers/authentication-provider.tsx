@@ -1,10 +1,10 @@
-import config from "../../app/config";
-import { authAtom, userProfileAtom } from "../../atoms/auth";
+import config from "src/app/config";
+import { authAtom, userProfileAtom } from "src/atoms/auth";
 import { useAtom, useSetAtom } from "jotai";
 import Keycloak from "keycloak-js";
-import { ReactNode, useCallback, useEffect } from "react";
-import { personsAtom } from "../../atoms/person";
-import { useApi } from "../../hooks/use-api";
+import { type ReactNode, useCallback, useEffect } from "react";
+import { usersAtom } from "src/atoms/user";
+import { useApi } from "src/hooks/use-api";
 
 interface Props {
   children: ReactNode;
@@ -18,8 +18,8 @@ const keycloak = new Keycloak(config.auth);
 const AuthenticationProvider = ({ children }: Props) => {
   const [auth, setAuth] = useAtom(authAtom);
   const setUserProfile = useSetAtom(userProfileAtom);
-  const setPersons = useSetAtom(personsAtom);
-  const { personsApi } = useApi();
+  const setUsers = useSetAtom(usersAtom);
+  const { usersApi } = useApi();
 
   const updateAuthData = useCallback(() => {
     setAuth({
@@ -79,13 +79,15 @@ const AuthenticationProvider = ({ children }: Props) => {
   /**
    * Sets the logged in timebank person from keycloak ID into global state
    */
-  const getPersonsList = async () => {
-    const fetchedPersons = await personsApi.listPersons({ active: true });
-    setPersons(fetchedPersons);
+  const getUsersList = async () => {
+    const fetchedUsers = await usersApi.listUsers();
+    setUsers(fetchedUsers);
   };
 
   useEffect(() => {
-    if (auth) getPersonsList();
+    if (auth) {
+      getUsersList();
+    }
   }, [auth]);
 
   /**
