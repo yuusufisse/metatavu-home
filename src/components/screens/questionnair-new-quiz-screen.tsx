@@ -1,20 +1,10 @@
-import { Check } from "@mui/icons-material";
 import {
   Box,
   Button,
-  ButtonGroup,
   Card,
   CardActions,
   CardContent,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
+  Grid,
   Paper,
   TextField,
   Typography,
@@ -38,15 +28,25 @@ const NewQuizCard = () => {
   // Function to handle closing the dialog
   const closeDialog = () => setIsDialogOpen(false);
 
-  // Function to handle submitting the question and options, this is for testing purposes
-  const handleAddQuestionSubmit = (questionText, options) => {
+  // FOR TESTING PURPOSES
+  const [questions, setQuestions] = useState<
+    { questionText: string; options: { label: string; isCorrect: boolean }[] }[]
+  >([]);
+
+  // Function to handle submitting the question and options, this is for testing purposes at this moment
+  const handleAddQuestionSubmit = (
+    questionText: string,
+    options: { label: string; isCorrect: boolean }[],
+  ) => {
     console.log("Question Submitted:", questionText);
     console.log("Options:", options);
 
-    // You can add your logic here to save the question and options to state,
-    // send to the backend, or handle them however your application needs.
-    closeDialog();
-    // Close the dialog after submitting
+    setQuestions((prevQuestions) => [
+      ...prevQuestions,
+      { questionText, options },
+    ]);
+
+    // TODO: add logic here to save the question and options to DB
   };
 
   const navigate = useNavigate();
@@ -55,15 +55,12 @@ const NewQuizCard = () => {
     navigate("/questionnaire");
   };
 
-  /**
-   *
-   */
-  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionnaireTitle, setQuestionnaireTitle] = useState("");
 
   const handleQuestionTitleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setQuestionTitle(event.target.value);
+    setQuestionnaireTitle(event.target.value);
   };
 
   // OLD VERSION
@@ -75,7 +72,7 @@ const NewQuizCard = () => {
   // }
 
   // const questionnaire: { title: string; questions: Question[] } = {
-  //   title: questionTitle,
+  //   title: questionnaireTitle,
   //   questions: []
   //   // Array of question objects { questionText, options{} }
   // };
@@ -134,7 +131,7 @@ const NewQuizCard = () => {
    */
 
   const handleSaveSubmit = () => {
-    console.log("Question Title: ", questionTitle);
+    console.log("Question Title: ", questionnaireTitle);
   };
 
   return (
@@ -156,16 +153,18 @@ const NewQuizCard = () => {
           <TextField
             label="Title"
             placeholder="Insert title here"
-            value={questionTitle}
+            value={questionnaireTitle}
             onChange={handleQuestionTitleChange}
             variant="outlined"
             fullWidth
+            sx={{ mt: 2 }}
           />
           <CardActions
             sx={{
               display: "flex",
               justifyContent: "space-between",
               padding: 2,
+              mt: 3,
             }}
           >
             <Button
@@ -174,6 +173,7 @@ const NewQuizCard = () => {
               size="large"
               variant="contained"
               color="primary"
+              disabled={!questionnaireTitle}
               onClick={openDialog}
             >
               + Add new Question
@@ -206,6 +206,7 @@ const NewQuizCard = () => {
       <Card
         sx={{
           p: 3,
+          mt: 2,
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -213,9 +214,35 @@ const NewQuizCard = () => {
         }}
       >
         <CardContent>
-          <Typography variant="h4" gutterBottom align="center">
-            All questions are render here as list
-          </Typography>
+          {/* Testing if form will render something */}
+          <Grid container sx={{ flexGrow: 1 }}>
+            <Grid item xs={12}>
+              <Typography variant="h4" gutterBottom>
+                All questions will be rendered here as list
+              </Typography>
+            </Grid>
+            <Typography variant="h4" gutterBottom>
+              {questionnaireTitle}
+            </Typography>
+            {questions.map((q, index) => (
+              <Grid item xs={12} key={index} sx={{ mb: 2 }}>
+                
+                <Card sx={{ p: 2 }}>
+                  <Typography>{q.questionText}</Typography>
+                  
+                  <ol>
+                    {q.options.map((option, idx) => (
+                      <li key={idx}>
+                        {option.label} ({option.isCorrect.toString()})
+                      </li>
+                    ))}
+                  </ol>
+                  
+                </Card>
+
+              </Grid>
+            ))}
+          </Grid>
         </CardContent>
       </Card>
       {/* Dialog window to make new question */}

@@ -11,12 +11,16 @@ import {
   FormGroup,
   FormControlLabel,
   Button,
-  ButtonGroup,
   DialogActions,
-  Box,
 } from "@mui/material";
 
-const NewQuestionDialog = ({ open, closeDialog, handleAddQuestionSubmit }) => {
+interface NewQuestionDialogProps {
+  open: boolean;
+  closeDialog: () => void;
+  handleAddQuestionSubmit: (questionText: string, options: { label: string; isCorrect: boolean }[]) => void;
+}
+
+const NewQuestionDialog: React.FC<NewQuestionDialogProps> = ({ open, closeDialog, handleAddQuestionSubmit }) => {
   const [questionText, setQuestionText] = useState("");
   const [options, setOptions] = useState([
     { label: "", isCorrect: false },
@@ -26,14 +30,14 @@ const NewQuestionDialog = ({ open, closeDialog, handleAddQuestionSubmit }) => {
   ]);
 
   // Handle option label change
-  const handleLabelChange = (index, event) => {
+  const handleLabelChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const updatedOptions = [...options];
     updatedOptions[index].label = event.target.value;
     setOptions(updatedOptions);
   };
 
   // Handle checkbox change
-  const handleCheckboxChange = (index) => {
+  const handleCheckboxChange = (index: number) => {
     const updatedOptions = [...options];
     updatedOptions[index].isCorrect = !updatedOptions[index].isCorrect;
     setOptions(updatedOptions);
@@ -75,7 +79,7 @@ const NewQuestionDialog = ({ open, closeDialog, handleAddQuestionSubmit }) => {
         >
           <CardContent>
             <Typography variant="h5" gutterBottom>
-              Do we need this ?
+            Want to add a new question? Fill in the details below.
             </Typography>
 
             <TextField
@@ -96,6 +100,7 @@ const NewQuestionDialog = ({ open, closeDialog, handleAddQuestionSubmit }) => {
                       checked={option.isCorrect}
                       onChange={() => handleCheckboxChange(index)}
                       name={`option${index + 1}`}
+                      sx={{ width: "60px", mt: 2 }}
                     />
                   }
                   label={
@@ -104,21 +109,24 @@ const NewQuestionDialog = ({ open, closeDialog, handleAddQuestionSubmit }) => {
                       label="Insert Option"
                       value={option.label}
                       onChange={(e) => handleLabelChange(index, e)}
-                      sx={{ width: "100%" }}
+                      fullWidth
+                      sx={{ width: "680px", mt: 2 }}
                     />
                   }
                 />
               </FormGroup>
             ))}
-            <Button onClick={handleAddNewOption}>
-              + Add new answer option
+            <Button onClick={handleAddNewOption} sx={{mt: 3}}>
+            <Typography sx={{ fontWeight: 'bold' }}>
+    + Add new answer option
+  </Typography>
             </Button>
           </CardContent>
         </Card>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSaveQuestion}>Submit</Button>
-        <Button onClick={closeDialog}>Cancel</Button>
+        <Button size="large" onClick={handleSaveQuestion}>Submit</Button>
+        <Button size="large" onClick={closeDialog}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );
