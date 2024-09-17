@@ -5,13 +5,12 @@ import {
   CardActions,
   CardContent,
   Grid,
-  Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NewQuestionDialog from "./question-form";
+import NewQuestionCard from "./question-form";
 
 /**
  * New Questionnaire Card component
@@ -19,16 +18,18 @@ import NewQuestionDialog from "./question-form";
  */
 const NewQuizCard = () => {
   /**
-   * State and function to open and close the dialog window
-   * @returns {boolean}
+   * State and function for the questionnaire title change
    */
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const openDialog = () => setIsDialogOpen(true);
-  const closeDialog = () => setIsDialogOpen(false);
+  const [questionnaireTitle, setQuestionnaireTitle] = useState("");
 
+  const handleQuestionTitleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setQuestionnaireTitle(event.target.value);
+  };
   /**
    * State and function to handle the questions and options
-   * @returns {object} 
+   * @returns {object}
    */
   const [questions, setQuestions] = useState<
     { questionText: string; options: { label: string; value: boolean }[] }[]
@@ -48,29 +49,19 @@ const NewQuizCard = () => {
   };
 
   /**
-   * Function to navigate back to the questionnaire screen
-   */
-  const navigate = useNavigate();
-  const handleClickGoBack = () => {
-    navigate("/questionnaire");
-  };
-
-  /**
-   * State and function for the questionnaire title change
-   */
-  const [questionnaireTitle, setQuestionnaireTitle] = useState("");
-  const handleQuestionTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setQuestionnaireTitle(event.target.value);
-  };
-
-  /**
    * This should save the question title and questions to DB.
    * TODO
    */
   const handleSaveSubmit = () => {
     console.log("Information above should be saved to DB: ");
+  };
+
+  /**
+   * Function to navigate back to the questionnaire screen
+   */
+  const navigate = useNavigate();
+  const handleClickGoBack = () => {
+    navigate("/questionnaire");
   };
 
   return (
@@ -98,6 +89,8 @@ const NewQuizCard = () => {
             fullWidth
             sx={{ mt: 2 }}
           />
+          <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
+
           <CardActions
             sx={{
               display: "flex",
@@ -107,25 +100,14 @@ const NewQuizCard = () => {
             }}
           >
             <Button
-              sx={{ alignSelf: "flex-start" }}
-              id="add-new-question"
-              size="large"
-              variant="contained"
-              color="primary"
-              disabled={!questionnaireTitle}
-              onClick={openDialog}
-            >
-              + Add new Question
-            </Button>
-            <Button
-              sx={{ display: "flex"}}
+              sx={{ display: "flex" }}
               id="save-submit"
               size="large"
               variant="contained"
               color="secondary"
               onClick={handleSaveSubmit}
             >
-              Save & Submit
+              Save & Submit questionnaire
             </Button>
             <Button
               sx={{ display: "flex" }}
@@ -140,7 +122,6 @@ const NewQuizCard = () => {
           </CardActions>
         </CardContent>
       </Card>
-
       {/* Render all questins in list THIS TODO*/}
       <Card
         sx={{
@@ -181,12 +162,7 @@ const NewQuizCard = () => {
           </Grid>
         </CardContent>
       </Card>
-      {/* Dialog window to make new question */}
-      <NewQuestionDialog
-        open={isDialogOpen}
-        closeDialog={closeDialog}
-        handleAddQuestionSubmit={handleAddQuestionSubmit}
-      />
+      {/* Card (questin-form.tsx) to make new question */}
     </>
   );
 };
