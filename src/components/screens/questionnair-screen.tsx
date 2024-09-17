@@ -5,7 +5,8 @@ import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 /**
- * Some mock Data.
+ * Some mock Data. 
+ * TODO: This will be replaced with the actual data from the backend.
  */
 
 const mockQuestionnaires = [
@@ -41,9 +42,8 @@ const mockQuestionnaires = [
 
 const QuestionnaireScreen = () => {
   /**
-   * Status for new questionnaire window.
+   * Navigations for buttons for new questionnaire window.
    */
-  // const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleClickOpen = () => {

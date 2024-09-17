@@ -17,26 +17,26 @@ import NewQuestionDialog from "./question-form";
  * New Questionnaire Card component
  * Includes a dialog window (question-form.tsx) to create a new question
  */
-
 const NewQuizCard = () => {
-  // State to control the dialog open/close
+  /**
+   * State and function to open and close the dialog window
+   * @returns {boolean}
+   */
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // Function to handle opening the dialog
   const openDialog = () => setIsDialogOpen(true);
-
-  // Function to handle closing the dialog
   const closeDialog = () => setIsDialogOpen(false);
 
-  // FOR TESTING PURPOSES
+  /**
+   * State and function to handle the questions and options
+   * @returns {object} 
+   */
   const [questions, setQuestions] = useState<
-    { questionText: string; options: { label: string; isCorrect: boolean }[] }[]
+    { questionText: string; options: { label: string; value: boolean }[] }[]
   >([]);
 
-  // Function to handle submitting the question and options, this is for testing purposes at this moment
   const handleAddQuestionSubmit = (
     questionText: string,
-    options: { label: string; isCorrect: boolean }[],
+    options: { label: string; value: boolean }[],
   ) => {
     console.log("Question Submitted:", questionText);
     console.log("Options:", options);
@@ -45,93 +45,32 @@ const NewQuizCard = () => {
       ...prevQuestions,
       { questionText, options },
     ]);
-
-    // TODO: add logic here to save the question and options to DB
   };
 
+  /**
+   * Function to navigate back to the questionnaire screen
+   */
   const navigate = useNavigate();
-
   const handleClickGoBack = () => {
     navigate("/questionnaire");
   };
 
+  /**
+   * State and function for the questionnaire title change
+   */
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
-
   const handleQuestionTitleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setQuestionnaireTitle(event.target.value);
   };
 
-  // OLD VERSION
-
-  // interface Question {
-  //   questionText: string;
-  //   options: string[];
-  //   correctAnswers: boolean[];
-  // }
-
-  // const questionnaire: { title: string; questions: Question[] } = {
-  //   title: questionnaireTitle,
-  //   questions: []
-  //   // Array of question objects { questionText, options{} }
-  // };
-
-  // const handleAddQuestionSubmit = (questionText: string, options: Array<string>, correctAnswers: Array<boolean> ) => {
-
-  //   const newQuestion = {
-  //     questionText: questionText,
-  //     options: options,
-  //     correctAnswers: correctAnswers
-  //   };
-
-  //   questionnaire.questions.push(newQuestion);
-
-  //   console.log("Question body: ", questionText);
-  //   console.log("Options: ", options);
-  //   console.log("Question added:" , newQuestion);
-  // };
-
-  // TODO
-  // NEW DESIGN
-
-  // const QuestionForm = ({ onSubmit }) => {
-  //   const [questionText, setQuestionText] = useState('');
-  //   const [options, setOptions] = useState([
-  //       { label: '', isCorrect: false },
-  //       { label: '', isCorrect: false },
-  //       { label: '', isCorrect: false },
-  //       { label: '', isCorrect: false }
-  //   ]);
-
-  //   // Handle option label change
-  //   const handleLabelChange = (index, event) => {
-  //       const updatedOptions = [...options];
-  //       updatedOptions[index].label = event.target.value;
-  //       setOptions(updatedOptions);
-  //   };
-
-  //   // Handle checkbox change
-  //   const handleCheckboxChange = (index) => {
-  //       const updatedOptions = [...options];
-  //       updatedOptions[index].isCorrect = !updatedOptions[index].isCorrect;
-  //       setOptions(updatedOptions);
-  //   };
-
-  //   // Handle form submission
-  //   const handleSubmit = () => {
-  //       onSubmit(questionText, options); // Call the handleAddQuestionSubmit function
-  //   };
-  // };
-  // OLD VERSION END
-
   /**
    * This should save the question title and questions to DB.
    * TODO
    */
-
   const handleSaveSubmit = () => {
-    console.log("Question Title: ", questionnaireTitle);
+    console.log("Information above should be saved to DB: ");
   };
 
   return (
@@ -226,20 +165,17 @@ const NewQuizCard = () => {
             </Typography>
             {questions.map((q, index) => (
               <Grid item xs={12} key={index} sx={{ mb: 2 }}>
-                
                 <Card sx={{ p: 2 }}>
                   <Typography>{q.questionText}</Typography>
-                  
+
                   <ol>
                     {q.options.map((option, idx) => (
                       <li key={idx}>
-                        {option.label} ({option.isCorrect.toString()})
+                        {option.label} ({option.value.toString()})
                       </li>
                     ))}
                   </ol>
-                  
                 </Card>
-
               </Grid>
             ))}
           </Grid>
