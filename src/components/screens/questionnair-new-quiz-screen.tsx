@@ -74,7 +74,7 @@ const NewQuizCard = () => {
   };
 
   return (
-    <Paper>
+    <>
       {/* Card containing functions to insert new Quiz */}
       <Card
         sx={{
@@ -118,7 +118,7 @@ const NewQuizCard = () => {
               + Add new Question
             </Button>
             <Button
-              sx={{ display: "flex" }}
+              sx={{ display: "flex"}}
               id="save-submit"
               size="large"
               variant="contained"
@@ -187,7 +187,7 @@ const NewQuizCard = () => {
         closeDialog={closeDialog}
         handleAddQuestionSubmit={handleAddQuestionSubmit}
       />
-    </Paper>
+    </>
   );
 };
 

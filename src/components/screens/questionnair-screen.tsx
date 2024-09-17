@@ -5,7 +5,7 @@ import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 /**
- * Some mock Data. 
+ * Some mock Data.
  * TODO: This will be replaced with the actual data from the backend.
  */
 
@@ -66,13 +66,63 @@ const QuestionnaireScreen = () => {
         }}
       >
         <Grid container sx={{ flexGrow: 1 }}>
-          <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom>
-              Current Questionnaires
-            </Typography>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              justifyContent: { xs: "center", sm: "space-between" },
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Grid item xs={12} sm={6} sx={{ alignItems: "center" }}>
+              <Typography variant="h4" justifyContent={"center"}>
+                Current Questionnaires
+              </Typography>
+            </Grid>
+
+            <Grid
+              item
+              xs={6}
+              sm={3}
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "center", sm: "flex-start" },
+              }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClickOpen}
+                size="large"
+              >
+                Build New Questionnaire
+              </Button>
+            </Grid>
+
+            <Grid
+              item
+              xs={6}
+              sm={3}
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "center", sm: "flex-end" },
+              }}
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleGoHome}
+                size="large"
+              >
+                Go back to Homepage
+              </Button>
+            </Grid>
           </Grid>
           {mockQuestionnaires.map((questionnaire) => (
-            <Grid item xs={12} key={questionnaire.id} sx={{ mb: 2 }}>
+            <Grid item xs={12} key={questionnaire.id} sx={{ mt: 2 }}>
               <Card sx={{ p: 2 }}>
                 <Typography variant="h6">{questionnaire.title}</Typography>
                 <Typography variant="body2">
@@ -87,31 +137,6 @@ const QuestionnaireScreen = () => {
               </Card>
             </Grid>
           ))}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleClickOpen}
-            >
-              Build New Questionnaire
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleGoHome}
-              sx={{ ml: 2 }}
-            >
-              Go back to Homepage
-            </Button>
-          </Grid>
         </Grid>
       </Card>
     </div>

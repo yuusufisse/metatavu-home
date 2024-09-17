@@ -149,7 +149,7 @@ const NewQuestionDialog: React.FC<NewQuestionDialogProps> = ({
                   <TextField
                     id="textfield-answer-option"
                     variant="outlined"
-                    label="Insert Option"
+                    label="Insert Answer"
                     value={option.label}
                     onChange={(e) => handleAnswerLabelChange(index, e)}
                     fullWidth
