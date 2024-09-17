@@ -77,7 +77,7 @@ const NewQuestionDialog: React.FC<NewQuestionDialogProps> = ({ open, closeDialog
             height: "100%",
           }}
         >
-          <CardContent>
+          <CardContent sx={{width: "100%"}}>
             <Typography variant="h5" gutterBottom>
             Want to add a new question? Fill in the details below.
             </Typography>
@@ -93,27 +93,26 @@ const NewQuestionDialog: React.FC<NewQuestionDialogProps> = ({ open, closeDialog
             />
 
             {options.map((option, index) => (
-              <FormGroup key={index}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
+              <FormGroup 
+              key={index}
+              sx={{width: "100%", display: "flex", flexDirection: "row", alignItems: "center"}}
+              >
+                <Checkbox
                       checked={option.isCorrect}
                       onChange={() => handleCheckboxChange(index)}
                       name={`option${index + 1}`}
-                      sx={{ width: "60px", mt: 2 }}
+                      sx={{ width: "auto", mt: 2 }}
                     />
-                  }
-                  label={
+                  
+                  
                     <TextField
                       variant="outlined"
                       label="Insert Option"
                       value={option.label}
                       onChange={(e) => handleLabelChange(index, e)}
                       fullWidth
-                      sx={{ width: "680px", mt: 2 }}
+                      sx={{mt: 2 }}
                     />
-                  }
-                />
               </FormGroup>
             ))}
             <Button onClick={handleAddNewOption} sx={{mt: 3}}>
