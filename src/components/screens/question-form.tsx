@@ -95,7 +95,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
         }}
       >
         <CardContent sx={{ width: "100%" }}>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" sx={{mb: 2}}>
             Want to add a new question? Fill in the details below.
           </Typography>
 
@@ -109,7 +109,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
             fullWidth
           />
 
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" sx={{mt: 2}}>
             Check the correct answer(s) below.
           </Typography>
 
@@ -130,6 +130,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
                   checked={option.value}
                   onChange={() => handleCheckboxChange(index)}
                   name={`option${index + 1}`}
+                  color="success"
                   sx={{ width: "auto", mt: 2 }}
                 />
               </Box>
@@ -154,17 +155,17 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
             </Box>
           ))}
           <Button onClick={handleAddNewOption} sx={{ mt: 3 }}>
-            <Typography sx={{ fontWeight: "bold" }}>
+            <Typography sx={{ fontWeight: "bold", mb: 2 }}>
               + Add new answer option
             </Typography>
           </Button>
 
           <CardActionArea>
             <CardActions>
-              <Button size="large" onClick={handleSaveQuestion}>
+              <Button size="large" variant="contained" onClick={handleSaveQuestion}>
                 Save question
               </Button>
-              <Button size="large">Cancel</Button>
+              <Button size="large" variant="outlined" color="secondary" >Cancel (Needed?)</Button>
             </CardActions>
           </CardActionArea>
         </CardContent>

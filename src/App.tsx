@@ -58,11 +58,9 @@ const App = () => {
           path: "/questionnaire",
           element: <QuestionnaireScreen />
         },
-        {
-          path: "/newQuestionnaire",
-          element: <NewQuizScreen />
-        }
-      ]
+        {path: "/newQuestionnaire",
+        element: <NewQuizScreen />
+        }]
     },
     {
       path: "/admin",

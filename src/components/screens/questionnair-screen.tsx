@@ -1,6 +1,8 @@
-import { Card, Grid, Box } from "@mui/material";
+import { Card, Grid, Box, CardContent, CardActions } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -124,16 +126,28 @@ const QuestionnaireScreen = () => {
           {mockQuestionnaires.map((questionnaire) => (
             <Grid item xs={12} key={questionnaire.id} sx={{ mt: 2 }}>
               <Card sx={{ p: 2 }}>
-                <Typography variant="h6">{questionnaire.title}</Typography>
-                <Typography variant="body2">
-                  {questionnaire.description}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <Typography variant="body2" sx={{ mr: 1 }}>
-                    Status:
+                <CardContent>
+                  <Typography variant="h6">{questionnaire.title}</Typography>
+
+                  <Typography variant="body2">
+                    {questionnaire.description}
                   </Typography>
-                  {questionnaire.status}
-                </Box>
+
+                  <Box display="flex" alignItems="center">
+                    <Typography variant="body2" sx={{ mr: 1 }}>
+                      Status:
+                    </Typography>
+                    {questionnaire.status}
+                  </Box>
+                </CardContent>
+                <CardActions>
+                  <Button size="large" variant="outlined" color="primary">
+                    <EditIcon sx={{ color: "green", mr: 2}}/>Edit
+                  </Button>
+                  <Button size="large" variant="contained" color="secondary">
+                    <DeleteForeverIcon sx={{ color: "red", mr: 2}}/>Delete
+                  </Button>
+                </CardActions>
               </Card>
             </Grid>
           ))}

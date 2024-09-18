@@ -87,9 +87,10 @@ const NewQuizCard = () => {
             onChange={handleQuestionTitleChange}
             variant="outlined"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, mb: 4 }}
           />
-          <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
+          {/* Card element (questin-form.tsx) to make new question */}
+          <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit}  />
 
           <CardActions
             sx={{
@@ -117,7 +118,7 @@ const NewQuizCard = () => {
               color="primary"
               onClick={handleClickGoBack}
             >
-              Cancel
+              Cancel & go back
             </Button>
           </CardActions>
         </CardContent>
@@ -152,7 +153,7 @@ const NewQuizCard = () => {
                   <ol>
                     {q.options.map((option, idx) => (
                       <li key={idx}>
-                        {option.label} ({option.value.toString()})
+                        {option.label} is ({option.value.toString()})
                       </li>
                     ))}
                   </ol>
@@ -162,7 +163,6 @@ const NewQuizCard = () => {
           </Grid>
         </CardContent>
       </Card>
-      {/* Card (questin-form.tsx) to make new question */}
     </>
   );
 };

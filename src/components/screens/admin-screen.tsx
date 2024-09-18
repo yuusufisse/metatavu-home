@@ -3,6 +3,7 @@ import BalanceCard from "../home/balance-card";
 import VacationsCard from "../home/vacations-card";
 import SprintViewCard from "../home/sprint-view-card";
 import UserRoleUtils from "src/utils/user-role-utils";
+import QuestionCard from "../home/questionnair-card";
 
 /**
  * Admin screen component
@@ -11,6 +12,7 @@ const AdminScreen = () => {
   const developerMode = UserRoleUtils.developerMode();
   const sprintViewCard = developerMode ? <SprintViewCard /> : null;
   const vacationsCard = developerMode ? <VacationsCard /> : null;
+  const questionairesCard = developerMode ? <QuestionCard /> : null;
   return (
     <Grid container spacing={2}>
     <Grid item xs={12} sm={6}>
@@ -21,6 +23,9 @@ const AdminScreen = () => {
     </Grid>
     <Grid item xs={12} sm={6}>
       {vacationsCard}
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      {questionairesCard}
     </Grid>
   </Grid>
   )
