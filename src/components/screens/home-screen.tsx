@@ -10,14 +10,15 @@ import UserRoleUtils from "src/utils/user-role-utils";
  */
 const HomeScreen = () => {
   const developerMode = UserRoleUtils.developerMode();
-  const sprintViewCard = developerMode ? <SprintViewCard />: null;
+  const balanceCard = developerMode ? <BalanceCard /> : null;
+  const sprintViewCard = developerMode ? <SprintViewCard /> : null;
   const vacationsCard = developerMode ? <VacationsCard /> : null;
   const questionairesCard = developerMode ? <QuestionCard /> : null;
   
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
-        <BalanceCard />
+        {balanceCard}
         <Grid item xs={12} style={{ marginTop: "16px" }}>
           {sprintViewCard}
         </Grid>
