@@ -95,7 +95,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
         }}
       >
         <CardContent sx={{ width: "100%" }}>
-          <Typography variant="body1" sx={{mb: 2}}>
+          <Typography variant="body1" sx={{ mb: 2 }}>
             Want to add a new question? Fill in the details below.
           </Typography>
 
@@ -109,7 +109,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
             fullWidth
           />
 
-          <Typography variant="body1" sx={{mt: 2}}>
+          <Typography variant="body1" sx={{ mt: 2 }}>
             Check the correct answer(s) below.
           </Typography>
 
@@ -162,10 +162,13 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
 
           <CardActionArea>
             <CardActions>
-              <Button size="large" variant="contained" onClick={handleSaveQuestion}>
+              <Button
+                size="large"
+                variant="contained"
+                onClick={handleSaveQuestion}
+              >
                 Save question
               </Button>
-              <Button size="large" variant="outlined" color="secondary" >Cancel (Needed?)</Button>
             </CardActions>
           </CardActionArea>
         </CardContent>

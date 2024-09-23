@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -95,13 +94,13 @@ const NewQuizCard = () => {
           <CardActions
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "right",
               padding: 2,
               mt: 3,
             }}
           >
             <Button
-              sx={{ display: "flex" }}
+              sx={{ display: "flex", mr: 3 }}
               id="save-submit"
               size="large"
               variant="contained"
