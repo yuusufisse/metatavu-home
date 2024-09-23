@@ -5,6 +5,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * Some mock Data.
@@ -56,8 +57,9 @@ const QuestionnaireScreen = () => {
     navigate("/");
   };
 
+  const adminMode = UserRoleUtils.adminMode();
+
   return (
-    <div>
       <Card
         sx={{
           p: 3,
@@ -94,14 +96,14 @@ const QuestionnaireScreen = () => {
                 justifyContent: { xs: "center", sm: "flex-start" },
               }}
             >
-              <Button
+              {adminMode ? (<Button
                 variant="contained"
                 color="primary"
                 onClick={handleClickOpen}
                 size="large"
               >
                 Build New Questionnaire
-              </Button>
+              </Button>) : null}
             </Grid>
 
             <Grid
@@ -140,7 +142,9 @@ const QuestionnaireScreen = () => {
                     {questionnaire.status}
                   </Box>
                 </CardContent>
-                <CardActions>
+                
+                {adminMode ? (
+                  <CardActions>
                   <Button size="large" variant="outlined" color="primary">
                     <EditIcon sx={{ color: "green", mr: 2}}/>Edit
                   </Button>
@@ -148,12 +152,14 @@ const QuestionnaireScreen = () => {
                     <DeleteForeverIcon sx={{ color: "red", mr: 2}}/>Delete
                   </Button>
                 </CardActions>
+                ) : null }
+                
+
               </Card>
             </Grid>
           ))}
         </Grid>
       </Card>
-    </div>
   );
 };
 

@@ -13,6 +13,7 @@ const HomeScreen = () => {
   const sprintViewCard = developerMode ? <SprintViewCard />: null;
   const vacationsCard = developerMode ? <VacationsCard /> : null;
   const questionairesCard = developerMode ? <QuestionCard /> : null;
+  
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
