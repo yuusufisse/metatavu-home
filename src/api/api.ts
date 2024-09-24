@@ -5,7 +5,6 @@ import {
   DailyEntriesApi,
   PersonsApi,
   SynchronizeApi,
-  UsersApi,
   VacationRequestsApi,
   VacationRequestStatusApi
 } from "../generated/client";
@@ -15,7 +14,8 @@ import {
   ProjectsApi,
   SlackAvatarsApi,
   TasksApi,
-  TimeEntriesApi
+  TimeEntriesApi,
+  UsersApi,
 } from "../generated/homeLambdasClient";
 
 /**
@@ -52,7 +52,6 @@ export const getApiClient = (accessToken?: string) => {
   return {
     dailyEntriesApi: new DailyEntriesApi(getConfiguration()),
     personsApi: new PersonsApi(getConfiguration()),
-    usersApi: new UsersApi(getConfiguration()),
     synchronizeApi: new SynchronizeApi(getConfiguration()),
     vacationRequestsApi: new VacationRequestsApi(getConfiguration()),
     vacationRequestStatusApi: new VacationRequestStatusApi(getConfiguration())
@@ -77,6 +76,7 @@ export const getLambdasApiClient = (accessToken?: string) => {
     projectsApi: new ProjectsApi(getConfiguration()),
     tasksApi: new TasksApi(getConfiguration()),
     timeEntriesApi: new TimeEntriesApi(getConfiguration()),
-    slackAvatarsApi: new SlackAvatarsApi(getConfiguration())
+    slackAvatarsApi: new SlackAvatarsApi(getConfiguration()),
+    usersApi: new UsersApi(getConfiguration()),
   };
 };
