@@ -122,7 +122,7 @@ const NewQuizCard = () => {
           </CardActions>
         </CardContent>
       </Card>
-      {/* Render all questins in list THIS TODO*/}
+      {/* Card containing all the build questions */}
       <Card
         sx={{
           p: 3,
@@ -134,7 +134,6 @@ const NewQuizCard = () => {
         }}
       >
         <CardContent>
-          {/* Testing if form will render something */}
           <Grid container sx={{ flexGrow: 1 }}>
             <Grid item xs={12}>
               <Typography variant="h4" gutterBottom>
