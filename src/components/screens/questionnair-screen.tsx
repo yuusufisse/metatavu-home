@@ -4,8 +4,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserRoleUtils from "src/utils/user-role-utils";
+import { KeyboardReturn } from "@mui/icons-material";
 
 /**
  * Some mock Data.
@@ -15,8 +16,8 @@ import UserRoleUtils from "src/utils/user-role-utils";
 const mockQuestionnaires = [
   {
     id: 1,
-    title: "Questionnaire 1",
-    description: "Description for Questionnaire 1",
+    title: "This is listing of Mock data for visual presentation",
+    description: "TODO: Build this with actual data, maybe table ?",
     status: <CheckCircleIcon sx={{ color: "green" }} />,
   },
   {
@@ -50,11 +51,7 @@ const QuestionnaireScreen = () => {
   const navigate = useNavigate();
 
   const handleClickOpen = () => {
-    navigate("/newQuestionnaire");
-  };
-
-  const handleGoHome = () => {
-    navigate("/");
+    navigate("/admin/newQuestionnaire");
   };
 
   const adminMode = UserRoleUtils.adminMode();
@@ -89,11 +86,11 @@ const QuestionnaireScreen = () => {
 
           <Grid
             item
-            xs={6}
-            sm={3}
+            xs={12}
+            sm={6}
             sx={{
               display: "flex",
-              justifyContent: { xs: "center", sm: "flex-start" },
+              justifyContent: { xs: "center", sm: "flex-end" },
             }}
           >
             {adminMode ? (
@@ -106,25 +103,6 @@ const QuestionnaireScreen = () => {
                 Build New Questionnaire
               </Button>
             ) : null}
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            sm={3}
-            sx={{
-              display: "flex",
-              justifyContent: { xs: "center", sm: "flex-end" },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleGoHome}
-              size="large"
-            >
-              Go back to Homepage
-            </Button>
           </Grid>
         </Grid>
         {mockQuestionnaires.map((questionnaire) => (
@@ -147,11 +125,11 @@ const QuestionnaireScreen = () => {
 
               {adminMode ? (
                 <CardActions>
-                  <Button size="large" variant="outlined" color="primary">
+                  <Button variant="outlined" color="primary">
                     <EditIcon sx={{ color: "green", mr: 2 }} />
                     Edit
                   </Button>
-                  <Button size="large" variant="contained" color="secondary">
+                  <Button variant="contained" color="secondary">
                     <DeleteForeverIcon sx={{ color: "red", mr: 2 }} />
                     Delete
                   </Button>
@@ -161,6 +139,14 @@ const QuestionnaireScreen = () => {
           </Grid>
         ))}
       </Grid>
+      <Card sx={{ mt: 2, padding: "10px", width: "100%" }}>
+        <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
+          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+            <KeyboardReturn sx={{ marginRight: "10px" }} />
+            <Typography>Back</Typography>
+          </Button>
+        </Link>
+      </Card>
     </Card>
   );
 };

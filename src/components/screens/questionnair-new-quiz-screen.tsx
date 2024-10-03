@@ -8,14 +8,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NewQuestionCard from "./question-form";
+import { KeyboardReturn } from "@mui/icons-material";
+import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * New Questionnaire Card component
  * Includes a dialog window (question-form.tsx) to create a new question
  */
 const NewQuizCard = () => {
+  const adminMode = UserRoleUtils.adminMode();
   /**
    * State and function for the questionnaire title change
    */
@@ -52,15 +55,7 @@ const NewQuizCard = () => {
    * TODO
    */
   const handleSaveSubmit = () => {
-    console.log("Information above should be saved to DB: ");
-  };
-
-  /**
-   * Function to navigate back to the questionnaire screen
-   */
-  const navigate = useNavigate();
-  const handleClickGoBack = () => {
-    navigate("/questionnaire");
+    
   };
 
   return (
@@ -94,33 +89,29 @@ const NewQuizCard = () => {
           <CardActions
             sx={{
               display: "flex",
-              justifyContent: "right",
-              padding: 2,
-              mt: 3,
-            }}
+              justifyContent: "flex-end",
+              }}
           >
             <Button
-              sx={{ display: "flex", mr: 3 }}
+              sx={{ display: "flex", alignItems: "center", mt: 4 }}
               id="save-submit"
               size="large"
               variant="contained"
-              color="secondary"
+              color= "success"
               onClick={handleSaveSubmit}
             >
               Save & Submit questionnaire
             </Button>
-            <Button
-              sx={{ display: "flex" }}
-              id="cancel"
-              size="large"
-              variant="outlined"
-              color="primary"
-              onClick={handleClickGoBack}
-            >
-              Cancel & go back
-            </Button>
           </CardActions>
         </CardContent>
+      </Card>
+      <Card sx={{ mt: 2, padding: "10px", width: "100%" }}>
+        <Link to={adminMode ? "/admin/questionnaire" : "/questionnaire"} style={{ textDecoration: "none" }}>
+          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+            <KeyboardReturn sx={{ marginRight: "10px" }} />
+            <Typography>Back</Typography>
+          </Button>
+        </Link>
       </Card>
       {/* Card containing all the build questions */}
       <Card
