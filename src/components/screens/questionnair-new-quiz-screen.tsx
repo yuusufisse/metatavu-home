@@ -1,12 +1,5 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardActions, CardContent, Grid, TextField, Typography } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import NewQuestionCard from "./question-form";
@@ -15,7 +8,7 @@ import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
  * New Questionnaire Card component
- * Includes a dialog window (question-form.tsx) to create a new question
+ * Includes a card (question-form.tsx) to create a new question
  */
 const NewQuizCard = () => {
   const adminMode = UserRoleUtils.adminMode();
@@ -24,13 +17,11 @@ const NewQuizCard = () => {
    */
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
 
-  const handleQuestionTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleQuestionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuestionnaireTitle(event.target.value);
   };
   /**
-   * State and function to handle the questions and options
+   * State and functions to handle the questions and options
    * @returns {object}
    */
   const [questions, setQuestions] = useState<
@@ -39,38 +30,35 @@ const NewQuizCard = () => {
 
   const handleAddQuestionSubmit = (
     questionText: string,
-    options: { label: string; value: boolean }[],
+    options: { label: string; value: boolean }[]
   ) => {
-    console.log("Question Submitted:", questionText);
-    console.log("Options:", options);
-
-    setQuestions((prevQuestions) => [
-      ...prevQuestions,
-      { questionText, options },
-    ]);
+    setQuestions((prevQuestions) => [...prevQuestions, { questionText, options }]);
   };
 
+  const handleDeleteQuestion = (index: number) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions.splice(index, 1);
+    setQuestions(updatedQuestions);
+  };
   /**
    * This should save the question title and questions to DB.
    * TODO
    */
-  const handleSaveSubmit = () => {
-    
-  };
+  const handleSaveSubmit = () => {};
 
   return (
     <>
       {/* Card containing functions to insert new Quiz */}
       <Card
         sx={{
-          p: 3,
+          p: 2,
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          height: "100",
+          height: "100"
         }}
       >
-        <CardContent>
+        <CardContent sx={{ p: 2 }}>
           <Typography variant="h4" gutterBottom>
             Make a new questionnairy
           </Typography>
@@ -84,20 +72,21 @@ const NewQuizCard = () => {
             sx={{ mt: 2, mb: 4 }}
           />
           {/* Card element (questin-form.tsx) to make new question */}
-          <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit}  />
+          <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
 
           <CardActions
             sx={{
               display: "flex",
               justifyContent: "flex-end",
-              }}
+              padding: 0
+            }}
           >
             <Button
               sx={{ display: "flex", alignItems: "center", mt: 4 }}
               id="save-submit"
               size="large"
               variant="contained"
-              color= "success"
+              color="success"
               onClick={handleSaveSubmit}
             >
               Save & Submit questionnaire
@@ -105,9 +94,12 @@ const NewQuizCard = () => {
           </CardActions>
         </CardContent>
       </Card>
-      <Card sx={{ mt: 2, padding: "10px", width: "100%" }}>
-        <Link to={adminMode ? "/admin/questionnaire" : "/questionnaire"} style={{ textDecoration: "none" }}>
-          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+      <Card sx={{ mt: 2, width: "100%" }}>
+        <Link
+          to={adminMode ? "/admin/questionnaire" : "/questionnaire"}
+          style={{ textDecoration: "none" }}
+        >
+          <Button variant="contained" sx={{ p: 2, width: "100%" }}>
             <KeyboardReturn sx={{ marginRight: "10px" }} />
             <Typography>Back</Typography>
           </Button>
@@ -116,22 +108,22 @@ const NewQuizCard = () => {
       {/* Card containing all the build questions */}
       <Card
         sx={{
-          p: 3,
+          p: 2,
           mt: 2,
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          height: "100",
+          height: "100"
         }}
       >
         <CardContent>
           <Grid container sx={{ flexGrow: 1 }}>
             <Grid item xs={12}>
               <Typography variant="h4" gutterBottom>
-                All questions will be rendered here as list
+                Questionnaire preview
               </Typography>
             </Grid>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               {questionnaireTitle}
             </Typography>
             {questions.map((q, index) => (
@@ -146,6 +138,15 @@ const NewQuizCard = () => {
                       </li>
                     ))}
                   </ol>
+
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleDeleteQuestion(index)}
+                  >
+                    <DeleteForeverIcon sx={{ color: "red", mr: 2 }} />
+                    Delete Question
+                  </Button>
                 </Card>
               </Grid>
             ))}

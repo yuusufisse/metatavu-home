@@ -1,16 +1,16 @@
-import type React from "react";
-import { useState } from "react";
 import {
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Checkbox,
-  Button,
   Box,
+  Button,
+  Card,
   CardActionArea,
   CardActions,
+  CardContent,
+  Checkbox,
+  TextField,
+  Typography
 } from "@mui/material";
+import type React from "react";
+import { useState } from "react";
 
 /**
  * NewQuestionCard component
@@ -20,13 +20,11 @@ import {
 interface NewQuestionProps {
   handleAddQuestionSubmit: (
     questionText: string,
-    options: { label: string; value: boolean }[],
+    options: { label: string; value: boolean }[]
   ) => void;
 }
 
-const NewQuestionCard: React.FC<NewQuestionProps> = ({
-  handleAddQuestionSubmit,
-}) => {
+const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }) => {
   /**
    * State for the question text and options
    */
@@ -35,7 +33,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
     { label: "", value: false },
     { label: "", value: false },
     { label: "", value: false },
-    { label: "", value: false },
+    { label: "", value: false }
   ]);
 
   /**
@@ -43,7 +41,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
    */
   const handleAnswerLabelChange = (
     index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const updatedOptions = [...options];
     updatedOptions[index].label = event.target.value;
@@ -78,7 +76,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
       { label: "", value: false },
       { label: "", value: false },
       { label: "", value: false },
-      { label: "", value: false },
+      { label: "", value: false }
     ]);
   };
 
@@ -87,14 +85,14 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
       <Card
         className="new-question"
         sx={{
-          p: 3,
+          p: 2,
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          height: "100%",
+          height: "100%"
         }}
       >
-        <CardContent sx={{ width: "100%" }}>
+        <CardContent sx={{ width: "100%", p: 2 }}>
           <Typography variant="body1" sx={{ mb: 2 }}>
             Want to add a new question? Fill in the details below.
           </Typography>
@@ -120,12 +118,10 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
                 width: "100%",
                 display: "flex",
                 flexDirection: { xs: "column", sm: "row" },
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
-              <Box
-                sx={{ flexShrink: 0, display: "flex", alignItems: "center" }}
-              >
+              <Box sx={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
                 <Checkbox
                   checked={option.value}
                   onChange={() => handleCheckboxChange(index)}
@@ -139,7 +135,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
                   width: "100%",
                   ml: 2,
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "center"
                 }}
               >
                 <TextField
@@ -155,18 +151,12 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({
             </Box>
           ))}
           <Button onClick={handleAddNewOption} sx={{ mt: 3 }}>
-            <Typography sx={{ fontWeight: "bold", mb: 2 }}>
-              + Add new answer option
-            </Typography>
+            <Typography sx={{ fontWeight: "bold", mb: 2 }}>+ Add new answer option</Typography>
           </Button>
 
           <CardActionArea>
             <CardActions>
-              <Button
-                size="large"
-                variant="contained"
-                onClick={handleSaveQuestion}
-              >
+              <Button size="large" variant="contained" onClick={handleSaveQuestion}>
                 Save question
               </Button>
             </CardActions>

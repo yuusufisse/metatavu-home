@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { Typography, Button } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { KeyboardReturn } from "@mui/icons-material";
 
@@ -18,26 +18,20 @@ const mockQuestionnaires = [
     id: 1,
     title: "This is listing of Mock data for visual presentation",
     description: "TODO: Build this with actual data, maybe table ?",
-    status: <CheckCircleIcon sx={{ color: "green" }} />,
+    status: <CheckCircleIcon sx={{ color: "green" }} />
   },
   {
     id: 2,
     title: "Questionnaire 2",
     description: "Description for Questionnaire 2",
-    status: <CloseIcon sx={{ color: "red" }} />,
+    status: <CloseIcon sx={{ color: "red" }} />
   },
   {
     id: 3,
     title: "Questionnaire 3",
     description: "Description for Questionnaire 3",
-    status: <CloseIcon sx={{ color: "red" }} />,
-  },
-  {
-    id: 4,
-    title: "Questionnaire 4",
-    description: "Description for Questionnaire 4",
-    status: <CloseIcon sx={{ color: "red" }} />,
-  },
+    status: <CloseIcon sx={{ color: "red" }} />
+  }
 ];
 
 /**
@@ -45,25 +39,16 @@ const mockQuestionnaires = [
  */
 
 const QuestionnaireScreen = () => {
-  /**
-   * Navigations for buttons for new questionnaire window.
-   */
-  const navigate = useNavigate();
-
-  const handleClickOpen = () => {
-    navigate("/admin/newQuestionnaire");
-  };
-
   const adminMode = UserRoleUtils.adminMode();
 
   return (
     <Card
       sx={{
-        p: 3,
+        p: 2,
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        height: "100",
+        height: "100"
       }}
     >
       <Grid container sx={{ flexGrow: 1 }}>
@@ -76,6 +61,7 @@ const QuestionnaireScreen = () => {
             justifyContent: { xs: "center", sm: "space-between" },
             alignItems: "center",
             mb: 2,
+            mt: 2
           }}
         >
           <Grid item xs={12} sm={6} sx={{ alignItems: "center" }}>
@@ -90,18 +76,15 @@ const QuestionnaireScreen = () => {
             sm={6}
             sx={{
               display: "flex",
-              justifyContent: { xs: "center", sm: "flex-end" },
+              justifyContent: { xs: "center", sm: "flex-end" }
             }}
           >
             {adminMode ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleClickOpen}
-                size="large"
-              >
-                Build New Questionnaire
-              </Button>
+              <Link to="/admin/newQuestionnaire" style={{ textDecoration: "none" }}>
+                <Button variant="contained" color="primary" size="large">
+                  Build New Questionnaire
+                </Button>
+              </Link>
             ) : null}
           </Grid>
         </Grid>
@@ -111,9 +94,7 @@ const QuestionnaireScreen = () => {
               <CardContent>
                 <Typography variant="h6">{questionnaire.title}</Typography>
 
-                <Typography variant="body2">
-                  {questionnaire.description}
-                </Typography>
+                <Typography variant="body2">{questionnaire.description}</Typography>
 
                 <Box display="flex" alignItems="center">
                   <Typography variant="body2" sx={{ mr: 1 }}>
@@ -125,8 +106,8 @@ const QuestionnaireScreen = () => {
 
               {adminMode ? (
                 <CardActions>
-                  <Button variant="outlined" color="primary">
-                    <EditIcon sx={{ color: "green", mr: 2 }} />
+                  <Button variant="outlined" color="success">
+                    <EditIcon sx={{ color: "success", mr: 2 }} />
                     Edit
                   </Button>
                   <Button variant="contained" color="secondary">
@@ -139,9 +120,9 @@ const QuestionnaireScreen = () => {
           </Grid>
         ))}
       </Grid>
-      <Card sx={{ mt: 2, padding: "10px", width: "100%" }}>
+      <Card sx={{ mt: 2, width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
-          <Button variant="contained" sx={{ padding: "10px", width: "100%" }}>
+          <Button variant="contained" sx={{ p: 2, width: "100%" }}>
             <KeyboardReturn sx={{ marginRight: "10px" }} />
             <Typography>Back</Typography>
           </Button>
