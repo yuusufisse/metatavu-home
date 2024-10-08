@@ -1,4 +1,4 @@
 import { atom } from "jotai"
-import type { UsersApi } from "src/generated/homeLambdasClient/apis"
+import type { User } from "src/generated/homeLambdasClient"
 
-export const usersAtom = atom<UsersApi[]>([]);
+export const usersAtom = atom<User[]>([]);
