@@ -16,7 +16,7 @@ import {
   TasksApi,
   TimeEntriesApi,
   UsersApi,
-} from "src/generated/homeLambdasClient";
+} from "../generated/homeLambdasClient";
 
 
 /**
