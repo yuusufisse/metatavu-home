@@ -85,7 +85,6 @@ const AuthenticationProvider = ({ children }: Props) => {
       return;
     }
     const fetchedUsers = await usersApi.listUsers();
-    console.log("fetched users: ", fetchedUsers);  
     setUsers(fetchedUsers);
   };
 
