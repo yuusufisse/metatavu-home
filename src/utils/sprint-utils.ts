@@ -130,9 +130,9 @@ export const filterAllocationsAndProjects = (allocations: Allocations[], project
   const filteredAllocations = allocations.filter((allocation) =>
     projects.find((project) => allocation.project === project.id)
   );
-  filteredAllocations.map((allocation) => {
+  for (const allocation of filteredAllocations) {
     const allocationProject = projects.find((project) => allocation.project === project.id);
     if (allocationProject) filteredProjects.push(allocationProject);
-  });
+  }
   return { filteredAllocations, filteredProjects };
 };
