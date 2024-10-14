@@ -1,11 +1,12 @@
 import { Typography, Card, CardContent, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
+import strings from "src/localization/strings";
 import UserRoleUtils from "src/utils/user-role-utils";
 
 /**
- * Component for displaying question card
+ * Component for displaying questionnaire card
  */
-const QuestionCard = () => {
+const QuestionnaireCard = () => {
 	const adminMode = UserRoleUtils.adminMode();
 
   return (
@@ -27,7 +28,7 @@ const QuestionCard = () => {
               fontWeight={"bold"}
               style={{ marginTop: 6, marginBottom: 3 }}
             >
-              Questionnaires Builder
+              {strings.questionnaireCard.questionnairesBuilder}
             </Typography>
           </CardContent>
         ) : (
@@ -37,11 +38,11 @@ const QuestionCard = () => {
               fontWeight={"bold"}
               style={{ marginTop: 6, marginBottom: 3 }}
             >
-              Questionnaires
+              {strings.questionnaireCard.questionnaires}
             </Typography>
             <Grid container>
               <Grid item xs={12}>
-                Progress bar
+                {strings.questionnaireCard.progressBar}
               </Grid>
             </Grid>
           </CardContent>
@@ -51,4 +52,4 @@ const QuestionCard = () => {
   );
 };
 
-export default QuestionCard;
+export default QuestionnaireCard;

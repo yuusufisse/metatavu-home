@@ -7,11 +7,7 @@ import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { KeyboardReturn } from "@mui/icons-material";
-
-/**
- * Some mock Data.
- * TODO: This will be replaced with the actual data from the backend.
- */
+import strings from "src/localization/strings";
 
 const mockQuestionnaires = [
   {
@@ -33,10 +29,6 @@ const mockQuestionnaires = [
     status: <CloseIcon sx={{ color: "red" }} />
   }
 ];
-
-/**
- * Questionnaire screen component.
- */
 
 const QuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
@@ -66,10 +58,9 @@ const QuestionnaireScreen = () => {
         >
           <Grid item xs={12} sm={6} sx={{ alignItems: "center" }}>
             <Typography variant="h4" justifyContent={"center"}>
-              Current Questionnaires
+              {strings.questionnaireScreen.currentQuestionnaires}
             </Typography>
           </Grid>
-
           <Grid
             item
             xs={12}
@@ -79,13 +70,13 @@ const QuestionnaireScreen = () => {
               justifyContent: { xs: "center", sm: "flex-end" }
             }}
           >
-            {adminMode ? (
+            {adminMode && 
               <Link to="/admin/newQuestionnaire" style={{ textDecoration: "none" }}>
                 <Button variant="contained" color="primary" size="large">
-                  Build New Questionnaire
+                  {strings.questionnaireScreen.buildNewQuestionnaire}
                 </Button>
               </Link>
-            ) : null}
+            }
           </Grid>
         </Grid>
         {mockQuestionnaires.map((questionnaire) => (
@@ -93,29 +84,26 @@ const QuestionnaireScreen = () => {
             <Card sx={{ p: 2 }}>
               <CardContent>
                 <Typography variant="h6">{questionnaire.title}</Typography>
-
                 <Typography variant="body2">{questionnaire.description}</Typography>
-
                 <Box display="flex" alignItems="center">
                   <Typography variant="body2" sx={{ mr: 1 }}>
-                    Status:
+                    {strings.questionnaireScreen.status}
                   </Typography>
                   {questionnaire.status}
                 </Box>
               </CardContent>
-
-              {adminMode ? (
+              {adminMode && 
                 <CardActions>
                   <Button variant="outlined" color="success">
                     <EditIcon sx={{ color: "success", mr: 2 }} />
-                    Edit
+                    {strings.questionnaireScreen.edit}
                   </Button>
                   <Button variant="contained" color="secondary">
                     <DeleteForeverIcon sx={{ color: "red", mr: 2 }} />
-                    Delete
+                    {strings.questionnaireScreen.delete}
                   </Button>
                 </CardActions>
-              ) : null}
+              }
             </Card>
           </Grid>
         ))}
@@ -124,7 +112,7 @@ const QuestionnaireScreen = () => {
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
           <Button variant="contained" sx={{ p: 2, width: "100%" }}>
             <KeyboardReturn sx={{ marginRight: "10px" }} />
-            <Typography>Back</Typography>
+            <Typography>{strings.questionnaireScreen.back}</Typography>
           </Button>
         </Link>
       </Card>

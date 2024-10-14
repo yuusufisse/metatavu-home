@@ -1,38 +1,41 @@
-import { Button, Card, CardActions, CardContent, Grid, TextField, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Grid, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import NewQuestionCard from "./question-form";
 import { KeyboardReturn } from "@mui/icons-material";
 import UserRoleUtils from "src/utils/user-role-utils";
+import type { Question, QuestionOption } from "src/types/index";
+import strings from "src/localization/strings";
 
 /**
  * New Questionnaire Card component
  * Includes a card (question-form.tsx) to create a new question
  */
-const NewQuizCard = () => {
+const NewQuestionnaireCard = () => {
   const adminMode = UserRoleUtils.adminMode();
-  /**
-   * State and function for the questionnaire title change
-   */
+  
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
 
-  const handleQuestionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuestionTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuestionnaireTitle(event.target.value);
   };
+
   /**
    * State and functions to handle the questions and options
-   * @returns {object}
    */
-  const [questions, setQuestions] = useState<
-    { questionText: string; options: { label: string; value: boolean }[] }[]
-  >([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
+  /**
+   * Functions to add new question to Questionnaire
+   * @param questionText 
+   * @param options 
+   */
   const handleAddQuestionSubmit = (
     questionText: string,
-    options: { label: string; value: boolean }[]
+    options: QuestionOption[]
   ) => {
-    setQuestions((prevQuestions) => [...prevQuestions, { questionText, options }]);
+    setQuestions((prevQuestions: Question[]) => [...prevQuestions, { questionText, options }]);
   };
 
   const handleDeleteQuestion = (index: number) => {
@@ -40,9 +43,10 @@ const NewQuizCard = () => {
     updatedQuestions.splice(index, 1);
     setQuestions(updatedQuestions);
   };
+
   /**
    * This should save the question title and questions to DB.
-   * TODO
+   * TODO:
    */
   const handleSaveSubmit = () => {};
 
@@ -60,11 +64,11 @@ const NewQuizCard = () => {
       >
         <CardContent sx={{ p: 2 }}>
           <Typography variant="h4" gutterBottom>
-            Make a new questionnairy
+            {strings.newQuestionnaireScreen.makeNewQuestionnaire}
           </Typography>
           <TextField
-            label="Title"
-            placeholder="Insert title here"
+            label={strings.newQuestionnaireScreen.title}
+            placeholder={strings.newQuestionnaireScreen.insertTitle}
             value={questionnaireTitle}
             onChange={handleQuestionTitleChange}
             variant="outlined"
@@ -73,7 +77,6 @@ const NewQuizCard = () => {
           />
           {/* Card element (questin-form.tsx) to make new question */}
           <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
-
           <CardActions
             sx={{
               display: "flex",
@@ -89,7 +92,7 @@ const NewQuizCard = () => {
               color="success"
               onClick={handleSaveSubmit}
             >
-              Save & Submit questionnaire
+              {strings.newQuestionnaireScreen.saveButton}
             </Button>
           </CardActions>
         </CardContent>
@@ -120,7 +123,7 @@ const NewQuizCard = () => {
           <Grid container sx={{ flexGrow: 1 }}>
             <Grid item xs={12}>
               <Typography variant="h4" gutterBottom>
-                Questionnaire preview
+                {strings.newQuestionnaireScreen.preview}
               </Typography>
             </Grid>
             <Typography variant="h5" gutterBottom>
@@ -131,21 +134,20 @@ const NewQuizCard = () => {
                 <Card sx={{ p: 2 }}>
                   <Typography>{q.questionText}</Typography>
 
-                  <ol>
+                  <List component="ol">
                     {q.options.map((option, idx) => (
-                      <li key={idx}>
-                        {option.label} is ({option.value.toString()})
-                      </li>
+                      <ListItem component="li" key={idx}>
+                        <ListItemText primary={`${option.label} ${strings.newQuestionnaireScreen.is} ${option.value.toString()}`} />
+                      </ListItem>
                     ))}
-                  </ol>
-
+                  </List>
                   <Button
                     variant="contained"
                     color="secondary"
                     onClick={() => handleDeleteQuestion(index)}
                   >
                     <DeleteForeverIcon sx={{ color: "red", mr: 2 }} />
-                    Delete Question
+                    {strings.newQuestionnaireScreen.delete}
                   </Button>
                 </Card>
               </Grid>
@@ -157,4 +159,4 @@ const NewQuizCard = () => {
   );
 };
 
-export default NewQuizCard;
+export default NewQuestionnaireCard;

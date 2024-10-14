@@ -295,6 +295,37 @@ export interface Localized extends LocalizedStringsMethods {
   employeeSelect: {
     employeeSelectlabel: string;
   };
+  /**
+   * Translations related to Questinnaire card
+   */
+  questionnaireCard: {
+    questionnairesBuilder: string;
+    questionnaires: string;
+    progressBar: string;
+  };
+  /**
+   * Translations related to Questinnaire Screen
+   */
+  questionnaireScreen: {
+    currentQuestionnaires: string;
+    buildNewQuestionnaire: string;
+    status: string;
+    edit: string;
+    delete: string;
+    back: string;
+  };
+  /**
+   * Translations related to New Questionnaire Screen
+   */
+  newQuestionnaireScreen: {
+    makeNewQuestionnaire: string;
+    title: string;
+    insertTitle: string;
+    saveButton: string;
+    preview: string;
+    is: string;
+    delete: string;
+  };
 }
 
 /**
