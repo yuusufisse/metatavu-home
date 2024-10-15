@@ -11,33 +11,31 @@ import {
 } from "@mui/material";
 import type React from "react";
 import { useState } from "react";
+import strings from "src/localization/strings";
 
 /**
- * NewQuestionCard component
- * Interface for the NewQuestionCard component
+ * Interface for the NewQuestionnaireCard component
  */
-
-interface NewQuestionProps {
+interface Props {
   handleAddQuestionSubmit: (
     questionText: string,
     options: { label: string; value: boolean }[]
   ) => void;
 }
 
-const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }) => {
-  /**
-   * State for the question text and options
-   */
+/**
+ * New Questionnaire Card Component
+ */
+const NewQuestionnaireCard = ({handleAddQuestionSubmit}: Props) => {
+  
   const [questionText, setQuestionText] = useState("");
   const [options, setOptions] = useState([
-    { label: "", value: false },
-    { label: "", value: false },
-    { label: "", value: false },
     { label: "", value: false }
   ]);
 
   /**
-   * Handle options label change
+   * Handle options label (answer option) change
+   * @param index
    */
   const handleAnswerLabelChange = (
     index: number,
@@ -73,9 +71,6 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
 
     setQuestionText("");
     setOptions([
-      { label: "", value: false },
-      { label: "", value: false },
-      { label: "", value: false },
       { label: "", value: false }
     ]);
   };
@@ -94,9 +89,8 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
       >
         <CardContent sx={{ width: "100%", p: 2 }}>
           <Typography variant="body1" sx={{ mb: 2 }}>
-            Want to add a new question? Fill in the details below.
+            {strings.newQuestionnaireCard.newQuestion}
           </Typography>
-
           <TextField
             id="textfield-question-body"
             label="Question"
@@ -108,7 +102,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
           />
 
           <Typography variant="body1" sx={{ mt: 2 }}>
-            Check the correct answer(s) below.
+            {strings.newQuestionnaireCard.correctAnswer}
           </Typography>
 
           {options.map((option, index) => (
@@ -125,7 +119,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
                 <Checkbox
                   checked={option.value}
                   onChange={() => handleCheckboxChange(index)}
-                  name={`option${index + 1}`}
+                  name={`option-${index + 1}`}
                   color="success"
                   sx={{ width: "auto", mt: 2 }}
                 />
@@ -141,7 +135,7 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
                 <TextField
                   id="textfield-answer-option"
                   variant="outlined"
-                  label="Insert Answer"
+                  label={strings.newQuestionnaireCard.answerLabel}
                   value={option.label}
                   onChange={(e) => handleAnswerLabelChange(index, e)}
                   fullWidth
@@ -153,7 +147,6 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
           <Button onClick={handleAddNewOption} sx={{ mt: 3 }}>
             <Typography sx={{ fontWeight: "bold", mb: 2 }}>+ Add new answer option</Typography>
           </Button>
-
           <CardActionArea>
             <CardActions>
               <Button size="large" variant="contained" onClick={handleSaveQuestion}>
@@ -167,4 +160,4 @@ const NewQuestionCard: React.FC<NewQuestionProps> = ({ handleAddQuestionSubmit }
   );
 };
 
-export default NewQuestionCard;
+export default NewQuestionnaireCard;

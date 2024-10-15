@@ -2,17 +2,17 @@ import { Button, Card, CardActions, CardContent, Grid, List, ListItem, ListItemT
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useState, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import NewQuestionCard from "./question-form";
+import NewQuestionnaireCard from "../questionnaire/new-questionnaire-card";
 import { KeyboardReturn } from "@mui/icons-material";
 import UserRoleUtils from "src/utils/user-role-utils";
 import type { Question, QuestionOption } from "src/types/index";
 import strings from "src/localization/strings";
 
 /**
- * New Questionnaire Card component
- * Includes a card (question-form.tsx) to create a new question
+ * New Questionnaire Screen component
+ * Includes a card (new-questionnaire-card.tsx) to create questions for a new questionnaire
  */
-const NewQuestionnaireCard = () => {
+const NewQuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
   
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
@@ -76,7 +76,7 @@ const NewQuestionnaireCard = () => {
             sx={{ mt: 2, mb: 4 }}
           />
           {/* Card element (questin-form.tsx) to make new question */}
-          <NewQuestionCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
+          <NewQuestionnaireCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
           <CardActions
             sx={{
               display: "flex",
@@ -159,4 +159,4 @@ const NewQuestionnaireCard = () => {
   );
 };
 
-export default NewQuestionnaireCard;
+export default NewQuestionnaireScreen;

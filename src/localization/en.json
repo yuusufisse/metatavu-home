@@ -241,5 +241,12 @@
     "preview": "Questionnaire preview",
     "is": "is",
     "delete": "Delete Question"
+  },
+  "newQuestionnaireCard": {
+    "newQuestion": "Want to add a new question? Fill in the details below.",
+    "correctAnswer": "Check the correct answer(s) below.",
+    "answerLabel": "Insert Answer",
+    "addAnswer": "+ Add new answer option",
+    "saveAnswer": "Save question"
   }
 }

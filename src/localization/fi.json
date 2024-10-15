@@ -241,5 +241,12 @@
     "preview": "Kyselyiden esikatselu",
     "is": "on",
     "delete": "Poista kysymys"
+  },
+  "newQuestionnaireCard": {
+    "newQuestion": "Haluatko lisätä uuden kysymyksen, lisää tiedot alle.",
+    "correctAnswer": "Merkitse oikeat vastaukset alle",
+    "answerLabel": "Syötä vastaus",
+    "addAnswer": "+ Lisää uusi vastausvaihtoehto",
+    "saveAnswer": "Tallenna kysymys"
   }
 }

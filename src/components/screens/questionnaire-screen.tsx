@@ -29,7 +29,9 @@ const mockQuestionnaires = [
     status: <CloseIcon sx={{ color: "red" }} />
   }
 ];
-
+/**
+ * Questionnaire Screen Component
+ */
 const QuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
 
