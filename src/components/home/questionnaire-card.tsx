@@ -7,37 +7,44 @@ import UserRoleUtils from "src/utils/user-role-utils";
  * Component for displaying questionnaire card
  */
 const QuestionnaireCard = () => {
-	const adminMode = UserRoleUtils.adminMode();
+  const adminMode = UserRoleUtils.adminMode();
 
-  return (
-    <Link
-      to={adminMode ? "/admin/questionnaire" : "/questionnaire"}
-      style={{ textDecoration: "none" }}
-    >
-      <Card
-        sx={{
-          "&:hover": {
-            background: "#efefef",
-          },
-        }}
-      >
-        {adminMode ? (
+  const renderCardContent = () => {
+    if (adminMode) {
+      return (
+        <Link to={"/admin/questionnaire"} style={{ textDecoration: "none" }}>
+          <Card
+            sx={{
+              "&:hover": {
+                background: "#efefef"
+              }
+            }}
+          >
+            <CardContent>
+              <Typography
+                variant="h6"
+                fontWeight={"bold"}
+                style={{ marginTop: 6, marginBottom: 3 }}
+              >
+                {strings.questionnaireCard.questionnairesBuilder}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Link>
+      );
+    }
+
+    return (
+      <Link to={"/questionnaire"} style={{ textDecoration: "none" }}>
+        <Card
+          sx={{
+            "&:hover": {
+              background: "#efefef"
+            }
+          }}
+        >
           <CardContent>
-            <Typography
-              variant="h6"
-              fontWeight={"bold"}
-              style={{ marginTop: 6, marginBottom: 3 }}
-            >
-              {strings.questionnaireCard.questionnairesBuilder}
-            </Typography>
-          </CardContent>
-        ) : (
-          <CardContent>
-            <Typography
-              variant="h6"
-              fontWeight={"bold"}
-              style={{ marginTop: 6, marginBottom: 3 }}
-            >
+            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
               {strings.questionnaireCard.questionnaires}
             </Typography>
             <Grid container>
@@ -46,10 +53,12 @@ const QuestionnaireCard = () => {
               </Grid>
             </Grid>
           </CardContent>
-        )}
-      </Card>
-    </Link>
-  );
+        </Card>
+      </Link>
+    );
+  };
+
+  return renderCardContent();
 };
 
 export default QuestionnaireCard;
