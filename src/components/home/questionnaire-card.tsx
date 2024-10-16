@@ -8,57 +8,49 @@ import UserRoleUtils from "src/utils/user-role-utils";
  */
 const QuestionnaireCard = () => {
   const adminMode = UserRoleUtils.adminMode();
+  const linkTarget = adminMode ? "/admin/questionnaire" : "/questionnaire";
 
+  /**
+   * Render card content
+   */
   const renderCardContent = () => {
     if (adminMode) {
       return (
-        <Link to={"/admin/questionnaire"} style={{ textDecoration: "none" }}>
-          <Card
-            sx={{
-              "&:hover": {
-                background: "#efefef"
-              }
-            }}
-          >
-            <CardContent>
-              <Typography
-                variant="h6"
-                fontWeight={"bold"}
-                style={{ marginTop: 6, marginBottom: 3 }}
-              >
-                {strings.questionnaireCard.questionnairesBuilder}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Link>
+        <CardContent>
+          <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+            {strings.questionnaireCard.questionnairesBuilder}
+          </Typography>
+        </CardContent>
       );
     }
 
     return (
-      <Link to={"/questionnaire"} style={{ textDecoration: "none" }}>
-        <Card
-          sx={{
-            "&:hover": {
-              background: "#efefef"
-            }
-          }}
-        >
-          <CardContent>
-            <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
-              {strings.questionnaireCard.questionnaires}
-            </Typography>
-            <Grid container>
-              <Grid item xs={12}>
-                {strings.questionnaireCard.progressBar}
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Link>
+      <CardContent>
+        <Typography variant="h6" fontWeight={"bold"} style={{ marginTop: 6, marginBottom: 3 }}>
+          {strings.questionnaireCard.questionnaires}
+        </Typography>
+        <Grid container>
+          <Grid item xs={12}>
+            {strings.questionnaireCard.progressBar}
+          </Grid>
+        </Grid>
+      </CardContent>
     );
   };
 
-  return renderCardContent();
+  return (
+    <Link to={linkTarget} style={{ textDecoration: "none" }}>
+      <Card
+        sx={{
+          "&:hover": {
+            background: "#efefef"
+          }
+        }}
+      >
+        {renderCardContent()}
+      </Card>
+    </Link>
+  );
 };
 
 export default QuestionnaireCard;
