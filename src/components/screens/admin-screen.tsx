@@ -17,16 +17,16 @@ const AdminScreen = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         {balanceCard}
+        <Grid item xs={12} style={{ marginTop: "16px" }}>
+          {sprintViewCard}
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        {sprintViewCard}
-      </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         {vacationsCard}
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         {questionairesCard}
       </Grid>
     </Grid>
