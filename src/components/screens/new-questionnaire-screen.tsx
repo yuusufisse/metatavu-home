@@ -104,7 +104,7 @@ const NewQuestionnaireScreen = () => {
         >
           <Button variant="contained" sx={{ p: 2, width: "100%" }}>
             <KeyboardReturn sx={{ marginRight: "10px" }} />
-            <Typography>Back</Typography>
+            <Typography>{strings.newQuestionnaireScreen.back}</Typography>
           </Button>
         </Link>
       </Card>

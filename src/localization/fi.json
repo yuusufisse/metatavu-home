@@ -240,10 +240,12 @@
     "saveButton": "Tallenna uusi kysely",
     "preview": "Kyselyiden esikatselu",
     "is": "on",
-    "delete": "Poista kysymys"
+    "delete": "Poista kysymys",
+    "back": "Takaisin"
   },
   "newQuestionnaireCard": {
     "newQuestion": "Haluatko lisätä uuden kysymyksen, lisää tiedot alle.",
+    "questionLabel": "Kysymysteksti",
     "correctAnswer": "Merkitse oikeat vastaukset alle",
     "answerLabel": "Syötä vastaus",
     "addAnswer": "+ Lisää uusi vastausvaihtoehto",

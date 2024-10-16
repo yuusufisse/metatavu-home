@@ -325,12 +325,14 @@ export interface Localized extends LocalizedStringsMethods {
     preview: string;
     is: string;
     delete: string;
+    back: string;
   };
   /**
    * Translations related to New Questionnaire Card
     */
   newQuestionnaireCard: {
     newQuestion: string;
+    questionLabel: string;
     correctAnswer: string;
     answerLabel: string;
     addAnswer: string;

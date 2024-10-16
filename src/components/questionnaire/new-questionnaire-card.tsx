@@ -93,7 +93,7 @@ const NewQuestionnaireCard = ({handleAddQuestionSubmit}: Props) => {
           </Typography>
           <TextField
             id="textfield-question-body"
-            label="Question"
+            label={strings.newQuestionnaireCard.questionLabel}
             multiline
             rows={6}
             value={questionText}
@@ -145,12 +145,12 @@ const NewQuestionnaireCard = ({handleAddQuestionSubmit}: Props) => {
             </Box>
           ))}
           <Button onClick={handleAddNewOption} sx={{ mt: 3 }}>
-            <Typography sx={{ fontWeight: "bold", mb: 2 }}>+ Add new answer option</Typography>
+            <Typography sx={{ fontWeight: "bold", mb: 2 }}>{strings.newQuestionnaireCard.addAnswer}</Typography>
           </Button>
           <CardActionArea>
             <CardActions>
               <Button size="large" variant="contained" onClick={handleSaveQuestion}>
-                Save question
+                {strings.newQuestionnaireCard.saveAnswer}
               </Button>
             </CardActions>
           </CardActionArea>

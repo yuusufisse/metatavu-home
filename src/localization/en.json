@@ -240,10 +240,12 @@
     "saveButton": "Save & Submit Questionnaire",
     "preview": "Questionnaire preview",
     "is": "is",
-    "delete": "Delete Question"
+    "delete": "Delete Question",
+    "back": "Back"
   },
   "newQuestionnaireCard": {
     "newQuestion": "Want to add a new question? Fill in the details below.",
+    "questionLabel": "Question",
     "correctAnswer": "Check the correct answer(s) below.",
     "answerLabel": "Insert Answer",
     "addAnswer": "+ Add new answer option",
