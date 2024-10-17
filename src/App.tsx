@@ -18,6 +18,8 @@ import { Settings } from "luxon";
 import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 import SprintViewScreen from "./components/screens/sprint-view-screen";
+import QuestionnaireScreen from "./components/screens/questionnaire-screen";
+import NewQuizScreen from "./components/screens/new-questionnaire-screen";
 
 /**
  * Application component
@@ -50,7 +52,11 @@ const App = () => {
         {
           path: "/sprintview",
           element: <SprintViewScreen />
-        }
+        },
+        {
+          path: "/questionnaire",
+          element: <QuestionnaireScreen />
+        },
       ]
     },
     {
@@ -77,6 +83,14 @@ const App = () => {
         {
           path: "/admin/sprintview",
           element: <SprintViewScreen />
+        },
+        {
+          path: "/admin/questionnaire",
+          element: <QuestionnaireScreen />
+        },
+        {
+          path: "/admin/newQuestionnaire",
+          element: <NewQuizScreen />
         }
       ]
     }

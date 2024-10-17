@@ -219,5 +219,36 @@
   },
   "employeeSelect": {
     "employeeSelectlabel": "Valitse työntekijä"
+  },
+  "questionnaireCard": {
+    "questionnairesBuilder": "Rakenna uusi kysely",
+    "questionnaires": "Kyselylomake",
+    "progressBar": "Edistyminen"
+  },
+  "questionnaireScreen": {
+    "currentQuestionnaires": "Kyselyt",
+    "buildNewQuestionnaire": "Rakenna uusi kysely",
+    "status": "Tila:",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "back": "Takaisin"
+  },
+  "newQuestionnaireScreen": {
+    "makeNewQuestionnaire" : "Tee uusi kysely",
+    "title": "Otsikko",
+    "insertTitle": "Syötä otsikko tähän",
+    "saveButton": "Tallenna uusi kysely",
+    "preview": "Kyselyiden esikatselu",
+    "is": "on",
+    "delete": "Poista kysymys",
+    "back": "Takaisin"
+  },
+  "newQuestionnaireCard": {
+    "newQuestion": "Haluatko lisätä uuden kysymyksen, lisää tiedot alle.",
+    "questionLabel": "Kysymysteksti",
+    "correctAnswer": "Merkitse oikeat vastaukset alle",
+    "answerLabel": "Syötä vastaus",
+    "addAnswer": "+ Lisää uusi vastausvaihtoehto",
+    "saveAnswer": "Tallenna kysymys"
   }
 }
