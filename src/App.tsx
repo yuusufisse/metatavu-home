@@ -18,6 +18,9 @@ import { Settings } from "luxon";
 import { useMemo } from "react";
 import RestrictedContentProvider from "./components/providers/restricted-content-provider";
 import SprintViewScreen from "./components/screens/sprint-view-screen";
+import SoftwareRegistryScreen from "./components/screens/software-registry-screen";
+import AllSoftwareScreen from "./components/screens/all-software-screen";
+import SoftwareDetails from "./components/software-registry/SoftwareDetails";
 
 /**
  * Application component
@@ -50,6 +53,22 @@ const App = () => {
         {
           path: "/sprintview",
           element: <SprintViewScreen />
+        },
+        {
+          path: "/softwareregistry",
+          element: <SoftwareRegistryScreen />
+        },
+        {
+          path: "/softwareregistry/:id",
+          element: <SoftwareDetails />
+        },
+        {
+          path: "/softwareregistry/allsoftware",
+          element: <AllSoftwareScreen />
+        },
+        {
+          path: "/softwareregistry/allsoftware/:id",
+          element: <SoftwareDetails />
         }
       ]
     },
@@ -77,6 +96,14 @@ const App = () => {
         {
           path: "/admin/sprintview",
           element: <SprintViewScreen />
+        },
+        {
+          path: "/admin/allsoftware",
+          element: <AllSoftwareScreen />
+        },
+        {
+          path: "/admin/allsoftware/:id",
+          element: <SoftwareDetails />
         }
       ]
     }
