@@ -30,6 +30,8 @@ import { validateValueIsNotUndefinedNorNull } from "src/utils/check-utils";
 import type { VacationInfoListItem } from "src/types";
 import { formatDate } from "src/utils/time-utils";
 import config from "src/app/config";
+import {User} from "src/generated/homeLambdasClient";
+import {usersAtom} from "src/atoms/user.ts";
 // TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
 // import { renderVacationDaysTextForCard } from "../../utils/vacation-days-utils";
 
@@ -48,10 +50,10 @@ const VacationsCard = () => {
     adminMode ? allVacationRequestStatusesAtom : vacationRequestStatusesAtom
   );
   const [loading, setLoading] = useState(false);
-  const [persons] = useAtom(personsAtom);
-  const loggedInPerson = persons.find(
-    (person: Person) =>
-      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+  const [users] = useAtom(usersAtom);
+  const loggedInPerson = users.find(
+    (person: User) =>
+      person.forecastId === config.person.forecastUserIdOverride || person.id === userProfile?.id
   );
 
   /**
@@ -130,6 +132,8 @@ const VacationsCard = () => {
     setLoading(true);
     if (!loggedInPerson) return;
 
+    console.log("Hello", loggedInPerson);
+
     if (!vacationRequests.length) {
       try {
         let fetchedVacationRequests: VacationRequest[] = [];
@@ -137,9 +141,10 @@ const VacationsCard = () => {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: loggedInPerson.keycloakId
+            personId: loggedInPerson.id
           });
         }
+        console.log("Hello 2", fetchedVacationRequests);
         setVacationRequests(fetchedVacationRequests);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
@@ -245,7 +250,7 @@ const VacationsCard = () => {
           name: strings.vacationsCard.applicant,
           value: getVacationRequestPersonFullName(
             earliestUpcomingVacationRequest,
-            persons,
+            users,
             userProfile
           )
         },
