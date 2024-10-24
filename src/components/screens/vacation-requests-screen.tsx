@@ -28,6 +28,8 @@ import LocalizationUtils from "src/utils/localization-utils";
 import { personsAtom } from "src/atoms/person";
 import config from "src/app/config";
 import { renderVacationDaysTextForScreen } from "src/utils/vacation-days-utils";
+import { usersAtom } from "src/atoms/user";
+import type { User } from "src/generated/homeLambdasClient";
 
 /**
  * Vacation requests screen
@@ -56,10 +58,10 @@ const VacationRequestsScreen = () => {
   );
   const [loading, setLoading] = useState(false);
   const [isUpcoming, setIsUpcoming] = useState(true);
-  const [persons] = useAtom(personsAtom);
+  const [persons] = useAtom(usersAtom);
   const loggedInPerson = persons.find(
-    (person: Person) =>
-      person.id === config.person.forecastUserIdOverride || person.keycloakId === userProfile?.id
+    (person: User) =>
+      person.forecastId === config.person.forecastUserIdOverride || person.id === userProfile?.id
   );
 
   /**
@@ -161,7 +163,7 @@ const VacationRequestsScreen = () => {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: loggedInPerson?.keycloakId
+            personId: loggedInPerson?.id
           });
         }
         setVacationRequests(fetchedVacationRequests);
@@ -257,9 +259,9 @@ const VacationRequestsScreen = () => {
             status: newStatus,
             message: LocalizationUtils.getLocalizedVacationRequestStatus(newStatus),
             createdAt: new Date(),
-            createdBy: loggedInPerson.keycloakId,
+            createdBy: loggedInPerson.id,
             updatedAt: new Date(),
-            updatedBy: loggedInPerson.keycloakId
+            updatedBy: loggedInPerson.id
           }
         });
       return createdVacationRequestStatus;

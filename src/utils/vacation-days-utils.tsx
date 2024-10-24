@@ -2,6 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import { theme } from "../theme";
 import type { Person } from "../generated/client";
 import strings from "../localization/strings";
+import type { User } from "src/generated/homeLambdasClient";
 
 /**
  * Display persons vacation days
@@ -45,7 +46,7 @@ export const renderVacationDaysTextForCard = (person: Person) => {
  *
  * @param Person timebank person
  */
-export const renderVacationDaysTextForScreen = (person: Person) => {
+export const renderVacationDaysTextForScreen = (person: User) => {
   const spentVacationsColor =
     person && person.spentVacations > 0 ? theme.palette.success.main : theme.palette.error.main;
 
