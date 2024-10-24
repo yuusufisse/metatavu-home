@@ -1,6 +1,16 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Typography, Grid, Box, Link, IconButton, Button, Card, CircularProgress } from "@mui/material";
+import { 
+  Container, 
+  Typography, 
+  Grid, 
+  Box, 
+  Link, 
+  IconButton, 
+  Button, 
+  Card, 
+  CircularProgress 
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import strings from "src/localization/strings";
 import { useLambdasApi } from "src/hooks/use-api";
@@ -26,7 +36,7 @@ const SoftwareDetails: FunctionComponent = () => {
   const navigate = useNavigate();
   const { softwareApi, usersApi } = useLambdasApi();
   const auth = useAtomValue(authAtom);
-  const loggedUserId = auth?.token?.sub ?? '';
+  const loggedUserId = auth?.token?.sub ?? "";
 
   /**
    * Fetches software details.
@@ -96,7 +106,7 @@ const SoftwareDetails: FunctionComponent = () => {
   const handleAddSoftware = async () => {
     if (!id || !software) return;
     try {
-      const updatedUsers = [...software.users || '', loggedUserId];
+      const updatedUsers = [...software.users || "", loggedUserId];
       await softwareApi.updateSoftwareById({
         id,
         softwareRegistry: { ...software, users: updatedUsers }
@@ -175,14 +185,30 @@ const SoftwareDetails: FunctionComponent = () => {
           <ArrowBackIcon />
         </IconButton>
         <Box flexGrow={1} textAlign="center">
-          <Typography variant="h4" sx={{ color: "#000", fontWeight: "bold" }}>{strings.softwareRegistry.application}</Typography>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              color: "#000", 
+              fontWeight: "bold" 
+            }}
+            >
+              {strings.softwareRegistry.application}
+          </Typography>
         </Box>
       </Box>
       <Box textAlign="center" mb={4}>
         {software.image && (
-          <img src={software.image} alt={software.name} style={{ width: "150px", height: "150px" }} />
+          <img src={software.image} 
+          alt={software.name} 
+          style={{ width: "150px", height: "150px" }} />
         )}
-        <Typography gutterBottom sx={{ color: "#000", fontSize: "30px", fontWeight: "bold" }}>
+        <Typography gutterBottom 
+          sx={{ 
+            color: "#000", 
+            fontSize: "30px", 
+            fontWeight: "bold" 
+            }}
+          >
           {software.name}
         </Typography>
         <Box display="flex" justifyContent="center" flexWrap="wrap" gap={1} mb={2}>
@@ -204,7 +230,7 @@ const SoftwareDetails: FunctionComponent = () => {
           ))}
         </Box>
         <Typography gutterBottom sx={{ color: "#000", fontWeight: "bold" }}>
-          {createdByUserName} - {new Date(software.createdAt || '').toLocaleDateString()}
+          {createdByUserName} - {new Date(software.createdAt || "").toLocaleDateString()}
         </Typography>
         <Link href={software.url} target="_blank" rel="noopener" sx={{ color: "#ff4d4f" }}>
           {software.url}

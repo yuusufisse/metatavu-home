@@ -1,7 +1,7 @@
-import type { FunctionComponent } from 'react';
-import { Grid } from '@mui/material';
-import type { SoftwareRegistry, SoftwareStatus } from 'src/generated/homeLambdasClient';
-import MainCard from './cards/mainCard';
+import type { FunctionComponent } from "react";
+import { Grid } from "@mui/material";
+import type { SoftwareRegistry, SoftwareStatus } from "src/generated/homeLambdasClient";
+import MainCard from "./cards/mainCard";
 
 /**
  * Props for the Content component.
@@ -44,7 +44,7 @@ const Content: FunctionComponent<ContentProps> = ({
         return (
           <Grid item key={app.id}>
             <MainCard
-              id={app.id || ''}
+              id={app.id || ""}
               image={app.image}
               name={app.name}
               description={app.description}
@@ -55,13 +55,13 @@ const Content: FunctionComponent<ContentProps> = ({
               onStatusChange={
                 adminMode ? 
                 (newStatus) => 
-                  onStatusChange( app.id || '', newStatus ) : undefined
+                  onStatusChange( app.id || "", newStatus ) : undefined
               }
-              onSave={() => onSave(app.id || '')}
-              onRemove={adminMode ? () => onRemove(app.id || '') : undefined}
+              onSave={() => onSave(app.id || "")}
+              onRemove={adminMode ? () => onRemove(app.id || "") : undefined}
               isInMyApplications={isInMyApplications} 
-              url={''} 
-              createdBy={''}
+              url={""} 
+              createdBy={""}
               />
           </Grid>
         );

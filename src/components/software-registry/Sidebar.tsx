@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, useCallback, useMemo } from "react";
+import React, { 
+  FunctionComponent, 
+  useState, 
+  useCallback, 
+  useMemo 
+} from "react";
 import { TextField, IconButton, Typography, Box, Chip, Button, InputAdornment } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SortIcon from '@mui/icons-material/Sort';
@@ -117,7 +122,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
             {filteredApplicationsCount} {strings.softwareRegistry.results}
           </Typography>
           <TextField
-            placeholder={strings.softwareRegistry.searchTags}
+            placeholder={strings.softwareRegistry.searchBy}
             variant="outlined"
             value={searchValue}
             onChange={handleSearchChange}

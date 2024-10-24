@@ -97,7 +97,7 @@
     "tags": "Tagit",
     "filter": "Rajaa",
     "results": "Tulosta",
-    "searchTags": "Hae tgia tai nimeä",
+    "searchBy": "Hae tageilla tai nimellä",
     "clearSearch": "Tyhjennä haku",
     "description": "Kuvaus",
     "review": "Lisääjan arvio",
@@ -105,6 +105,7 @@
     "addToMyApps": "Lisää omiin sovelluksiin",
     "editApp": "Muokkaa sovellus",
     "addSoftware": "Lisää sovellus",
+    "added": "Lisätty",
     "name": "Nimi",
     "nameRequired": "Nimi on pakollinen",
     "imageURL": "Kuva URL",
@@ -118,7 +119,9 @@
     "showMore": "Näytä lisää",
     "showLess": "Näytä vähemmän",
     "noPending": "Ei uutta sovellusta",
-    "newSoftware": "Uusi sovelluksia"
+    "newSoftware": "Uusi sovelluksia",
+    "alreadyExists": "Nimi on jo olemassa",
+    "delete": "Poista"
   },
   "errors": {
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",

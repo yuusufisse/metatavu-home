@@ -1,33 +1,20 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  Chip,
-  Button,
-  IconButton,
-  CardActionArea,
-  CardMedia,
-  CircularProgress,
-} from "@mui/material";
+import { FunctionComponent, useState, useRef } from "react";
+import { Box, Typography, Grid, IconButton, Button } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { Link, useNavigate } from "react-router-dom";
-import type { SoftwareRegistry } from "src/generated/homeLambdasClient";
+import { useNavigate } from "react-router-dom";
+import { SoftwareRegistry } from "src/generated/homeLambdasClient";
 import { useLambdasApi } from "src/hooks/use-api";
 import strings from "src/localization/strings";
-import AddIcon from "@mui/icons-material/Add";
+import RecommendCard from "./cards/recommendCard";
 
 /**
  * Recommendations component props.
  */
 interface RecommendationsProps {
   applications: SoftwareRegistry[];
-  setApplications: (apps: SoftwareRegistry[]) => void;
   onAddUser: (appId: string) => Promise<void>;
 }
 
@@ -38,19 +25,24 @@ interface RecommendationsProps {
  * Each application is displayed as a card, and user can add an application to their list.
  *
  * @component
- * @param RecommendationsProps the propsfor the Recommendations component.
+ * @param RecommendationsProps the props for the Recommendations component.
  * @returns The rendered Recommendations component.
  */
 const Recommendations: FunctionComponent<RecommendationsProps> = ({
   applications,
   onAddUser,
 }) => {
-  const swiperRef = React.useRef<any>(null);
+  const swiperRef = useRef<any>(null); // Reference to Swiper
   const navigate = useNavigate();
   const { usersApi } = useLambdasApi();
-  const [loadingAppId, setLoadingAppId] = useState<string | null>(null);
+
+  // Combined state for app loading and user name loading
+  const [loadingStates, setLoadingStates] = useState<{
+    appId: string | null;
+    users: { [key: string]: boolean };
+  }>({ appId: null, users: {} });
+
   const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
-  const [loadingUsers, setLoadingUsers] = useState<{ [key: string]: boolean }>({});
 
   /**
    * Scroll the carousel to the left.
@@ -76,11 +68,14 @@ const Recommendations: FunctionComponent<RecommendationsProps> = ({
    * @param {string | undefined} userId - The id of the user whose name should be fetched.
    */
   const fetchUserName = async (userId: string | undefined) => {
-    if (!userId || userNames[userId] || loadingUsers[userId]) {
+    if (!userId || userNames[userId] || loadingStates.users[userId]) {
       return;
     }
 
-    setLoadingUsers((prev) => ({ ...prev, [userId]: true }));
+    setLoadingStates((prev) => ({
+      ...prev,
+      users: { ...prev.users, [userId]: true },
+    }));
 
     try {
       const users = await usersApi.listUsers();
@@ -97,128 +92,11 @@ const Recommendations: FunctionComponent<RecommendationsProps> = ({
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
-      setLoadingUsers((prev) => ({ ...prev, [userId]: false }));
+      setLoadingStates((prev) => ({
+        ...prev,
+        users: { ...prev.users, [userId]: false },
+      }));
     }
-  };
-
-  /**
-   * Renders a card for each application in the list.
-   *
-   * @param {object} props - Props for the ContentCard component.
-   * @param {SoftwareRegistry} props.app - The software entry to display in the card.
-   * @returns The rendered card component.
-   */
-  const ContentCard = ({ app }: { app: SoftwareRegistry }) => {
-    useEffect(() => {
-      if (app.createdBy) {
-        fetchUserName(app.createdBy);
-      }
-    }, [app.createdBy]);
-
-    return (
-      <Card
-        sx={{
-          width: 247,
-          height: 250,
-          backgroundColor: "#fff",
-          borderRadius: "10px",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          overflow: "hidden",
-          margin: "10px",
-          ":hover": {
-            boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.3)",
-          },
-          position: "relative",
-        }}
-      >
-        <CardActionArea
-          component={Link}
-          to={`${app.id}`}
-          sx={{ padding: "16px" }}
-        >
-          <CardMedia
-            component="img"
-            height="80"
-            image={app.image}
-            alt={app.name}
-            sx={{
-              objectFit: 'contain',
-              marginBottom: '16px',
-              borderRadius: "8px",
-            }}
-          />
-          <CardContent sx={{ padding: "0px", flex: "1" }}>
-            <Typography
-              gutterBottom
-              variant="h6"
-              mt={1}
-              sx={{ fontSize: "16px", fontWeight: "bold" }}
-            >
-              {app.name}
-            </Typography>
-            <Box>
-              <Typography
-                mt={1}
-                sx={{
-                  fontSize: "14px",
-                  color: "#f9473b",
-                  fontWeight: "bold",
-                }}
-              >
-                {loadingUsers[app.createdBy]
-                  ? "Loading..."
-                  : userNames[app.createdBy] || "Unknown User"}
-              </Typography>
-            </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              flexWrap="wrap"
-              sx={{
-                height: '60px',
-                gap: 0.5,
-                marginTop: '8px',
-              }}
-            >
-              {app.tags &&
-                app.tags.map((tag, index) => (
-                  <Chip
-                    key={index}
-                    label={tag}
-                    sx={{
-                      height: '25px',
-                      borderRadius: '5px',
-                      padding: '0px',
-                      margin: '2px',
-                      backgroundColor: '#ff4d4f',
-                      color: '#fff',
-                      fontSize: '12px',
-                      whiteSpace: 'nowrap',
-                    }}
-                  />
-                ))}
-            </Box>
-          </CardContent>
-        </CardActionArea>
-
-        <IconButton
-          sx={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            color: "#000",
-          }}
-          onClick={() => {
-            if (app.id) {
-              setLoadingAppId(app.id);
-              onAddUser(app.id).finally(() => setLoadingAppId(null));
-            }
-          }}
-        >
-          {loadingAppId === app.id ? <CircularProgress size={24} /> : <AddIcon />}
-        </IconButton>
-      </Card>
-    );
   };
 
   return (
@@ -268,7 +146,15 @@ const Recommendations: FunctionComponent<RecommendationsProps> = ({
           <Swiper ref={swiperRef} spaceBetween={10} slidesPerView="auto">
             {applications.map((app) => (
               <SwiperSlide key={app.id} style={{ width: "260px" }}>
-                <ContentCard app={app} />
+                <RecommendCard
+                  app={app}
+                  onAddUser={onAddUser}
+                  fetchUserName={fetchUserName}
+                  userNames={userNames}
+                  loadingUsers={loadingStates.users}
+                  loadingAppId={loadingStates.appId}
+                  setLoadingAppId={setLoadingStates}
+                />
               </SwiperSlide>
             ))}
           </Swiper>

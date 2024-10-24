@@ -15,8 +15,8 @@ import AddSoftwareModal from "../software-registry/AddSoftwareModal";
 import Recommendations from "../software-registry/Recommendations";
 import Sidebar from "../software-registry/Sidebar";
 import strings from "src/localization/strings";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { authAtom, userProfileAtom } from "src/atoms/auth";
+import { useAtom, useAtomValue } from "jotai";
+import { authAtom } from "src/atoms/auth";
 import { useLambdasApi } from "src/hooks/use-api";
 import { softwareAtom } from "src/atoms/software";
 import type { SoftwareRegistry } from "src/generated/homeLambdasClient";
@@ -32,9 +32,7 @@ const SoftwareScreen = () => {
   const auth = useAtomValue(authAtom);
   const loggedUserId = auth?.token?.sub ?? "";
   const [isGridView, setIsGridView] = useState(true);
-
   const [applications, setApplications] = useAtom(softwareAtom);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -59,7 +57,7 @@ const SoftwareScreen = () => {
    */
   const myApplications = useMemo(
     () => applications.filter((app) =>
-      app.users?.includes(loggedUserId) && app.status === 'ACCEPTED'
+      app.users?.includes(loggedUserId) && app.status === "ACCEPTED"
     ),
     [applications, loggedUserId]
   );
@@ -72,7 +70,8 @@ const SoftwareScreen = () => {
   const filteredApplications = useMemo(
     () => myApplications.filter((app) => {
       const matchesSearch = app.name.toLowerCase().includes(searchValue.toLowerCase());
-      const matchesTags = selectedTags.length === 0 || (app.tags && selectedTags.some(tag => app.tags?.includes(tag)));
+      const matchesTags = selectedTags.length === 0 || 
+        (app.tags && selectedTags.some(tag => app.tags?.includes(tag)));
       return matchesSearch && matchesTags;
     }),
     [myApplications, selectedTags, searchValue]
@@ -214,7 +213,6 @@ const SoftwareScreen = () => {
         <Typography sx={{ fontWeight: "bold", fontSize: "35px" }} m={4}>
           {strings.softwareRegistry.applications}
         </Typography>
-
         {recommendedApplications.length > 0 && (
           <Grid item container justifyContent="center" alignItems="center" mb={4}>
             <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "20px", color: "#f9473b" }}>
@@ -222,7 +220,6 @@ const SoftwareScreen = () => {
                 "{recommendationCount}",
                 recommendedApplications.length.toString()
               )}
-
             </Typography>
             <IconButton
               onClick={scrollToRecommendations}
@@ -239,12 +236,10 @@ const SoftwareScreen = () => {
             </IconButton>
           </Grid>
         )}
-
         <Grid item container justifyContent="space-between" alignItems="center">
           <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "30px" }}>
             {strings.softwareRegistry.myApplications}
           </Typography>
-
           <Button
             variant="contained"
             color="primary"
@@ -266,14 +261,14 @@ const SoftwareScreen = () => {
             <IconButton
               onClick={() => setIsGridView(true)}
               sx={{
-                backgroundColor: isGridView ? '#f9473b' : '#f2f2f2',
-                color: isGridView ? '#fff' : '#000',
-                borderRadius: '4px',
-                padding: '6px',
-                marginRight: '10px',
-                ':hover': {
-                  backgroundColor: '#000',
-                  color: '#fff',
+                backgroundColor: isGridView ? "#f9473b" : "#f2f2f2",
+                color: isGridView ? "#fff" : "#000",
+                borderRadius: "4px",
+                padding: "6px",
+                marginRight: "10px",
+                ":hover": {
+                  backgroundColor: "#000",
+                  color: "#fff",
                 },
               }}
             >
@@ -282,13 +277,13 @@ const SoftwareScreen = () => {
             <IconButton
               onClick={() => setIsGridView(false)}
               sx={{
-                backgroundColor: !isGridView ? '#f9473b' : '#f2f2f2',
-                color: !isGridView ? '#fff' : '#000',
-                borderRadius: '4px',
-                padding: '6px',
-                ':hover': {
-                  backgroundColor: '#000',
-                  color: '#fff',
+                backgroundColor: !isGridView ? "#f9473b" : "#f2f2f2",
+                color: !isGridView ? "#fff" : "#000",
+                borderRadius: "4px",
+                padding: "6px",
+                ":hover": {
+                  backgroundColor: "#000",
+                  color: "#fff",
                 },
               }}
             >
@@ -296,7 +291,6 @@ const SoftwareScreen = () => {
             </IconButton>
           </Box>
         </Grid>
-
         <Grid container justifyContent="flex-start" mt={2}>
           <Grid item mr={2}>
             <Sidebar
@@ -306,25 +300,26 @@ const SoftwareScreen = () => {
               onSearch={setSearchValue}
             />
           </Grid>
-
           <Grid item xs>
             {error && (
               <Box mb={2} width="100%">
                 <Alert severity="error">{error}</Alert>
               </Box>
             )}
-
             {loading ? (
               <Box textAlign="center">
                 <CircularProgress size={50} sx={{ mt: 2 }} />
               </Box>
             ) : (
               <Content
-                applications={showAll ? filteredApplications : filteredApplications.slice(0, 4)}
+                applications={
+                  showAll ? 
+                  filteredApplications : 
+                  filteredApplications.slice(0, 4)
+                }
                 isGridView={isGridView}
               />
             )}
-
             {filteredApplications.length > 4 && (
               <Box textAlign="center" mt={3}>
                 <Button
@@ -340,15 +335,17 @@ const SoftwareScreen = () => {
                     "&:hover": { background: "#000" },
                   }}
                 >
-                  {showAll ? strings.softwareRegistry.showLess : strings.softwareRegistry.showMore}
+                  {
+                    showAll ? 
+                    strings.softwareRegistry.showLess : 
+                    strings.softwareRegistry.showMore
+                  }
                 </Button>
               </Box>
             )}
           </Grid>
         </Grid>
       </Grid>
-
-
       <Grid
         container
         direction="column"
@@ -358,11 +355,9 @@ const SoftwareScreen = () => {
       >
         <Recommendations
           applications={recommendedApplications}
-          setApplications={setApplications}
           onAddUser={handleUserUpdate}
         />
       </Grid>
-
       <AddSoftwareModal
         open={isModalOpen}
         handleClose={() => setIsModalOpen(false)}

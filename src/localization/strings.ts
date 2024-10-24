@@ -123,10 +123,11 @@ export interface Localized extends LocalizedStringsMethods {
     recommendationMessage: string;
     allApplications: string;
     addApplication: string;
+    added: string;
     tags: string;
     filter: string;
     results: string;
-    searchTags: string;
+    searchBy: string;
     clearSearch: string;
     description: string;
     review: string;
@@ -147,7 +148,9 @@ export interface Localized extends LocalizedStringsMethods {
     showMore: string;
     showLess: string;
     noPending: string;
-    newSoftware: string
+    newSoftware: string;
+    alreadyExists: string;
+    delete: string
   };
   /**
    * General time-related expressions
