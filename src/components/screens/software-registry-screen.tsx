@@ -23,6 +23,7 @@ import type { SoftwareRegistry } from "src/generated/homeLambdasClient";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ListViewIcon from "@mui/icons-material/List";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import useCreateSoftware from "src/hooks/use-create-software";
 
 /**
  * Software registry screen component
@@ -36,10 +37,11 @@ const SoftwareScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState<string>(""); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [showAll, setShowAll] = useState(false);
-  const recommendationRef = useRef<null | HTMLDivElement>(null);
+  const recommendationRef = useRef<null | HTMLDivElement>(null); 
+  const { createSoftware } = useCreateSoftware(loggedUserId, setApplications); 
 
   /**
    * Scrolls to the recommendations section.
@@ -110,34 +112,6 @@ const SoftwareScreen = () => {
       setApplications(fetchedApplications);
     } catch (error) {
       setError(`Error fetching software data: ${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /**
-   * Creates a new software entry.
-   * Adds the logged-in user as the creator and user of the software and updates the state.
-   *
-   * @param {SoftwareRegistry} software - The software data to be created.
-   */
-  const createSoftware = async (software: SoftwareRegistry) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const newSoftware = {
-        ...software,
-        createdBy: loggedUserId,
-        users: [loggedUserId],
-      };
-
-      const createdSoftware = await softwareApi.createSoftware({
-        softwareRegistry: newSoftware,
-      });
-      setApplications((prev) => [createdSoftware, ...prev]);
-      setIsModalOpen(false);
-    } catch (error) {
-      setError(`Error creating software: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -252,7 +226,7 @@ const SoftwareScreen = () => {
               borderRadius: "100px",
               "&:hover": { background: "#000" },
             }}
-            >
+          >
             {strings.softwareRegistry.addApplication}
           </Button>
         </Grid>

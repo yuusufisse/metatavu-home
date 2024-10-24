@@ -28,6 +28,7 @@ import { authAtom } from "src/atoms/auth";
 import UserRoleUtils from "src/utils/user-role-utils";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
+import useCreateSoftware from "src/hooks/use-create-software";
 
 const statusOptions = [
   { value: "ALL", label: "Show all" },
@@ -55,6 +56,7 @@ const AllSoftwareScreen: React.FC = () => {
   const [isGridView, setIsGridView] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const { createSoftware } = useCreateSoftware(loggedUserId, setApplications);
 
   /**
    * Fetches the list of all software applications from the API.
@@ -225,32 +227,6 @@ const AllSoftwareScreen: React.FC = () => {
 
     } catch (error) {
       console.error(`Error deleting the app: ${error}`);
-    }
-  };
-
-  /**
-   * Creates a new software entry and adds the current user as a creator and user.
-   * 
-   * @param {SoftwareRegistry} software - The software data to create.
-   */
-  const createSoftware = async (software: SoftwareRegistry) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const newSoftware = {
-        ...software,
-        createdBy: loggedUserId,
-        users: [loggedUserId],
-      };
-      const createdSoftware = await softwareApi.createSoftware({
-        softwareRegistry: newSoftware,
-      });
-      setApplications((prev) => [createdSoftware, ...prev]);
-      setIsModalOpen(false);
-    } catch (error) {
-      setError(`Error creating software: ${error}`);
-    } finally {
-      setLoading(false);
     }
   };
 
