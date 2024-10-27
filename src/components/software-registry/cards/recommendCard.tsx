@@ -103,23 +103,22 @@ const RecommendCard: React.FC<RecommendCardProps> = ({
               marginTop: "8px",
             }}
           >
-            {app.tags &&
-              app.tags.map((tag, index) => (
-                <Chip
-                  key={index}
-                  label={tag}
-                  sx={{
-                    height: "25px",
-                    borderRadius: "5px",
-                    padding: "0px",
-                    margin: "2px",
-                    backgroundColor: "#ff4d4f",
-                    color: "#fff",
-                    fontSize: "12px",
-                    whiteSpace: "nowrap",
-                  }}
-                />
-              ))}
+            {app.tags?.map((tag) => (
+              <Chip
+                key={tag}
+                label={tag}
+                sx={{
+                  height: "25px",
+                  borderRadius: "5px",
+                  padding: "0px",
+                  margin: "2px",
+                  backgroundColor: "#ff4d4f",
+                  color: "#fff",
+                  fontSize: "12px",
+                  whiteSpace: "nowrap",
+                }}
+              />
+            ))}
           </Box>
         </CardContent>
       </CardActionArea>

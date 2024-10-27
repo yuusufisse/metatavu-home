@@ -1,15 +1,15 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  Container, 
-  Typography, 
-  Grid, 
-  Box, 
-  Link, 
-  IconButton, 
-  Button, 
-  Card, 
-  CircularProgress 
+import {
+  Container,
+  Typography,
+  Grid,
+  Box,
+  Link,
+  IconButton,
+  Button,
+  Card,
+  CircularProgress
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import strings from "src/localization/strings";
@@ -17,7 +17,7 @@ import { useLambdasApi } from "src/hooks/use-api";
 import { useAtomValue } from "jotai";
 import { authAtom } from "src/atoms/auth";
 import { SoftwareRegistry } from "src/generated/homeLambdasClient";
-import AddSoftwareModal from "../software-registry/AddSoftwareModal";
+import AddSoftwareModal from "./addSoftwareModal";
 
 /**
  * Component for displaying detailed information about a specific software entry.
@@ -185,36 +185,36 @@ const SoftwareDetails: FunctionComponent = () => {
           <ArrowBackIcon />
         </IconButton>
         <Box flexGrow={1} textAlign="center">
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              color: "#000", 
-              fontWeight: "bold" 
+          <Typography
+            variant="h4"
+            sx={{
+              color: "#000",
+              fontWeight: "bold"
             }}
-            >
-              {strings.softwareRegistry.application}
+          >
+            {strings.softwareRegistry.application}
           </Typography>
         </Box>
       </Box>
       <Box textAlign="center" mb={4}>
         {software.image && (
-          <img src={software.image} 
-          alt={software.name} 
-          style={{ width: "150px", height: "150px" }} />
+          <img src={software.image}
+            alt={software.name}
+            style={{ width: "150px", height: "150px" }} />
         )}
-        <Typography gutterBottom 
-          sx={{ 
-            color: "#000", 
-            fontSize: "30px", 
-            fontWeight: "bold" 
-            }}
-          >
+        <Typography gutterBottom
+          sx={{
+            color: "#000",
+            fontSize: "30px",
+            fontWeight: "bold"
+          }}
+        >
           {software.name}
         </Typography>
         <Box display="flex" justifyContent="center" flexWrap="wrap" gap={1} mb={2}>
-          {software.tags?.map((tag: string, index: number) => (
+          {software.tags?.map((tag) => (
             <Box
-              key={index}
+              key={tag}
               component="span"
               sx={{
                 backgroundColor: "#ff4d4f",

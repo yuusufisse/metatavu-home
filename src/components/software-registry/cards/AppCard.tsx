@@ -80,9 +80,9 @@ const AppCard: FunctionComponent<AppCardProps> = ({
                 </Typography>
               </Box>
               <Box alignItems="center" sx={{ minHeight: "60px", maxHeight: "60px" }}>
-                {tags.map((tag, index) => (
+                {tags.map((tag) => (
                   <Chip
-                    key={index}
+                    key={tag}
                     label={tag}
                     sx={{
                       height: "25px",
@@ -170,9 +170,9 @@ const AppCard: FunctionComponent<AppCardProps> = ({
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={0.5} sx={{ flexWrap: "wrap", marginTop: "8px" }}>
-                {tags.map((tag, index) => (
+                {tags.map((tag) => (
                   <Chip
-                    key={index}
+                    key={tag}
                     label={tag}
                     sx={{
                       borderRadius: "5px",

@@ -1,7 +1,7 @@
 import type { FunctionComponent } from 'react';
 import { Grid } from '@mui/material';
 import type { SoftwareRegistry } from 'src/generated/homeLambdasClient';
-import AppCard from './cards/AppCard';
+import AppCard from './cards/appCard';
 
 /**
  * Props for the Content component.
@@ -24,10 +24,10 @@ interface ContentProps {
 const Content: FunctionComponent<ContentProps> = ({ applications, isGridView }) => {
   return (
     <Grid container spacing={2}>
-      {applications.map((app, index) => (
+      {applications.map((app) => (
         <Grid
           item
-          key={index} 
+          key={app.id} 
         >
           <AppCard
             id={app.id || ''}

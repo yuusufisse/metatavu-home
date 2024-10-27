@@ -147,13 +147,13 @@ const MainCard: React.FC<CardProps> = ({
           strings.softwareRegistry.addApplication
         }
       </Button>
-      {isAdmin && (
+      {isAdmin && onRemove && (
         <Button
           variant="outlined"
           size="small"
           onClick={(e) => {
             e.stopPropagation();
-            onRemove && onRemove();
+            onRemove();
           }}
           sx={{
             textTransform: "none",

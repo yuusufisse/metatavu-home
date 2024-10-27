@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import { useState, useEffect, useMemo, useRef } from "react";
 import Content from "../software-registry/myContent";
-import AddSoftwareModal from "../software-registry/AddSoftwareModal";
-import Recommendations from "../software-registry/Recommendations";
-import Sidebar from "../software-registry/Sidebar";
+import AddSoftwareModal from "../software-registry/addSoftwareModal";
+import Recommendations from "../software-registry/recommendations";
+import Sidebar from "../software-registry/sidebar";
 import strings from "src/localization/strings";
 import { useAtom, useAtomValue } from "jotai";
 import { authAtom } from "src/atoms/auth";
@@ -37,11 +37,11 @@ const SoftwareScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [searchValue, setSearchValue] = useState<string>(""); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const recommendationRef = useRef<null | HTMLDivElement>(null); 
-  const { createSoftware } = useCreateSoftware(loggedUserId, setApplications); 
+  const recommendationRef = useRef<null | HTMLDivElement>(null);
+  const { createSoftware } = useCreateSoftware(loggedUserId, setApplications);
 
   /**
    * Scrolls to the recommendations section.
@@ -72,7 +72,7 @@ const SoftwareScreen = () => {
   const filteredApplications = useMemo(
     () => myApplications.filter((app) => {
       const matchesSearch = app.name.toLowerCase().includes(searchValue.toLowerCase());
-      const matchesTags = selectedTags.length === 0 || 
+      const matchesTags = selectedTags.length === 0 ||
         (app.tags && selectedTags.some(tag => app.tags?.includes(tag)));
       return matchesSearch && matchesTags;
     }),
@@ -287,9 +287,9 @@ const SoftwareScreen = () => {
             ) : (
               <Content
                 applications={
-                  showAll ? 
-                  filteredApplications : 
-                  filteredApplications.slice(0, 4)
+                  showAll ?
+                    filteredApplications :
+                    filteredApplications.slice(0, 4)
                 }
                 isGridView={isGridView}
               />
@@ -310,9 +310,9 @@ const SoftwareScreen = () => {
                   }}
                 >
                   {
-                    showAll ? 
-                    strings.softwareRegistry.showLess : 
-                    strings.softwareRegistry.showMore
+                    showAll ?
+                      strings.softwareRegistry.showLess :
+                      strings.softwareRegistry.showMore
                   }
                 </Button>
               </Box>
