@@ -326,6 +326,8 @@ export interface Localized extends LocalizedStringsMethods {
     is: string;
     delete: string;
     back: string;
+    description: string;
+    insertDescription: string;
   };
   /**
    * Translations related to New Questionnaire Card

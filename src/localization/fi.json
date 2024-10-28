@@ -241,7 +241,9 @@
     "preview": "Kyselyiden esikatselu",
     "is": "on",
     "delete": "Poista kysymys",
-    "back": "Takaisin"
+    "back": "Takaisin",
+    "description": "Kuvaus",
+    "insertDescription": "Syötä kuvaus kyselystä tähän"
   },
   "newQuestionnaireCard": {
     "newQuestion": "Haluatko lisätä uuden kysymyksen, lisää tiedot alle.",

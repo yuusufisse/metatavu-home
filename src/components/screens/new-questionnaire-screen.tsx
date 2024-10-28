@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, Grid, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CircularProgress, Grid, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useState, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
@@ -14,17 +14,18 @@ import strings from "src/localization/strings";
  */
 const NewQuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
-  
+  const [loading, setLoading] = useState(false);
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
+  const [questionnaireDescription, setQuestionnaireDescription] = useState("");
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   const handleQuestionTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuestionnaireTitle(event.target.value);
   };
 
-  /**
-   * State and functions to handle the questions and options
-   */
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuestionnaireDescription(event.target.value);
+  };
 
   /**
    * Functions to add new question to Questionnaire
@@ -45,10 +46,30 @@ const NewQuestionnaireScreen = () => {
   };
 
   /**
-   * This should save the question title and questions to DB.
-   * TODO:
+   * Function to save the new questionnaire
    */
-  const handleSaveSubmit = () => {};
+  const handleSaveSubmit = async () => {
+    setLoading(true);
+    try {
+      const newQuestionnaireData = { 
+        title: questionnaireTitle, 
+        description: questionnaireDescription,
+        options: questions,
+        passScore: 0
+      /*TODO: passScore needs to be added to UI*/
+      };
+
+      // const result = await createQuestionnaire(newQuestionnaireData);
+      /**
+       * TODO: fix api.ts to include questionnaire API
+       */
+      console.log(newQuestionnaireData);
+    } catch (error) {
+      console.error("Error saving questionnaire:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -73,9 +94,17 @@ const NewQuestionnaireScreen = () => {
             onChange={handleQuestionTitleChange}
             variant="outlined"
             fullWidth
+            sx={{ mt: 2, mb: 2 }}
+          />
+          <TextField
+            label={strings.newQuestionnaireScreen.description}
+            placeholder={strings.newQuestionnaireScreen.insertDescription}
+            value={questionnaireDescription}
+            onChange={handleDescriptionChange}
+            variant="outlined"
+            fullWidth
             sx={{ mt: 2, mb: 4 }}
           />
-          {/* Card element (questin-form.tsx) to make new question */}
           <NewQuestionnaireCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
           <CardActions
             sx={{
@@ -91,8 +120,9 @@ const NewQuestionnaireScreen = () => {
               variant="contained"
               color="success"
               onClick={handleSaveSubmit}
+              disabled={loading}
             >
-              {strings.newQuestionnaireScreen.saveButton}
+              {loading ? <CircularProgress size={24} color="inherit" /> : strings.newQuestionnaireScreen.saveButton}
             </Button>
           </CardActions>
         </CardContent>
@@ -133,7 +163,6 @@ const NewQuestionnaireScreen = () => {
               <Grid item xs={12} key={index} sx={{ mb: 2 }}>
                 <Card sx={{ p: 2 }}>
                   <Typography>{q.questionText}</Typography>
-
                   <List component="ol">
                     {q.options.map((option, idx) => (
                       <ListItem component="li" key={idx}>

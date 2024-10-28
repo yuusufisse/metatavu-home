@@ -241,7 +241,9 @@
     "preview": "Questionnaire preview",
     "is": "is",
     "delete": "Delete Question",
-    "back": "Back"
+    "back": "Back",
+    "description": "Description",
+    "insertDescription": "Insert Description Here"
   },
   "newQuestionnaireCard": {
     "newQuestion": "Want to add a new question? Fill in the details below.",
