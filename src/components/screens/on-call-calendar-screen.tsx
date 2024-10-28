@@ -104,9 +104,9 @@ const OnCallCalendarScreen = () => {
 
   /**
    * Updates the selected paid status
-   * @param year
-   * @param weekNumber
-   * @param paid
+   * @param year number
+   * @param weekNumber number
+   * @param paid boolean
    */
   const updatePaidStatus = async (year: number, weekNumber: number, paid: boolean) => {
     const updateParameters: OnCallPaid = {
@@ -125,8 +125,8 @@ const OnCallCalendarScreen = () => {
   const renderCurrentOnCall = () => {
     if (onCallPerson)
       return (
-        <Typography sx={{ textAlign: "center" }}>
-          {strings.oncall.onCallPersonExists}{" "}
+        <Typography sx={{ textAlign: "center", margin: "10px 0" }}>
+          {strings.oncall.onCallPersonExists}
           <b style={{ color: stringToColor(onCallPerson) }}>{onCallPerson}</b>
         </Typography>
       );
