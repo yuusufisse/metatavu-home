@@ -23,7 +23,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import useCreateSoftware from "src/hooks/use-create-software";
 import Recommendations from "../software-registry/Recommendations";
 import AddSoftwareModal from "../software-registry/AddSoftwareModal";
-import Sidebar from "../software-registry/sidebar";
+import Sidebar from "../software-registry/Sidebar";
 
 /**
  * Software registry screen component

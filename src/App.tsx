@@ -22,7 +22,7 @@ import QuestionnaireScreen from "./components/screens/questionnaire-screen";
 import NewQuizScreen from "./components/screens/new-questionnaire-screen";
 import SoftwareRegistryScreen from "./components/screens/software-registry-screen";
 import AllSoftwareScreen from "./components/screens/all-software-screen";
-import SoftwareDetails from "./components/software-registry/softwareDetails";
+import SoftwareDetails from "./components/software-registry/SoftwareDetails";
 
 /**
  * Application component
