@@ -1,4 +1,4 @@
-import { Card, Grid, Box, CardContent, CardActions } from "@mui/material";
+import { Card, Grid, Box, CardContent, CardActions, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -8,32 +8,65 @@ import { Link } from "react-router-dom";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { KeyboardReturn } from "@mui/icons-material";
 import strings from "src/localization/strings";
+import type { Questionnaire } from "src/generated/homeLambdasClient/models/Questionnaire";
+import { useEffect, useState } from "react";
 
 const mockQuestionnaires = [
   {
-    id: 1,
-    title: "This is listing of Mock data for visual presentation",
-    description: "TODO: Build this with actual data, maybe table ?",
-    status: <CheckCircleIcon sx={{ color: "green" }} />
+    id: '1',
+    title: 'Math Basics',
+    description: 'A simple questionnaire to test basic math skills.',
+    passedUsers: true,
   },
   {
-    id: 2,
-    title: "Questionnaire 2",
-    description: "Description for Questionnaire 2",
-    status: <CloseIcon sx={{ color: "red" }} />
+    id: '2',
+    title: 'Science Facts',
+    description: 'Test your knowledge of fundamental science facts.',
+    passedUsers: false,
   },
   {
-    id: 3,
-    title: "Questionnaire 3",
-    description: "Description for Questionnaire 3",
-    status: <CloseIcon sx={{ color: "red" }} />
-  }
+    id: '3',
+    title: 'History Quiz',
+    description: 'A deep dive into world history questions.',
+    passedUsers: false,
+  },
+  {
+    id: '4',
+    title: 'Programming Fundamentals',
+    description: 'Basic questions to evaluate understanding of programming.',
+    passedUsers: false,
+  },
+  {
+    id: '5',
+    title: 'Geography Challenge',
+    description: 'Quiz to assess knowledge on global geography.',
+    passedUsers: false,
+  },
 ];
+
 /**
  * Questionnaire Screen Component
  */
 const QuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
+  const [, setQuestionnaires] = useState<Questionnaire[]>([]);
+
+  useEffect(() => {
+    const fetchQuestionnaires = async () => {
+      const questionnaires = await listQuestionnaires();
+      setQuestionnaires(questionnaires);
+    };
+    fetchQuestionnaires(); 
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteQuestionnaire(id);
+      setQuestionnaires((prevQuestionnaires: Questionnaire[]) => prevQuestionnaires.filter((questionnaire: Questionnaire) => questionnaire.id !== id));
+    } catch (error) {
+      console.error("Delete Questionnaire failed:", error);
+    }
+  };
 
   return (
     <Card
@@ -81,34 +114,52 @@ const QuestionnaireScreen = () => {
             }
           </Grid>
         </Grid>
-        {mockQuestionnaires.map((questionnaire) => (
-          <Grid item xs={12} key={questionnaire.id} sx={{ mt: 2 }}>
-            <Card sx={{ p: 2 }}>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+            <Card>
               <CardContent>
-                <Typography variant="h6">{questionnaire.title}</Typography>
-                <Typography variant="body2">{questionnaire.description}</Typography>
-                <Box display="flex" alignItems="center">
-                  <Typography variant="body2" sx={{ mr: 1 }}>
-                    {strings.questionnaireScreen.status}
-                  </Typography>
-                  {questionnaire.status}
-                </Box>
-              </CardContent>
-              {adminMode && 
-                <CardActions>
-                  <Button variant="outlined" color="success">
-                    <EditIcon sx={{ color: "success", mr: 2 }} />
+
+              <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Questionnaire Title</TableCell>
+            <TableCell>Description</TableCell>
+            {adminMode ? ( <TableCell>Actions</TableCell>) : (<TableCell>Status</TableCell>)}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {mockQuestionnaires.map((questionnaire) => (
+            <TableRow key={questionnaire.id}>
+              <TableCell>{questionnaire.title}</TableCell>
+              <TableCell>{questionnaire.description}</TableCell>
+              {adminMode ? (
+                <TableCell>
+                  <Button variant="outlined" color="success" sx={{ mr: 2 }}>
+                    <EditIcon sx={{ color: "success", mr: 1 }} />
                     {strings.questionnaireScreen.edit}
                   </Button>
-                  <Button variant="contained" color="secondary">
-                    <DeleteForeverIcon sx={{ color: "red", mr: 2 }} />
+                  <Button variant="contained" color="secondary" onClick={() => handleDelete(questionnaire.id)}>
+                    <DeleteForeverIcon sx={{ color: "red", mr: 1 }} />
                     {strings.questionnaireScreen.delete}
                   </Button>
-                </CardActions>
+                </TableCell>) : (
+                  <TableCell>
+                  {questionnaire.passedUsers ? (
+                    <CheckCircleIcon sx={{ color: 'green' }} />
+                  ) : (
+                    <CloseIcon sx={{ color: 'red' }} />
+                  )}
+                </TableCell>
+                )
               }
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+              </CardContent>
             </Card>
           </Grid>
-        ))}
       </Grid>
       <Card sx={{ mt: 2, width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
