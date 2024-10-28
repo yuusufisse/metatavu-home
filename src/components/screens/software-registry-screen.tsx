@@ -11,9 +11,6 @@ import {
 } from "@mui/material";
 import { useState, useEffect, useMemo, useRef } from "react";
 import Content from "../software-registry/myContent";
-import AddSoftwareModal from "../software-registry/addSoftwareModal";
-import Recommendations from "../software-registry/recommendations";
-import Sidebar from "../software-registry/sidebar";
 import strings from "src/localization/strings";
 import { useAtom, useAtomValue } from "jotai";
 import { authAtom } from "src/atoms/auth";
@@ -24,6 +21,9 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import ListViewIcon from "@mui/icons-material/List";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import useCreateSoftware from "src/hooks/use-create-software";
+import Recommendations from "../software-registry/Recommendations";
+import AddSoftwareModal from "../software-registry/AddSoftwareModal";
+import Sidebar from "../software-registry/sidebar";
 
 /**
  * Software registry screen component

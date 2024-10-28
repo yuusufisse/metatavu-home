@@ -17,7 +17,7 @@ import { useLambdasApi } from "src/hooks/use-api";
 import { useAtomValue } from "jotai";
 import { authAtom } from "src/atoms/auth";
 import { SoftwareRegistry } from "src/generated/homeLambdasClient";
-import AddSoftwareModal from "./addSoftwareModal";
+import AddSoftwareModal from "./AddSoftwareModal";
 
 /**
  * Component for displaying detailed information about a specific software entry.

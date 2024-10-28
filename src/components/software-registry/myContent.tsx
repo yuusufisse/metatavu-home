@@ -1,7 +1,7 @@
 import type { FunctionComponent } from 'react';
 import { Grid } from '@mui/material';
 import type { SoftwareRegistry } from 'src/generated/homeLambdasClient';
-import AppCard from './cards/appCard';
+import AppCard from './cards/AppCard';
 
 /**
  * Props for the Content component.

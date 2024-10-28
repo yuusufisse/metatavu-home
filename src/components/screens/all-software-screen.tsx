@@ -20,7 +20,6 @@ import Content from "../software-registry/allContent";
 import { useLambdasApi } from "src/hooks/use-api";
 import type { SoftwareRegistry, SoftwareStatus } from "src/generated/homeLambdasClient";
 import strings from "src/localization/strings";
-import AddSoftwareModal from "../software-registry/addSoftwareModal";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ListViewIcon from "@mui/icons-material/List";
 import { useAtomValue } from "jotai";
@@ -29,6 +28,7 @@ import UserRoleUtils from "src/utils/user-role-utils";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
 import useCreateSoftware from "src/hooks/use-create-software";
+import AddSoftwareModal from "../software-registry/AddSoftwareModal";
 
 const statusOptions = [
   { value: "ALL", label: "Show all" },
