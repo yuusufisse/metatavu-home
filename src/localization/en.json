@@ -250,5 +250,13 @@
     "answerLabel": "Insert Answer",
     "addAnswer": "+ Add new answer option",
     "saveAnswer": "Save question"
+  },
+  "questionnaireTable": {
+    "title": "Questionnaire Title",
+    "description": "Description",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "status": "Status"
   }
 }
