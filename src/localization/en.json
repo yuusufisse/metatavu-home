@@ -243,7 +243,9 @@
     "delete": "Delete Question",
     "back": "Back",
     "description": "Description",
-    "insertDescription": "Insert Description Here"
+    "insertDescription": "Insert Description Here",
+    "countedAnswers": "True values in this Questionnaire:",
+    "requiredAnswers": "Set Required Correct Answers:"
   },
   "newQuestionnaireCard": {
     "newQuestion": "Want to add a new question? Fill in the details below.",

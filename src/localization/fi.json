@@ -243,7 +243,9 @@
     "delete": "Poista kysymys",
     "back": "Takaisin",
     "description": "Kuvaus",
-    "insertDescription": "Syötä kuvaus kyselystä tähän"
+    "insertDescription": "Syötä kuvaus kyselystä tähän",
+    "countedAnswers": "Oikeiden vastausten määrä tässä kyselyssä:",
+    "requiredAnswers": "Montako pitää olla oikein, jotta kysely menee läpi:"
   },
   "newQuestionnaireCard": {
     "newQuestion": "Haluatko lisätä uuden kysymyksen, lisää tiedot alle.",
