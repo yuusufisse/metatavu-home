@@ -69,14 +69,14 @@ const SoftwareScreen = () => {
    *
    * @returns Filtered applications matching the search and tags.
    */
-  const filteredApplications = useMemo(
-    () => myApplications.filter((app) => {
-      const matchesSearch = app.name.toLowerCase().includes(searchValue.toLowerCase());
-      const matchesTags = selectedTags.length === 0 ||
-        (app.tags && selectedTags.some(tag => app.tags?.includes(tag)));
-      return matchesSearch && matchesTags;
-    }),
-    [myApplications, selectedTags, searchValue]
+  const filteredApplications = useMemo(() => {
+    return myApplications.filter((app) => {
+      const matchesName = app.name.toLowerCase().includes(searchValue.toLowerCase());
+      const matchesTags = selectedTags.length === 0 || (app.tags && selectedTags.some(tag => app.tags?.includes(tag)));
+      const matchesTagSearch = app.tags?.some((tag) => tag.toLowerCase().includes(searchValue.toLowerCase()));
+      return (matchesName || matchesTagSearch) && matchesTags;
+    });
+  }, [myApplications, selectedTags, searchValue]
   );
 
   /**

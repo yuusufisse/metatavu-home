@@ -70,7 +70,6 @@ const AddSoftwareModal: React.FC<AddSoftwareModalProps> = ({
       try {
         const users = await usersApi.listUsers();
         setUserList(users);
-        console.log(users)
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -90,6 +89,15 @@ const AddSoftwareModal: React.FC<AddSoftwareModalProps> = ({
     );
     setNameExists(nameAlreadyExists);
   }, [software.name, existingSoftwareList]);
+
+  /**
+   * Handle form field reset to initial values.
+   */
+  const resetForm = () => {
+    setSoftware(initialSoftwareState);
+    setTags("");
+    setNameExists(false);
+  };
 
   /**
    * Handle form field changes by updating the software state.
@@ -130,28 +138,29 @@ const AddSoftwareModal: React.FC<AddSoftwareModalProps> = ({
   const handleSubmit = () => {
     if (!nameExists) {
       handleSave(software);
+      resetForm();
       handleClose();
     }
   };
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: { xs: "90%", sm: "80%", md: "60%" },
-          maxWidth: 900,
-          bgcolor: "background.paper",
-          borderRadius: "10px",
-          boxShadow: 24,
-          p: 4,
-          overflowY: "auto",
+      <Box 
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: { xs: "90%", sm: "80%", md: "60%" },
+        maxWidth: 900,
+        bgcolor: "background.paper",
+        borderRadius: "10px",
+        boxShadow: 24,
+        p: 4,
+        overflowY: "auto",
         }}
       >
-        <IconButton onClick={handleClose} sx={{ position: "absolute", top: 16, right: 16 }}>
+        <IconButton onClick={() => { resetForm(); handleClose(); }} sx={{ position: "absolute", top: 16, right: 16 }}>
           <CloseIcon />
         </IconButton>
         <Typography variant="h6" marginBottom={4}>
@@ -269,7 +278,7 @@ const AddSoftwareModal: React.FC<AddSoftwareModalProps> = ({
           </Grid>
           <Grid item container justifyContent="right" xs={12} mt={4}>
             <Button
-              onClick={handleClose}
+              onClick={() => { resetForm(); handleClose(); }}
               variant="outlined"
               sx={{
                 marginRight: "4px",

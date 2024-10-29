@@ -87,9 +87,8 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
    * Clears the search input and resets the tag selection.
    */
   const handleClearSearch = useCallback(() => {
-    const emptySearch = "";
-    setSearchValue(emptySearch);
-    onSearch(emptySearch);
+    setSearchValue("");
+    onSearch("");
     setSelectedTags([]);
     onTagSelection([]);
   }, [onSearch, onTagSelection]);
