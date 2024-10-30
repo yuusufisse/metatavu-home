@@ -29,11 +29,19 @@ const fetchSecrets = async ({ token, endpoint, path }) => {
  */
 const getDefine = async ({ mode }: UserConfig) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const { VAULT_TOKEN, VAULT_ENDPOINT, VAULT_PATH } = env;
+  const { VAULT_TOKEN, VAULT_ADDR, VAULT_PATH } = env;
+
+  if (!VAULT_PATH) {
+    throw new Error("VAULT_PATH is required. Please check your .env file.");
+  }
+
+  if (!VAULT_ADDR || !VAULT_TOKEN) {
+    throw new Error("You must be logged in to the HCV (use withhcv -command). See https://github.com/Metatavu/development-scripts/blob/master/hcv/withhcv.sh for more information.");
+  }
 
   const secrets = await fetchSecrets({
     token: VAULT_TOKEN,
-    endpoint: VAULT_ENDPOINT,
+    endpoint: VAULT_ADDR,
     path: VAULT_PATH
   });
 
