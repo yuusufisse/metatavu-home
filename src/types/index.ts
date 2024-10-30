@@ -159,3 +159,20 @@ export interface SprintViewChartData {
   timeEntries: number,
   color: string
 }
+
+/**
+ * Type describing option for a question in New Quiz Screen
+ */
+export interface QuestionOption {
+  label: string;
+  value: boolean;
+}
+
+/**
+ * Type describing a question with text and options in New Quiz Screen
+ */
+export interface Question {
+  questionText: string;
+  options: QuestionOption[];
+}
+

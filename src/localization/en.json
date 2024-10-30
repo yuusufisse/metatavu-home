@@ -219,5 +219,36 @@
   },
   "employeeSelect": {
     "employeeSelectlabel": "Select employee"
+  },
+  "questionnaireCard": {
+    "questionnairesBuilder": "Questionnaires builder",
+    "questionnaires": "Questionnaires",
+    "progressBar": "Progress Bar"   
+  },
+  "questionnaireScreen": {
+    "currentQuestionnaires": "Current Questionnaires",
+    "buildNewQuestionnaire": "Build New Questionnaire",
+    "status": "Status:",
+    "edit": "Edit",
+    "delete": "Delete", 
+    "back": "Back"
+  },
+  "newQuestionnaireScreen": {
+    "makeNewQuestionnaire": "Make a New Questionnaire",
+    "title": "Title",
+    "insertTitle": "Insert Title Here",
+    "saveButton": "Save & Submit Questionnaire",
+    "preview": "Questionnaire preview",
+    "is": "is",
+    "delete": "Delete Question",
+    "back": "Back"
+  },
+  "newQuestionnaireCard": {
+    "newQuestion": "Want to add a new question? Fill in the details below.",
+    "questionLabel": "Question",
+    "correctAnswer": "Check the correct answer(s) below.",
+    "answerLabel": "Insert Answer",
+    "addAnswer": "+ Add new answer option",
+    "saveAnswer": "Save question"
   }
 }
