@@ -1,7 +1,7 @@
 import { useState } from "react";
 import GenericDialog from "../generics/generic-dialog";
 import { OnCallCalendarEntry } from "../../types";
-import { Box, Button, Dialog, DialogActions, DialogContent,Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent,Typography} from "@mui/material";
 import { DateTime } from "luxon";
 import strings from "src/localization/strings";
 
@@ -55,8 +55,7 @@ const OnCallHandler = ({ open, setOpen, onCallEntry, updatePaidStatus }: Props) 
       </Dialog>
       {strings.vacationRequest.person}: {onCallEntry.person}
       <br />
-      <Typography>{strings.vacationRequest.status}:</Typography>
-      <Typography sx={{ marginLeft: 1 }}>{onCallEntry.paid ? strings.oncall.paid : strings.oncall.notPaid}</Typography>
+      <Typography>{strings.vacationRequest.status}: {onCallEntry.paid ? strings.oncall.paid : strings.oncall.notPaid}</Typography>
       <br />
       <Box sx={{ display: "flex", justifyContent: "center", mt: "16px" }}>
         <Button variant="outlined" onClick={() => setConfirmationOpen(true)}>
