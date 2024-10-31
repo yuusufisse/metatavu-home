@@ -7,7 +7,7 @@ import { KeyboardReturn } from "@mui/icons-material";
 import UserRoleUtils from "src/utils/user-role-utils";
 import type { Question, QuestionOption } from "src/types/index";
 import strings from "src/localization/strings";
-import { set } from "react-hook-form";
+import { useLambdasApi } from "src/hooks/use-api";
 
 /**
  * New Questionnaire Screen component
@@ -15,6 +15,7 @@ import { set } from "react-hook-form";
  */
 const NewQuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
+  const { questionnaireApi } = useLambdasApi();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
@@ -65,20 +66,24 @@ const NewQuestionnaireScreen = () => {
    * Function to save the new questionnaire
    */
   const handleSaveSubmit = async () => {
-    setLoading(true);
-    setError(null);
     try {
-      const newQuestionnaireData = { 
-        title: questionnaireTitle, 
-        description: questionnaireDescription,
-        options: questions,
-        passScore: passScoreValue
-      };
+      setLoading(true);
+      setError(null);
 
-      await createQuestionnaire(newQuestionnaireData);
-      /**
-       * TODO: fix api.ts to include questionnaire API
-       */
+      const createdQuestionnaire = 
+        await questionnaireApi.createQuestionnaire({
+          questionnaire: {
+            id: "",
+            title: questionnaireTitle, 
+            description: questionnaireDescription, 
+            options: questions, 
+            passScore: passScoreValue
+          }
+          });
+          console.log("Questionnaire saved", createdQuestionnaire);
+      return createdQuestionnaire;
+      
+
     } catch (error) {
       console.error("Failed to save questionnaire", error);
       setError("Failed to save questionnaire. Please try again.");
