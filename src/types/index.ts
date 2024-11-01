@@ -172,7 +172,7 @@ export interface QuestionOption {
  * Type describing a question with text and options in New Quiz Screen
  */
 export interface Question {
-  questionText: string;
+  question: string;
   options: QuestionOption[];
 }
 

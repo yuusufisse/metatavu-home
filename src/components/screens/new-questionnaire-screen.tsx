@@ -91,7 +91,6 @@ const NewQuestionnaireScreen = () => {
           passScore: passScoreValue
         }
       });
-      console.log("Questionnaire saved", createdQuestionnaire);
       return createdQuestionnaire;
     } catch (error) {
       console.error("Failed to save questionnaire", error);
