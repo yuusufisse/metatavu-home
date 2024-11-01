@@ -1,4 +1,19 @@
-import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, Grid, List, ListItem, ListItemText, Slider, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Slider,
+  TextField,
+  Typography
+} from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useState, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
@@ -11,7 +26,7 @@ import { useLambdasApi } from "src/hooks/use-api";
 
 /**
  * New Questionnaire Screen component
- * Includes a card (new-questionnaire-card.tsx) to create questions for a new questionnaire
+ * Includes a card (new-questionnaire-card.tsx) to create options for a new questionnaire
  */
 const NewQuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
@@ -20,7 +35,7 @@ const NewQuestionnaireScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
   const [questionnaireDescription, setQuestionnaireDescription] = useState("");
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [options, setOptions] = useState<Question[]>([]);
   const [passScoreValue, setPassScoreValue] = useState(0);
 
   const handleQuestionTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -37,28 +52,25 @@ const NewQuestionnaireScreen = () => {
 
   /**
    * Functions to add new question to Questionnaire
-   * @param questionText 
-   * @param options 
+   * @param question
+   * @param options
    */
-  const handleAddQuestionSubmit = (
-    questionText: string,
-    options: QuestionOption[]
-  ) => {
-    setQuestions((prevQuestions: Question[]) => [...prevQuestions, { questionText, options }]);
+  const handleAddQuestionSubmit = (question: string, options: QuestionOption[]) => {
+    setOptions((prevQuestions: Question[]) => [...prevQuestions, { question, options }]);
   };
 
   const handleDeleteQuestion = (index: number) => {
-    const updatedQuestions = [...questions];
+    const updatedQuestions = [...options];
     updatedQuestions.splice(index, 1);
-    setQuestions(updatedQuestions);
+    setOptions(updatedQuestions);
   };
 
   /**
    * Function to count all correct answers in the questionnaire, used for passScore determination
    */
   const countCorrectAnswers = () => {
-    return questions.reduce((count, question) => {
-      return count + question.options.filter(option => option.value === true).length;
+    return options.reduce((count, question) => {
+      return count + question.options.filter((option) => option.value === true).length;
     }, 0);
   };
 
@@ -70,29 +82,28 @@ const NewQuestionnaireScreen = () => {
       setLoading(true);
       setError(null);
 
-      const createdQuestionnaire = 
-        await questionnaireApi.createQuestionnaire({
-          questionnaire: {
-            id: "",
-            title: questionnaireTitle, 
-            description: questionnaireDescription, 
-            options: questions, 
-            passScore: passScoreValue
-          }
-          });
-          console.log("Questionnaire saved", createdQuestionnaire);
+      const createdQuestionnaire = await questionnaireApi.createQuestionnaire({
+        questionnaire: {
+          id: "",
+          title: questionnaireTitle,
+          description: questionnaireDescription,
+          options: options,
+          passScore: passScoreValue
+        }
+      });
+      console.log("Questionnaire saved", createdQuestionnaire);
       return createdQuestionnaire;
-      
-
     } catch (error) {
       console.error("Failed to save questionnaire", error);
       setError("Failed to save questionnaire. Please try again.");
-      setTimeout(() => {setError(null);}, 3000);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
     } finally {
       setLoading(false);
       setQuestionnaireTitle("");
       setQuestionnaireDescription("");
-      setQuestions([]);
+      setOptions([]);
       setPassScoreValue(0);
     }
   };
@@ -132,37 +143,37 @@ const NewQuestionnaireScreen = () => {
             sx={{ mt: 2, mb: 4 }}
           />
           <NewQuestionnaireCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
-          
-          
           <CardActions
             sx={{
               display: "flex",
               justifyContent: "flex-end",
-              padding: 0, 
+              padding: 0,
               alignItems: "flex-start",
               flexDirection: { xs: "column", sm: "row" },
               width: "100%"
             }}
           >
             <Box sx={{ display: "flex", flexDirection: "column", width: "75%", mr: 2 }}>
-            <Typography variant="h6" gutterBottom
-              sx={{ display: "flex", alignItems: "center", mb: 1, mt: 3 }}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{ display: "flex", alignItems: "center", mb: 1, mt: 3 }}
+              >
                 {strings.newQuestionnaireScreen.countedAnswers} {countCorrectAnswers()}
-            </Typography>
-            <Typography variant="h6" gutterBottom 
-              sx={{ mb: 1, mt: 1 }}>
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ mb: 1, mt: 1 }}>
                 {strings.newQuestionnaireScreen.requiredAnswers} {passScoreValue}
-            </Typography>
-            <Slider
-              value={passScoreValue}
-              onChange={handlePassScoreSliderChange as any}
-              step={1}
-              marks
-              min={0}
-              max={countCorrectAnswers()}
-              valueLabelDisplay="auto"
-              sx={{ mt: 1, width: "70%" }}
-            />
+              </Typography>
+              <Slider
+                value={passScoreValue}
+                onChange={handlePassScoreSliderChange as any}
+                step={1}
+                marks
+                min={0}
+                max={countCorrectAnswers()}
+                valueLabelDisplay="auto"
+                sx={{ mt: 1, width: "70%" }}
+              />
             </Box>
             <Button
               sx={{ display: "flex", alignItems: "center", mt: 8 }}
@@ -173,12 +184,14 @@ const NewQuestionnaireScreen = () => {
               onClick={handleSaveSubmit}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : strings.newQuestionnaireScreen.saveButton}
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                strings.newQuestionnaireScreen.saveButton
+              )}
               {error && <Alert severity="error">{error}</Alert>}
             </Button>
           </CardActions>
-
-
         </CardContent>
       </Card>
       <Card sx={{ mt: 2, width: "100%" }}>
@@ -192,7 +205,7 @@ const NewQuestionnaireScreen = () => {
           </Button>
         </Link>
       </Card>
-      {/* Card containing all the build questions */}
+      {/* Card containing all the build options */}
       <Card
         sx={{
           p: 2,
@@ -213,14 +226,18 @@ const NewQuestionnaireScreen = () => {
             <Typography variant="h5" gutterBottom>
               {questionnaireTitle}
             </Typography>
-            {questions.map((q, index) => (
+            {options.map((q, index) => (
               <Grid item xs={12} key={index} sx={{ mb: 2 }}>
                 <Card sx={{ p: 2 }}>
-                  <Typography>{q.questionText}</Typography>
+                  <Typography>{q.question}</Typography>
                   <List component="ol">
                     {q.options.map((option, idx) => (
                       <ListItem component="li" key={idx}>
-                        <ListItemText primary={`${option.label} ${strings.newQuestionnaireScreen.is} ${option.value.toString()}`} />
+                        <ListItemText
+                          primary={`${option.label} ${
+                            strings.newQuestionnaireScreen.is
+                          } ${option.value.toString()}`}
+                        />
                       </ListItem>
                     ))}
                   </List>
