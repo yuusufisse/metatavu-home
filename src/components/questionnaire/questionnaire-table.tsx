@@ -73,7 +73,7 @@ const QuestionnaireTable = () => {
     }
   };
 
-	const columns = [
+  const columns = [
     { field: "title", headerName: `${strings.questionnaireTable.title}`, flex: 3 },
     { field: "description", headerName: `${strings.questionnaireTable.description}`, flex: 5 },
     adminMode
@@ -96,7 +96,7 @@ const QuestionnaireTable = () => {
                 {strings.questionnaireTable.delete}
               </Button>
             </>
-          ),
+          )
         }
       : {
           field: "status",
@@ -107,13 +107,13 @@ const QuestionnaireTable = () => {
               <CheckCircleIcon sx={{ color: "green" }} />
             ) : (
               <CloseIcon sx={{ color: "red" }} />
-            ),
-        },
+            )
+        }
   ];
 
   return (
     <>
-        <Paper style={{ height: 500, width: "100%" }}>
+      <Paper style={{ height: 500, width: "100%" }}>
         {loading && (
           <CircularProgress
             size={50}
@@ -121,28 +121,23 @@ const QuestionnaireTable = () => {
               position: "absolute",
               top: "50%",
               left: "50%",
-              transform: "translate(-50%, -50%)",
+              transform: "translate(-50%, -50%)"
             }}
           />
         )}
-          <DataGrid
-            rows={questionnaires}
-            columns={columns}
-            pagination
-            pageSizeOptions={[5]}
-            getRowId={(row) => row.id}
-            disableRowSelectionOnClick
-          />
-        </Paper>
-        <Dialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-      >
+        <DataGrid
+          rows={questionnaires}
+          columns={columns}
+          pagination
+          pageSizeOptions={[5]}
+          getRowId={(row) => row.id}
+          disableRowSelectionOnClick
+        />
+      </Paper>
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>{strings.questionnaireTable.confirmDeleteTitle}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {deleteTitle}
-          </DialogContentText>
+          <DialogContentText>{deleteTitle}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
@@ -153,7 +148,6 @@ const QuestionnaireTable = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </>
   );
 };
