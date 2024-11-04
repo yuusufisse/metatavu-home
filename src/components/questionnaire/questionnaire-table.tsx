@@ -17,7 +17,6 @@ import { useLambdasApi } from "src/hooks/use-api";
  * Questionnaire Table Component
  * @returns Questionnaires from DynamoDB rendered in a x-data-grid table
  */
-
 const QuestionnaireTable = () => {
   const adminMode = UserRoleUtils.adminMode();
   const { questionnaireApi } = useLambdasApi();
@@ -33,7 +32,7 @@ const QuestionnaireTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await questionnaireApi.deleteQuestionnaire(id);
+      await questionnaireApi.deleteQuestionnaire({ id });
       setQuestionnaires((prevQuestionnaires: Questionnaire[]) =>
         prevQuestionnaires.filter((questionnaire: Questionnaire) => questionnaire.id !== id)
       );
@@ -43,17 +42,17 @@ const QuestionnaireTable = () => {
   };
 
 	const columns = [
-    { field: 'title', headerName: `${strings.questionnaireTable.title}`, flex: 3 },
-    { field: 'description', headerName: `${strings.questionnaireTable.description}`, flex: 5 },
+    { field: "title", headerName: `${strings.questionnaireTable.title}`, flex: 3 },
+    { field: "description", headerName: `${strings.questionnaireTable.description}`, flex: 5 },
     adminMode
       ? {
-          field: 'actions',
+          field: "actions",
           headerName: `${strings.questionnaireTable.actions}`,
           flex: 2.5,
           renderCell: (params: GridRenderCellParams) => (
             <>
               <Button variant="outlined" color="success" sx={{ mr: 1 }}>
-                <EditIcon sx={{ color: 'success.main', mr: 1 }} />
+                <EditIcon sx={{ color: "success.main", mr: 1 }} />
                 {strings.questionnaireTable.edit}
               </Button>
               <Button
@@ -61,28 +60,28 @@ const QuestionnaireTable = () => {
                 color="secondary"
                 onClick={() => handleDelete(params.row.id)}
               >
-                <DeleteForeverIcon sx={{ color: 'red', mr: 1 }} />
+                <DeleteForeverIcon sx={{ color: "red", mr: 1 }} />
                 {strings.questionnaireTable.delete}
               </Button>
             </>
           ),
         }
       : {
-          field: 'status',
+          field: "status",
           headerName: `${strings.questionnaireTable.status}`,
           flex: 1,
           renderCell: (params: GridRenderCellParams) =>
             params.row.passedUsers && params.row.passedUsers.lenght > 0 ? (
-              <CheckCircleIcon sx={{ color: 'green' }} />
+              <CheckCircleIcon sx={{ color: "green" }} />
             ) : (
-              <CloseIcon sx={{ color: 'red' }} />
+              <CloseIcon sx={{ color: "red" }} />
             ),
         },
   ];
 
   return (
     <>
-        <Paper style={{ height: 500, width: '100%' }}>
+        <Paper style={{ height: 500, width: "100%" }}>
           <DataGrid
             rows={questionnaires}
             columns={columns}
