@@ -1,6 +1,12 @@
 import {
   Paper,
-  Button
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -21,23 +27,46 @@ const QuestionnaireTable = () => {
   const adminMode = UserRoleUtils.adminMode();
   const { questionnaireApi } = useLambdasApi();
   const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
-      const questionnaires = await questionnaireApi.listQuestionnaires();
-      setQuestionnaires(questionnaires);
+      setLoading(true);
+      try {
+        const questionnaires = await questionnaireApi.listQuestionnaires();
+        setQuestionnaires(questionnaires);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchQuestionnaires();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleOpenDialog = (id: string) => {
+    setDeleteId(id);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setDeleteId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
+    setLoading(true);
     try {
-      await questionnaireApi.deleteQuestionnaire({ id });
+      await questionnaireApi.deleteQuestionnaire({ id: deleteId });
       setQuestionnaires((prevQuestionnaires: Questionnaire[]) =>
         prevQuestionnaires.filter((questionnaire: Questionnaire) => questionnaire.id !== id)
       );
+      handleCloseDialog();
     } catch (error) {
       console.error("Delete Questionnaire failed:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,14 +111,46 @@ const QuestionnaireTable = () => {
   return (
     <>
         <Paper style={{ height: 500, width: "100%" }}>
+        {loading && (
+          <CircularProgress
+            size={50}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        )}
           <DataGrid
             rows={questionnaires}
             columns={columns}
             pagination
             pageSizeOptions={[5]}
             getRowId={(row) => row.id}
+            disableRowSelectionOnClick
           />
         </Paper>
+        <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>{strings.questionnaireTable.confirmDeleteTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {strings.questionnaireTable.confirmDeleteMessage}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            {strings.questionnaireTable.cancel}
+          </Button>
+          <Button onClick={handleConfirmDelete} color="secondary" variant="contained">
+            {strings.questionnaireTable.confirm}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </>
   );
 };

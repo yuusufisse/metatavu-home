@@ -257,6 +257,11 @@
     "actions": "Actions",
     "edit": "Edit",
     "delete": "Delete",
-    "status": "Status"
+    "status": "Status",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteMessage": "Delete selected questionnaire?",
+    "cancel": "Cancel",
+    "confirm": "Confirm Delete"
+
   }
 }

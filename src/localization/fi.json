@@ -257,6 +257,10 @@
     "actions": "Toiminnot",
     "edit": "Muokkaa",
     "delete": "Poista",
-    "status": "Tila"
+    "status": "Tila",
+    "confirmDeleteTitle": "Oletko varma?",
+    "confirmDeleteMessage": "Poista valittu kysely?",
+    "cancel": "Peruuta",
+    "confirm": "Vahvista poisto"
   }
 }
