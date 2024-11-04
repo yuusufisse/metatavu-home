@@ -26,7 +26,6 @@ import { useLambdasApi } from "src/hooks/use-api";
 
 /**
  * New Questionnaire Screen component
- * Includes a card (new-questionnaire-card.tsx) to create options for a new questionnaire
  */
 const NewQuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
@@ -51,14 +50,18 @@ const NewQuestionnaireScreen = () => {
   };
 
   /**
-   * Functions to add new question to Questionnaire
-   * @param question
-   * @param options
+   * Functions to add new question to Questionnaire that is being built
+   * @param questionText string
+   * @param list of QuestionOptions
    */
-  const handleAddQuestionSubmit = (question: string, options: QuestionOption[]) => {
-    setOptions((prevQuestions: Question[]) => [...prevQuestions, { question, options }]);
+  const handleAddQuestionSubmit = (questionText: string, options: QuestionOption[]) => {
+    setOptions((prevQuestions: Question[]) => [...prevQuestions, { questionText, options }]);
   };
 
+  /**
+   * Function to delete question from the questionnaire that is being built
+   * @param index
+   */
   const handleDeleteQuestion = (index: number) => {
     const updatedQuestions = [...options];
     updatedQuestions.splice(index, 1);
@@ -77,14 +80,13 @@ const NewQuestionnaireScreen = () => {
   /**
    * Function to save the new questionnaire
    */
-  const handleSaveSubmit = async () => {
+  const saveQuestionnaire = async () => {
     try {
       setLoading(true);
       setError(null);
 
       const createdQuestionnaire = await questionnaireApi.createQuestionnaire({
         questionnaire: {
-          id: "",
           title: questionnaireTitle,
           description: questionnaireDescription,
           options: options,
@@ -109,7 +111,7 @@ const NewQuestionnaireScreen = () => {
 
   return (
     <>
-      {/* Card containing functions to insert new Quiz */}
+      {/* Card containing functions to build new Questionnaire */}
       <Card
         sx={{
           p: 2,
@@ -180,7 +182,7 @@ const NewQuestionnaireScreen = () => {
               size="large"
               variant="contained"
               color="success"
-              onClick={handleSaveSubmit}
+              onClick={saveQuestionnaire}
               disabled={loading}
             >
               {loading ? (
@@ -204,7 +206,7 @@ const NewQuestionnaireScreen = () => {
           </Button>
         </Link>
       </Card>
-      {/* Card containing all the build options */}
+      {/* Card containing questions preview */}
       <Card
         sx={{
           p: 2,

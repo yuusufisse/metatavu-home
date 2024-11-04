@@ -161,7 +161,7 @@ export interface SprintViewChartData {
 }
 
 /**
- * Type describing option for a question in New Quiz Screen
+ * Type describing option for a question in New Questionnaire Screen
  */
 export interface QuestionOption {
   label: string;
@@ -169,10 +169,10 @@ export interface QuestionOption {
 }
 
 /**
- * Type describing a question with text and options in New Quiz Screen
+ * Type describing a question with text and options in New Questionnaire Screen
  */
 export interface Question {
-  question: string;
+  questionText: string;
   options: QuestionOption[];
 }
 

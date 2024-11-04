@@ -12,6 +12,7 @@ import {
 import type React from "react";
 import { useState } from "react";
 import strings from "src/localization/strings";
+import type { QuestionOption } from "src/types/index";
 
 /**
  * Interface for the NewQuestionnaireCard component
@@ -22,10 +23,11 @@ interface Props {
 
 /**
  * New Questionnaire Card Component
+ * @params handleAddQuestionSubmit
  */
 const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
   const [question, setQuestionText] = useState("");
-  const [options, setOptions] = useState([{ label: "", value: false }]);
+  const [options, setOptions] = useState<QuestionOption[]>([]);
 
   /**
    * Handle options label (answer option) change
@@ -58,9 +60,9 @@ const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
   };
 
   /**
-   * Handle saving the question (submitting the question and options + resetting the form)
+   * Handle adding new question (submitting the question and options + resetting the form)
    */
-  const handleSaveQuestion = () => {
+  const handleAddNewQuestion = () => {
     handleAddQuestionSubmit(question, options);
     setQuestionText("");
     setOptions([{ label: "", value: false }]);
@@ -140,7 +142,7 @@ const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
           </Button>
           <CardActionArea>
             <CardActions>
-              <Button size="large" variant="contained" onClick={handleSaveQuestion}>
+              <Button size="large" variant="contained" onClick={handleAddNewQuestion}>
                 {strings.newQuestionnaireCard.saveAnswer}
               </Button>
             </CardActions>
