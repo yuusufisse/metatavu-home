@@ -30,6 +30,7 @@ const QuestionnaireTable = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteTitle, setDeleteTitle] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -44,14 +45,16 @@ const QuestionnaireTable = () => {
     fetchQuestionnaires();
   }, []);
 
-  const handleOpenDialog = (id: string) => {
+  const handleOpenDialog = (id: string, title: string) => {
     setDeleteId(id);
+    setDeleteTitle(title);
     setDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setDeleteId(null);
+    setDeleteTitle(null);
   };
 
   const handleConfirmDelete = async () => {
@@ -60,7 +63,7 @@ const QuestionnaireTable = () => {
     try {
       await questionnaireApi.deleteQuestionnaire({ id: deleteId });
       setQuestionnaires((prevQuestionnaires: Questionnaire[]) =>
-        prevQuestionnaires.filter((questionnaire: Questionnaire) => questionnaire.id !== id)
+        prevQuestionnaires.filter((questionnaire: Questionnaire) => questionnaire.id !== deleteId)
       );
       handleCloseDialog();
     } catch (error) {
@@ -87,7 +90,7 @@ const QuestionnaireTable = () => {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => handleDelete(params.row.id)}
+                onClick={() => handleOpenDialog(params.row.id, params.row.title)}
               >
                 <DeleteForeverIcon sx={{ color: "red", mr: 1 }} />
                 {strings.questionnaireTable.delete}
@@ -138,7 +141,7 @@ const QuestionnaireTable = () => {
         <DialogTitle>{strings.questionnaireTable.confirmDeleteTitle}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {strings.questionnaireTable.confirmDeleteMessage}
+            {deleteTitle}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

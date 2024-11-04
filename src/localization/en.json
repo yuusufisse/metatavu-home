@@ -258,8 +258,7 @@
     "edit": "Edit",
     "delete": "Delete",
     "status": "Status",
-    "confirmDeleteTitle": "Are you sure?",
-    "confirmDeleteMessage": "Delete selected questionnaire?",
+    "confirmDeleteTitle": "Are you sure to delete?",
     "cancel": "Cancel",
     "confirm": "Confirm Delete"
 

@@ -258,8 +258,7 @@
     "edit": "Muokkaa",
     "delete": "Poista",
     "status": "Tila",
-    "confirmDeleteTitle": "Oletko varma?",
-    "confirmDeleteMessage": "Poista valittu kysely?",
+    "confirmDeleteTitle": "Oletko varma, että haluat poista?",
     "cancel": "Peruuta",
     "confirm": "Vahvista poisto"
   }

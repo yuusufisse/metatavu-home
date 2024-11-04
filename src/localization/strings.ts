@@ -346,7 +346,6 @@ export interface Localized extends LocalizedStringsMethods {
     delete: string;
     status: string;
     confirmDeleteTitle: string;
-    confirmDeleteMessage: string;
     cancel: string;
     confirm: string;
   }; 
