@@ -1,10 +1,11 @@
-import { Card, Grid } from "@mui/material";
+import { Card, CircularProgress, Grid } from "@mui/material";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { KeyboardReturn } from "@mui/icons-material";
 import strings from "src/localization/strings";
 import QuestionnaireTable from "../questionnaire/questionnaire-table";
+import { Suspense } from "react";
 
 /**
  * Questionnaire Screen Component
@@ -58,7 +59,11 @@ const QuestionnaireScreen = () => {
           </Grid>
         </Grid>
       </Grid>
-      <QuestionnaireTable/>
+      <Suspense fallback={<CircularProgress/>}>
+        <QuestionnaireTable/>
+      </Suspense>
+      
+
       <Card sx={{ mt: 2, width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
           <Button variant="contained" sx={{ p: 2, width: "100%" }}>

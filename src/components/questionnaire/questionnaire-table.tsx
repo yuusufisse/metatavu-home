@@ -11,53 +11,21 @@ import type { Questionnaire } from "src/generated/homeLambdasClient";
 import strings from "src/localization/strings";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { DataGrid, type GridRenderCellParams } from "@mui/x-data-grid";
+import { useLambdasApi } from "src/hooks/use-api";
 
-const mockQuestionnaires = [
-  {
-    id: "1",
-    title: "Math Basics",
-    description: "A simple questionnaire to test basic math skills.",
-    passedUsers: true
-  },
-  {
-    id: "2",
-    title: "Science Facts",
-    description: "Test your knowledge of fundamental science facts.",
-    passedUsers: false
-  },
-  {
-    id: "3",
-    title: "History Quiz",
-    description: "A deep dive into world history questions.",
-    passedUsers: false
-  },
-  {
-    id: "4",
-    title: "Programming Fundamentals",
-    description: "Basic questions to evaluate understanding of programming.",
-    passedUsers: false
-  },
-  {
-    id: "5",
-    title: "Geography Challenge",
-    description: "Quiz to assess knowledge on global geography.",
-    passedUsers: false
-  },
-	{
-		id: "6",
-		title: "Literature Quiz",
-		description: "Questions on classic literature.",
-		passedUsers: false
-	}
-];
+/**
+ * Questionnaire Table Component
+ * @returns Questionnaires from DynamoDB rendered in a x-data-grid table
+ */
 
 const QuestionnaireTable = () => {
   const adminMode = UserRoleUtils.adminMode();
-  const [, setQuestionnaires] = useState<Questionnaire[]>([]);
+  const { questionnaireApi } = useLambdasApi();
+  const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([]);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
-      const questionnaires = await listQuestionnaires();
+      const questionnaires = await questionnaireApi.listQuestionnaires();
       setQuestionnaires(questionnaires);
     };
     fetchQuestionnaires();
@@ -65,7 +33,7 @@ const QuestionnaireTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteQuestionnaire(id);
+      await questionnaireApi.deleteQuestionnaire(id);
       setQuestionnaires((prevQuestionnaires: Questionnaire[]) =>
         prevQuestionnaires.filter((questionnaire: Questionnaire) => questionnaire.id !== id)
       );
@@ -104,7 +72,7 @@ const QuestionnaireTable = () => {
           headerName: `${strings.questionnaireTable.status}`,
           flex: 1,
           renderCell: (params: GridRenderCellParams) =>
-            params.row.passedUsers ? (
+            params.row.passedUsers && params.row.passedUsers.lenght > 0 ? (
               <CheckCircleIcon sx={{ color: 'green' }} />
             ) : (
               <CloseIcon sx={{ color: 'red' }} />
@@ -116,7 +84,7 @@ const QuestionnaireTable = () => {
     <>
         <Paper style={{ height: 500, width: '100%' }}>
           <DataGrid
-            rows={mockQuestionnaires}
+            rows={questionnaires}
             columns={columns}
             pagination
             pageSizeOptions={[5]}
