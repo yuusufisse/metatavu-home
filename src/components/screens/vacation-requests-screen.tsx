@@ -152,7 +152,6 @@ const VacationRequestsScreen = () => {
   const fetchVacationsRequests = async () => {
     setLoading(true);
     if (!loggedInUser) return;
-    console.log(loggedInUser);
 
     if (!vacationRequests.length) {
       try {
