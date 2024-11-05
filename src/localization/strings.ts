@@ -46,6 +46,7 @@ export interface Localized extends LocalizedStringsMethods {
     fetchFailedGeneral: string;
     fetchFailedNoEntriesGeneral: string;
     fetchSlackAvatarsFailed: string;
+    questionnaireSaveFailed: string;
   };
   /**
    * Translations related to localization

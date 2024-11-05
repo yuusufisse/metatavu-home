@@ -29,7 +29,8 @@
     "dailyEntriesNotFound": "Aikakirjauksia ei löydetty",
     "fetchFailedGeneral": "Tietojen hakeminen epäonnistui",
     "fetchFailedNoEntriesGeneral": "Ei aikatietoja saatavilla",
-    "fetchSlackAvatarsFailed": "Virhe Slack-avatareita pyydettäessä"
+    "fetchSlackAvatarsFailed": "Virhe Slack-avatareita pyydettäessä",
+    "questionnaireSaveFailed": "Kyselyn tallentaminen epäonnistui"
   },
   "localization": {
     "en": "EN",

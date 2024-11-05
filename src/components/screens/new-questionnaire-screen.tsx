@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   Card,
@@ -23,6 +22,8 @@ import UserRoleUtils from "src/utils/user-role-utils";
 import type { Question, QuestionOption } from "src/types/index";
 import strings from "src/localization/strings";
 import { useLambdasApi } from "src/hooks/use-api";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "src/atoms/error";
 
 /**
  * New Questionnaire Screen component
@@ -31,7 +32,7 @@ const NewQuestionnaireScreen = () => {
   const adminMode = UserRoleUtils.adminMode();
   const { questionnaireApi } = useLambdasApi();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const setError = useSetAtom(errorAtom);
   const [questionnaireTitle, setQuestionnaireTitle] = useState("");
   const [questionnaireDescription, setQuestionnaireDescription] = useState("");
   const [options, setOptions] = useState<Question[]>([]);
@@ -51,11 +52,11 @@ const NewQuestionnaireScreen = () => {
   };
 
   /**
-   * Function to handle slider that pass score about what is the minimum score to pass the questionnaire
+   * Function to handle slider that pass value about what is the minimum score to pass the questionnaire
    * @param event
-   * @param value number 
+   * @param value number
    */
-  const handlePassScoreSliderChange = (_ : Event, value: number | number[]) => {
+  const handlePassScoreSliderChange = (_: Event, value: number | number[]) => {
     setPassScoreValue(value as number);
   };
 
@@ -64,7 +65,7 @@ const NewQuestionnaireScreen = () => {
    * @param questionText string
    * @param list of QuestionOptions
    */
-  const handleAddQuestionSubmit = (questionText: string, options: QuestionOption[]) => {
+  const handleAddQuestion = (questionText: string, options: QuestionOption[]) => {
     setOptions((prevQuestions: Question[]) => [...prevQuestions, { questionText, options }]);
   };
 
@@ -91,7 +92,6 @@ const NewQuestionnaireScreen = () => {
    * Function to close and clear the questionnaire form
    */
   const closeAndClear = async () => {
-    setLoading(false);
     setQuestionnaireTitle("");
     setQuestionnaireDescription("");
     setOptions([]);
@@ -102,10 +102,8 @@ const NewQuestionnaireScreen = () => {
    * Function to save the new questionnaire
    */
   const saveQuestionnaire = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-
       const createdQuestionnaire = await questionnaireApi.createQuestionnaire({
         questionnaire: {
           title: questionnaireTitle,
@@ -114,16 +112,15 @@ const NewQuestionnaireScreen = () => {
           passScore: passScoreValue
         }
       });
+      closeAndClear();
       return createdQuestionnaire;
     } catch (error) {
-      console.error("Failed to save questionnaire", error);
-      setError("Failed to save questionnaire. Please try again.");
+      setError(`${strings.error.questionnaireSaveFailed}, ${error}`);
       setTimeout(() => {
-        setError(null);
-      }, 3000);
-    } finally {
-      closeAndClear();
+        setError(undefined);
+      }, 5000);
     }
+    setLoading(false);
   };
 
   return (
@@ -162,7 +159,7 @@ const NewQuestionnaireScreen = () => {
             fullWidth
             sx={{ mt: 2, mb: 4 }}
           />
-          <NewQuestionnaireCard handleAddQuestionSubmit={handleAddQuestionSubmit} />
+          <NewQuestionnaireCard handleAddQuestion={handleAddQuestion} />
           <CardActions
             sx={{
               display: "flex",
@@ -209,7 +206,6 @@ const NewQuestionnaireScreen = () => {
               ) : (
                 strings.newQuestionnaireScreen.saveButton
               )}
-              {error && <Alert severity="error">{error}</Alert>}
             </Button>
           </CardActions>
         </CardContent>
@@ -249,7 +245,7 @@ const NewQuestionnaireScreen = () => {
             {options.map((q, index) => (
               <Grid item xs={12} key={index} sx={{ mb: 2 }}>
                 <Card sx={{ p: 2 }}>
-                  <Typography>{q.question}</Typography>
+                  <Typography>{q.questionText}</Typography>
                   <List component="ol">
                     {q.options.map((option, idx) => (
                       <ListItem component="li" key={idx}>

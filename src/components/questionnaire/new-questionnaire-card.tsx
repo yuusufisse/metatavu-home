@@ -18,16 +18,16 @@ import type { QuestionOption } from "src/types/index";
  * Interface for the NewQuestionnaireCard component
  */
 interface Props {
-  handleAddQuestionSubmit: (question: string, options: { label: string; value: boolean }[]) => void;
+  handleAddQuestion: (question: string, options: { label: string; value: boolean }[]) => void;
 }
 
 /**
  * New Questionnaire Card Component
- * @params handleAddQuestionSubmit
+ * @params handleAddQuestion
  */
-const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
+const NewQuestionnaireCard = ({ handleAddQuestion }: Props) => {
   const [questionText, setQuestionText] = useState("");
-  const [options, setOptions] = useState<QuestionOption[]>([{label: "", value: false}]);
+  const [options, setOptions] = useState<QuestionOption[]>([{ label: "", value: false }]);
 
   /**
    * Handle options label (answer option) change
@@ -63,7 +63,7 @@ const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
    * Handle adding new question (submitting the question and options + resetting the form)
    */
   const handleAddNewQuestion = () => {
-    handleAddQuestionSubmit(questionText, options);
+    handleAddQuestion(questionText, options);
     setQuestionText("");
     setOptions([{ label: "", value: false }]);
   };
