@@ -10,7 +10,6 @@ import {
   type VacationRequest,
   type VacationRequestStatus,
   VacationRequestStatuses,
-  type Person
 } from "src/generated/client";
 import { useApi } from "src/hooks/use-api";
 import { DateTime } from "luxon";
@@ -24,7 +23,6 @@ import {
 import { getVacationRequestStatusColor } from "src/utils/vacation-status-utils";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { Check, Pending } from "@mui/icons-material";
-import { personsAtom } from "src/atoms/person";
 import { getVacationRequestPersonFullName } from "src/utils/vacation-request-utils";
 import { validateValueIsNotUndefinedNorNull } from "src/utils/check-utils";
 import type { VacationInfoListItem } from "src/types";
@@ -51,9 +49,9 @@ const VacationsCard = () => {
   );
   const [loading, setLoading] = useState(false);
   const [users] = useAtom(usersAtom);
-  const loggedInPerson = users.find(
-    (person: User) =>
-      person.forecastId === config.person.forecastUserIdOverride || person.id === userProfile?.id
+  const loggedInUser = users.find(
+    (user: User) =>
+      user.forecastId === config.person.forecastUserIdOverride || user.id === userProfile?.id
   );
 
   /**
@@ -130,9 +128,7 @@ const VacationsCard = () => {
    */
   const fetchVacationsRequests = async () => {
     setLoading(true);
-    if (!loggedInPerson) return;
-
-    console.log("Hello", loggedInPerson);
+    if (!loggedInUser) return;
 
     if (!vacationRequests.length) {
       try {
@@ -141,10 +137,9 @@ const VacationsCard = () => {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({
-            personId: loggedInPerson.id
+            personId: loggedInUser.id
           });
         }
-        console.log("Hello 2", fetchedVacationRequests);
         setVacationRequests(fetchedVacationRequests);
       } catch (error) {
         setError(`${strings.vacationRequestError.fetchRequestError}, ${error}`);
@@ -155,7 +150,7 @@ const VacationsCard = () => {
 
   useMemo(() => {
     fetchVacationsRequests();
-  }, [loggedInPerson]);
+  }, [loggedInUser]);
 
   /**
    * Get pending vacation requests by checking wether it has a status or not
@@ -383,7 +378,7 @@ const VacationsCard = () => {
           <Grid container>
             <Box sx={{ width: "100%", display: "flex", flexDirection: "column", mb: 2 }}>
               {/* TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code. */}
-              {/* {loggedInPerson && renderVacationDaysTextForCard(loggedInPerson)} */}
+              {/* {loggedInUser && renderVacationDaysTextForCard(loggedInUser)} */}
             </Box>
             {renderUpcomingOrPendingVacationRequestsCount()}
             {renderEarliestUpcomingVacationRequest()}
