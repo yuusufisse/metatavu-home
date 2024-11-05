@@ -5,7 +5,6 @@ import UserRoleUtils from "src/utils/user-role-utils";
 import { KeyboardReturn } from "@mui/icons-material";
 import strings from "src/localization/strings";
 import QuestionnaireTable from "../questionnaire/questionnaire-table";
-import { Suspense } from "react";
 
 /**
  * Questionnaire Screen Component
@@ -59,11 +58,7 @@ const QuestionnaireScreen = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Suspense fallback={<CircularProgress/>}>
-        <QuestionnaireTable/>
-      </Suspense>
-      
-
+      <QuestionnaireTable/>
       <Card sx={{ mt: 2, width: "100%" }}>
         <Link to={adminMode ? "/admin" : "/"} style={{ textDecoration: "none" }}>
           <Button variant="contained" sx={{ p: 2, width: "100%" }}>

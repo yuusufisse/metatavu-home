@@ -18,6 +18,8 @@ import strings from "src/localization/strings";
 import UserRoleUtils from "src/utils/user-role-utils";
 import { DataGrid, type GridRenderCellParams } from "@mui/x-data-grid";
 import { useLambdasApi } from "src/hooks/use-api";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "src/atoms/error";
 
 /**
  * Questionnaire Table Component
@@ -27,10 +29,11 @@ const QuestionnaireTable = () => {
   const adminMode = UserRoleUtils.adminMode();
   const { questionnaireApi } = useLambdasApi();
   const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteTitle, setDeleteTitle] = useState<string | null>(null);
+  const setError = useSetAtom(errorAtom);
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -38,27 +41,40 @@ const QuestionnaireTable = () => {
       try {
         const questionnaires = await questionnaireApi.listQuestionnaires();
         setQuestionnaires(questionnaires);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        setError(`${strings.error.questionnaireLoadFailed}, ${error}`);
       }
+      setLoading(false);
     };
     fetchQuestionnaires();
   }, []);
 
+  /**
+   * Function to open the dialog for deleting the questionnaire
+   * @param id - Questionnaire ID
+   * @param title - Questionnaire Title
+   */
   const handleOpenDialog = (id: string, title: string) => {
     setDeleteId(id);
     setDeleteTitle(title);
     setDialogOpen(true);
   };
 
+/**
+ * Function to close the dialog for deleting the questionnaire
+ */
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setDeleteId(null);
     setDeleteTitle(null);
   };
 
+  /**
+   * Function to delete the questionnaire
+   */
   const handleConfirmDelete = async () => {
-    if (!deleteId) return;
+    if (!deleteId) 
+      return;
     setLoading(true);
     try {
       await questionnaireApi.deleteQuestionnaire({ id: deleteId });
@@ -67,10 +83,32 @@ const QuestionnaireTable = () => {
       );
       handleCloseDialog();
     } catch (error) {
-      console.error("Delete Questionnaire failed:", error);
-    } finally {
-      setLoading(false);
+      setError(`${strings.error.questionnaireDeleteFailed}, ${error}`);
     }
+      setLoading(false);
+    
+  };
+
+  /**
+   * Function to render the confirm delete dialog
+   */
+  const renderConfirmDeleteDialog = () => {
+    return (
+<Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>{strings.questionnaireTable.confirmDeleteTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{deleteTitle}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            {strings.questionnaireTable.cancel}
+          </Button>
+          <Button onClick={handleConfirmDelete} color="secondary" variant="contained">
+            {strings.questionnaireTable.confirm}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   const columns = [
@@ -83,7 +121,7 @@ const QuestionnaireTable = () => {
           flex: 2.5,
           renderCell: (params: GridRenderCellParams) => (
             <>
-              <Button variant="outlined" color="success" sx={{ mr: 1 }}>
+              <Button variant="outlined" color="success" sx={{ mr: 1 }} disabled>
                 <EditIcon sx={{ color: "success.main", mr: 1 }} />
                 {strings.questionnaireTable.edit}
               </Button>
@@ -102,12 +140,13 @@ const QuestionnaireTable = () => {
           field: "status",
           headerName: `${strings.questionnaireTable.status}`,
           flex: 1,
-          renderCell: (params: GridRenderCellParams) =>
-            params.row.passedUsers && params.row.passedUsers.lenght > 0 ? (
-              <CheckCircleIcon sx={{ color: "green" }} />
-            ) : (
-              <CloseIcon sx={{ color: "red" }} />
-            )
+          FIXME: "This should be checking if loggedInUser.id is in passedUsers array",
+          // renderCell: (params: GridRenderCellParams) =>
+          //   params.row.passedUsers && params.row.passedUsers.lenght > 0 ? (
+          //     <CheckCircleIcon sx={{ color: "green" }} />
+          //   ) : (
+          //     <CloseIcon sx={{ color: "red" }} />
+          //   )
         }
   ];
 
@@ -129,25 +168,11 @@ const QuestionnaireTable = () => {
           rows={questionnaires}
           columns={columns}
           pagination
-          pageSizeOptions={[5]}
-          getRowId={(row) => row.id}
+          getRowId={(row) => row.id || ""}
           disableRowSelectionOnClick
         />
       </Paper>
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>{strings.questionnaireTable.confirmDeleteTitle}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{deleteTitle}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            {strings.questionnaireTable.cancel}
-          </Button>
-          <Button onClick={handleConfirmDelete} color="secondary" variant="contained">
-            {strings.questionnaireTable.confirm}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {renderConfirmDeleteDialog()}
     </>
   );
 };
