@@ -37,17 +37,26 @@ const NewQuestionnaireScreen = () => {
   const [options, setOptions] = useState<Question[]>([]);
   const [passScoreValue, setPassScoreValue] = useState(0);
 
-  const handleQuestionTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuestionnaireTitle(event.target.value);
+  /**
+   * Function to handle input change in the questionnaire title and description
+   * @param event
+   */
+  const handleQuestionnaireInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === "title") {
+      setQuestionnaireTitle(value);
+    } else if (name === "description") {
+      setQuestionnaireDescription(value);
+    }
   };
-
-  const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuestionnaireDescription(event.target.value);
-  };
-
+  
+  /**
+   * Function to handle slider that pass score about what is the minimum score to pass the questionnaire
+   * @param _ empty event
+   * @param value 
+   */
   const handlePassScoreSliderChange = (_: Event, value: number) => {
     setPassScoreValue(value as number);
-    console.log("Pass score value: ", passScoreValue);
   };
 
   /**
@@ -127,19 +136,21 @@ const NewQuestionnaireScreen = () => {
             {strings.newQuestionnaireScreen.makeNewQuestionnaire}
           </Typography>
           <TextField
+            name="title"
             label={strings.newQuestionnaireScreen.title}
             placeholder={strings.newQuestionnaireScreen.insertTitle}
             value={questionnaireTitle}
-            onChange={handleQuestionTitleChange}
+            onChange={handleQuestionnaireInputChange}
             variant="outlined"
             fullWidth
             sx={{ mt: 2, mb: 2 }}
           />
           <TextField
+            name="description"
             label={strings.newQuestionnaireScreen.description}
             placeholder={strings.newQuestionnaireScreen.insertDescription}
             value={questionnaireDescription}
-            onChange={handleDescriptionChange}
+            onChange={handleQuestionnaireInputChange}
             variant="outlined"
             fullWidth
             sx={{ mt: 2, mb: 4 }}
