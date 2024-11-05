@@ -49,13 +49,13 @@ const NewQuestionnaireScreen = () => {
       setQuestionnaireDescription(value);
     }
   };
-  
+
   /**
    * Function to handle slider that pass score about what is the minimum score to pass the questionnaire
-   * @param _ empty event
-   * @param value 
+   * @param event
+   * @param value number 
    */
-  const handlePassScoreSliderChange = (_: Event, value: number) => {
+  const handlePassScoreSliderChange = (_ : Event, value: number | number[]) => {
     setPassScoreValue(value as number);
   };
 
@@ -88,6 +88,17 @@ const NewQuestionnaireScreen = () => {
   };
 
   /**
+   * Function to close and clear the questionnaire form
+   */
+  const closeAndClear = async () => {
+    setLoading(false);
+    setQuestionnaireTitle("");
+    setQuestionnaireDescription("");
+    setOptions([]);
+    setPassScoreValue(0);
+  };
+
+  /**
    * Function to save the new questionnaire
    */
   const saveQuestionnaire = async () => {
@@ -111,11 +122,7 @@ const NewQuestionnaireScreen = () => {
         setError(null);
       }, 3000);
     } finally {
-      setLoading(false);
-      setQuestionnaireTitle("");
-      setQuestionnaireDescription("");
-      setOptions([]);
-      setPassScoreValue(0);
+      closeAndClear();
     }
   };
 
