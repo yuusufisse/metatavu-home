@@ -24,7 +24,6 @@ import UserRoleUtils from "src/utils/user-role-utils";
 import { Link } from "react-router-dom";
 import { KeyboardReturn } from "@mui/icons-material";
 import LocalizationUtils from "src/utils/localization-utils";
-import config from "src/app/config";
 import { renderVacationDaysTextForScreen } from "src/utils/vacation-days-utils";
 import { usersAtom } from "src/atoms/user";
 import type { User } from "src/generated/homeLambdasClient";
@@ -59,7 +58,7 @@ const VacationRequestsScreen = () => {
   const [users] = useAtom(usersAtom);
   const loggedInUser = users.find(
     (user: User) =>
-      user.forecastId === config.person.forecastUserIdOverride || user.id === userProfile?.id
+      user.id === userProfile?.id
   );
 
   /**
@@ -157,7 +156,7 @@ const VacationRequestsScreen = () => {
 
     if (!vacationRequests.length) {
       try {
-        let fetchedVacationRequests: VacationRequest[] = [];
+        let fetchedVacationRequests = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {

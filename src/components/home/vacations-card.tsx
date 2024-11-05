@@ -27,7 +27,6 @@ import { getVacationRequestPersonFullName } from "src/utils/vacation-request-uti
 import { validateValueIsNotUndefinedNorNull } from "src/utils/check-utils";
 import type { VacationInfoListItem } from "src/types";
 import { formatDate } from "src/utils/time-utils";
-import config from "src/app/config";
 import type {User} from "src/generated/homeLambdasClient";
 import {usersAtom} from "src/atoms/user.ts";
 // TODO: Component is commented out due backend calculations about vacation days being incorrect. Once the error is fixed, introduce the text components back in the code.
@@ -51,7 +50,7 @@ const VacationsCard = () => {
   const [users] = useAtom(usersAtom);
   const loggedInUser = users.find(
     (user: User) =>
-      user.forecastId === config.person.forecastUserIdOverride || user.id === userProfile?.id
+      user.id === userProfile?.id
   );
 
   /**
@@ -132,7 +131,7 @@ const VacationsCard = () => {
 
     if (!vacationRequests.length) {
       try {
-        let fetchedVacationRequests: VacationRequest[] = [];
+        let fetchedVacationRequests = [];
         if (adminMode) {
           fetchedVacationRequests = await vacationRequestsApi.listVacationRequests({});
         } else {
