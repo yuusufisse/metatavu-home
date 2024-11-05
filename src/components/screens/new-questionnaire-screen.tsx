@@ -45,8 +45,9 @@ const NewQuestionnaireScreen = () => {
     setQuestionnaireDescription(event.target.value);
   };
 
-  const handlePassScoreSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassScoreValue(Number(event.target.value));
+  const handlePassScoreSliderChange = (_: Event, value: number) => {
+    setPassScoreValue(value as number);
+    console.log("Pass score value: ", passScoreValue);
   };
 
   /**
@@ -167,7 +168,7 @@ const NewQuestionnaireScreen = () => {
               </Typography>
               <Slider
                 value={passScoreValue}
-                onChange={handlePassScoreSliderChange as any}
+                onChange={handlePassScoreSliderChange}
                 step={1}
                 marks
                 min={0}

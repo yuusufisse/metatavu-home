@@ -26,8 +26,8 @@ interface Props {
  * @params handleAddQuestionSubmit
  */
 const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
-  const [question, setQuestionText] = useState("");
-  const [options, setOptions] = useState<QuestionOption[]>([]);
+  const [questionText, setQuestionText] = useState("");
+  const [options, setOptions] = useState<QuestionOption[]>([{label: "", value: false}]);
 
   /**
    * Handle options label (answer option) change
@@ -63,7 +63,7 @@ const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
    * Handle adding new question (submitting the question and options + resetting the form)
    */
   const handleAddNewQuestion = () => {
-    handleAddQuestionSubmit(question, options);
+    handleAddQuestionSubmit(questionText, options);
     setQuestionText("");
     setOptions([{ label: "", value: false }]);
   };
@@ -89,7 +89,7 @@ const NewQuestionnaireCard = ({ handleAddQuestionSubmit }: Props) => {
             label={strings.newQuestionnaireCard.questionLabel}
             multiline
             rows={6}
-            value={question}
+            value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
             fullWidth
           />
